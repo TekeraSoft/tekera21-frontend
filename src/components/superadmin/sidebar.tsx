@@ -1,11 +1,19 @@
-"use client"
+"use client";
 
-import { BarChart3, Package, ShoppingCart, Users, Home, Settings, LogOut } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Link, usePathname } from "@/i18n/navigation"
+import {
+  BarChart3,
+  Package,
+  ShoppingCart,
+  Users,
+  Home,
+  Settings,
+  LogOut,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Link, usePathname } from "@/i18n/navigation";
 
-export function Sidebar({userRoles}: {userRoles: string[]}) {
-  const pathname = usePathname()
+export function Sidebar({ userRoles }: { userRoles: string[] }) {
+  const pathname = usePathname();
 
   const routes = [
     {
@@ -13,27 +21,27 @@ export function Sidebar({userRoles}: {userRoles: string[]}) {
       path: "/superadmin/dashboard",
       icon: Home,
     },
-   userRoles.includes("products") && {
+    userRoles.includes("products") && {
       name: "Products",
-      path: "/products",
+      path: "/superadmin/products",
       icon: Package,
     },
     userRoles.includes("orders") && {
       name: "Orders",
-      path: "/orders",
+      path: "/superadmin/orders",
       icon: ShoppingCart,
     },
     userRoles.includes("customers") && {
       name: "Customers",
-      path: "/customers",
+      path: "/superadmin/customers",
       icon: Users,
     },
-    userRoles.includes("analytics") &&  {
+    userRoles.includes("analytics") && {
       name: "Analytics",
-      path: "/analytics",
+      path: "/superadmin/analytics",
       icon: BarChart3,
     },
-  ].filter(Boolean) as { name: string; path: string; icon: any }[] // Filter out any undefined values
+  ].filter(Boolean) as { name: string; path: string; icon: any }[]; // Filter out any undefined values
 
   return (
     <div className="flex h-screen w-64 flex-col border-r bg-white">
@@ -43,20 +51,22 @@ export function Sidebar({userRoles}: {userRoles: string[]}) {
       <div className="flex-1 overflow-auto py-2">
         <nav className="grid items-start px-2 text-sm font-medium">
           {routes.map((route) => {
-            const Icon = route.icon
+            const Icon = route.icon;
             return (
               <Link
                 key={route.path}
                 href={route.path}
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-gray-900",
-                  pathname === route.path ? "bg-gray-100 text-gray-900" : "text-gray-500 hover:bg-gray-100",
+                  pathname === route.path
+                    ? "bg-gray-100 text-gray-900"
+                    : "text-gray-500 hover:bg-gray-100"
                 )}
               >
                 <Icon className="h-4 w-4" />
                 {route.name}
               </Link>
-            )
+            );
           })}
         </nav>
       </div>
@@ -79,5 +89,5 @@ export function Sidebar({userRoles}: {userRoles: string[]}) {
         </nav>
       </div>
     </div>
-  )
+  );
 }

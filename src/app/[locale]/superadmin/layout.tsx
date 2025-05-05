@@ -1,4 +1,4 @@
-import { Sidebar } from "@/components/sidebar";
+import { Sidebar } from "@/components/superadmin/sidebar";
 import { users } from "@/data/users";
 import React from "react";
 
