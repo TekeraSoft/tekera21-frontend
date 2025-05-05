@@ -1,4 +1,5 @@
 export const john = {
+  id:1,
   name: "John Doe",
   age: 30,
   email: "john@gmail.com",
@@ -8,6 +9,7 @@ export const john = {
 };
 
 export const jane = {
+  id:2,
   name: "Jane Doe",
   age: 28,
   email: "jane@gmail.com",
@@ -19,7 +21,3 @@ export type User = typeof john;
 
 export const users = { John: john, Jane: jane };
 export const userList = Object.values(users).map((user) => user as User);
-export const userListWithId: User[] = userList.map((user, index) => ({
-  id: index + 1,
-  ...user,
-}));
