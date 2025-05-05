@@ -24,7 +24,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body className={` antialiased`}>
         <StoreProvider>
           <NextIntlClientProvider>
