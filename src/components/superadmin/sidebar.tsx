@@ -10,7 +10,7 @@ export function Sidebar({userRoles}: {userRoles: string[]}) {
   const routes = [
     {
       name: "Dashboard",
-      path: "/",
+      path: "/superadmin/dashboard",
       icon: Home,
     },
    userRoles.includes("products") && {
