@@ -1,20 +1,20 @@
 export const john = {
-  id:1,
+  id: 1,
   name: "John Doe",
   age: 30,
   email: "john@gmail.com",
   password: "123456",
-  role:[ "orders", "products", "users"],
+  role: ["orders", "users", "products"],
   isActive: true,
 };
 
 export const jane = {
-  id:2,
+  id: 2,
   name: "Jane Doe",
   age: 28,
   email: "jane@gmail.com",
   password: "123456",
-  role: [ "orders", "products", "users","shipping","adds"],
+  role: ["orders", "products", "users", "shipping", "adds", "analytics"],
   isActive: true,
 };
 export type User = typeof john;
