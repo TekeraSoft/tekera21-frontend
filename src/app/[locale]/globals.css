@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  li {
+    list-style: none;
+  }
+
+  body {
+    padding: 0;
+    margin: 0;
+    width: 100dvw;
+    overflow-x: hidden;
+  }
+}
+
+@theme {
+  --color-primary: #0d7992;
+  --color-secondary: #1a567e;
+}
+
+@layer utilities {
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+
+  .flex-col-center {
+    @apply flex flex-col items-center justify-center;
+  }
+}
