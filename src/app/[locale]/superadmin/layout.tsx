@@ -2,7 +2,7 @@ import { Sidebar } from "@/components/sidebar";
 import { users } from "@/data/users";
 import React from "react";
 
-export default function ({ children }: { children: React.ReactNode }) {
+export default function SuperAdminLayout ({ children }: { children: React.ReactNode }) {
   const user = users["John"]; // örnek kullanıcı, gerçek uygulamada bu bilgiyi auth'dan alırsınız
   const userRole = user.role;
   return (
