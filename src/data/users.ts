@@ -3,7 +3,7 @@ export const john = {
   age: 30,
   email: "john@gmail.com",
   password: "123456",
-  role: "admin",
+  role:[ "orders", "products", "users"],
   isActive: true,
 };
 
@@ -12,7 +12,7 @@ export const jane = {
   age: 28,
   email: "jane@gmail.com",
   password: "123456",
-  role: "superadmin",
+  role: [ "orders", "products", "users","shipping","adds"],
   isActive: true,
 };
 export type User = typeof john;
