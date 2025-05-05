@@ -1,3 +1,4 @@
+import SellerNavbar from "@/components/seller-components/layout/Navbar/SellerNavbar";
 import React from "react";
 
 export default function SellerLayout({
@@ -5,5 +6,10 @@ export default function SellerLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="text-xl">{children} </div>;
+  return (
+    <div className="flex flex-col ">
+      <SellerNavbar />
+      {children}
+    </div>
+  );
 }
