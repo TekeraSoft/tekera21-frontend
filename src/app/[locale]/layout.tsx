@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import "./globals.css";
 import StoreProvider from "@/store/StoreProvider";
-import MainLayout from "@/components/layouts/MainLayout";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -29,7 +28,7 @@ export default async function RootLayout({
       <body className={` antialiased`}>
         <StoreProvider>
           <NextIntlClientProvider>
-            <MainLayout> {children}</MainLayout>
+             {children}
           </NextIntlClientProvider>
         </StoreProvider>
       </body>

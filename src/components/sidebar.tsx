@@ -1,8 +1,8 @@
+"use client"
 
-import { usePathname } from "next/navigation"
 import { BarChart3, Package, ShoppingCart, Users, Home, Settings, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Link } from "@/i18n/navigation"
+import { Link, usePathname } from "@/i18n/navigation"
 
 export function Sidebar({userRoles}: {userRoles: string[]}) {
   const pathname = usePathname()
