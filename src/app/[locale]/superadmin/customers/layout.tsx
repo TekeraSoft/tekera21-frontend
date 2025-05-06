@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function AdminProductsLayout({
+export default function AdminCustomersLayout({
   children,
 }: {
   children: React.ReactNode;
