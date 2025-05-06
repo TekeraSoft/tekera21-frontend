@@ -1,9 +1,12 @@
-import React from 'react'
+import { ProductsHeader } from "@/components/superadmin/ProductsHeader";
+import { ProductsTable } from "@/components/superadmin/ProductsTable";
 
-const Products = () => {
+
+export default function ProductsPage() {
   return (
-    <div>Products sayfası</div>
+    <div className="flex flex-col gap-6 p-6">
+      <ProductsHeader />
+      <ProductsTable />
+    </div>
   )
 }
-
-export default Products

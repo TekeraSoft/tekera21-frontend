@@ -8,7 +8,7 @@ export default function SuperAdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = users["John"]; // örnek kullanıcı, gerçek uygulamada bu bilgiyi auth'dan alırsınız
+  const user = users["Jane"]; // örnek kullanıcı, gerçek uygulamada bu bilgiyi auth'dan alırsınız
   const userRoles = user.role;
 
   return (
