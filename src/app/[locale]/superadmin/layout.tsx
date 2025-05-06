@@ -1,14 +1,27 @@
-import { Sidebar } from "@/components/sidebar";
+import { SideBar } from "@/components/superadmin/SideBar";
+import { SidebarProvider } from "@/context/SideBarContext";
 import { users } from "@/data/users";
 import React from "react";
 
-export default function SuperAdminLayout ({ children }: { children: React.ReactNode }) {
-  const user = users["John"]; // örnek kullanıcı, gerçek uygulamada bu bilgiyi auth'dan alırsınız
-  const userRole = user.role;
+export default function SuperAdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const user = users["Jane"]; // örnek kullanıcı, gerçek uygulamada bu bilgiyi auth'dan alırsınız
+  const userRoles = user.role;
+
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar userRoles={userRole} />
-      <div className="flex-1 overflow-auto">{children}</div>
+    <div className="flex flex-col min-h-screen bg-gray-100">
+      <div className="flex">
+        <SidebarProvider>
+          <SideBar userRoles={userRoles} />
+          <main className="w-full">
+           
+            {children}
+          </main>
+        </SidebarProvider>
+      </div>
     </div>
   );
 }
