@@ -1,11 +1,17 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import { MoreHorizontal, ArrowUpDown, Check, Pencil, Trash2 } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import { useState } from "react";
+import Image from "next/image";
+import {
+  MoreHorizontal,
+  ArrowUpDown,
+  Check,
+  Pencil,
+  Trash2,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,16 +19,29 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+} from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function ProductsTable() {
   const [products, setProducts] = useState([
     {
       id: "PROD-001",
       name: "Wireless Headphones",
-      image: "/vercel.svg?height=40&width=40",
+      image: "/placeholder.svg?height=40&width=40",
       category: "Electronics",
       price: "$129.99",
       stock: 45,
@@ -31,7 +50,7 @@ export function ProductsTable() {
     {
       id: "PROD-002",
       name: "Smart Watch",
-      image: "/vercel.svg?height=40&width=40",
+      image: "/placeholder.svg?height=40&width=40",
       category: "Electronics",
       price: "$199.99",
       stock: 32,
@@ -40,7 +59,7 @@ export function ProductsTable() {
     {
       id: "PROD-003",
       name: "Cotton T-Shirt",
-      image: "/vercel.svg?height=40&width=40",
+      image: "/placeholder.svg?height=40&width=40",
       category: "Clothing",
       price: "$24.99",
       stock: 89,
@@ -49,7 +68,7 @@ export function ProductsTable() {
     {
       id: "PROD-004",
       name: "Bluetooth Speaker",
-      image: "/vercel.svg?height=40&width=40",
+      image: "/placeholder.svg?height=40&width=40",
       category: "Electronics",
       price: "$79.99",
       stock: 21,
@@ -58,7 +77,7 @@ export function ProductsTable() {
     {
       id: "PROD-005",
       name: "Running Shoes",
-      image: "/vercel.svg?height=40&width=40",
+      image: "/placeholder.svg?height=40&width=40",
       category: "Footwear",
       price: "$89.99",
       stock: 54,
@@ -67,7 +86,7 @@ export function ProductsTable() {
     {
       id: "PROD-006",
       name: "Leather Wallet",
-      image: "/vercel.svg?height=40&width=40",
+      image: "/placeholder.svg?height=40&width=40",
       category: "Accessories",
       price: "$49.99",
       stock: 76,
@@ -76,7 +95,7 @@ export function ProductsTable() {
     {
       id: "PROD-007",
       name: "Smartphone Case",
-      image: "/vercel.svg?height=40&width=40",
+      image: "/placeholder.svg?height=40&width=40",
       category: "Accessories",
       price: "$19.99",
       stock: 120,
@@ -85,7 +104,7 @@ export function ProductsTable() {
     {
       id: "PROD-008",
       name: "Desk Lamp",
-      image: "/vercel.svg?height=40&width=40",
+      image: "/placeholder.svg?height=40&width=40",
       category: "Home",
       price: "$34.99",
       stock: 0,
@@ -94,7 +113,7 @@ export function ProductsTable() {
     {
       id: "PROD-009",
       name: "Coffee Mug",
-      image: "/vercel.svg?height=40&width=40",
+      image: "/placeholder.svg?height=40&width=40",
       category: "Home",
       price: "$14.99",
       stock: 65,
@@ -103,26 +122,26 @@ export function ProductsTable() {
     {
       id: "PROD-010",
       name: "Yoga Mat",
-      image: "/vercel.svg?height=40&width=40",
+      image: "/placeholder.svg?height=40&width=40",
       category: "Fitness",
       price: "$29.99",
       stock: 42,
       status: "In Stock",
     },
-  ])
+  ]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "In Stock":
-        return "bg-green-100 text-green-800"
+        return "bg-green-100 text-green-800";
       case "Low Stock":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow-100 text-yellow-800";
       case "Out of Stock":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 text-red-800";
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 text-gray-800";
     }
-  }
+  };
 
   return (
     <Card>
@@ -182,7 +201,7 @@ export function ProductsTable() {
             <TableRow key={product.id}>
               <TableCell>
                 <Image
-                  src={product.image || "/vercel.svg"}
+                  src={product.image || "/placeholder.svg"}
                   alt={product.name}
                   width={40}
                   height={40}
@@ -194,7 +213,10 @@ export function ProductsTable() {
               <TableCell>{product.price}</TableCell>
               <TableCell>{product.stock}</TableCell>
               <TableCell>
-                <Badge className={getStatusColor(product.status)} variant="outline">
+                <Badge
+                  className={getStatusColor(product.status)}
+                  variant="outline"
+                >
                   {product.status}
                 </Badge>
               </TableCell>
@@ -237,5 +259,5 @@ export function ProductsTable() {
         </Button>
       </div>
     </Card>
-  )
+  );
 }

@@ -1,4 +1,3 @@
-
 import { SideBar } from "@/components/superadmin/sidebar";
 import { SidebarProvider } from "@/context/SideBarContext";
 import { users } from "@/data/users";
@@ -17,10 +16,7 @@ export default function SuperAdminLayout({
       <div className="flex">
         <SidebarProvider>
           <SideBar userRoles={userRoles} />
-          <main className="w-full">
-           
-            {children}
-          </main>
+          <main className="w-full">{children}</main>
         </SidebarProvider>
       </div>
     </div>
