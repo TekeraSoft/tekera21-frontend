@@ -5,8 +5,6 @@ import {
   X,
   Home,
   Users,
-  Settings,
-  HelpCircle,
   ChevronRight,
   Package,
   ShoppingCart,
