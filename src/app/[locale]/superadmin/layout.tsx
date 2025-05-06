@@ -1,4 +1,5 @@
-import { SideBar } from "@/components/superadmin/SideBar";
+
+import { SideBar } from "@/components/superadmin/sidebar";
 import { SidebarProvider } from "@/context/SideBarContext";
 import { users } from "@/data/users";
 import React from "react";
