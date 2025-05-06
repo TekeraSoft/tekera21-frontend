@@ -1,8 +1,9 @@
-import { DashboardCards } from '@/components/superadmin/DashBoardCards'
-import { DashboardHeader } from '@/components/superadmin/DashBoardHeader'
-import { RecentOrders } from '@/components/superadmin/RecentOrders'
-import { TopProducts } from '@/components/superadmin/TopProducts'
-import React from 'react'
+import React from "react";
+
+import { DashboardCards } from "@/components/superadmin/DashBoardCards";
+import { DashboardHeader } from "@/components/superadmin/DashBoardHeader";
+import { RecentOrders } from "@/components/superadmin/RecentOrders";
+import { TopProducts } from "@/components/superadmin/TopProducts";
 
 const DashBoard = () => {
   return (
@@ -14,7 +15,7 @@ const DashBoard = () => {
         <TopProducts />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DashBoard
+export default DashBoard;
