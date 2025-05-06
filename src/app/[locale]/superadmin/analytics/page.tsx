@@ -3,7 +3,7 @@ import { AdminAnalyticsHeader } from "@/components/superadmin/AdminAnalyticsHead
 
 export default function AnalyticsPage() {
   return (
-    <div className="flex flex-col gap-6 p-6">
+    <div className="flex flex-col gap-6 px-6 py-3 w-full">
       <AdminAnalyticsHeader />
       <AdminAnalyticsCharts />
     </div>

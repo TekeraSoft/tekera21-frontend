@@ -190,7 +190,7 @@ export function AdminOrdersTable() {
             <TableHead>Total</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Payment</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            {/* <TableHead className="text-right">Actions</TableHead> */}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -211,7 +211,7 @@ export function AdminOrdersTable() {
                   {order.payment}
                 </Badge>
               </TableCell>
-              <TableCell className="text-right">
+              {/* <TableCell className="text-right">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="icon">
@@ -236,7 +236,7 @@ export function AdminOrdersTable() {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>
