@@ -19,9 +19,10 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { cn } from "@/lib/utils";
 import { NotificationPopover } from "./SellerNotificationPopover";
+import { MenuItem } from "../../../../../types/SellerTypes/SellerNavbarTypes";
 
 interface SellerNavbarMobileProps {
-  menuItems: object;
+  menuItems: MenuItem[];
 }
 
 function SellerNavbarMobile({ menuItems }: SellerNavbarMobileProps) {
