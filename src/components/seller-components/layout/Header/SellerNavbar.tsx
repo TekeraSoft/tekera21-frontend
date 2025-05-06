@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Package,
   Users,
@@ -8,10 +7,6 @@ import {
   Truck,
   BarChart2,
   FileText,
-  Menu,
-  X,
-  ChevronDown,
-  ChevronRight,
 } from "lucide-react";
 import {
   Menubar,
@@ -24,15 +19,11 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+
 import type { MenuItem } from "../../../../../types/SellerTypes/SellerNavbarTypes";
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
+import SellerNavbarMobile from "./SellerNavbarMobile";
 
 // Define the menu structure
 const menuItems: MenuItem[] = [
@@ -188,39 +179,16 @@ function SellerNavbar() {
     (state: RootState) => state.SellerUser
   );
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [openSubMenus, setOpenSubMenus] = useState<Record<string, boolean>>({});
-  const [openFlyouts, setOpenFlyouts] = useState<Record<string, boolean>>({});
-
   // Check if the user has the required role
   const hasRole = (role: string): boolean => {
     if (!SellerUserInfo) return false;
     return SellerUserInfo.role.includes(role);
   };
 
-  const toggleSubMenu = (key: string) => {
-    setOpenSubMenus((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
-
-  const toggleFlyout = (key: string) => {
-    setOpenFlyouts((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
-
-  const handleNavigation = (href: string, hasRequiredRole: boolean) => {
-    if (!hasRequiredRole) return;
-    window.location.href = href;
-  };
-
   return (
     <div className="w-full">
       {/* Desktop Navigation */}
-      <div className="w-full border-b hidden md:flex justify-start items-center px-5 h-20">
+      <div className="w-full border-b hidden lg:flex justify-start items-center px-5 h-20">
         <div className="mr-4">Logo</div>
         <Menubar className="border-none rounded-none px-2 lg:px-4">
           {menuItems.map((item) => (
@@ -304,121 +272,7 @@ function SellerNavbar() {
           ))}
         </Menubar>
       </div>
-
-      {/* Mobile Navigation */}
-      <div className="md:hidden border-b">
-        <div className="flex justify-between items-center p-4">
-          <div>Logo</div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </Button>
-        </div>
-
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="px-4 pb-4 bg-white">
-            {menuItems.map((item) => (
-              <div key={item.key} className="mb-2">
-                <Collapsible>
-                  <CollapsibleTrigger
-                    className={cn(
-                      "w-full flex items-center justify-between p-2 rounded-md",
-                      hasRole(item.requiredRole)
-                        ? "hover:bg-slate-100"
-                        : "bg-red-50 opacity-50 cursor-not-allowed"
-                    )}
-                    disabled={!hasRole(item.requiredRole)}
-                    onClick={() => toggleSubMenu(item.key)}
-                  >
-                    <div className="flex items-center">
-                      {item.icon}
-                      <span className="ml-2">{item.label}</span>
-                    </div>
-                    {openSubMenus[item.key] ? (
-                      <ChevronDown className="h-4 w-4" />
-                    ) : (
-                      <ChevronRight className="h-4 w-4" />
-                    )}
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    {item.subItems?.map((subItem) =>
-                      subItem.flyout ? (
-                        <Collapsible key={subItem.key}>
-                          <CollapsibleTrigger
-                            className={cn(
-                              "w-full flex items-center justify-between p-2 pl-8 rounded-md",
-                              hasRole(subItem.requiredRole)
-                                ? "hover:bg-slate-100"
-                                : "opacity-50 cursor-not-allowed"
-                            )}
-                            disabled={!hasRole(subItem.requiredRole)}
-                            onClick={() => toggleFlyout(subItem.key)}
-                          >
-                            <span>{subItem.label}</span>
-                            {openFlyouts[subItem.key] ? (
-                              <ChevronDown className="h-4 w-4" />
-                            ) : (
-                              <ChevronRight className="h-4 w-4" />
-                            )}
-                          </CollapsibleTrigger>
-                          <CollapsibleContent>
-                            {subItem.flyout.map((flyoutItem) => (
-                              <div
-                                key={flyoutItem.key}
-                                className={cn(
-                                  "p-2 pl-12 rounded-md",
-                                  hasRole(flyoutItem.requiredRole)
-                                    ? "hover:bg-slate-100 cursor-pointer"
-                                    : "opacity-50 cursor-not-allowed"
-                                )}
-                                onClick={() =>
-                                  handleNavigation(
-                                    flyoutItem.href,
-                                    hasRole(flyoutItem.requiredRole)
-                                  )
-                                }
-                              >
-                                {flyoutItem.label}
-                              </div>
-                            ))}
-                          </CollapsibleContent>
-                        </Collapsible>
-                      ) : (
-                        <div
-                          key={subItem.key}
-                          className={cn(
-                            "p-2 pl-8 rounded-md",
-                            hasRole(subItem.requiredRole)
-                              ? "hover:bg-slate-100 cursor-pointer"
-                              : "opacity-50 cursor-not-allowed"
-                          )}
-                          onClick={() =>
-                            handleNavigation(
-                              subItem.href || "",
-                              hasRole(subItem.requiredRole)
-                            )
-                          }
-                        >
-                          {subItem.label}
-                        </div>
-                      )
-                    )}
-                  </CollapsibleContent>
-                </Collapsible>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      <SellerNavbarMobile menuItems={menuItems} />
     </div>
   );
 }
