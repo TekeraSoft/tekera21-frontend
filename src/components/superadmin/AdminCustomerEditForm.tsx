@@ -41,6 +41,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { formSchema } from "@/data/users";
 
 const countries = [
   { label: "United States", value: "us" },
@@ -55,42 +56,7 @@ const countries = [
   { label: "Netherlands", value: "nl" },
 ];
 
-const formSchema = z.object({
-  firstName: z.string().min(2, {
-    message: "First name must be at least 2 characters.",
-  }),
-  lastName: z.string().min(2, {
-    message: "Last name must be at least 2 characters.",
-  }),
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  phone: z.string().min(10, {
-    message: "Phone number must be at least 10 digits.",
-  }),
-  address: z.string().min(5, {
-    message: "Address must be at least 5 characters.",
-  }),
-  city: z.string().min(2, {
-    message: "City must be at least 2 characters.",
-  }),
-  state: z.string().min(2, {
-    message: "State must be at least 2 characters.",
-  }),
-  postalCode: z.string().min(5, {
-    message: "Postal code must be at least 5 characters.",
-  }),
-  country: z.string({
-    required_error: "Please select a country.",
-  }),
-  dateOfBirth: z.date({
-    required_error: "Please select a date of birth.",
-  }),
-  customerType: z.string({
-    required_error: "Please select a customer type.",
-  }),
-  notes: z.string().optional(),
-});
+
 
 type CustomerFormValues = z.infer<typeof formSchema>;
 
