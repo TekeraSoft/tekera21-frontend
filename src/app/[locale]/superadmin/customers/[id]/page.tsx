@@ -3,6 +3,7 @@ import { useParams } from "next/navigation";
 import { AdminCustomerEditForm } from "@/components/superadmin/AdminCustomerEditForm";
 import React from "react";
 import { customers } from "@/data/users";
+import TopBar from "@/components/superadmin/TopBar";
 
 const AdminEditCustomerPage = () => {
   const { id } = useParams() as { id: string };
@@ -13,9 +14,17 @@ const AdminEditCustomerPage = () => {
 
   const handleSaveCustomer = (data: any) => {};
   return (
-    <div className="px-6 py-3 w-full">
-      <AdminCustomerEditForm customer={customer} onSave={handleSaveCustomer} />
-    </div>
+    <>
+      <TopBar>
+        <></>
+      </TopBar>
+      <div className="px-6 py-3 w-full">
+        <AdminCustomerEditForm
+          customer={customer}
+          onSave={handleSaveCustomer}
+        />
+      </div>
+    </>
   );
 };
 

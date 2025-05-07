@@ -67,7 +67,7 @@ export function SideBar({ userRoles }: { userRoles: string[] }) {
                 }`
               : "relative"
           }
-          bg-gray-100 h-screen transition-all duration-300 border-r
+          bg-gray-100 min-h-screen transition-all duration-300 border-r
           ${isOpen && !isMobile ? "w-96" : isMobile ? "w-64" : "w-16"}
         `}
       >
@@ -81,7 +81,7 @@ export function SideBar({ userRoles }: { userRoles: string[] }) {
           </button>
         )}
 
-        <div className="p-4 border-b">
+        <div className="px-4 py-2 border-b">
           <div className="flex items-center gap-2">
             <div
               onClick={toggleSidebar}

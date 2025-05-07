@@ -54,8 +54,8 @@ const SidebarProvider = React.forwardRef<
 
     React.useEffect(() => {
       const checkIsMobile = () => {
-        setIsMobile(window.innerWidth < 768);
-        if (window.innerWidth < 768) {
+        setIsMobile(window.innerWidth < 769);
+        if (window.innerWidth < 769) {
           setIsOpen(false);
         } else {
           setIsOpen(true);
