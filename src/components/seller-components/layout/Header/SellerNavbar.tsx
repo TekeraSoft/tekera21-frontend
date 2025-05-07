@@ -24,6 +24,8 @@ import type { MenuItem } from "../../../../../types/SellerTypes/SellerNavbarType
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 import SellerNavbarMobile from "./SellerNavbarMobile";
+import Image from "next/image";
+import { Link } from "@/i18n/navigation";
 
 // Define the menu structure
 const menuItems: MenuItem[] = [
@@ -34,6 +36,13 @@ const menuItems: MenuItem[] = [
     requiredRole: "products",
     subItems: [
       {
+        key: "productList",
+        label: "Ürün Listesi",
+        requiredRole: "products",
+        href: "/seller/products/list",
+      },
+
+      {
         key: "automaticPricing",
         label: "Otomatik Fiyatlandırma",
         requiredRole: "products",
@@ -42,27 +51,22 @@ const menuItems: MenuItem[] = [
             key: "buyboxRules",
             label: "Buybox Kuralları",
             requiredRole: "products",
-            href: "/products/buybox-rules",
+            href: "/seller/products/buybox-rules",
           },
           {
             key: "advantageousProductRules",
             label: "Avantajlı Ürün Kuralları",
             requiredRole: "products",
-            href: "/products/advantageous-product-rules",
+            href: "/seller/products/advantageous-product-rules",
           },
         ],
       },
-      {
-        key: "productList",
-        label: "Ürün Listesi",
-        requiredRole: "products",
-        href: "/products/list",
-      },
+
       {
         key: "categories",
         label: "Kategoriler",
         requiredRole: "products",
-        href: "/products/categories",
+        href: "/seller/products/categories",
       },
     ],
   },
@@ -76,13 +80,13 @@ const menuItems: MenuItem[] = [
         key: "orderList",
         label: "Sipariş Listesi",
         requiredRole: "orders",
-        href: "/orders/list",
+        href: "/seller/orders/list",
       },
       {
         key: "returns",
         label: "İadeler",
         requiredRole: "orders",
-        href: "/orders/returns",
+        href: "/seller/orders/returns",
       },
     ],
   },
@@ -96,13 +100,13 @@ const menuItems: MenuItem[] = [
         key: "userList",
         label: "Kullanıcı Listesi",
         requiredRole: "users",
-        href: "/users/list",
+        href: "/seller/users/list",
       },
       {
         key: "roles",
         label: "Roller",
         requiredRole: "users",
-        href: "/users/roles",
+        href: "/seller/users/roles",
       },
     ],
   },
@@ -116,13 +120,13 @@ const menuItems: MenuItem[] = [
         key: "shippingSettings",
         label: "Kargo Ayarları",
         requiredRole: "shipping",
-        href: "/shipping/settings",
+        href: "/seller/shipping/settings",
       },
       {
         key: "carriers",
         label: "Kargo Firmaları",
         requiredRole: "shipping",
-        href: "/shipping/carriers",
+        href: "/seller/shipping/carriers",
       },
     ],
   },
@@ -136,12 +140,12 @@ const menuItems: MenuItem[] = [
         key: "campaigns",
         label: "Kampanyalar",
         requiredRole: "adds",
-        href: "/adds/campaigns",
+        href: "/seller/adds/campaigns",
       },
       {
         key: "performance",
         label: "Performans",
-        href: "/adds/performance",
+        href: "/seller/adds/performance",
         requiredRole: "adds",
       },
     ],
@@ -162,13 +166,13 @@ const menuItems: MenuItem[] = [
         key: "dashboard",
         label: "Dashboard",
         requiredRole: "analytics",
-        href: "/analytics/dashboard",
+        href: "/seller/analytics/dashboard",
       },
       {
         key: "reports",
         label: "Raporlar",
         requiredRole: "analytics",
-        href: "/analytics/reports",
+        href: "/seller/analytics/reports",
       },
     ],
   },
@@ -178,6 +182,7 @@ function SellerNavbar() {
   const { SellerUserInfo } = useSelector(
     (state: RootState) => state.SellerUser
   );
+  const { logoUrl } = useSelector((state: RootState) => state.globalSettings);
 
   // Check if the user has the required role
   const hasRole = (role: string): boolean => {
@@ -189,7 +194,19 @@ function SellerNavbar() {
     <div className="w-full">
       {/* Desktop Navigation */}
       <div className="w-full border-b hidden lg:flex justify-start items-center px-5 h-20">
-        <div className="mr-4">Logo</div>
+        <Link
+          href={"/seller"}
+          className="mr-4 flex items-center justify-center"
+        >
+          {/* Logo */}
+          <Image
+            src={logoUrl}
+            alt="logo-url"
+            width={50}
+            height={50}
+            className="object-cover"
+          />
+        </Link>
         <Menubar className="border-none rounded-none px-2 lg:px-4">
           {menuItems.map((item) => (
             <MenubarMenu key={item.key}>
@@ -197,7 +214,7 @@ function SellerNavbar() {
                 className={cn(
                   "flex items-center gap-1 hover:bg-slate-100 transition duration-300",
                   hasRole(item.requiredRole)
-                    ? "cursor-pointer"
+                    ? "cursor-pointer "
                     : "bg-red-50 opacity-50 cursor-not-allowed"
                 )}
                 disabled={!hasRole(item.requiredRole)}
@@ -248,6 +265,7 @@ function SellerNavbar() {
                       <MenubarItem
                         key={subItem.key}
                         className={cn(
+                          "cursor-pointer",
                           !hasRole(subItem.requiredRole) &&
                             "opacity-50 cursor-not-allowed"
                         )}

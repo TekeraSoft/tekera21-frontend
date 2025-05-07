@@ -16,15 +16,7 @@ export const jane = {
   age: 28,
   email: "jane@gmail.com",
   password: "123456",
-  role: [
-    "orders",
-    "products",
-    "users",
-    "shipping",
-    "adds",
-    "analytics",
-    "customers",
-  ],
+  role: ["orders", "products", "users", "shipping", "analytics", "customers"],
   isActive: true,
 };
 

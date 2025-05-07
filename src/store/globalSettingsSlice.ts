@@ -7,7 +7,7 @@ interface GlobalState {
 }
 
 const initialState: GlobalState = {
-  logoUrl: "/logo.svg",
+  logoUrl: "/1600w-bHiX_0QpJxE.webp",
 };
 
 const globalSettingsSlice = createSlice({
