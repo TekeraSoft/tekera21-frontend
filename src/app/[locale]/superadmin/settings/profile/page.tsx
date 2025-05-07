@@ -10,16 +10,14 @@ const AdminProfilePage = () => {
         <></>
       </TopBar>
       <AdminInnerLayout>
-        <>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold tracking-tight">
-                Hesap Ayarları
-              </h1>
-            </div>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <h1 className="text-2xl font-bold tracking-tight">
+              Hesap Ayarları
+            </h1>
           </div>
-          <AdminSettingsPanel />
-        </>
+        </div>
+        <AdminSettingsPanel />
       </AdminInnerLayout>
     </div>
   );

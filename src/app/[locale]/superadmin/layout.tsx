@@ -11,6 +11,12 @@ export default function SuperAdminLayout({
   const user = users["Jane"]; // örnek kullanıcı, gerçek uygulamada bu bilgiyi auth'dan alırsınız
   const userRoles = user.role;
 
+  // if (userRoles.includes("superadmin") === false) {
+  //   return (
+  //     <div className="flex flex-col min-h-screen bg-gray-100">NOT ALLOWED</div>
+  //   );
+  // }
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <div className="flex">

@@ -10,16 +10,14 @@ const AdminConfigurationPage = () => {
         <></>
       </TopBar>
       <AdminInnerLayout>
-        <>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold tracking-tight">
-                Ayarlar ve Yapılandırma
-              </h1>
-            </div>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <h1 className="text-2xl font-bold tracking-tight">
+              Yapılandırma Ayarları
+            </h1>
           </div>
-          <AdminConfigurationPanel />
-        </>
+        </div>
+        <AdminConfigurationPanel />
       </AdminInnerLayout>
     </div>
   );
