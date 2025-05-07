@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { NextIntlClientProvider, hasLocale, useLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import "./globals.css";
@@ -27,9 +27,7 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       <body className={` antialiased`}>
         <StoreProvider>
-          <NextIntlClientProvider>
-             {children}
-          </NextIntlClientProvider>
+          <NextIntlClientProvider>{children}</NextIntlClientProvider>
         </StoreProvider>
       </body>
     </html>

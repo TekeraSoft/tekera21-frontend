@@ -1,8 +1,8 @@
-import { jane } from "@/data/users"; // sadece Jane'i al
+import { companies } from "@/data/companies";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  SellerCompanyInfo: jane,
+  SellerCompanyInfo: companies.Arzuamber,
 };
 
 export const SellerCompany = createSlice({
@@ -16,6 +16,6 @@ export const SellerCompany = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {} = SellerCompany.actions;
+export const { setSellerCompany } = SellerCompany.actions;
 
 export default SellerCompany.reducer;

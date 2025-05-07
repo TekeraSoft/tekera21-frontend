@@ -16,6 +16,6 @@ export const SellerUserSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {} = SellerUserSlice.actions;
+export const { setSellerUser } = SellerUserSlice.actions;
 
 export default SellerUserSlice.reducer;

@@ -89,7 +89,7 @@ function Topbar() {
               Mağaza Adı <ChevronDown size={16} />
             </div>
           </PopoverTrigger>
-          <PopoverContent className="w-80 sm:w-96 p-4">
+          <PopoverContent className="w-80 sm:w-96 p-4 hidden lg:block">
             <div className="flex items-center gap-4 border-b pb-4">
               <Image src="/logo.png" alt="Logo" width={48} height={48} />
               <div>

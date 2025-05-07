@@ -2,62 +2,34 @@
 
 import SellerInfoCard from "@/components/seller-components/cards/SellerInfoCard";
 import SellerHomePageSlider from "@/components/seller-components/sliders/SellerHomePageSlider";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import SellerSubHeader from "@/components/seller-components/layout/header/SellerSubHeader";
+import SellerQuickAccessCard from "@/components/seller-components/cards/SellerQuickAccessCard";
+import SellerActionsCard from "@/components/seller-components/main-page/SellerActionsCard";
+import SellerPerformCard from "@/components/seller-components/main-page/SellerPerformCard";
 
 const SellerPage = () => {
-  const validStatuses = ["Normal", "Yoğun", "Çok Yoğun", "Kapalı"] as const;
+  const { SellerCompanyInfo } = useSelector(
+    (state: RootState) => state.SellerCompany
+  );
 
-  type OperationStatus = (typeof validStatuses)[number];
-
-  function parseStatus(status: string): OperationStatus {
-    if (validStatuses.includes(status as OperationStatus)) {
-      return status as OperationStatus;
-    }
-    return "Normal";
+  if (!SellerCompanyInfo) {
+    return <div>Loading...</div>; // Veriler henüz yüklenmediyse "Loading..." mesajı gösterelim
   }
 
-  const sellerData = {
-    sellerInfo: {
-      sellerName: "ARZUAMBER MODA",
-      sellerId: "1110123",
-      sellerLogo:
-        "https://arzuamber.com/_next/image?url=%2Fimages%2Flogo%2Ffooterlogo.png&w=256&q=75",
-      rating: 9.65,
-      followers: 58,
-      deliveryTime: "2 Gün",
-      operationStatus: "Normal",
-      commercialLevel: 1,
-      maxCommercialLevel: 5,
-      violationPoints: 0,
-      ordersShippingToday: 0,
-    },
-  };
-
   return (
-    <main className="flex flex-col w-full  px-4 py-6 gap-6">
-      {/* Hero slider section */}
-      <section className="w-full">
+    <main className="flex flex-col w-full ">
+      <SellerSubHeader>
+        <div>sdfgsgsg</div>
+      </SellerSubHeader>
+      <section className="flex flex-col px-4 gap-6">
         <SellerHomePageSlider />
-      </section>
 
-      {/* Seller information section */}
-      <section className="w-full">
-        <SellerInfoCard
-          {...(sellerData?.sellerInfo || {
-            sellerName: "",
-            sellerId: "",
-            sellerLogo: "",
-            rating: 0,
-            followers: 0,
-            deliveryTime: "",
-            operationStatus: "Normal",
-            commercialLevel: 0,
-            maxCommercialLevel: 5,
-            violationPoints: 0,
-            ordersShippingToday: 0,
-          })}
-          operationStatus={parseStatus(sellerData.sellerInfo.operationStatus)}
-          isLoading={false}
-        />
+        <SellerInfoCard SellerCompanyInfo={SellerCompanyInfo} />
+        <SellerActionsCard />
+        <SellerPerformCard />
+        <SellerQuickAccessCard />
       </section>
     </main>
   );

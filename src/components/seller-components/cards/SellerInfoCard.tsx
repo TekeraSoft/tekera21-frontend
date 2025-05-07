@@ -1,52 +1,45 @@
-"use client";
-
-import { Star, Users, Info } from "lucide-react";
+import { Star, Users } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
-export interface SellerInfoCardProps {
-  sellerName: string;
-  sellerId: string;
-  sellerLogo: string;
-  rating: number;
-  followers: number;
-  deliveryTime: string;
-  operationStatus: "Normal" | "Yoğun" | "Çok Yoğun" | "Kapalı";
-  commercialLevel: number;
-  maxCommercialLevel: number;
-  violationPoints: number;
-  ordersShippingToday: number;
-  isLoading?: boolean | string;
-}
+export default function SellerInfoCard({ SellerCompanyInfo }: any) {
+  if (!SellerCompanyInfo) {
+    // Veriler yükleniyorsa Skeleton göster
+    return (
+      <Card className="w-full shadow-sm border border-gray-200 rounded-xl">
+        <CardContent className="p-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            {/* Seller Info Skeleton */}
+            <div className="flex items-start gap-4">
+              <Skeleton className="h-14 w-14 rounded-md" />
+              <div>
+                <Skeleton className="h-4 w-32 mb-2" />
+                <Skeleton className="h-3 w-24 mb-2" />
+                <div className="flex gap-2">
+                  <Skeleton className="h-6 w-32" />
+                  <Skeleton className="h-6 w-32" />
+                </div>
+              </div>
+            </div>
 
-export default function SellerInfoCard({
-  sellerName,
-  sellerId,
-  sellerLogo,
-  rating,
-  followers,
-  deliveryTime,
-  operationStatus,
-  commercialLevel,
-  maxCommercialLevel,
-  violationPoints,
-  ordersShippingToday,
-  isLoading = false,
-}: SellerInfoCardProps) {
-  // Convert string "false" to boolean false if needed
-  const loading = isLoading === "false" ? false : Boolean(isLoading);
+            {/* Status, Delivery Time, Commercial Level Skeleton */}
+            <div className="grid grid-cols-2 md:grid-cols-4 items-center gap-4 text-right text-sm w-full  max-w-2xl">
+              <Skeleton className="h-6 w-24" />
+              <Skeleton className="h-6 w-24" />
+              <Skeleton className="h-6 w-24" />
+              <Skeleton className="h-6 w-24" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
-  // Enhanced helper function to determine operation status color and variant
+  // Veriler geldiyse gerçek içerik
   const getStatusInfo = (status: string) => {
     switch (status) {
       case "Normal":
@@ -62,65 +55,31 @@ export default function SellerInfoCard({
     }
   };
 
-  // Custom badge variants
-  const badgeVariants = {
-    rating: "bg-green-100 text-green-800 hover:bg-green-200",
-    followers: "bg-purple-100 text-purple-800 hover:bg-purple-200",
-    info: "bg-blue-100 text-blue-800 hover:bg-blue-200",
-  };
-
-  if (loading) {
-    return (
-      <Card className="w-full shadow-sm">
-        <CardContent className="p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Skeleton className="h-12 w-12 rounded-full" />
-              <div>
-                <Skeleton className="h-5 w-40 mb-2" />
-                <div className="flex gap-2">
-                  <Skeleton className="h-6 w-32" />
-                  <Skeleton className="h-6 w-24" />
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-6">
-              <Skeleton className="h-12 w-20" />
-              <Skeleton className="h-12 w-24" />
-              <Skeleton className="h-12 w-16" />
-              <Skeleton className="h-12 w-16" />
-              <Skeleton className="h-8 w-8 rounded-full" />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  const statusInfo = getStatusInfo(operationStatus);
+  const statusInfo = getStatusInfo(SellerCompanyInfo.operationStatus);
 
   return (
     <Card className="w-full shadow-sm border border-gray-200 rounded-xl">
       <CardContent className="p-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          {/* LEFT - Seller Info */}
           <div className="flex items-start gap-4">
             <Avatar className="h-14 w-14 rounded-md border border-gray-200 shrink-0">
               <AvatarImage
-                src={sellerLogo || "/placeholder.svg"}
-                alt={sellerName}
+                src={SellerCompanyInfo.logo || "/placeholder.svg"}
+                alt={SellerCompanyInfo.name}
               />
               <AvatarFallback className="bg-gray-100 text-gray-700">
-                {sellerName.substring(0, 2)}
+                {SellerCompanyInfo.name}
               </AvatarFallback>
             </Avatar>
 
             <div>
               <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="font-semibold text-gray-800 text-lg">
-                  {sellerName}
+                  {SellerCompanyInfo.name}
                 </h3>
-                <span className="text-sm text-gray-500">(ID: {sellerId})</span>
+                <span className="text-sm text-gray-500">
+                  (ID: {SellerCompanyInfo.id})
+                </span>
               </div>
 
               <div className="flex flex-wrap items-center gap-2 mt-2">
@@ -128,10 +87,12 @@ export default function SellerInfoCard({
                   variant="outline"
                   className={cn(
                     "flex items-center gap-1 px-2 py-1 text-sm",
-                    badgeVariants.rating
+                    "bg-green-100 text-green-800 hover:bg-green-200"
                   )}
                 >
-                  <span>Satıcı Puanı: {rating.toFixed(2)}/10</span>
+                  <span>
+                    Satıcı Puanı: {SellerCompanyInfo.score.toFixed(2)}/10
+                  </span>
                   <Star className="h-4 w-4 fill-current" />
                 </Badge>
 
@@ -139,25 +100,37 @@ export default function SellerInfoCard({
                   variant="outline"
                   className={cn(
                     "flex items-center gap-1 px-2 py-1 text-sm",
-                    badgeVariants.followers
+                    "bg-purple-100 text-purple-800 hover:bg-purple-200"
                   )}
                 >
-                  <span>Takipçi: {followers}</span>
+                  <span>Takipçi: {SellerCompanyInfo.follower}</span>
                   <Users className="h-4 w-4" />
                 </Badge>
               </div>
             </div>
           </div>
 
-          {/* RIGHT - Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 items-center gap-4 text-right text-sm w-full  max-w-2xl">
-            {/* Delivery Time */}
             <div className="flex-1 md:border-r md:pr-4">
-              <p className="text-gray-500 text-xs">Teslimat Süresi</p>
-              <p className="font-medium text-gray-800">{deliveryTime}</p>
+              <p className="text-gray-500 text-xs">Siparişler</p>
+              <p className="font-medium text-gray-800">
+                {SellerCompanyInfo.totalOrders} Toplam Sipariş
+              </p>
+              <p className="font-medium text-gray-800">
+                {SellerCompanyInfo.todaysOrders} Bugün Sipariş
+              </p>
             </div>
 
-            {/* Operation Status */}
+            <div className="flex-1 md:border-r md:pr-4">
+              <p className="text-gray-500 text-xs">Ürünler</p>
+              <p className="font-medium text-gray-800">
+                {SellerCompanyInfo.totalProducts} Toplam Ürün
+              </p>
+              <p className="font-medium text-gray-800">
+                {SellerCompanyInfo.approvedProducts} Onaylanan Ürün
+              </p>
+            </div>
+
             <div className="flex-1 md:border-r md:pr-4">
               <p className="text-gray-500 text-xs">Operasyon Durumu</p>
               <div className="flex items-center justify-end gap-1 mt-1">
@@ -168,45 +141,18 @@ export default function SellerInfoCard({
                   variant={statusInfo.variant}
                   className="font-medium text-xs"
                 >
-                  {operationStatus}
+                  {SellerCompanyInfo.operationStatus}
                 </Badge>
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                {ordersShippingToday} sipariş bugün kargolanıyor
+                {SellerCompanyInfo.pendingOrders} sipariş bekliyor
               </p>
             </div>
 
-            {/* Commercial Level */}
-            <div className="flex-1 md:border-r md:pr-4">
-              <div className="flex items-center justify-end gap-1">
-                <p className="text-xs text-gray-500">Ticari Seviye</p>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-5 w-5 p-0"
-                      >
-                        <Info className="h-3.5 w-3.5 text-gray-400" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Satıcının ticari seviyesi</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-              <p className="font-medium text-gray-800">
-                {commercialLevel}/{maxCommercialLevel}
-              </p>
-            </div>
-
-            {/* Violation Points */}
             <div className="flex-1">
               <p className="text-xs text-gray-500">İhlal Puanı</p>
               <p className="font-medium text-green-600">
-                {violationPoints} Puan
+                {SellerCompanyInfo.cancelledOrders} İptal Sipariş
               </p>
             </div>
           </div>

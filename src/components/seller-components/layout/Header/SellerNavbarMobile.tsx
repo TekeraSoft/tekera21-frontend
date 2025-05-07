@@ -7,19 +7,13 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { RootState } from "@/store/store";
-import {
-  ChevronDown,
-  ChevronRight,
-  Menu,
-  Search,
-  UserRound,
-  X,
-} from "lucide-react";
+import { ChevronDown, ChevronRight, Menu, Search, X } from "lucide-react";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { cn } from "@/lib/utils";
 import { NotificationPopover } from "./SellerNotificationPopover";
 import { MenuItem } from "../../../../../types/SellerTypes/SellerNavbarTypes";
+import SellerUserPopover from "./SellerCompanyPopover";
 
 interface SellerNavbarMobileProps {
   menuItems: MenuItem[];
@@ -106,16 +100,9 @@ function SellerNavbarMobile({ menuItems }: SellerNavbarMobileProps) {
           >
             <Search size={16} />
           </Button>
-          <NotificationPopover alertItems={alertItems} />
 
-          <Button
-            className=" rounded-full"
-            variant="default"
-            size="icon"
-            aria-label="Toggle search"
-          >
-            <UserRound size={16} />
-          </Button>
+          <NotificationPopover alertItems={alertItems} />
+          <SellerUserPopover />
           <Button
             className="border"
             variant="ghost"

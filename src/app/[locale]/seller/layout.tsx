@@ -1,19 +1,24 @@
 "use client";
 
-import SellerHeader from "@/components/seller-components/layout/Header/SellerHeader";
-import type React from "react";
+import SellerFooter from "@/components/seller-components/layout/footer/SellerFooter";
+import SellerHeader from "@/components/seller-components/layout/header/SellerHeader";
+// import { AppDispatch } from "@/store/store";
+// import { useDispatch } from "react-redux";
 
-export default function SellerLayout({
-  children,
-}: {
+interface SellerLayoutProps {
   children: React.ReactNode;
-}) {
+}
+
+export default function SellerLayout({ children }: SellerLayoutProps) {
+  // const dispatch = useDispatch<AppDispatch>();
+
   return (
     <div className="flex flex-col">
       <main className="min-h-screen flex flex-col">
         <SellerHeader />
 
-        <div className="flex-1 p-8">{children}</div>
+        <div className="flex-1 px-8">{children}</div>
+        <SellerFooter />
       </main>
     </div>
   );

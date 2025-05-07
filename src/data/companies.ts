@@ -1,16 +1,17 @@
-export const stores = {
+export const companies = {
   Arzuamber: {
     id: 1110123,
     name: "ARZUAMBER MODA",
-    email: "arzuamber@gmail.com",
-    logo: "/logos/arzuamber.png",
+    email: "arzuamber@gmail.com", // Bu değişmedi çünkü sellerData'da email yok
+    logo: "https://arzuamber.com/_next/image?url=%2Fimages%2Flogo%2Ffooterlogo.png&w=256&q=75",
     score: 9.65,
     isActive: true,
-    follower: 10000,
+    follower: 58,
+    operationStatus: "Normal",
 
     // Siparişler
     totalOrders: 3500,
-    todaysOrders: 12,
+    todaysOrders: 0,
     cancelledOrders: 150,
     pendingOrders: 25,
 
@@ -20,8 +21,8 @@ export const stores = {
     pendingApprovalProducts: 5,
     rejectedProducts: 5,
 
-    bannerImage: "/placeholders/store-banner-1.jpg",
-    storePreviewImage: "/placeholders/store-preview-1.jpg",
+    bannerImage: "/placeholders/store-banner-1.jpg", // sellerData'da yok
+    storePreviewImage: "/placeholders/store-preview-1.jpg", // sellerData'da yok
   },
 
   ModaNova: {
@@ -32,6 +33,7 @@ export const stores = {
     score: 9.25,
     isActive: true,
     follower: 1500,
+    operationStatus: "Normal",
 
     totalOrders: 1200,
     todaysOrders: 8,
@@ -55,6 +57,7 @@ export const stores = {
     score: 8.75,
     isActive: false,
     follower: 25,
+    operationStatus: "Normal",
 
     totalOrders: 180,
     todaysOrders: 0,
