@@ -1,5 +1,15 @@
 {
   "HomePage": {
     "title": "Merhaba Dünya"
+  },
+
+  "quickAccess": {
+    "title": "Hızlı Erişim",
+    "myProducts": "Satıştaki Ürünlerim",
+    "delivery": "Hızlı Teslimat & Operasyon",
+    "advertising": "Reklam Ver",
+    "videoCenter": "Video Merkezi",
+    "reviews": "Ürün Değerlendirme Raporu",
+    "favorites": "Favori & Görüntüleme Raporu"
   }
 }

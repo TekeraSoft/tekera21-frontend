@@ -4,10 +4,8 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import {
-  AlertCircle,
   CheckCircle,
   Info,
-  ShieldAlert,
   Megaphone,
   XCircle,
   AlertTriangle,

@@ -1,9 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import SellerUserReducer from "./SellerUserSlice";
+import SellerCompanyReducer from "./SellerCompanySlice";
+import globalSettingsReducer from "./globalSettingsSlice";
 
 export const store = configureStore({
   reducer: {
     SellerUser: SellerUserReducer,
+    SellerCompany: SellerCompanyReducer,
+    globalSettings: globalSettingsReducer,
   },
 });
 

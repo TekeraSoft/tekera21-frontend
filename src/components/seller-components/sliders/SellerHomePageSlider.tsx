@@ -138,7 +138,7 @@ function HomePageSlider({
         <CarouselContent className="-ml-4">
           {slides.map((slide) => (
             <CarouselItem key={slide.id} className="pl-4 w-full">
-              <div className="h-[200px] md:h-[300px] lg:h-[400px] w-full relative rounded-lg overflow-hidden">
+              <div className="h-[200px] md:h-[300px] lg:h-[400px] w-full relative rounded-lg overflow-hidden  w">
                 <Image
                   src={slide.imageUrl || "/placeholder.svg"}
                   alt={slide.altText || slide.title}
