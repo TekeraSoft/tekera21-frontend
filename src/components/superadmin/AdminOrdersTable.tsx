@@ -1,20 +1,25 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { MoreHorizontal, ArrowUpDown, Eye, PackageCheck, Ban } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import { useState } from "react";
+import { ArrowUpDown } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function AdminOrdersTable() {
   const [orders, setOrders] = useState([
@@ -108,37 +113,37 @@ export function AdminOrdersTable() {
       payment: "Paid",
       items: 1,
     },
-  ])
+  ]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Delivered":
-        return "bg-green-100 text-green-800"
+        return "bg-green-100 text-green-800";
       case "Processing":
-        return "bg-blue-100 text-blue-800"
+        return "bg-blue-100 text-blue-800";
       case "Shipped":
-        return "bg-purple-100 text-purple-800"
+        return "bg-purple-100 text-purple-800";
       case "Pending":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow-100 text-yellow-800";
       case "Cancelled":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 text-red-800";
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 text-gray-800";
     }
-  }
+  };
 
   const getPaymentColor = (payment: string) => {
     switch (payment) {
       case "Paid":
-        return "bg-green-100 text-green-800"
+        return "bg-green-100 text-green-800";
       case "Pending":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow-100 text-yellow-800";
       case "Refunded":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 text-red-800";
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 text-gray-800";
     }
-  }
+  };
 
   return (
     <Card>
@@ -202,12 +207,18 @@ export function AdminOrdersTable() {
               <TableCell>{order.items}</TableCell>
               <TableCell>{order.total}</TableCell>
               <TableCell>
-                <Badge className={getStatusColor(order.status)} variant="outline">
+                <Badge
+                  className={getStatusColor(order.status)}
+                  variant="outline"
+                >
                   {order.status}
                 </Badge>
               </TableCell>
               <TableCell>
-                <Badge className={getPaymentColor(order.payment)} variant="outline">
+                <Badge
+                  className={getPaymentColor(order.payment)}
+                  variant="outline"
+                >
                   {order.payment}
                 </Badge>
               </TableCell>
@@ -250,5 +261,5 @@ export function AdminOrdersTable() {
         </Button>
       </div>
     </Card>
-  )
+  );
 }
