@@ -68,7 +68,7 @@ const TopBar = ({ children }: { children: React.ReactNode }) => {
     }
   };
   return (
-    <div className="w-full bg-white h-12 flex items-center justify-between px-4 shadow-sm border-b">
+    <div className="w-full bg-white h-[52px] flex items-center justify-between px-4 shadow-sm border-b">
       <ToggleSidebarButton />
       {children}
       <div className="pr-2 ml-auto">

@@ -210,7 +210,7 @@ export const formSchema = z.object({
   dateOfBirth: z.date({
     required_error: "Please select a date of birth.",
   }),
-  customerType: z.string({
+  customerRole: z.string({
     required_error: "Please select a customer type.",
   }),
   notes: z.string().optional(),

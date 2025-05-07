@@ -42,9 +42,12 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { formSchema } from "@/data/users";
+import { PopoverClose } from "@radix-ui/react-popover";
+import { enUS, tr as dateFnsTr } from "date-fns/locale";
+import { useLocale } from "next-intl";
 
 const countries = [
-  { label: "Türkiye", value: "us" },
+  { label: "Türkiye", value: "tr" },
   { label: "United States", value: "us" },
   { label: "United Kingdom", value: "uk" },
   { label: "Canada", value: "ca" },
@@ -56,8 +59,6 @@ const countries = [
   { label: "Spain", value: "es" },
   { label: "Netherlands", value: "nl" },
 ];
-
-
 
 type CustomerFormValues = z.infer<typeof formSchema>;
 
@@ -84,7 +85,7 @@ export function AdminCustomerEditForm({
     postalCode: customer?.postalCode || "",
     country: customer?.country || "us",
     dateOfBirth: customer?.dateOfBirth || new Date(),
-    customerType: customer?.customerType || "regular",
+    customerRole: customer?.customerRole || "customer",
     notes: customer?.notes || "",
   };
 
@@ -96,6 +97,7 @@ export function AdminCustomerEditForm({
   function onSubmit(data: CustomerFormValues) {
     onSave(data);
   }
+  const locale = useLocale() === "tr" ? dateFnsTr : enUS;
 
   return (
     <div className="container mx-auto">
@@ -227,12 +229,12 @@ export function AdminCustomerEditForm({
                 />
               </div>
 
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="grid sm:grid-cols-3 grid-cols-1 gap-4 w-full">
                 <FormField
                   control={form.control}
                   name="country"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col">
+                    <FormItem className="flex flex-col lg:w-52">
                       <FormLabel>Country</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
@@ -259,27 +261,29 @@ export function AdminCustomerEditForm({
                             <CommandInput placeholder="Search country..." />
                             <CommandList>
                               <CommandEmpty>No country found.</CommandEmpty>
-                              <CommandGroup>
-                                {countries.map((country) => (
-                                  <CommandItem
-                                    value={country.label}
-                                    key={country.value}
-                                    onSelect={() => {
-                                      form.setValue("country", country.value);
-                                    }}
-                                  >
-                                    <Check
-                                      className={cn(
-                                        "mr-2 h-4 w-4",
-                                        country.value === field.value
-                                          ? "opacity-100"
-                                          : "opacity-0"
-                                      )}
-                                    />
-                                    {country.label}
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
+                              <PopoverClose asChild>
+                                <CommandGroup>
+                                  {countries.map((country) => (
+                                    <CommandItem
+                                      value={country.label}
+                                      key={country.value}
+                                      onSelect={() => {
+                                        form.setValue("country", country.value);
+                                      }}
+                                    >
+                                      <Check
+                                        className={cn(
+                                          "mr-2 h-4 w-4",
+                                          country.value === field.value
+                                            ? "opacity-100"
+                                            : "opacity-0"
+                                        )}
+                                      />
+                                      {country.label}
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </PopoverClose>
                             </CommandList>
                           </Command>
                         </PopoverContent>
@@ -305,7 +309,7 @@ export function AdminCustomerEditForm({
                               )}
                             >
                               {field.value ? (
-                                format(field.value, "PPP")
+                                format(field.value, "P", { locale: locale })
                               ) : (
                                 <span>Pick a date</span>
                               )}
@@ -315,6 +319,8 @@ export function AdminCustomerEditForm({
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
                           <Calendar
+                            className=""
+                            captionLayout="dropdown"
                             mode="single"
                             selected={field.value}
                             onSelect={field.onChange}
@@ -329,37 +335,38 @@ export function AdminCustomerEditForm({
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="customerRole"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Customer Role</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select customer type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="customer">Customer</SelectItem>
+                          <SelectItem value="superadmin">
+                            Super Admin
+                          </SelectItem>
+                          <SelectItem value="admin">Admin</SelectItem>
+                          <SelectItem value="seller">Seller</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        The customer type determines pricing and benefits.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-
-              <FormField
-                control={form.control}
-                name="customerType"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Customer Type</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select customer type" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="regular">Regular</SelectItem>
-                        <SelectItem value="vip">VIP</SelectItem>
-                        <SelectItem value="wholesale">Wholesale</SelectItem>
-                        <SelectItem value="business">Business</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>
-                      The customer type determines pricing and benefits.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
 
               <FormField
                 control={form.control}
