@@ -107,11 +107,11 @@ export default function AdminSettingsPanel() {
   }
 
   return (
-    <Card className="w-full min-h-screen px-4 mx-auto">
-      <CardHeader>
+    <Card className="w-full min-h-screen mx-auto pt-4">
+      {/* <CardHeader>
         <CardTitle className="text-2xl">Hesap Ayarları</CardTitle>
         <CardDescription>Kişisel bilgilerinizi ve hesap ayarlarınızı yönetin.</CardDescription>
-      </CardHeader>
+      </CardHeader> */}
       <CardContent>
         <Tabs defaultValue="profile" className="w-full">
           <TabsList className="grid grid-cols-4 mb-8">
