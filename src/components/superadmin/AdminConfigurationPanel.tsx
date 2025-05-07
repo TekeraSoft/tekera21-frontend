@@ -49,7 +49,7 @@ export default function AdminConfigurationPanel() {
   };
 
   return (
-    <Card className="w-full mx-auto px-4 mt-5">
+    <Card className="w-full mx-auto pt-4">
       {/* <CardHeader>
         <CardTitle className="text-2xl">Ayarlar ve Yapılandırma</CardTitle>
         <CardDescription>
