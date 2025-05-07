@@ -44,7 +44,7 @@ export const customers = [
   {
     id: "CUST-001",
     name: "John Smith",
-    firstName: "John Smith",
+    firstName: "John",
     lastName: "Smith",
     email: "john@example.com",
     avatar: "/placeholder.svg?height=32&width=32",
@@ -177,6 +177,9 @@ export const users = { John: john, Jane: jane, Arzuamber: Arzuamber };
 export const userList = Object.values(users).map((user) => user as User);
 
 export const formSchema = z.object({
+  name: z.string().min(2, {
+    message: "First name must be at least 2 characters.",
+  }),
   firstName: z.string().min(2, {
     message: "First name must be at least 2 characters.",
   }),

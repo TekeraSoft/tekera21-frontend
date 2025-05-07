@@ -4,7 +4,7 @@ import { Search, UserPlus, Download } from "lucide-react"
 
 export function AdminCustomersHeader() {
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-4 sm:flex-row flex-wrap sm:items-center sm:justify-between">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Customers</h1>
         <p className="text-muted-foreground">Manage your customer database and information.</p>

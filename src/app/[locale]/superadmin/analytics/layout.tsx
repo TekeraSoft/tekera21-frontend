@@ -1,3 +1,4 @@
+import TopBar from "@/components/superadmin/TopBar";
 import React from "react";
 
 export default function OrdersLayout({
@@ -5,5 +6,12 @@ export default function OrdersLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      <TopBar>
+        <></>
+      </TopBar>
+      {children}
+    </>
+  );
 }
