@@ -16,7 +16,6 @@ export default function SellerLayout({ children }: SellerLayoutProps) {
     <div className="flex flex-col">
       <main className="min-h-screen flex flex-col">
         <SellerHeader />
-
         <div className="flex-1 px-8">{children}</div>
         <SellerFooter />
       </main>
