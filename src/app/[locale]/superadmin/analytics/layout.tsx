@@ -6,12 +6,5 @@ export default function OrdersLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <TopBar>
-        <></>
-      </TopBar>
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }

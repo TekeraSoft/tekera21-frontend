@@ -58,7 +58,7 @@ export default function AdminConfigurationPanel() {
       </CardHeader> */}
       <CardContent>
         <Tabs defaultValue="general" className="w-full">
-          <TabsList className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 mb-8">
+          <TabsList className="grid grid-cols-3 md:grid-cols-4 gap-y-2 lg:grid-cols-5 mb-8 h-full">
             <TabsTrigger value="general" className="flex items-center gap-2">
               <Globe className="h-4 w-4" />
               <span className="hidden md:inline">Genel</span>

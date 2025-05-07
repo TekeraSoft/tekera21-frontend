@@ -4,6 +4,7 @@ import { AdminCustomerEditForm } from "@/components/superadmin/AdminCustomerEdit
 import React from "react";
 import { customers } from "@/data/users";
 import TopBar from "@/components/superadmin/TopBar";
+import AdminInnerLayout from "@/components/superadmin/AdminInnerLayout";
 
 const AdminEditCustomerPage = () => {
   const { id } = useParams() as { id: string };
@@ -18,12 +19,14 @@ const AdminEditCustomerPage = () => {
       <TopBar>
         <></>
       </TopBar>
-      <div className="px-6 py-3 w-full">
-        <AdminCustomerEditForm
-          customer={customer}
-          onSave={handleSaveCustomer}
-        />
-      </div>
+      <AdminInnerLayout>
+        <div className="w-full">
+          <AdminCustomerEditForm
+            customer={customer}
+            onSave={handleSaveCustomer}
+          />
+        </div>
+      </AdminInnerLayout>
     </>
   );
 };

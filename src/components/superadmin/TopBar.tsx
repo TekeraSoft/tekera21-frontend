@@ -6,9 +6,11 @@ import {
   CheckCircle,
   Info,
   Megaphone,
+  Settings,
   XCircle,
 } from "lucide-react";
 import ToggleSidebarButton from "./ToggleSidebarButton";
+import { Link } from "@/i18n/navigation";
 
 type AlertItem = {
   id: string;
@@ -71,7 +73,31 @@ const TopBar = ({ children }: { children: React.ReactNode }) => {
     <div className="w-full bg-white h-[52px] flex items-center justify-between px-4 shadow-sm border-b">
       <ToggleSidebarButton />
       {children}
-      <div className="pr-2 ml-auto">
+      <div className="pr-2 ml-auto flex items-center gap-3">
+        <Popover>
+          <PopoverTrigger asChild>
+            <div className="flex items-center gap-1 cursor-pointer text-gray-600">
+              <Settings size={15} />
+              Ayarlar
+            </div>
+          </PopoverTrigger>
+          <PopoverContent className="w-48 sm:w-60 text-sm">
+            <Link
+              href={"/superadmin/settings/configuration"}
+              className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md"
+            >
+              <Megaphone size={16} className="text-gray-600" /> Configuration
+              Settings
+            </Link>
+            <Link
+              href={"/superadmin/settings/profile"}
+              className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md"
+            >
+              <Megaphone size={16} className="text-gray-600" /> Profile
+              Settings
+            </Link>
+          </PopoverContent>
+        </Popover>
         <Popover>
           <PopoverTrigger asChild>
             <div className="flex items-center gap-1 cursor-pointer text-gray-600">
