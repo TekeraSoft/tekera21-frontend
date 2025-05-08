@@ -39,7 +39,7 @@ const menuItems: MenuItem[] = [
         key: "productList",
         label: "Ürün Listesi",
         requiredRole: "products",
-        href: "/seller/products/list",
+        href: "/seller/product/list",
       },
 
       {
