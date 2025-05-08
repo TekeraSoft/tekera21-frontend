@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import "./globals.css";
 import StoreProvider from "@/store/StoreProvider";
-import getUser from "@/request/getUser";
+import { getUser } from "../actions";
 
 export const metadata: Metadata = {
   title: "Create Next App",

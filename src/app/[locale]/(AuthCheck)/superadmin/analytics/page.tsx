@@ -3,7 +3,14 @@ import { AdminAnalyticsHeader } from "@/components/superadmin/AdminAnalyticsHead
 import AdminInnerLayout from "@/components/superadmin/AdminInnerLayout";
 import TopBar from "@/components/superadmin/TopBar";
 
-export default function AnalyticsPage() {
+export default async function AnalyticsPage() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/users/1", {
+    cache: "no-store",
+  });
+
+  const user = await res.json();
+  console.log("user in analytics page", user);
+
   return (
     <>
       <TopBar>
