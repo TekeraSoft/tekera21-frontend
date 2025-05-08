@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import "./globals.css";
 import StoreProvider from "@/store/StoreProvider";
+import getUser from "@/request/getUser";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,10 +24,12 @@ export default async function RootLayout({
     notFound();
   }
 
+  const user = await getUser();
+
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={` antialiased`}>
-        <StoreProvider>
+        <StoreProvider user={user}>
           <NextIntlClientProvider>{children}</NextIntlClientProvider>
         </StoreProvider>
       </body>

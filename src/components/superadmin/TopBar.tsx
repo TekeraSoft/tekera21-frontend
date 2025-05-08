@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import {
@@ -13,6 +14,8 @@ import {
 } from "lucide-react";
 import ToggleSidebarButton from "./ToggleSidebarButton";
 import { Link } from "@/i18n/navigation";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 type AlertItem = {
   id: string;
@@ -71,6 +74,10 @@ const TopBar = ({ children }: { children: React.ReactNode }) => {
         };
     }
   };
+
+  const user = useSelector((state: RootState) => state.User.userInfo);
+
+  console.log("user topbar", user);
   return (
     <div className="w-full bg-white h-[52px] flex items-center justify-between px-4 shadow-sm border-b">
       <ToggleSidebarButton />
