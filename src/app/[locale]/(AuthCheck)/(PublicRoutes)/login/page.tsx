@@ -7,11 +7,12 @@ export const metadata: Metadata = {
   description: "Login to your account",
 };
 
-type Props = {
-  params: { locale: string };
-};
-
-export default function LoginPage({ params: { locale } }: Props) {
+export default async function LoginPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
   return (
     <div className="flex min-h-screen w-full">
       <div className="flex w-full flex-col items-center justify-center px-4 py-12 sm:px-6 lg:w-1/2 lg:px-8">

@@ -11,7 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { loginUser } from "@/app/[locale]/(AuthCheck)/login/actions";
+import { loginUser } from "@/app/[locale]/(AuthCheck)/(PublicRoutes)/login/actions";
 
 export function LoginForm({ locale }: { locale: string }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -22,19 +22,37 @@ export function LoginForm({ locale }: { locale: string }) {
     { error: "" }
   );
 
-  console.log("lang", locale);
-
   return (
     <div className="mt-8 space-y-6">
       <form action={formAction} className="space-y-4">
         <input type="hidden" name="locale" value={locale} />
+        {state.error && (
+          <div className="rounded-md bg-red-50 p-4 text-sm text-red-800 dark:bg-red-900 dark:text-red-400">
+            <div className="flex items-center space-x-2">
+              <svg
+                className="h-5 w-5 flex-shrink-0 text-red-400 dark:text-red-500"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm1.293-11.293a1 1 0 00-1.414 1.414L9.586 10l.293.293a1 1 0 001.414-1.414L10.414 10l.293-.293zM10 14a1 1 0 110-2h.01a1 1 0 010 2H10z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <p>{state.error}</p>
+            </div>
+          </div>
+        )}
         <div className="space-y-2">
-          <Label htmlFor="username">Email</Label>
+          <Label htmlFor="username">username</Label>
           <Input
             id="username"
             name="username"
             type="string"
-            placeholder="enter your role"
+            placeholder="enter your username"
             required
           />
         </div>

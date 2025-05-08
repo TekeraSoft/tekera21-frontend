@@ -6,22 +6,35 @@ import { userList } from "@/data/users";
 
 export async function loginUser(prevState: any, formData: FormData) {
   const username = formData.get("username") as string;
-  const password = formData.get("password") as string;
+  //   const password = formData.get("password") as string;
   const locale = formData.get("locale") as string;
-  console.log("username", username);
+
   const res = userList;
+
   let role;
+
   const user = res.find((user) => {
-    role = username;
-    return user.role.includes(username);
+    return user.name === username;
   });
-  console.log("user", user);
+
   if (!user) {
     return { error: "Kullanıcı bulunamadı" };
   }
-  console.log("role", role);
+  if (user.role.includes("superadmin")) {
+    role = "superadmin";
+  } else if (user.role.includes("seller")) {
+    role = "seller";
+  } else {
+    return { error: "Kullanıcı Yetkisi yok!" };
+  }
+
   const cookieStore = await cookies();
-  cookieStore.set("token", "accessToken", {
+  cookieStore.set("token", "accessTokenvaluserfdsfd", {
+    httpOnly: true,
+    path: "/",
+    maxAge: 60 * 30,
+  });
+  cookieStore.set("user", JSON.stringify(user), {
     httpOnly: true,
     path: "/",
     maxAge: 60 * 30,
