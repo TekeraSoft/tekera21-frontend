@@ -1,18 +1,18 @@
 "use client";
 
-import SellerInfoCard from "@/components/seller-components/cards/SellerInfoCard";
-import SellerHomePageSlider from "@/components/seller-components/sliders/SellerHomePageSlider";
 import { useSelector } from "react-redux";
-import type { RootState } from "@/store/store";
+
 import SellerSubHeader from "@/components/seller-components/layout/header/SellerSubHeader";
-import SellerQuickAccessCard from "@/components/seller-components/cards/SellerQuickAccessCard";
+import { RootState } from "@/store/store";
+import SellerHomePageSlider from "@/components/seller-components/sliders/SellerHomePageSlider";
+import SellerInfoCard from "@/components/seller-components/cards/SellerInfoCard";
 import SellerActionsCard from "@/components/seller-components/main-page/SellerActionsCard";
 import SellerPerformCard from "@/components/seller-components/main-page/SellerPerformCard";
-import SellerAnnouncementsCard from "@/components/seller-components/main-page/SellerAnnouncementsCard";
-import SellerInvoiceCard from "@/components/seller-components/main-page/SellerInvoiceCard";
+import SellerQuickAccessCard from "@/components/seller-components/cards/SellerQuickAccessCard";
 import SellerRecommendationsCard from "@/components/seller-components/main-page/SellerRecommendationsCard";
 import SellerCalendar from "@/components/seller-components/main-page/SellerCalendar";
-
+import SellerAnnouncementsCard from "@/components/seller-components/main-page/SellerAnnouncementsCard";
+import SellerInvoiceCard from "@/components/seller-components/main-page/SellerInvoiceCard";
 const SellerPage = () => {
   const { SellerCompanyInfo } = useSelector(
     (state: RootState) => state.SellerCompany

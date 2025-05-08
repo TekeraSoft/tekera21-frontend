@@ -31,7 +31,7 @@ interface HomePageSliderProps {
   className?: string;
 }
 
-function HomePageSlider({
+export default function SellerHomePageSlider({
   slides: initialSlides,
   apiEndpoint,
   autoplayDelay = 5000,
@@ -169,5 +169,3 @@ function HomePageSlider({
     </div>
   );
 }
-
-export default HomePageSlider;
