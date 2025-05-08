@@ -1,39 +1,42 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { Github } from "lucide-react"
+import { useActionState, useState } from "react";
+import Link from "next/link";
+import { Github } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { loginUser } from "@/app/[locale]/(AuthCheck)/login/actions";
 
-export function LoginForm() {
-  const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
+export function LoginForm({ locale }: { locale: string }) {
+  const [isLoading, setIsLoading] = useState(false);
 
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setIsLoading(true)
+  const [state, formAction] = useActionState(
+    (prevState: { error: string }, formData: FormData) =>
+      loginUser(prevState, formData),
+    { error: "" }
+  );
 
-    // Simulate login - replace with actual authentication logic
-    setTimeout(() => {
-      setIsLoading(false)
-      router.push("/dashboard")
-    }, 1000)
-  }
+  console.log("lang", locale);
 
   return (
     <div className="mt-8 space-y-6">
-      <form onSubmit={onSubmit} className="space-y-4">
+      <form action={formAction} className="space-y-4">
+        <input type="hidden" name="locale" value={locale} />
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="name@example.com" required autoComplete="email" />
+          <Label htmlFor="username">Email</Label>
+          <Input
+            id="username"
+            name="username"
+            type="string"
+            placeholder="enter your role"
+            required
+          />
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
@@ -45,11 +48,19 @@ export function LoginForm() {
               Forgot password?
             </Link>
           </div>
-          <Input id="password" type="password" required autoComplete="current-password" />
+          <Input
+            id="password"
+            type="password"
+            required
+            autoComplete="current-password"
+          />
         </div>
         <div className="flex items-center space-x-2">
           <Checkbox id="remember" />
-          <Label htmlFor="remember" className="text-sm font-medium leading-none">
+          <Label
+            htmlFor="remember"
+            className="text-sm font-medium leading-none"
+          >
             Remember me
           </Label>
         </div>
@@ -62,7 +73,9 @@ export function LoginForm() {
           <Separator className="w-full" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+          <span className="bg-background px-2 text-muted-foreground">
+            Or continue with
+          </span>
         </div>
       </div>
       <div className="flex flex-col space-y-2">
@@ -71,7 +84,13 @@ export function LoginForm() {
           GitHub
         </Button>
         <Button variant="outline" type="button" className="w-full">
-          <svg className="mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="16" height="16">
+          <svg
+            className="mr-2 h-4 w-4"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 48 48"
+            width="16"
+            height="16"
+          >
             <path
               fill="#FFC107"
               d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
@@ -93,5 +112,5 @@ export function LoginForm() {
         </Button>
       </div>
     </div>
-  )
+  );
 }

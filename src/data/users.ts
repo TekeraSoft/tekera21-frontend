@@ -16,7 +16,35 @@ export const jane = {
   age: 28,
   email: "jane@gmail.com",
   password: "123456",
-  role: ["orders", "products", "users", "shipping", "analytics", "customers"],
+  role: [
+    "orders",
+    "products",
+    "users",
+    "shipping",
+    "analytics",
+    "customers",
+    "seller",
+    "sellerSuperAdmin",
+  ],
+  isActive: true,
+};
+
+
+export const ken = {
+  id: 4,
+  name: "Jane Doe",
+  age: 28,
+  email: "jane@gmail.com",
+  password: "123456",
+  role: [
+    "orders",
+    "products",
+    "users",
+    "shipping",
+    "analytics",
+    "customers",
+    "superadmin",
+  ],
   isActive: true,
 };
 
@@ -165,7 +193,7 @@ export const customers = [
   },
 ];
 
-export const users = { John: john, Jane: jane, Arzuamber: Arzuamber };
+export const users = { John: john, Jane: jane, Arzuamber: Arzuamber, ken: ken };
 export const userList = Object.values(users).map((user) => user as User);
 
 export const formSchema = z.object({
