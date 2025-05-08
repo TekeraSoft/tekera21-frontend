@@ -6,7 +6,7 @@ export default function SellerProductsPage() {
   return (
     <>
       <SellerSubHeader>
-        <div className="flex lex-col justify-between items-center">
+        <div className="flex justify-between items-center">
           <div className="flex items-center justify-center">
             <div>
               <p>Ürün Limit seviyesi</p>
@@ -14,10 +14,11 @@ export default function SellerProductsPage() {
             </div>
             <Separator orientation="vertical" />
             <div>
-              <p>Ürün Limit seviyesi</p>
-              <span>Seviye 1</span>
+              <p>Ürün Adeti</p>
+              <span>150/500</span>
             </div>
           </div>
+          <div></div>
         </div>
       </SellerSubHeader>
       <SellerProductList />
