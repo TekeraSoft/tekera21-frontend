@@ -17,13 +17,10 @@ function SellerPerformCard() {
             <span className="h-2 w-2 rounded-full bg-orange-500 animate-pulse"></span>
             Canlı Performansım
           </Badge>
-          <Button variant="ghost" size="icon">
-            <ChevronDown className="h-4 w-4" />
-          </Button>
         </div>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
           <div className="bg-gray-50 p-4 rounded-lg">
             <div className="text-sm text-gray-600">Bugünkü Satış</div>
             <div className="flex items-center justify-between mt-1">

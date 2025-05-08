@@ -18,8 +18,12 @@ import {
 import { Store } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 export default function SellerCompanyPopover() {
+  const { logoUrl } = useSelector((state: RootState) => state.globalSettings);
+
   const [openDialog, setOpenDialog] = useState(false);
 
   return (
@@ -35,9 +39,21 @@ export default function SellerCompanyPopover() {
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className="w-72 sm:w-96 p-4 lg:hidden">
+      <PopoverContent className="w-72 sm:w-96 p-4 lg:hidden z-50">
         <div className="flex items-center gap-4 border-b pb-4">
-          <Image src="/logo.png" alt="Logo" width={48} height={48} />
+          <Link
+            href={"/seller"}
+            className="mr-4 flex items-center justify-center"
+          >
+            {/* Logo */}
+            <Image
+              src={logoUrl}
+              alt="logo-url"
+              width={50}
+              height={50}
+              className="object-cover"
+            />
+          </Link>
           <div className="min-w-0">
             <h3 className="text-lg font-semibold truncate">Mağaza Adı</h3>
             <p className="text-sm text-gray-500 truncate">

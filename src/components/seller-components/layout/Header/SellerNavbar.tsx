@@ -7,6 +7,7 @@ import {
   Truck,
   BarChart2,
   FileText,
+  UserRoundCog,
 } from "lucide-react";
 import {
   Menubar,
@@ -27,8 +28,26 @@ import SellerNavbarMobile from "./SellerNavbarMobile";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 
+// <Users className="mr-2 h-4 w-4" />,
+
 // Define the menu structure
+
 const menuItems: MenuItem[] = [
+  {
+    key: "user",
+    label: "Kullanıcı",
+    icon: <Users className="mr-2 h-4 w-4" />,
+
+    requiredRole: "user",
+    subItems: [
+      {
+        key: "user",
+        label: "Profil",
+        requiredRole: "users",
+        href: "/seller/user/profile",
+      },
+    ],
+  },
   {
     key: "products",
     label: "Ürünler",
@@ -61,7 +80,6 @@ const menuItems: MenuItem[] = [
           },
         ],
       },
-
       {
         key: "categories",
         label: "Kategoriler",
@@ -90,10 +108,12 @@ const menuItems: MenuItem[] = [
       },
     ],
   },
+
   {
     key: "users",
     label: "Kullanıcılar",
-    icon: <Users className="mr-2 h-4 w-4" />,
+    icon: <UserRoundCog className="mr-2 h-4 w-4" />,
+
     requiredRole: "users",
     subItems: [
       {
@@ -182,6 +202,7 @@ function SellerNavbar() {
   const { SellerUserInfo } = useSelector(
     (state: RootState) => state.SellerUser
   );
+
   const { logoUrl } = useSelector((state: RootState) => state.globalSettings);
 
   // Check if the user has the required role

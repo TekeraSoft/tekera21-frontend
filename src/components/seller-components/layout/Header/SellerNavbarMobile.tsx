@@ -7,15 +7,17 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { RootState } from "@/store/store";
-import { ChevronDown, ChevronRight, Menu, Search, X } from "lucide-react";
+import { ChevronDown, ChevronRight, Menu, Search, User, X } from "lucide-react";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { cn } from "@/lib/utils";
 import { NotificationPopover } from "./SellerNotificationPopover";
 import { MenuItem } from "../../../../../types/SellerTypes/SellerNavbarTypes";
-import SellerCompanyPopover from "./SellerCompanyPopover";
+import SellerCompanyPopover from "./SellerCompanyPopoverMobile";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
+
+import SellerMobileSearchButton from "./NavButtons/SellerMobileSearchButton";
 
 interface SellerNavbarMobileProps {
   menuItems: MenuItem[];
@@ -104,7 +106,7 @@ function SellerNavbarMobile({ menuItems }: SellerNavbarMobileProps) {
             alt="logo-url"
             width={50}
             height={50}
-            className="object-cover"
+            className="object-cover w-full h-auto"
           />
         </Link>
         <div className="flex  justify-between items-center gap-2">
@@ -116,9 +118,22 @@ function SellerNavbarMobile({ menuItems }: SellerNavbarMobileProps) {
           >
             <Search size={16} />
           </Button>
-
+          {/* <SellerMobileSearchButton /> */}
           <NotificationPopover alertItems={alertItems} />
+
+          <Button
+            className=" rounded-full"
+            variant="default"
+            size="icon"
+            aria-label="Toggle alert"
+          >
+            <Link href={"/seller/user/profile"}>
+              <User size={16} />
+            </Link>
+          </Button>
+
           <SellerCompanyPopover />
+
           <Button
             className="border"
             variant="ghost"

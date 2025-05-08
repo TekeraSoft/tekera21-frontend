@@ -146,7 +146,7 @@ const SellerActionsCard = () => {
         <CardTitle>Aksiyonlar</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-6 lg:grid-cols-3">
           {sections.map((section, idx) => (
             <div key={idx} className="space-y-4">
               <div className="text-sm font-medium text-blue-600">

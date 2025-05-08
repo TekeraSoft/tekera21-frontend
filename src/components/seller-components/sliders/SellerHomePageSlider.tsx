@@ -21,24 +21,19 @@ interface SliderItem {
 }
 
 interface HomePageSliderProps {
-  // Allow passing slides directly as props
   slides?: SliderItem[];
-  // Or fetch from an API endpoint
   apiEndpoint?: string;
-  // Autoplay configuration
   autoplayDelay?: number;
-  // Optional className for additional styling
   className?: string;
 }
 
 export default function SellerHomePageSlider({
   slides: initialSlides,
-  apiEndpoint,
   autoplayDelay = 5000,
   className = "",
 }: HomePageSliderProps) {
   // State to hold slider data
-  const [slides, setSlides] = useState<SliderItem[]>(
+  const [slides] = useState<SliderItem[]>(
     initialSlides || [
       // Default slides if none provided
       {
@@ -68,37 +63,8 @@ export default function SellerHomePageSlider({
     ]
   );
 
-  const [loading, setLoading] = useState(!!apiEndpoint);
-  const [error, setError] = useState<string | null>(null);
-
-  // Fetch slides from API if endpoint is provided
-  useEffect(() => {
-    if (!apiEndpoint) return;
-
-    const fetchSlides = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(apiEndpoint);
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch slides: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setSlides(data);
-        setError(null);
-      } catch (err) {
-        console.error("Error fetching slider data:", err);
-        setError(
-          err instanceof Error ? err.message : "Failed to load slider data"
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSlides();
-  }, [apiEndpoint]);
+  const [loading] = useState();
+  const [error] = useState<string | null>(null);
 
   // Show loading state
   if (loading) {
@@ -122,7 +88,7 @@ export default function SellerHomePageSlider({
   }
 
   return (
-    <div className={`w-full relative ${className}`}>
+    <div className={`w-full relative  ${className}`}>
       <Carousel
         opts={{
           align: "start",

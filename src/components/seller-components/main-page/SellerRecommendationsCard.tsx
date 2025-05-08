@@ -15,10 +15,10 @@ const SellerRecommendationsCard = () => {
       </CardHeader>
       <CardContent className="p-0">
         <Tabs defaultValue="growth" className="w-full">
-          <TabsList className="w-full grid grid-cols-3 rounded-none border-b bg-transparent h-auto p-0">
+          <TabsList className="w-full flex flex-wrap lg:grid lg:grid-cols-3 rounded-b border-b bg-transparent h-auto p-0">
             <TabsTrigger
               value="growth"
-              className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-rose-500 data-[state=active]:shadow-none py-2 text-sm font-medium"
+              className="rounded-none data-[state=active]:border-b data-[state=active]:border-rose-500 data-[state=active]:shadow-none py-2 text-sm font-medium"
             >
               <span className="flex items-center gap-1">
                 <TrendingUp className="h-4 w-4 text-blue-500" />
@@ -27,7 +27,7 @@ const SellerRecommendationsCard = () => {
             </TabsTrigger>
             <TabsTrigger
               value="development"
-              className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-rose-500 data-[state=active]:shadow-none py-2 text-sm font-medium"
+              className="rounded-none data-[state=active]:border-b data-[state=active]:border-rose-500 data-[state=active]:shadow-none py-2 text-sm font-medium"
             >
               <span className="flex items-center gap-1">
                 <Star className="h-4 w-4 text-purple-500" />
@@ -36,7 +36,7 @@ const SellerRecommendationsCard = () => {
             </TabsTrigger>
             <TabsTrigger
               value="promotion"
-              className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-rose-500 data-[state=active]:shadow-none py-2 text-sm font-medium"
+              className="rounded-none data-[state=active]:border-b data-[state=active]:border-rose-500 data-[state=active]:shadow-none py-2 text-sm font-medium"
             >
               <span className="flex items-center gap-1">
                 <Heart className="h-4 w-4 text-orange-500" />
