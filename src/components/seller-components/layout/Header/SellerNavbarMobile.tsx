@@ -13,7 +13,9 @@ import { useSelector } from "react-redux";
 import { cn } from "@/lib/utils";
 import { NotificationPopover } from "./SellerNotificationPopover";
 import { MenuItem } from "../../../../../types/SellerTypes/SellerNavbarTypes";
-import SellerUserPopover from "./SellerCompanyPopover";
+import SellerCompanyPopover from "./SellerCompanyPopover";
+import { Link } from "@/i18n/navigation";
+import Image from "next/image";
 
 interface SellerNavbarMobileProps {
   menuItems: MenuItem[];
@@ -87,10 +89,24 @@ function SellerNavbarMobile({ menuItems }: SellerNavbarMobileProps) {
     return SellerUserInfo.role.includes(role);
   };
 
+  const { logoUrl } = useSelector((state: RootState) => state.globalSettings);
+
   return (
     <div className="lg:hidden border-b">
       <div className="flex justify-between items-center p-4">
-        <div>Logo</div>
+        <Link
+          href={"/seller"}
+          className="mr-4 flex items-center justify-center"
+        >
+          {/* Logo */}
+          <Image
+            src={logoUrl}
+            alt="logo-url"
+            width={50}
+            height={50}
+            className="object-cover"
+          />
+        </Link>
         <div className="flex  justify-between items-center gap-2">
           <Button
             className=" rounded-full"
@@ -102,7 +118,7 @@ function SellerNavbarMobile({ menuItems }: SellerNavbarMobileProps) {
           </Button>
 
           <NotificationPopover alertItems={alertItems} />
-          <SellerUserPopover />
+          <SellerCompanyPopover />
           <Button
             className="border"
             variant="ghost"

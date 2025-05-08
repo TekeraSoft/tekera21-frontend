@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Filter, Download, MoreHorizontal, ChevronDown } from "lucide-react";
+import { Filter, MoreHorizontal, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
@@ -36,6 +36,8 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Badge } from "@/components/ui/badge";
+
+import SellerProductListTabsHeader from "./SellerProductListTabsHeader";
 
 // Sample product data
 const products = [
@@ -170,7 +172,7 @@ function FilterSection({ activeTab, onApplyFilter }: any) {
             className="w-full md:w-auto"
           >
             <CollapsibleTrigger asChild>
-              <Button variant="outline" className="w-full ">
+              <Button variant="outline">
                 <Filter className="h-4 w-4 mr-2" />
                 Detaylı Filtreyi {isFilterOpen ? "Kapat" : "Aç"}
                 <ChevronDown
@@ -547,20 +549,8 @@ export default function SellerProductList() {
   };
 
   return (
-    <div className="container mx-auto py-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Ürün Listesi</h1>
-        <div className="flex gap-2">
-          <Button variant="outline">
-            <Download className="h-4 w-4 mr-2" />
-            Excel İle İndir
-          </Button>
-          <Button>
-            <span className="mr-2">+</span>
-            Yeni Ürün Ekle
-          </Button>
-        </div>
-      </div>
+    <div className="container  md:mx-auto py-6 space-y-6">
+      <SellerProductListTabsHeader />
 
       <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
         <div className="mb-4">
@@ -570,10 +560,10 @@ export default function SellerProductList() {
           />
         </div>
 
-        <TabsList className="grid w-full grid-cols-4 mb-6">
+        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4  items-center gap-5 min-h-24 px-2">
           <TabsTrigger
             value="all"
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground min-w-12"
           >
             Tüm Ürünler
             <Badge variant="outline" className="ml-2">
@@ -593,7 +583,7 @@ export default function SellerProductList() {
             value="pending"
             className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
           >
-            Onay Sürecindeki Ürünler
+            Onay Bekleyen Ürünler
             <Badge variant="outline" className="ml-2">
               2
             </Badge>

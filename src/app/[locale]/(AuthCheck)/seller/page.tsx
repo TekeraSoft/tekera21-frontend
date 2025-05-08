@@ -2,7 +2,6 @@
 
 import { useSelector } from "react-redux";
 
-import SellerSubHeader from "@/components/seller-components/layout/header/SellerSubHeader";
 import { RootState } from "@/store/store";
 import SellerHomePageSlider from "@/components/seller-components/sliders/SellerHomePageSlider";
 import SellerInfoCard from "@/components/seller-components/cards/SellerInfoCard";
@@ -23,10 +22,7 @@ const SellerPage = () => {
   }
 
   return (
-    <main className="flex flex-col w-full">
-      <SellerSubHeader>
-        <div>sdfgsgsg</div>
-      </SellerSubHeader>
+    <main className="flex flex-col w-full px-8">
       <section className="flex flex-col gap-2">
         <SellerHomePageSlider />
         <SellerInfoCard SellerCompanyInfo={SellerCompanyInfo} />

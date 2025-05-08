@@ -1,27 +1,24 @@
 import SellerSubHeader from "@/components/seller-components/layout/header/SellerSubHeader";
 import SellerProductList from "@/components/seller-components/product/list-page/SellerProductList";
-import { Separator } from "@/components/ui/separator";
 
 export default function SellerProductsPage() {
   return (
-    <>
-      <SellerSubHeader>
-        <div className="flex justify-between items-center">
-          <div className="flex items-center justify-center">
+    <main className="w-full">
+      <SellerSubHeader
+        left={
+          <div className="flex items-center space-x-4">
             <div>
-              <p>Ürün Limit seviyesi</p>
-              <span>Seviye 1</span>
+              <p className="text-sm font-medium">Ürün Limit seviyesi</p>
+              <span className="text-sm text-gray-600">Seviye 1</span>
             </div>
-            <Separator orientation="vertical" />
             <div>
-              <p>Ürün Adeti</p>
-              <span>150/500</span>
+              <p className="text-sm font-medium">Ürün Adeti</p>
+              <span className="text-sm text-gray-600">150/500</span>
             </div>
           </div>
-          <div></div>
-        </div>
-      </SellerSubHeader>
+        }
+      />
       <SellerProductList />
-    </>
+    </main>
   );
 }
