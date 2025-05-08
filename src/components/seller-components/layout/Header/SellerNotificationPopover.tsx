@@ -67,7 +67,7 @@ export function NotificationPopover({ alertItems }: NotificationPopoverProps) {
 
   return (
     <Popover>
-      <PopoverTrigger className="relative bg-primary h-10 w-10 flex justify-center items-center rounded-full cursor-pointer ">
+      <PopoverTrigger className="relative bg-secondary h-10 w-10 flex justify-center items-center rounded-full cursor-pointer ">
         <Bell className="text-white" size={18} />
         {alertItems.length > 0 && (
           <span className="absolute top-0 right-0 inline-block text-[10px] text-white w-4 h-4 bg-red-500 rounded-full">

@@ -12,6 +12,7 @@ import SellerRecommendationsCard from "@/components/seller-components/main-page/
 import SellerCalendar from "@/components/seller-components/main-page/SellerCalendar";
 import SellerAnnouncementsCard from "@/components/seller-components/main-page/SellerAnnouncementsCard";
 import SellerInvoiceCard from "@/components/seller-components/main-page/SellerInvoiceCard";
+import SellerInnerContainer from "@/components/seller-components/containers/SellerInnerContainer";
 const SellerPage = () => {
   const { SellerCompanyInfo } = useSelector(
     (state: RootState) => state.SellerCompany
@@ -22,13 +23,12 @@ const SellerPage = () => {
   }
 
   return (
-    <main className="flex flex-col w-full px-8">
-      <section className="flex flex-col gap-2">
-        <SellerHomePageSlider />
+    <main className="flex flex-col w-full ">
+      <SellerInnerContainer>
         <SellerInfoCard SellerCompanyInfo={SellerCompanyInfo} />
-
-        <div className="flex justify-between items-start gap-4">
-          <div className="flex flex-col gap-5 w-3/4">
+        <SellerHomePageSlider />
+        <div className="flex flex-col lg:flex-row justify-between items-start gap-4">
+          <div className="flex flex-col gap-5 lg:w-3/4">
             <SellerActionsCard />
             <SellerPerformCard />
             <SellerQuickAccessCard />
@@ -40,7 +40,7 @@ const SellerPage = () => {
             <SellerInvoiceCard />
           </div>
         </div>
-      </section>
+      </SellerInnerContainer>
     </main>
   );
 };

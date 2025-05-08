@@ -4,7 +4,7 @@ import SellerTopBar from "./SellerTopBar";
 
 function SellerHeader() {
   return (
-    <div className="w-full ">
+    <div className="w-full">
       <SellerTopBar />
       <SellerNavbar />
     </div>

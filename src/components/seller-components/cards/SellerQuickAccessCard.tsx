@@ -77,7 +77,7 @@ function SellerQuickAccessCard() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
           {quickAccessItems.map((item, index) => {
             const Icon = item.icon;
             return (

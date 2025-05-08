@@ -25,10 +25,10 @@ export const jane = {
     "customers",
     "seller",
     "sellerSuperAdmin",
+    "user",
   ],
   isActive: true,
 };
-
 
 export const ken = {
   id: 4,
