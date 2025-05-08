@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const john = {
   id: 1,
-  name: "John Doe",
+  name: "john",
   age: 30,
   email: "john@gmail.com",
   password: "123456",
@@ -12,7 +12,7 @@ export const john = {
 
 export const jane = {
   id: 2,
-  name: "Jane Doe",
+  name: "jane",
   age: 28,
   email: "jane@gmail.com",
   password: "123456",
@@ -32,9 +32,9 @@ export const jane = {
 
 export const ken = {
   id: 4,
-  name: "Jane Doe",
+  name: "ken",
   age: 28,
-  email: "jane@gmail.com",
+  email: "ken@gmail.com",
   password: "123456",
   role: [
     "orders",
