@@ -12,7 +12,6 @@ function StoreProvider({
   children: React.ReactNode;
   user: any;
 }) {
-  console.log("storeProvider", user);
   useEffect(() => {
     if (user) {
       store.dispatch(setUser(user));
