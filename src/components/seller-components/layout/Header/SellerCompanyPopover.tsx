@@ -15,11 +15,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { UserRound } from "lucide-react";
+import { Store } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function SellerUserPopover() {
+export default function SellerCompanyPopover() {
   const [openDialog, setOpenDialog] = useState(false);
 
   return (
@@ -31,7 +31,7 @@ export default function SellerUserPopover() {
           size="icon"
           aria-label="Kullanıcı menüsü"
         >
-          <UserRound size={16} />
+          <Store size={16} />
         </Button>
       </PopoverTrigger>
 

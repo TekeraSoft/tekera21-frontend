@@ -67,7 +67,7 @@ export function NotificationPopover({ alertItems }: NotificationPopoverProps) {
 
   return (
     <Popover>
-      <PopoverTrigger className="relative bg-black h-10 w-10 flex justify-center items-center rounded-full cursor-pointer ">
+      <PopoverTrigger className="relative bg-primary h-10 w-10 flex justify-center items-center rounded-full cursor-pointer ">
         <Bell className="text-white" size={18} />
         {alertItems.length > 0 && (
           <span className="absolute top-0 right-0 inline-block text-[10px] text-white w-4 h-4 bg-red-500 rounded-full">
@@ -75,7 +75,7 @@ export function NotificationPopover({ alertItems }: NotificationPopoverProps) {
           </span>
         )}
       </PopoverTrigger>
-      <PopoverContent className="min-w-md max-h-[400px] overflow-y-auto p-2 mt-2">
+      <PopoverContent className="min-w-md max-h-[400px] overflow-y-auto p-2 mt-2 lg:hidden">
         {alertItems.length === 0 ? (
           <p className="text-center text-sm text-gray-500 py-4">
             Bildiriminiz yok
