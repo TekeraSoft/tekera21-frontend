@@ -5,6 +5,6 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 }) {
-    console.log("RootLayout params", params);
+
   return children;
 }
