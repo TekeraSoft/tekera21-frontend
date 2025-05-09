@@ -1,5 +1,6 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+
 import { toast } from "@/hooks/use-toast";
 import {
   profileFormSchema,
@@ -20,12 +22,16 @@ import { setIsEditing } from "@/store/formControlSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, Pencil, Upload, User } from "lucide-react";
+
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
 function SellerUserProfileTab() {
   const dispatch = useDispatch<AppDispatch>();
   const { userInfo } = useSelector((state: RootState) => state.User);
+  const { SellerCompanyInfo } = useSelector(
+    (state: RootState) => state.SellerCompany
+  );
   const { isEditing } = useSelector((state: RootState) => state.formControl);
 
   // Profil resmi yükleme işlemi
@@ -34,6 +40,8 @@ function SellerUserProfileTab() {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       // Gerçek uygulamada buraya upload işlemi yazılır
+
+      profileForm.setValue("image", imageUrl);
       toast({
         title: "Profil resmi güncellendi",
         description: "Profil resminiz başarıyla güncellendi.",
@@ -49,11 +57,11 @@ function SellerUserProfileTab() {
       phone: userInfo?.phone || "",
       address: userInfo?.address || "",
       image: userInfo?.image || "",
-      role: userInfo?.role || [],
     },
   });
 
   function onProfileSubmit(data: ProfileFormValues) {
+    console.log(data);
     dispatch(setIsEditing(false));
     toast({
       title: "Profil güncellendi",
@@ -61,8 +69,10 @@ function SellerUserProfileTab() {
     });
   }
 
+  console.log(SellerCompanyInfo);
+
   return (
-    <div>
+    <div className="space-y-6">
       <Card>
         <CardHeader className="pb-2">
           <CardTitle>Kullanıcı Bilgileri</CardTitle>
@@ -74,8 +84,8 @@ function SellerUserProfileTab() {
           <div className="relative mb-4">
             <Avatar className="w-24 h-24 border-2 border-gray-200">
               <AvatarImage
-                src={profileForm.getValues()?.image || "/placeholder.svg"}
-                alt={profileForm.getValues().name}
+                src={userInfo?.image || "/placeholder.svg"}
+                alt={userInfo?.name}
               />
               <AvatarFallback>
                 <User className="w-12 h-12" />
@@ -88,7 +98,7 @@ function SellerUserProfileTab() {
                 className="absolute bottom-0 right-0 bg-primary text-primary-foreground p-1 rounded-full cursor-pointer"
               >
                 <Upload className="w-4 h-4" />
-                <input
+                <Input
                   type="file"
                   id="profile-image"
                   className="hidden"
@@ -105,19 +115,38 @@ function SellerUserProfileTab() {
               </div>
             )}
           </div>
-          /* burası */
-          <h3 className="text-xl font-bold">{profileForm.getValues()?.name}</h3>
-          <p className="text-gray-500 text-sm">
-            {profileForm.getValues()?.email}
-          </p>
-          <div className="flex flex-wrap gap-2 justify-center mt-2">
-            {profileForm.getValues().role?.map((role: any, index: number) => (
-              <div key={index}>{role}</div>
+
+          <h3 className="text-xl font-bold">{userInfo?.name}</h3>
+          <p className="text-gray-500 text-sm">{userInfo?.email}</p>
+
+          <div className="mt-4 text-sm text-gray-500">
+            <p>Üyelik Başlangıcı: {userInfo?.memberSince}</p>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle>Mağaza Bilgileri</CardTitle>
+          <CardDescription>
+            Mağanızla ilgili bilgileri görüntüleyin ve düzenleyin.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col justify-center items-center text-center">
+          <div className="flex flex-wrap gap-2 justify-center  items-center ">
+            {userInfo?.role?.map((role: any, index: number) => (
+              <Badge key={index}>{role}</Badge>
             ))}
           </div>
-          /* User information display */
-          <div className="mt-4 text-sm text-gray-500">
-            <p>Üyelik Başlangıcı: {profileForm.getValues()?.memberSince}</p>
+          <div>
+            {SellerCompanyInfo && (
+              <div>
+                <div>{SellerCompanyInfo.name}</div>
+                <div>{SellerCompanyInfo.email}</div>
+                <div>{SellerCompanyInfo.totalOrders}</div>
+                {/* Diğer alanları da ekleyebilirsin */}
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -161,7 +190,6 @@ function SellerUserProfileTab() {
                   </p>
                 )}
               </div>
-
               <div className="grid gap-2">
                 <Label htmlFor="email">E-posta</Label>
                 <Input
