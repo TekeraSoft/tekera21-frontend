@@ -1,3 +1,4 @@
+"use client"
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 import Image from "next/image";

@@ -1,13 +1,18 @@
+import { is } from "react-day-picker/locale";
 import { z } from "zod";
 
 export const profileFormSchema = z.object({
-  fullName: z.string().min(2, { message: "İsim en az 2 karakter olmalıdır" }),
+  name: z.string().min(2, { message: "İsim en az 2 karakter olmalıdır" }),
   email: z.string().email({ message: "Geçerli bir e-posta adresi giriniz" }),
   phone: z
     .string()
     .min(10, { message: "Geçerli bir telefon numarası giriniz" }),
   address: z.string().min(5, { message: "Adres en az 5 karakter olmalıdır" }),
   bio: z.string().optional(),
+  image: z.string().optional(),
+  role: z.array(z.string()).optional(),
+  isActive: z.boolean().optional(),
+  memberSince: z.string().optional(),
 });
 
 export const passwordFormSchema = z

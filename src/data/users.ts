@@ -6,6 +6,10 @@ export const john = {
   age: 30,
   email: "john@gmail.com",
   password: "123456",
+  address: "123 Main St, Cityville, ST 12345",
+  phone: "123-456-7890",
+  memberSince: "2023-01-01",
+  image: "https://fakeimg.pl/100x100",
   role: ["orders", "users", "products"],
   isActive: true,
 };
@@ -16,6 +20,10 @@ export const jane = {
   age: 28,
   email: "jane@gmail.com",
   password: "123456",
+  address: "123 Main St, Cityville, ST 12345",
+  phone: "123-456-7890",
+  memberSince: "2023-01-01",
+  image: "https://fakeimg.pl/100x100",
   role: [
     "orders",
     "products",
@@ -36,6 +44,10 @@ export const ken = {
   age: 28,
   email: "ken@gmail.com",
   password: "123456",
+  address: "123 Main St, Cityville, ST 12345",
+  phone: "123-456-7890",
+  memberSince: "2023-01-01",
+  image: "https://fakeimg.pl/100x100",
   role: [
     "orders",
     "products",
@@ -54,6 +66,10 @@ export const Arzuamber = {
   age: 28,
   email: "jane@gmail.com",
   password: "123456",
+  address: "123 Main St, Cityville, ST 12345",
+  phone: "123-456-7890",
+  memberSince: "2023-01-01",
+  image: "https://fakeimg.pl/100x100",
   role: ["orders", "products", "users", "shipping", "adds", "analytics"],
   isActive: true,
 };
