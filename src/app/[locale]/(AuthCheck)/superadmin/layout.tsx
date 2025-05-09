@@ -16,20 +16,21 @@ export default async function SuperAdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const headersList = await headers();
 
+  const pathname = headersList.get("x-pathname") || "";
   const user = await getUser();
-  if (!user) {
-    return redirect("/login");
+
+  if (user.role.includes("seller")) {
+    return redirect("/seller");
+  } else if (user.role.includes("superadmin") && !pathname.includes("/superadmin")) {
+    return redirect("/superadmin/dashboard");
+  } else if (
+    !user.role.includes("superadmin")
+  ) {
+    console.log("bu çalıştı")
+    return redirect("/");
   }
-
-
-  // if (!user.role.includes("superadmin")) {
-  //   return redirect("/");
-  // } else if (user.role.includes("seller")) {
-  //   return redirect("/seller");
-  // } else if (user.role.includes("superadmin")) {
-  //   return redirect("/superadmin");
-  // }
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <div className="flex">
