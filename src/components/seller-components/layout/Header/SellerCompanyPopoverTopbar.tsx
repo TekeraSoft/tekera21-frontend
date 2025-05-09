@@ -28,7 +28,7 @@ export default function SellerCompanyPopoverTopbar() {
   }
 
   const menuItems: MenuItem[] = [
-    { label: "Hesap Bilgileri", href: "/seller/company" },
+    { label: "Mağaza Bilgileri", href: "/seller/company" },
     { label: "Kullanıcı Yönetimi", href: "/kullanicilar" },
     { label: "Ticari Şartlar", href: "/sartlar" },
     { label: "Platform Kuralları", href: "/kurallar" },
@@ -45,7 +45,7 @@ export default function SellerCompanyPopoverTopbar() {
           Mağaza Adı <ChevronDown size={16} />
         </div>
       </PopoverTrigger>
-      <PopoverContent className="w-80 sm:w-96 p-4 shadow-lg rounded-lg bg-white">
+      <PopoverContent className="w-80 sm:w-96 p-4 shadow-lg rounded-lg bg-white z-[999]">
         <div className="flex items-center gap-4 border-b pb-4">
           <Image src={logoUrl} alt="Logo" width={48} height={48} />
           <div>
