@@ -11,5 +11,34 @@
     "videoCenter": "Video Merkezi",
     "reviews": "Ürün Değerlendirme Raporu",
     "favorites": "Favori & Görüntüleme Raporu"
+  },
+
+  "warningText": {
+    "blogPage": {
+      "title": "Hiç Blog Bulunamadı",
+      "text": "Şu anda görüntülenecek blog bulunmamaktadır. Lütfen daha sonra tekrar kontrol edin."
+    },
+    "ProductNotFoundTitle": "Ürün Bulunamadı",
+    "ProductNotFoundText": "Aradığınız ürün bulunamadı.",
+    "BlogNotFoundTitle": "Blog Bulunamadı",
+    "BlogNotFoundText": "Aradığınız blog bulunamadı.",
+    "BlogsNotFoundTitle": "Hiç Blog Bulunamadı",
+    "BlogsNotFoundText": "Şu anda hiç blog bulunmamaktadır. Lütfen daha sonra tekrar kontrol edin.",
+    "requiredText": "Bu alan zorunlu !",
+    "ButtonText": "Ana sayfaya git",
+    "somethingWentWrong": "Bir şeyler yanlış gitti. Lütfen daha sonra tekrar deneyin.",
+    "serverError": "Hoppala! Sunucuda bir sorun oluşmuş gibi görünüyor.",
+    "pageNotFoundTitle": "Sayfa Bulunamadı",
+    "pageNotFoundText": "Aradığınız sayfa bulunamadı. Lütfen URL'yi kontrol edin veya anasayfaya geri dönün.",
+    "notFoundProduct": {
+      "title": "Ürün Bulunamadı",
+      "message": "Aradığınız ürün şu anda mevcut değil.",
+      "browseMore": "Diğer ürünleri incele"
+    },
+    "notFoundFilteredProduct": {
+      "title": "Bu kategoriye ait ürün bulunmamakta.",
+      "message": "Aradığınız kategoriye ait ürünler şu anda mevcut değil.",
+      "browseMore": "Diğer ürünleri incele"
+    }
   }
 }

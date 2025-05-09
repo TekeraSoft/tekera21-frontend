@@ -17,7 +17,9 @@ interface UserInfoTabProps {
   };
 }
 
-export default function UserInfoTab({ userData }: UserInfoTabProps) {
+export default function SellerCompanyUserPermissionsTab({
+  userData,
+}: UserInfoTabProps) {
   const [editingEmail, setEditingEmail] = useState(false);
   const [editingPhone, setEditingPhone] = useState(false);
   const [editingPassword, setEditingPassword] = useState(false);
