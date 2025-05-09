@@ -11,7 +11,7 @@ export default function SellerUserProfile() {
       <div className="flex flex-col md:flex-row gap-6">
         {/* Right side with tabs */}
         <div className="w-full md:w-2/3">
-          <Tabs value={"profile"} className="w-full">
+          <Tabs defaultValue="profile" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="profile">Profil</TabsTrigger>
               <TabsTrigger value="security">Güvenlik</TabsTrigger>

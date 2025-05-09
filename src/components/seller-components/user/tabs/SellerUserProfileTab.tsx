@@ -1,5 +1,5 @@
+"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -44,10 +44,12 @@ function SellerUserProfileTab() {
   const profileForm = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      fullName: userInfo.fullName,
-      email: userInfo.email,
-      phone: userInfo.phone,
-      address: userInfo.address,
+      name: userInfo?.name || "",
+      email: userInfo?.email || "",
+      phone: userInfo?.phone || "",
+      address: userInfo?.address || "",
+      image: userInfo?.image || "",
+      role: userInfo?.role || [],
     },
   });
 
@@ -72,8 +74,8 @@ function SellerUserProfileTab() {
           <div className="relative mb-4">
             <Avatar className="w-24 h-24 border-2 border-gray-200">
               <AvatarImage
-                src={userInfo.image || "/placeholder.svg"}
-                alt={userInfo.fullName}
+                src={profileForm.getValues()?.image || "/placeholder.svg"}
+                alt={profileForm.getValues().name}
               />
               <AvatarFallback>
                 <User className="w-12 h-12" />
@@ -103,20 +105,19 @@ function SellerUserProfileTab() {
               </div>
             )}
           </div>
-
-          <h3 className="text-xl font-bold">{userInfo.fullName}</h3>
-          <p className="text-gray-500 text-sm">{userInfo.email}</p>
-
+          /* burası */
+          <h3 className="text-xl font-bold">{profileForm.getValues()?.name}</h3>
+          <p className="text-gray-500 text-sm">
+            {profileForm.getValues()?.email}
+          </p>
           <div className="flex flex-wrap gap-2 justify-center mt-2">
-            {userInfo.role.map(({ role, index }: any) => (
-              <Badge key={index} variant="secondary">
-                {role}
-              </Badge>
+            {profileForm.getValues().role?.map((role: any, index: number) => (
+              <div key={index}>{role}</div>
             ))}
           </div>
-
+          /* User information display */
           <div className="mt-4 text-sm text-gray-500">
-            <p>Üyelik Başlangıcı: {userInfo.memberSince}</p>
+            <p>Üyelik Başlangıcı: {profileForm.getValues()?.memberSince}</p>
           </div>
         </CardContent>
       </Card>
@@ -148,15 +149,15 @@ function SellerUserProfileTab() {
           <form onSubmit={profileForm.handleSubmit(onProfileSubmit)}>
             <div className="grid gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="fullName">Ad Soyad</Label>
+                <Label htmlFor="name">Ad Soyad</Label>
                 <Input
-                  id="fullName"
+                  id="name"
                   disabled={!isEditing}
-                  {...profileForm.register("fullName")}
+                  {...profileForm.register("name")}
                 />
-                {profileForm.formState.errors.fullName && (
+                {profileForm.formState.errors.name && (
                   <p className="text-sm text-red-500">
-                    {profileForm.formState.errors.fullName.message}
+                    {profileForm.formState.errors.name.message}
                   </p>
                 )}
               </div>
