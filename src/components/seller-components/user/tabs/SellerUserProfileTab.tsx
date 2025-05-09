@@ -105,7 +105,7 @@ function SellerUserProfileTab() {
               </div>
             )}
           </div>
-          /* burası */
+     
           <h3 className="text-xl font-bold">{profileForm.getValues()?.name}</h3>
           <p className="text-gray-500 text-sm">
             {profileForm.getValues()?.email}
@@ -115,7 +115,7 @@ function SellerUserProfileTab() {
               <div key={index}>{role}</div>
             ))}
           </div>
-          /* User information display */
+
           <div className="mt-4 text-sm text-gray-500">
             <p>Üyelik Başlangıcı: {profileForm.getValues()?.memberSince}</p>
           </div>

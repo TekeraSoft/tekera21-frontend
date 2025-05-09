@@ -5,6 +5,7 @@ import { routing } from "@/i18n/routing";
 import "./globals.css";
 import StoreProvider from "@/store/StoreProvider";
 import { getUser } from "../actions";
+import { headers } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,7 +26,21 @@ export default async function RootLayout({
   }
 
   const user = await getUser();
+  const headersList = await headers();
 
+  const pathname = headersList.get("x-pathname") || "";
+
+  if (!user && pathname !== `/${locale}`) {
+    return (
+      <html lang={locale} suppressHydrationWarning>
+        <body className={` antialiased`}>
+          <StoreProvider user={null}>
+            <NextIntlClientProvider>{children}</NextIntlClientProvider>
+          </StoreProvider>
+        </body>
+      </html>
+    );
+  }
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={` antialiased`}>

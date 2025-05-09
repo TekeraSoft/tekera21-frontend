@@ -12,30 +12,34 @@ import {
 } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useSidebar } from "@/context/SideBarContext";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
-export function SideBar({ userRoles }: { userRoles: string[] }) {
+export function SideBar() {
+  const { userInfo: user } = useSelector((state: RootState) => state.User);
+
   const routes = [
     {
       name: "Dashboard",
       path: "/superadmin/dashboard",
       icon: Home,
     },
-    userRoles.includes("products") && {
+    user?.role.includes("products") && {
       name: "Products",
       path: "/superadmin/products",
       icon: Package,
     },
-    userRoles.includes("orders") && {
+    user?.role.includes("orders") && {
       name: "Orders",
       path: "/superadmin/orders",
       icon: ShoppingCart,
     },
-    userRoles.includes("customers") && {
+    user?.role.includes("customers") && {
       name: "Customers",
       path: "/superadmin/customers",
       icon: Users,
     },
-    userRoles.includes("analytics") && {
+    user?.role.includes("analytics") && {
       name: "Analytics",
       path: "/superadmin/analytics",
       icon: BarChart3,
@@ -101,7 +105,7 @@ export function SideBar({ userRoles }: { userRoles: string[] }) {
         <div className="p-4">
           <nav>
             <ul className="space-y-2">
-              {routes.map((item, index) => {
+              {routes?.map((item, index) => {
                 const Icon = item.icon;
                 return (
                   <li key={index}>

@@ -1,9 +1,7 @@
-import { getUser } from "@/app/actions";
 import { SideBar } from "@/components/superadmin/sidebar";
 import { SidebarProvider } from "@/context/SideBarContext";
 import { Metadata } from "next";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+
 import React from "react";
 
 export const metadata: Metadata = {
@@ -16,26 +14,11 @@ export default async function SuperAdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const headersList = await headers();
-
-  const pathname = headersList.get("x-pathname") || "";
-  const user = await getUser();
-
-  if (user.role.includes("seller")) {
-    return redirect("/seller");
-  } else if (user.role.includes("superadmin") && !pathname.includes("/superadmin")) {
-    return redirect("/superadmin/dashboard");
-  } else if (
-    !user.role.includes("superadmin")
-  ) {
-    console.log("bu çalıştı")
-    return redirect("/");
-  }
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <div className="flex">
         <SidebarProvider>
-          <SideBar userRoles={user.role} />
+          <SideBar/>
           <main className="w-full">{children}</main>
         </SidebarProvider>
       </div>

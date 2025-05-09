@@ -1,17 +1,14 @@
-"use client";
-import { RootState } from "@/store/store";
+import { getUser } from "@/app/actions";
 import { redirect } from "next/navigation";
-import { useSelector } from "react-redux";
 
-export default function PublicRouteProtection({
+export default async function PublicRouteProtection({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { userInfo: user } = useSelector((state: RootState) => state.User);
+  const user = await getUser();
 
   if (!user) return children;
-  console.log("user public layout", user);
 
   const role = user?.role?.includes("superadmin")
     ? "superadmin"
@@ -19,7 +16,7 @@ export default function PublicRouteProtection({
     ? "seller"
     : null;
 
-  if (user && role) redirect(`/${role}`);
+  if (role) redirect(`/${role}`);
 
   return children;
 }
