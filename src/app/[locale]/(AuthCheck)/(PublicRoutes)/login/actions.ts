@@ -25,19 +25,21 @@ export async function loginUser(prevState: any, formData: FormData) {
   } else if (user.role.includes("seller")) {
     role = "seller";
   } else {
-    return { error: "Kullanıcı Yetkisi yok!" };
+    role = "register";
   }
 
   const cookieStore = await cookies();
+
   cookieStore.set("token", "accessTokenvaluserfdsfd", {
     httpOnly: true,
     path: "/",
-    maxAge: 60 * 30,
+    maxAge: 60 * 60 * 24 * 30,
   });
+
   cookieStore.set("user", JSON.stringify(user), {
     httpOnly: true,
     path: "/",
-    maxAge: 60 * 30,
+    maxAge: 60 * 60 * 24 * 30,
   });
 
   // Giriş başarılıysa yönlendir
