@@ -10,6 +10,7 @@ interface UserState {
     role: string[];
     image: string;
     memberSince: string;
+    companyId: number;
   } | null;
 }
 const initialState: UserState = {

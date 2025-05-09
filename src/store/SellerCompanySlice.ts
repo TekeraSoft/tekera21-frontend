@@ -1,8 +1,7 @@
-import { companies } from "@/data/companies";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  SellerCompanyInfo: companies.Arzuamber,
+  SellerCompanyInfo: null,
 };
 
 export const SellerCompany = createSlice({

@@ -4,6 +4,7 @@ export const john = {
   id: 1,
   name: "john",
   age: 30,
+  companyId: 2220345,
   email: "john@gmail.com",
   password: "123456",
   address: "123 Main St, Cityville, ST 12345",
@@ -18,6 +19,7 @@ export const jane = {
   id: 2,
   name: "jane",
   age: 28,
+  companyId: 1110123,
   email: "jane@gmail.com",
   password: "123456",
   address: "123 Main St, Cityville, ST 12345",
@@ -43,6 +45,7 @@ export const ken = {
   name: "ken",
   age: 28,
   email: "ken@gmail.com",
+  companyId: 3330567,
   password: "123456",
   address: "123 Main St, Cityville, ST 12345",
   phone: "123-456-7890",
@@ -57,20 +60,6 @@ export const ken = {
     "customers",
     "superadmin",
   ],
-  isActive: true,
-};
-
-export const Arzuamber = {
-  id: 3,
-  name: "Arzuamber",
-  age: 28,
-  email: "jane@gmail.com",
-  password: "123456",
-  address: "123 Main St, Cityville, ST 12345",
-  phone: "123-456-7890",
-  memberSince: "2023-01-01",
-  image: "https://fakeimg.pl/100x100",
-  role: ["orders", "products", "users", "shipping", "adds", "analytics"],
   isActive: true,
 };
 
@@ -209,7 +198,7 @@ export const customers = [
   },
 ];
 
-export const users = { John: john, Jane: jane, Arzuamber: Arzuamber, ken: ken };
+export const users = { John: john, Jane: jane, ken: ken };
 export const userList = Object.values(users).map((user) => user as User);
 
 export const formSchema = z.object({
