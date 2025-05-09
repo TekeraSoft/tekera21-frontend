@@ -14,23 +14,23 @@ function StoreProvider({
   children: React.ReactNode;
   user: any;
 }) {
-  useEffect(() => {
-    if (user) {
-      store.dispatch(setUser(user));
-    }
-    console.log(user);
-    if (user?.companyId) {
-      // companyId'ye göre eşleşen şirketi bul
-      const company = Object.values(companies).find(
-        (c) => c.id === user.companyId
-      );
+  // useEffect(() => {
+  //   if (user) {
+  //     store.dispatch(setUser(user));
+  //   }
+  //   console.log(user);
+  //   if (user?.companyId) {
+  //     // companyId'ye göre eşleşen şirketi bul
+  //     const company = Object.values(companies).find(
+  //       (c) => c.id === user.companyId
+  //     );
 
-      // Eğer şirket varsa Redux'a aktar
-      if (company) {
-        store.dispatch(setSellerCompany(company));
-      }
-    }
-  }, [user]);
+  //     // Eğer şirket varsa Redux'a aktar
+  //     if (company) {
+  //       store.dispatch(setSellerCompany(company));
+  //     }
+  //   }
+  // }, [user]);
 
   return <Provider store={store}>{children}</Provider>;
 }

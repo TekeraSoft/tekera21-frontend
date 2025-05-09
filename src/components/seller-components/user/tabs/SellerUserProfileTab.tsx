@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useAuthContext } from "@/context/AuthContext";
 
 import { toast } from "@/hooks/use-toast";
 import {
@@ -28,7 +29,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 function SellerUserProfileTab() {
   const dispatch = useDispatch<AppDispatch>();
-  const { userInfo } = useSelector((state: RootState) => state.User);
+  const { userInfo  } = useAuthContext();
   const { SellerCompanyInfo } = useSelector(
     (state: RootState) => state.SellerCompany
   );

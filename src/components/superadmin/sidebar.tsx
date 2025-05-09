@@ -12,11 +12,10 @@ import {
 } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useSidebar } from "@/context/SideBarContext";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useAuthContext } from "@/context/AuthContext";
 
 export function SideBar() {
-  const { userInfo: user } = useSelector((state: RootState) => state.User);
+  const { userInfo: user } = useAuthContext();
 
   const routes = [
     {
