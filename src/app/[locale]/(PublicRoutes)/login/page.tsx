@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { LoginForm } from "@/components/auth/LoginForm";
 
 export const metadata: Metadata = {
-  title: "Login",
+  title: "Login Page",
   description: "Login to your account",
 };
 
@@ -20,7 +20,14 @@ export default async function LoginPage({
           <div className="space-y-2 text-center">
             <h1 className="text-3xl font-bold">Login</h1>
             <p className="text-gray-500 dark:text-gray-400">
-              Enter your credentials to access your account
+              Enter your credentials to access your account <br />
+              <br />
+              <span className="font-bold text-gray-600">Super Admin</span>: ken<br />
+              <span className="font-bold text-gray-600">Seller</span>: jane<br />
+              <span className="font-bold text-gray-600">Standard User</span>: john<br />
+              <br />
+
+              <span className="font-bold text-gray-600">password</span>: enter anything
             </p>
           </div>
           <LoginForm locale={locale} />

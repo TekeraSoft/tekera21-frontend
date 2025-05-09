@@ -1,8 +1,8 @@
-import { jane } from "@/data/users";
 import { createSlice } from "@reduxjs/toolkit";
 
+
 const initialState = {
-  userInfo: null,
+  userInfo: null as any,
 };
 
 export const UserSlice = createSlice({
