@@ -28,8 +28,6 @@ import SellerNavbarMobile from "./SellerNavbarMobile";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 
-// <Users className="mr-2 h-4 w-4" />,
-
 // Define the menu structure
 
 const menuItems: MenuItem[] = [

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { PlusCircle } from "lucide-react";
 
-export default function AddressContactTab() {
+export default function SellerCompanyContactTab() {
   return (
     <div className="space-y-8">
       <div>

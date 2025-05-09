@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Info, Check, Eye } from "lucide-react";
 
-export default function PermissionsTab() {
+export default function SellerCompanyPermissionsTab() {
   return (
     <div className="space-y-6">
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-md">

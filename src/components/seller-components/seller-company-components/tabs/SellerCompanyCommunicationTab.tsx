@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Info } from "lucide-react";
 
-export default function CommunicationPreferencesTab() {
+export default function SellerCompanyCommunicationTab() {
   const [preferences, setPreferences] = useState({
     marketing: {
       sms: true,

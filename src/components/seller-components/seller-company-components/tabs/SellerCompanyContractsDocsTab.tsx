@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Info, Check, Eye } from "lucide-react";
 
-export default function ContractsDocumentsTab() {
+export default function SellerContractsDocsTab() {
   const [activeTab, setActiveTab] = useState("all");
 
   return (

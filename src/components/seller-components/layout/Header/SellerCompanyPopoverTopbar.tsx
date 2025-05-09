@@ -28,7 +28,7 @@ export default function SellerCompanyPopoverTopbar() {
   }
 
   const menuItems: MenuItem[] = [
-    { label: "Hesap Bilgileri", href: "/hesap" },
+    { label: "Hesap Bilgileri", href: "/seller/company" },
     { label: "Kullanıcı Yönetimi", href: "/kullanicilar" },
     { label: "Ticari Şartlar", href: "/sartlar" },
     { label: "Platform Kuralları", href: "/kurallar" },

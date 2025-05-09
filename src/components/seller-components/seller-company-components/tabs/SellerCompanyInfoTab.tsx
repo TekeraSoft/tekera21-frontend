@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export default function CompanyInfoTab() {
+export default function SelllerCompanyInfoTab() {
   const [editingCompanyName, setEditingCompanyName] = useState(false);
   const [editingKepAddress, setEditingKepAddress] = useState(false);
   const [editingMersisNo, setEditingMersisNo] = useState(false);

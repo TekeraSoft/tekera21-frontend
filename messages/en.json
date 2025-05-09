@@ -11,5 +11,33 @@
     "videoCenter": "Video Center",
     "reviews": "Product Reviews Report",
     "favorites": "Favorites & Views Report"
+  },
+  "warningText": {
+    "blogPage": {
+      "title": "No Blogs Found",
+      "text": "There are currently no blogs to display. Please check back later."
+    },
+    "ProductNotFoundTitle": "Product Not Found",
+    "ProductNotFoundText": "The product you are looking for could not be found.",
+    "BlogNotFoundTitle": "Blog Not Found",
+    "BlogNotFoundText": "The blog you are looking for could not be found.",
+    "BlogsNotFoundTitle": "No Blogs Found",
+    "BlogsNotFoundText": "There are currently no blogs available. Please check back later.",
+    "requiredText": "This field is required!",
+    "ButtonText": "Go to homepage",
+    "somethingWentWrong": "Something went wrong. Please try again later.",
+    "serverError": "Oops! It looks like there's a problem on the server.",
+    "pageNotFoundTitle": "Page Not Found",
+    "pageNotFoundText": "The page you are looking for could not be found. Please check the URL or return to the homepage.",
+    "notFoundProduct": {
+      "title": "Product Not Found",
+      "message": "The product you are looking for is currently unavailable.",
+      "browseMore": "Browse other products"
+    },
+    "notFoundFilteredProduct": {
+      "title": "No products found for this category.",
+      "message": "There are currently no products available in the selected category.",
+      "browseMore": "Browse other products"
+    }
   }
 }
