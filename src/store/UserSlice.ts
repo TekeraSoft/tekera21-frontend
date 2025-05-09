@@ -1,4 +1,3 @@
-import { jane } from "@/data/users";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {

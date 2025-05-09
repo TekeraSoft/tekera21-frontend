@@ -1,12 +1,13 @@
+import SellerInnerContainer from "@/components/seller-components/containers/SellerInnerContainer";
 import { SellerAdminUserHeader } from "@/components/seller-components/user/SellerAdminUserHeader";
 import { SellerAdminUsersList } from "@/components/seller-components/user/SellerAdminUserList";
 
 function SellerUserListPage() {
   return (
-    <div className="container  mx-auto my-5">
+    <SellerInnerContainer>
       <SellerAdminUserHeader />
       <SellerAdminUsersList />
-    </div>
+    </SellerInnerContainer>
   );
 }
 

@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import SellerUserReducer from "./SellerUserSlice";
 import SellerCompanyReducer from "./SellerCompanySlice";
 import globalSettingsReducer from "./globalSettingsSlice";
+import formControlReducer from "./formControlSlice";
 import UserReducer from "./UserSlice";
 
 export const store = configureStore({
@@ -9,6 +10,7 @@ export const store = configureStore({
     SellerUser: SellerUserReducer,
     User: UserReducer,
     SellerCompany: SellerCompanyReducer,
+    formControl: formControlReducer,
     globalSettings: globalSettingsReducer,
   },
 });
