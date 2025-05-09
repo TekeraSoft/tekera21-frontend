@@ -11,7 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { loginUser } from "@/app/[locale]/(AuthCheck)/(PublicRoutes)/login/actions";
+import { loginUser } from "@/app/[locale]/(PublicRoutes)/login/actions";
 
 export function LoginForm({ locale }: { locale: string }) {
   const [isLoading, setIsLoading] = useState(false);

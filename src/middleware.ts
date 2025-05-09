@@ -9,6 +9,9 @@ export default function middleware(request: NextRequest) {
   const response = intlMiddleware(request);
 
   // Pathname'i custom header olarak ekliyoruz
+
+  const { pathname } = request.nextUrl;
+  console.log("pathname middleware", pathname);
   response.headers.set('x-pathname', request.nextUrl.pathname);
 
   return response;
