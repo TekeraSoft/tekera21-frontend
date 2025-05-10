@@ -2,13 +2,14 @@
 import SellerFooter from "@/components/seller-components/layout/footer/SellerFooter";
 import SellerHeader from "@/components/seller-components/layout/header/SellerHeader";
 import SellerSupport from "@/components/seller-components/support/SellerSupport";
+import LoadingBigCircle from "@/components/shared/Loading/LoadingBigCircle";
 import { useAuthContext } from "@/context/AuthContext";
 import { companies } from "@/data/companies";
-import { setSellerCompany } from "@/store/SellerCompanySlice";
-import { AppDispatch } from "@/store/store";
+import { setLoading, setSellerCompany } from "@/store/SellerCompanySlice";
+import { RootState, useAppDispatch } from "@/store/store";
 import { setUser } from "@/store/UserSlice";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 interface SellerLayoutProps {
   children: React.ReactNode;
@@ -16,8 +17,9 @@ interface SellerLayoutProps {
 
 export default function SellerLayout({ children }: SellerLayoutProps) {
   const { userInfo: user } = useAuthContext();
-  const dispatch = useDispatch<AppDispatch>();
-  
+  const { loading } = useSelector((state: RootState) => state.SellerCompany);
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     if (user) {
       dispatch(setUser(user));
@@ -32,6 +34,7 @@ export default function SellerLayout({ children }: SellerLayoutProps) {
       // Eğer şirket varsa Redux'a aktar
       if (company) {
         dispatch(setSellerCompany(company));
+        dispatch(setLoading(true));
       }
     }
   }, [user]);
@@ -40,7 +43,13 @@ export default function SellerLayout({ children }: SellerLayoutProps) {
     <div className="flex flex-col">
       <div className="relative min-h-screen flex flex-col">
         <SellerHeader />
-        <div className="flex-1 ">{children}</div>
+
+        {loading ? (
+          <LoadingBigCircle />
+        ) : (
+          <div className="flex-1 ">{children}</div>
+        )}
+
         <SellerSupport />
         <SellerFooter />
       </div>

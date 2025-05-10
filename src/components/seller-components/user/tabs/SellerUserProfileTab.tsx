@@ -20,16 +20,16 @@ import {
   ProfileFormValues,
 } from "@/schemas/SellerUserProfileScema";
 import { setIsEditing } from "@/store/formControlSlice";
-import { AppDispatch, RootState } from "@/store/store";
+import { RootState, useAppDispatch } from "@/store/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, Pencil, Upload, User } from "lucide-react";
 
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 function SellerUserProfileTab() {
-  const dispatch = useDispatch<AppDispatch>();
-  const { userInfo  } = useAuthContext();
+  const dispatch = useAppDispatch();
+  const { userInfo } = useAuthContext();
   const { SellerCompanyInfo } = useSelector(
     (state: RootState) => state.SellerCompany
   );
