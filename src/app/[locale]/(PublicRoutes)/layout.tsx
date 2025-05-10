@@ -6,7 +6,7 @@ export default async function PublicRouteProtection({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getUser();
+  const user = await getUser("public layout");
 
   if (!user) return children;
 

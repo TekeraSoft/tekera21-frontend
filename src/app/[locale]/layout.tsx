@@ -25,7 +25,7 @@ export default async function RootLayout({
     notFound();
   }
 
-  const user = await getUser();
+  const user = await getUser("root layout");
 
   return (
     <html lang={locale} suppressHydrationWarning>

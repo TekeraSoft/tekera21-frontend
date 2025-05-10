@@ -2,8 +2,8 @@
 
 import { cookies } from "next/headers";
 
-export async function getUser() {
-  console.log("get user çalıştı");
+export async function getUser(layout: string) {
+  console.log("get user", layout);
   const cookieStore = await cookies();
   try {
     const user = cookieStore.get("user")?.value;
