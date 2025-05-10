@@ -18,7 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
 
-function SellerUserPasswordUpdateTab() {
+function SellerUserPasswordChangeCard() {
   // Password form
   const passwordForm = useForm<PasswordFormValues>({
     resolver: zodResolver(passwordFormSchema),
@@ -38,7 +38,6 @@ function SellerUserPasswordUpdateTab() {
     });
     passwordForm.reset();
   }
-
   return (
     <Card>
       <CardHeader>
@@ -102,4 +101,4 @@ function SellerUserPasswordUpdateTab() {
   );
 }
 
-export default SellerUserPasswordUpdateTab;
+export default SellerUserPasswordChangeCard;

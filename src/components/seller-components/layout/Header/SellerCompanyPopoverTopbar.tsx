@@ -21,11 +21,16 @@ import Image from "next/image";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
+interface MenuItem {
+  label: string;
+  href: string;
+}
+
 export default function SellerCompanyPopoverTopbar() {
-  interface MenuItem {
-    label: string;
-    href: string;
-  }
+  const { SellerCompanyInfo } = useSelector(
+    (state: RootState) => state.SellerCompany
+  );
+  const { logoUrl } = useSelector((state: RootState) => state.globalSettings);
 
   const menuItems: MenuItem[] = [
     { label: "Mağaza Bilgileri", href: "/seller/company" },
@@ -36,13 +41,12 @@ export default function SellerCompanyPopoverTopbar() {
 
   const [openDialog, setOpenDialog] = useState(false);
 
-  const { logoUrl } = useSelector((state: RootState) => state.globalSettings);
-
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div className="flex items-center gap-1 cursor-pointer transition-all duration-300 border  mx-3 px-2 py-0.5 rounded-md border-black">
-          Mağaza Adı <ChevronDown size={16} />
+        <div className="flex items-center gap-1 text-xs cursor-pointer transition-all duration-300 border  mx-3 px-2 py-0.5 rounded-md border-black">
+          {SellerCompanyInfo?.name}
+          <ChevronDown size={16} />
         </div>
       </PopoverTrigger>
       <PopoverContent className="w-80 sm:w-96 p-4 shadow-lg rounded-lg bg-white z-[999]">
