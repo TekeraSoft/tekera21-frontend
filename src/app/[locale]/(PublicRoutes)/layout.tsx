@@ -11,12 +11,12 @@ const PublicRouteProtection = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (userInfo) {
-      const role = userInfo?.role?.includes("superadmin")
-        ? "superadmin"
+      const route = userInfo?.role?.includes("superadmin")
+        ? "superadmin/dashboard"
         : userInfo.role.includes("seller")
         ? "seller"
-        : null;
-      router.replace(`/${role}`);
+        : "register";
+      router.replace(`/${route}`);
     }
   }, [userInfo, router]);
 
