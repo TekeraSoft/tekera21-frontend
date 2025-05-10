@@ -1,3 +1,4 @@
+import RouteProtect from "@/components/shared/RouteProtect";
 import { SideBar } from "@/components/superadmin/sidebar";
 import { SidebarProvider } from "@/context/SideBarContext";
 import { Metadata } from "next";
@@ -15,13 +16,15 @@ export default async function SuperAdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
-      <div className="flex">
-        <SidebarProvider>
-          <SideBar/>
-          <main className="w-full">{children}</main>
-        </SidebarProvider>
+    <RouteProtect allowedRoles={["superadmin"]}>
+      <div className="flex flex-col min-h-screen bg-gray-100">
+        <div className="flex">
+          <SidebarProvider>
+            <SideBar />
+            <main className="w-full">{children}</main>
+          </SidebarProvider>
+        </div>
       </div>
-    </div>
+    </RouteProtect>
   );
 }

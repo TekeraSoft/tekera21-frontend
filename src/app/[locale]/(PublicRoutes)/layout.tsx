@@ -1,22 +1,30 @@
-import { getUser } from "@/app/actions";
-import { redirect } from "next/navigation";
+"use client";
 
-export default async function PublicRouteProtection({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const user = await getUser("public layout");
+import { useAuthContext } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import LoadingBigCircle from "@/components/shared/Loading/LoadingBigCircle";
 
-  if (!user) return children;
+const PublicRouteProtection = ({ children }: { children: React.ReactNode }) => {
+  const { userInfo } = useAuthContext();
+  const router = useRouter();
 
-  const role = user?.role?.includes("superadmin")
-    ? "superadmin"
-    : user.role.includes("seller")
-    ? "seller"
-    : null;
+  useEffect(() => {
+    if (userInfo) {
+      const route = userInfo?.role?.includes("superadmin")
+        ? "superadmin/dashboard"
+        : userInfo.role.includes("seller")
+        ? "seller"
+        : "register";
+      router.replace(`/${route}`);
+    }
+  }, [userInfo, router]);
 
-  if (role) redirect(`/${role}`);
+  if (userInfo) {
+    return <LoadingBigCircle />;
+  }
 
-  return children;
-}
+  return <>{children}</>;
+};
+
+export default PublicRouteProtection;
