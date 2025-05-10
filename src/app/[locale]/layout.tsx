@@ -30,7 +30,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={` antialiased`}>
-        <StoreProvider user={user}>
+        <StoreProvider>
           <AuthProvider user={user}>
             <NextIntlClientProvider>{children}</NextIntlClientProvider>
           </AuthProvider>
