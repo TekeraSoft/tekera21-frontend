@@ -16,7 +16,7 @@ export default function middleware(request: NextRequest) {
     const loginUrl = new URL(`/login`, request.url);
     return NextResponse.redirect(loginUrl);
   }
-  console.log("pathname middleware", pathname);
+
   response.headers.set("x-pathname", request.nextUrl.pathname);
 
   return response;

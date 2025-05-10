@@ -5,8 +5,8 @@ import SellerSupport from "@/components/seller-components/support/SellerSupport"
 import LoadingBigCircle from "@/components/shared/Loading/LoadingBigCircle";
 import { useAuthContext } from "@/context/AuthContext";
 import { companies } from "@/data/companies";
-import { setLoading, setSellerCompany } from "@/store/SellerCompanySlice";
-import { RootState, useAppDispatch } from "@/store/store";
+import { setSellerCompany } from "@/store/SellerCompanySlice";
+import { AppDispatch } from "@/store/store";
 import { setUser } from "@/store/UserSlice";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -17,24 +17,19 @@ interface SellerLayoutProps {
 
 export default function SellerLayout({ children }: SellerLayoutProps) {
   const { userInfo: user } = useAuthContext();
-  const { loading } = useSelector((state: RootState) => state.SellerCompany);
-  const dispatch = useAppDispatch();
-
+  const dispatch = useDispatch<AppDispatch>();
+  
   useEffect(() => {
     if (user) {
-      dispatch(setUser(user));
-    }
-    console.log(user);
-    if (user?.companyId) {
-      // companyId'ye göre eşleşen şirketi bul
-      const company = Object.values(companies).find(
-        (c) => c.id === user.companyId
-      );
+      if (user?.companyId) {
+        // companyId'ye göre eşleşen şirketi bul
+        const company = Object.values(companies).find(
+          (c) => c.id === user.companyId
+        );
 
       // Eğer şirket varsa Redux'a aktar
       if (company) {
         dispatch(setSellerCompany(company));
-        dispatch(setLoading(true));
       }
     }
   }, [user]);

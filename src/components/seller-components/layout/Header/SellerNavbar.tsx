@@ -27,6 +27,7 @@ import { useSelector } from "react-redux";
 import SellerNavbarMobile from "./SellerNavbarMobile";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
+import { useAuthContext } from "@/context/AuthContext";
 
 // Define the menu structure
 
@@ -197,16 +198,14 @@ const menuItems: MenuItem[] = [
 ];
 
 function SellerNavbar() {
-  const { SellerUserInfo } = useSelector(
-    (state: RootState) => state.SellerUser
-  );
+  const { userInfo } = useAuthContext();
 
   const { logoUrl } = useSelector((state: RootState) => state.globalSettings);
 
   // Check if the user has the required role
   const hasRole = (role: string): boolean => {
-    if (!SellerUserInfo) return false;
-    return SellerUserInfo.role.includes(role);
+    if (!userInfo) return false;
+    return userInfo.role.includes(role);
   };
 
   return (

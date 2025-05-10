@@ -13,8 +13,7 @@ import {
 } from "lucide-react";
 import ToggleSidebarButton from "./ToggleSidebarButton";
 import { Link } from "@/i18n/navigation";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useAuthContext } from "@/context/AuthContext";
 
 type AlertItem = {
   id: string;
@@ -74,9 +73,9 @@ const TopBar = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const user = useSelector((state: RootState) => state.User.userInfo);
+  const { userInfo } = useAuthContext();
 
-  console.log("user topbar", user);
+  console.log("userinfo topbar", userInfo);
   return (
     <div className="w-full bg-white h-[52px] flex items-center justify-between px-4 shadow-sm border-b">
       <ToggleSidebarButton />
