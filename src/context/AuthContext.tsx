@@ -1,9 +1,6 @@
 "use client";
-import { companies } from "@/data/companies";
-import { setSellerCompany } from "@/store/SellerCompanySlice";
-import { AppDispatch } from "@/store/store";
+
 import { createContext, useContext, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 
 interface IAuthContext {
   userInfo: any;
@@ -24,31 +21,10 @@ const AuthProvider = ({
   children: React.ReactNode;
   user: any;
 }) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const [userInfo, setUserInfo] = useState(user);
-
-  useEffect(() => {
-    if (user) {
-      if (user?.companyId) {
-        // companyId'ye göre eşleşen şirketi bul
-        const company = Object.values(companies).find(
-          (c) => c.id === user.companyId
-        );
-
-        // Eğer şirket varsa Redux'a aktar
-        if (company) {
-          setUserInfo({ ...user, company: company });
-        }
-      }
-    }
-
-    return () => {};
-  }, [user]);
-
   return (
     <AuthContext.Provider
       value={{
-        userInfo,
+        userInfo: user,
       }}
     >
       {children}

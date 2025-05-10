@@ -91,7 +91,7 @@ export default function SellerInfoCard({ SellerCompanyInfo }: any) {
                   )}
                 >
                   <span>
-                    Satıcı Puanı: {SellerCompanyInfo.score.toFixed(2)}/10
+                    Satıcı Puanı: {SellerCompanyInfo?.score?.toFixed(2)}/10
                   </span>
                   <Star className="h-4 w-4 fill-current" />
                 </Badge>
