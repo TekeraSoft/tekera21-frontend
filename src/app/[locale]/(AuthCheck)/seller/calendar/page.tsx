@@ -148,23 +148,23 @@ function SellerCalendarPage() {
   };
 
   // Filter events by type
-  const getFilteredEvents = () => {
-    if (selectedFilter === "all") return events;
-    return events.filter((event) => {
-      switch (selectedFilter) {
-        case "training":
-          return event.type === "training";
-        case "campaign":
-          return event.type === "campaign";
-        case "payment":
-          return event.type === "payment";
-        case "special":
-          return event.type === "special";
-        default:
-          return true;
-      }
-    });
-  };
+  // const getFilteredEvents = () => {
+  //   if (selectedFilter === "all") return events;
+  //   return events.filter((event) => {
+  //     switch (selectedFilter) {
+  //       case "training":
+  //         return event.type === "training";
+  //       case "campaign":
+  //         return event.type === "campaign";
+  //       case "payment":
+  //         return event.type === "payment";
+  //       case "special":
+  //         return event.type === "special";
+  //       default:
+  //         return true;
+  //     }
+  //   });
+  // };
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 my-5">

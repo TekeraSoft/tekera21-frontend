@@ -40,7 +40,7 @@ export function SignUpForm() {
       await new Promise((resolve) => setTimeout(resolve, 1000))
       router.push("/verify-email?email=" + encodeURIComponent(email))
     } catch (err) {
-      setError("An error occurred. Please try again.")
+      setError("An error occurred. Please try again." + err)
       setIsLoading(false)
     }
   }

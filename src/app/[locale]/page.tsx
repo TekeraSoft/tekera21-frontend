@@ -1,12 +1,9 @@
 "use client";
 
-import { decrement, increment } from "@/store/counterSlice";
-import { AppDispatch, RootState } from "@/store/store";
 import { useTranslations } from "next-intl";
-import { useDispatch, useSelector } from "react-redux";
 
 export default function Home() {
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
 
   const t = useTranslations();
 

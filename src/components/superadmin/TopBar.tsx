@@ -6,7 +6,6 @@ import {
   Bell,
   CheckCircle,
   Info,
-  Megaphone,
   PersonStanding,
   Settings,
   TableConfig,

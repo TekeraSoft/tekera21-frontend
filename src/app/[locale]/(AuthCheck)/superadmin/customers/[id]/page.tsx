@@ -13,7 +13,9 @@ const AdminEditCustomerPage = () => {
     return <div>Customer not found</div>;
   }
 
-  const handleSaveCustomer = (data: any) => {};
+  const handleSaveCustomer = (data: any) => {
+    console.log("data", data);
+  };
   return (
     <>
       <TopBar>

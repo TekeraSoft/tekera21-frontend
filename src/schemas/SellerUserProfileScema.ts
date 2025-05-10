@@ -1,4 +1,3 @@
-import { is } from "react-day-picker/locale";
 import { z } from "zod";
 
 export const profileFormSchema = z.object({

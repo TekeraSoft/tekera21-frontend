@@ -2,24 +2,11 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import {
-  MoreHorizontal,
-  ArrowUpDown,
-  Check,
-  Pencil,
-  Trash2,
-} from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import {
   Table,
   TableBody,
