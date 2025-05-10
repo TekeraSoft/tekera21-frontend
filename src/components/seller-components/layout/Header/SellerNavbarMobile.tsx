@@ -16,6 +16,7 @@ import { MenuItem } from "../../../../../types/SellerTypes/SellerNavbarTypes";
 import SellerCompanyPopover from "./SellerCompanyPopoverMobile";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
+import { useAuthContext } from "@/context/AuthContext";
 
 // import SellerMobileSearchButton from "./NavButtons/SellerMobileSearchButton";
 
@@ -24,9 +25,7 @@ interface SellerNavbarMobileProps {
 }
 
 function SellerNavbarMobile({ menuItems }: SellerNavbarMobileProps) {
-  const { SellerUserInfo } = useSelector(
-    (state: RootState) => state.SellerUser
-  );
+  const { userInfo } = useAuthContext();
 
   interface AlertItem {
     id: string;
@@ -87,8 +86,8 @@ function SellerNavbarMobile({ menuItems }: SellerNavbarMobileProps) {
 
   // Check if the user has the required role
   const hasRole = (role: string): boolean => {
-    if (!SellerUserInfo) return false;
-    return SellerUserInfo.role.includes(role);
+    if (!userInfo) return false;
+    return userInfo.role.includes(role);
   };
 
   const { logoUrl } = useSelector((state: RootState) => state.globalSettings);

@@ -19,7 +19,7 @@ import {
   profileFormSchema,
   ProfileFormValues,
 } from "@/schemas/SellerUserProfileScema";
-import { setIsEditing } from "@/store/formControlSlice";
+import { setIsEditing } from "@/store/generalSlices/formControlSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, Pencil, Upload, User } from "lucide-react";

@@ -4,9 +4,8 @@ import SellerHeader from "@/components/seller-components/layout/header/SellerHea
 import SellerSupport from "@/components/seller-components/support/SellerSupport";
 import { useAuthContext } from "@/context/AuthContext";
 import { companies } from "@/data/companies";
-import { setSellerCompany } from "@/store/SellerCompanySlice";
+import { setSellerCompany } from "@/store/sellerSlices/SellerCompanySlice";
 import { AppDispatch } from "@/store/store";
-import { setUser } from "@/store/UserSlice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
@@ -17,21 +16,19 @@ interface SellerLayoutProps {
 export default function SellerLayout({ children }: SellerLayoutProps) {
   const { userInfo: user } = useAuthContext();
   const dispatch = useDispatch<AppDispatch>();
-  
+
   useEffect(() => {
     if (user) {
-      dispatch(setUser(user));
-    }
-    console.log(user);
-    if (user?.companyId) {
-      // companyId'ye göre eşleşen şirketi bul
-      const company = Object.values(companies).find(
-        (c) => c.id === user.companyId
-      );
+      if (user?.companyId) {
+        // companyId'ye göre eşleşen şirketi bul
+        const company = Object.values(companies).find(
+          (c) => c.id === user.companyId
+        );
 
-      // Eğer şirket varsa Redux'a aktar
-      if (company) {
-        dispatch(setSellerCompany(company));
+        // Eğer şirket varsa Redux'a aktar
+        if (company) {
+          dispatch(setSellerCompany(company));
+        }
       }
     }
   }, [user]);
