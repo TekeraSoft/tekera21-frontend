@@ -3,15 +3,14 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import React from "react";
 
-function SellerUserProfilePreferencesTab() {
+export default function SellerUserProfilePreferencesCard() {
   return (
     <Card>
       <CardHeader>
@@ -21,7 +20,8 @@ function SellerUserProfilePreferencesTab() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
+        <div className="space-y-5">
+          {/* E-posta Bildirimi */}
           <div className="flex items-center justify-between">
             <div>
               <h4 className="font-medium">E-posta Bildirimleri</h4>
@@ -29,19 +29,15 @@ function SellerUserProfilePreferencesTab() {
                 Yeni siparişler ve güncellemeler hakkında bildirimler alın
               </p>
             </div>
-            <div className="flex items-center space-x-2">
+            <div>
               <Label htmlFor="email-notifications" className="sr-only">
                 E-posta Bildirimleri
               </Label>
-              <Input
-                type="checkbox"
-                id="email-notifications"
-                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                defaultChecked
-              />
+              <Switch id="email-notifications" defaultChecked />
             </div>
           </div>
 
+          {/* SMS Bildirimi */}
           <div className="flex items-center justify-between">
             <div>
               <h4 className="font-medium">SMS Bildirimleri</h4>
@@ -49,19 +45,15 @@ function SellerUserProfilePreferencesTab() {
                 Acil güncellemeler için SMS bildirimleri alın
               </p>
             </div>
-            <div className="flex items-center space-x-2">
+            <div>
               <Label htmlFor="sms-notifications" className="sr-only">
                 SMS Bildirimleri
               </Label>
-              <Input
-                type="checkbox"
-                id="sms-notifications"
-                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                defaultChecked
-              />
+              <Switch id="sms-notifications" defaultChecked />
             </div>
           </div>
 
+          {/* 2FA */}
           <div className="flex items-center justify-between">
             <div>
               <h4 className="font-medium">İki Faktörlü Doğrulama</h4>
@@ -69,25 +61,16 @@ function SellerUserProfilePreferencesTab() {
                 Hesabınızı korumak için iki faktörlü doğrulamayı etkinleştirin
               </p>
             </div>
-            <div className="flex items-center space-x-2">
+            <div>
               <Label htmlFor="two-factor" className="sr-only">
                 İki Faktörlü Doğrulama
               </Label>
-              <Input
-                type="checkbox"
-                id="two-factor"
-                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                defaultChecked
-              />
+              <Switch id="two-factor" defaultChecked />
             </div>
           </div>
+          <Button>Tercihleri Kaydet</Button>
         </div>
       </CardContent>
-      <CardFooter>
-        <Button>Tercihleri Kaydet</Button>
-      </CardFooter>
     </Card>
   );
 }
-
-export default SellerUserProfilePreferencesTab;

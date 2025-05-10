@@ -59,6 +59,12 @@ const menuItems: MenuItem[] = [
         requiredRole: "products",
         href: "/seller/product/list",
       },
+      {
+        key: "productCreate",
+        label: "Ürün oluştur",
+        requiredRole: "products",
+        href: "/seller/product/create",
+      },
 
       {
         key: "automaticPricing",

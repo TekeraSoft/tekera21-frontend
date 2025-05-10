@@ -1,6 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { SellerCompanyProps } from "../../../types/CompanyTypes/CompanySliceTypes";
 
-const initialState = {
+// Slice’ın genel durumu
+export interface SellerCompanyState {
+  SellerCompanyInfo: SellerCompanyProps | null;
+  loading: boolean;
+}
+
+const initialState: SellerCompanyState = {
   SellerCompanyInfo: null,
   loading: true,
 };

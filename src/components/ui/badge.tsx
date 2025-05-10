@@ -23,6 +23,7 @@ const badgeVariants = cva(
         danger:
           "bg-orange-100 text-orange-800 hover:bg-orange-200 border-orange-200",
         info: "bg-blue-100 text-blue-800 hover:bg-blue-200 border-blue-200",
+        square: " rounded-md px-3 py-1 bg-slate-100 shadow-sm",
       },
     },
     defaultVariants: {

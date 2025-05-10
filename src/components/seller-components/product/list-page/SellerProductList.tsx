@@ -38,6 +38,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 import SellerProductListTabsHeader from "./SellerProductListTabsHeader";
+import SellerInnerContainer from "../../containers/SellerInnerContainer";
 
 // Sample product data
 const products = [
@@ -549,7 +550,7 @@ export default function SellerProductList() {
   };
 
   return (
-    <div className="container  md:mx-auto py-6 space-y-6">
+    <SellerInnerContainer>
       <SellerProductListTabsHeader />
 
       <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
@@ -615,6 +616,6 @@ export default function SellerProductList() {
           <ProductTable products={filteredProducts} activeTab="passive" />
         </TabsContent>
       </Tabs>
-    </div>
+    </SellerInnerContainer>
   );
 }

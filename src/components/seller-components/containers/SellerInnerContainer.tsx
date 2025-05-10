@@ -5,7 +5,7 @@ interface SellerInnerContainerProps {
 }
 
 const SellerInnerContainer = ({ children }: SellerInnerContainerProps) => {
-  return <div className="flex flex-col gap-6 px-6 py-3 w-full">{children}</div>;
+  return <div className="flex flex-col gap-6 px-8 py-3 w-full">{children}</div>;
 };
 
 export default SellerInnerContainer;
