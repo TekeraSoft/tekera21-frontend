@@ -1,6 +1,5 @@
 import Image from "next/image";
-import { User, Building, CheckCircle, AlertCircle } from "lucide-react";
-
+import { User, Building, CheckCircle, AlertCircle, Edit } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -11,6 +10,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
 
 // Example user data
 const userData = {
@@ -68,7 +69,15 @@ type typeUserData = typeof userData;
 export default function DocumentsPage() {
   return (
     <div className="container mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-6">Kayıt Bilgileri ve Belgeler</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold">Kayıt Bilgileri ve Belgeler</h1>
+        <Link href="/register/edit">
+          <Button className="flex items-center gap-2">
+            <Edit className="h-4 w-4" />
+            Bilgileri Düzenle
+          </Button>
+        </Link>
+      </div>
 
       {/* User and Company Info Card */}
       <div className="grid gap-6 md:grid-cols-2 mb-8">

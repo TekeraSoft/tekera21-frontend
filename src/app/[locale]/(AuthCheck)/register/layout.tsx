@@ -1,7 +1,7 @@
 import type React from "react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { FileText } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 
 export const metadata: Metadata = {
   title: "Profil - Belgeler",
