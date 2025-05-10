@@ -17,7 +17,7 @@ import SellerCompanyPopover from "./SellerCompanyPopoverMobile";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 
-import SellerMobileSearchButton from "./NavButtons/SellerMobileSearchButton";
+// import SellerMobileSearchButton from "./NavButtons/SellerMobileSearchButton";
 
 interface SellerNavbarMobileProps {
   menuItems: MenuItem[];

@@ -46,7 +46,7 @@ export function ResetPasswordForm() {
       await new Promise((resolve) => setTimeout(resolve, 1000))
       setIsSubmitted(true)
     } catch (err) {
-      setError("An error occurred. Please try again.")
+      setError("An error occurred. Please try again." + err)
     } finally {
       setIsLoading(false)
     }
