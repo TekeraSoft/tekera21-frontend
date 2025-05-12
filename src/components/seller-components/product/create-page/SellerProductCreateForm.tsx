@@ -51,7 +51,6 @@ type ProductImage = {
   preview: string;
 };
 
-// Zod şeması
 const productSchema = z.object({
   name: z.string().min(3, { message: "Ürün adı en az 3 karakter olmalıdır" }),
   description: z
@@ -60,8 +59,8 @@ const productSchema = z.object({
   price: z.string().min(1, { message: "Fiyat alanı zorunludur" }),
   stock: z.string().min(1, { message: "Stok alanı zorunludur" }),
   sku: z.string().optional(),
-  isActive: z.boolean().default(true),
-  isFeatured: z.boolean().default(false),
+  isActive: z.boolean().optional(),
+  isFeatured: z.boolean().optional(),
   category: z.string().min(1, { message: "Kategori seçimi zorunludur" }),
   subcategory: z.string().optional(),
 });
@@ -819,9 +818,9 @@ export default function SellerProductCreateForm() {
                                       accept="image/*"
                                       multiple
                                       className="hidden"
-                                      ref={(el) =>
-                                        setVariantFileInputRef(el, variant.id)
-                                      }
+                                      ref={(el: any) => {
+                                        setVariantFileInputRef(el, variant.id);
+                                      }}
                                       onChange={(e) =>
                                         handleVariantImageUpload(e, variant.id)
                                       }
