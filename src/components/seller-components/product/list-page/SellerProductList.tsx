@@ -430,7 +430,7 @@ function ProductTable({ products, activeTab }: any) {
               <div>Komisyon</div>
             </TableHead>
             <TableHead>
-              <div>Trendyol Satış Fiyatı</div>
+              <div>tekera21 Satış Fiyatı</div>
             </TableHead>
             <TableHead>
               <div>Stok</div>

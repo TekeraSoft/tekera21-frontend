@@ -61,7 +61,7 @@ const SellerRecommendationsCard = () => {
                     <div>
                       <div className="flex items-center gap-1 mb-1">
                         <span className="text-xs px-1.5 py-0.5 bg-green-100 text-green-700 rounded-sm">
-                          Trendyol Avantaj Ürünleri
+                          tekera21 Avantaj Ürünleri
                         </span>
                       </div>
                       <p className="text-sm font-medium line-clamp-2">
@@ -269,8 +269,8 @@ const SellerRecommendationsCard = () => {
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-sm font-medium">
-                        Trendyol'a Hoşgeldiniz! 1000 TL'ye 100 TL İndirim - %50
-                        Trendyol Karşılamalı
+                        tekera21'a Hoşgeldiniz! 1000 TL'ye 100 TL İndirim - %50
+                        tekera21 Karşılamalı
                       </span>
                     </div>
                     <div className="flex items-center gap-1 mt-1">
@@ -280,7 +280,7 @@ const SellerRecommendationsCard = () => {
                     </div>
                     <p className="text-xs text-gray-600 mt-1">
                       Kampanyaya katılarak ürünleriniz için belirlendiğiniz ürün
-                      fiyatının belirtilen oranda indirimini Trendyol karşılar.
+                      fiyatının belirtilen oranda indirimini tekera21 karşılar.
                     </p>
                     <p className="text-xs text-gray-500">
                       Katılım Koşulu: Butikler Fiyatı veya Daha Düşük

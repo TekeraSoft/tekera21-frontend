@@ -85,12 +85,6 @@ const menuItems: MenuItem[] = [
           },
         ],
       },
-      {
-        key: "categories",
-        label: "Kategoriler",
-        requiredRole: "products",
-        href: "/seller/products/categories",
-      },
     ],
   },
   {
@@ -137,7 +131,7 @@ const menuItems: MenuItem[] = [
   },
   {
     key: "shipping",
-    label: "Sipariş & Kargo",
+    label: "Kargo",
     icon: <Truck className="mr-2 h-4 w-4" />,
     requiredRole: "shipping",
     subItems: [

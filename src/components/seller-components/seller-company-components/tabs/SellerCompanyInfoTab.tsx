@@ -455,7 +455,7 @@ export default function SelllerCompanyInfoTab() {
           üzerinden bizimle iletişime geçebilirsiniz. Firma bilgileriniz Gelir
           İdaresi Başkanlığı'nda değişti ise{" "}
           <span className="font-medium">"Güncelle"</span> butonuna tıklayarak
-          bilgilerinizin Trendyol'da da güncellenmesini sağlayabilirsiniz.
+          bilgilerinizin tekera21'da da güncellenmesini sağlayabilirsiniz.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">

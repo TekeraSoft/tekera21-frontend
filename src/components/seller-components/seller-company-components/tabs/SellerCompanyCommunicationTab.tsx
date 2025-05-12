@@ -56,7 +56,7 @@ export default function SellerCompanyCommunicationTab() {
           </button>
         </div>
         <p className="text-sm text-gray-600">
-          Trendyol Pazaryeri'nde işinizi büyütmeniz ve geliştirmeniz için
+          tekera21 Pazaryeri'nde işinizi büyütmeniz ve geliştirmeniz için
           gönderilen Kampanya, Satıcı Mağazası, Kupon, Satıcı Paneli'ndeki
           yenilikler ve Akademi iletişimlerini kapsamaktadır.
         </p>
@@ -115,7 +115,7 @@ export default function SellerCompanyCommunicationTab() {
           </button>
         </div>
         <p className="text-sm text-gray-600">
-          Trendyol Pazaryeri'nde sürdürdüğünüz operasyon, ticari ve finansal
+          tekera21 Pazaryeri'nde sürdürdüğünüz operasyon, ticari ve finansal
           süreçleriniz için gönderilen iletişimleri kapsamaktadır.
         </p>
 

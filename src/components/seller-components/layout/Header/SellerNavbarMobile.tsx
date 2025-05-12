@@ -157,9 +157,9 @@ function SellerNavbarMobile({ menuItems }: SellerNavbarMobileProps) {
               <Collapsible>
                 <CollapsibleTrigger
                   className={cn(
-                    "w-full flex items-center justify-between p-2 rounded-md",
+                    "w-full flex items-center justify-between p-2 rounded-md cursor-pointer ",
                     hasRole(item.requiredRole)
-                      ? "hover:bg-slate-100"
+                      ? "hover:bg-slate-200"
                       : "bg-red-50 opacity-50 cursor-not-allowed"
                   )}
                   disabled={!hasRole(item.requiredRole)}
@@ -181,9 +181,9 @@ function SellerNavbarMobile({ menuItems }: SellerNavbarMobileProps) {
                       <Collapsible key={subItem.key}>
                         <CollapsibleTrigger
                           className={cn(
-                            "w-full flex items-center justify-between p-2 pl-8 rounded-md",
+                            "w-full flex items-center justify-between p-2 pl-8 rounded-md cursor-pointer",
                             hasRole(subItem.requiredRole)
-                              ? "hover:bg-slate-100"
+                              ? "hover:bg-slate-200"
                               : "opacity-50 cursor-not-allowed"
                           )}
                           disabled={!hasRole(subItem.requiredRole)}
@@ -203,7 +203,7 @@ function SellerNavbarMobile({ menuItems }: SellerNavbarMobileProps) {
                               className={cn(
                                 "p-2 pl-12 rounded-md",
                                 hasRole(flyoutItem.requiredRole)
-                                  ? "hover:bg-slate-100 cursor-pointer"
+                                  ? "hover:bg-slate-200 cursor-pointer"
                                   : "opacity-50 cursor-not-allowed"
                               )}
                               onClick={() =>
@@ -224,7 +224,7 @@ function SellerNavbarMobile({ menuItems }: SellerNavbarMobileProps) {
                         className={cn(
                           "p-2 pl-8 rounded-md",
                           hasRole(subItem.requiredRole)
-                            ? "hover:bg-slate-100 cursor-pointer"
+                            ? "hover:bg-slate-200 cursor-pointer"
                             : "opacity-50 cursor-not-allowed"
                         )}
                         onClick={() =>
