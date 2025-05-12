@@ -6,7 +6,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { useDialogContext } from "@/context/DialogContext";
 
@@ -27,7 +26,7 @@ const ApproveDelete = ({ handler }: { handler: (val?: string) => void }) => {
           <DialogFooter className="mt-4 flex flex-col gap-3">
             <Button
               variant="outline"
-              //  onClick={() => setOpenDialog(false)}
+              onClick={() => setDialogStatus({ isOpen: false, value: "" })}
             >
               Hayır
             </Button>
