@@ -165,7 +165,7 @@ export default function EditDocumentsPage(): JSX.Element {
       return;
     }
     const updatedDocuments = user.documents.map((d) =>
-      d.type === docType ? { ...d, status: "deleted" as "deleted" } : d
+      d.type === docType ? { ...d, status: "deleted" as const } : d
     );
     setDialogStatus({ isOpen: false, value: "" });
     setUser((prev) => ({
