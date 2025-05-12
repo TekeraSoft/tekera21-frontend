@@ -226,10 +226,10 @@ export default function EditDocumentsPage(): JSX.Element {
 
   return (
     <div className="container mx-auto py-8 px-4">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-wrap w-full items-center justify-between mb-6 gap-y-5">
         <h1 className="text-3xl font-bold">Bilgileri Düzenle</h1>
         <Link href="/register">
-          <Button variant="outline" className="flex items-center gap-2">
+          <Button variant="outline" className="flex items-center gap-2 p-2">
             <ArrowLeft className="h-4 w-4" />
             Görüntüleme Sayfasına Dön
           </Button>
@@ -472,6 +472,7 @@ export default function EditDocumentsPage(): JSX.Element {
                               Değiştir
                             </Button>
                             <Button
+                              type="button"
                               variant="destructive"
                               size="sm"
                               onClick={() =>

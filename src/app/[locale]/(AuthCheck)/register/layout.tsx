@@ -14,33 +14,13 @@ export default function ProfileLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col px-2 lg:px-6">
       <header className="sticky top-0 z-50 w-full border-b bg-background">
         <div className="container mx-auto flex h-16 items-center">
           <Link href="/" className="flex items-center gap-2 font-semibold">
             <FileText className="h-5 w-5" />
             <span>Belge Yönetim Sistemi</span>
           </Link>
-          <nav className="ml-auto flex gap-4">
-            <Link
-              href="/profile"
-              className="text-sm font-medium hover:underline"
-            >
-              Profil
-            </Link>
-            <Link
-              href="/profile/documents"
-              className="text-sm font-medium hover:underline"
-            >
-              Belgeler
-            </Link>
-            <Link
-              href="/profile/settings"
-              className="text-sm font-medium hover:underline"
-            >
-              Ayarlar
-            </Link>
-          </nav>
         </div>
       </header>
       <main className="flex-1">{children}</main>

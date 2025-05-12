@@ -69,7 +69,7 @@ type typeUserData = typeof userData;
 export default function DocumentsPage() {
   return (
     <div className="container mx-auto py-8 px-4">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-wrap items-center justify-between mb-6 gap-y-5">
         <h1 className="text-3xl font-bold">Kayıt Bilgileri ve Belgeler</h1>
         <Link href="/register/edit">
           <Button className="flex items-center gap-2">
