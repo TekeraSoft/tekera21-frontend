@@ -2,7 +2,15 @@
 
 import { useState, useRef, type FormEvent, type ChangeEvent, JSX } from "react";
 import Image from "next/image";
-import { User, Building, Upload, ArrowLeft, Save, Trash2 } from "lucide-react";
+import {
+  User,
+  Building,
+  Upload,
+  ArrowLeft,
+  Save,
+  Trash2,
+  UploadIcon,
+} from "lucide-react";
 
 import {
   Card,
@@ -204,7 +212,7 @@ export default function EditDocumentsPage(): JSX.Element {
     <div className="container mx-auto py-8 px-4">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold">Bilgileri Düzenle</h1>
-        <Link href="/profile/documents">
+        <Link href="/register">
           <Button variant="outline" className="flex items-center gap-2">
             <ArrowLeft className="h-4 w-4" />
             Görüntüleme Sayfasına Dön
@@ -399,59 +407,15 @@ export default function EditDocumentsPage(): JSX.Element {
               <CardContent>
                 <div className="space-y-6">
                   {/* Upload New Document */}
-                  <div className="bg-muted/50 p-4 rounded-lg">
-                    <h3 className="font-medium mb-3">Yeni Belge Yükle</h3>
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="documentName">Belge Adı</Label>
-                          <Input id="documentName" ref={documentNameRef} />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="documentType">Belge Türü</Label>
-                          <select
-                            id="documentType"
-                            ref={documentTypeRef}
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                          >
-                            <option value="">Seçiniz</option>
-                            <option value="identity">Kimlik Belgesi</option>
-                            <option value="tax">Vergi Belgesi</option>
-                            <option value="signature">İmza Sirküleri</option>
-                            <option value="commercial">Ticaret Sicil</option>
-                            <option value="other">Diğer</option>
-                          </select>
-                        </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="documentFile">Dosya</Label>
-                        <Input
-                          id="documentFile"
-                          type="file"
-                          ref={documentFileRef}
-                        />
-                      </div>
-
-                      <Button
-                        type="button"
-                        onClick={handleDocumentUpload}
-                        className="flex items-center gap-2"
-                      >
-                        <Upload className="h-4 w-4" />
-                        Belge Yükle
-                      </Button>
-                    </div>
-                  </div>
 
                   <Separator />
 
                   {/* Existing Documents */}
                   <div>
-                    <h3 className="font-medium mb-3">Mevcut Belgeler</h3>
+                    <h3 className="font-medium mb-3">Belgeler</h3>
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                       {user.documents.map((doc) => (
-                        <Card key={doc.id} className="overflow-hidden">
+                        <Card key={doc.id} className="overflow-hidden relative">
                           <div className="relative h-40 w-full">
                             <Image
                               src={doc.fileUrl || "/placeholder.svg"}
@@ -460,6 +424,20 @@ export default function EditDocumentsPage(): JSX.Element {
                               className="object-cover"
                             />
                           </div>
+                          <div className="absolute flex justify-center items-center top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full">
+                            <div className="w-16 h-16 space-y-2 relative hover:bg-gray-100 ">
+                              <Label htmlFor="documentFile">
+                                <UploadIcon className="w-16 h-16 cursor-pointer p-2" />
+                              </Label>
+                              <Input
+                                id="documentFile"
+                                type="file"
+                                className="hidden"
+                                ref={documentFileRef}
+                              />
+                            </div>
+                          </div>
+
                           <CardContent className="p-4">
                             <div className="flex justify-between items-start">
                               <div>

@@ -20,3 +20,14 @@ export async function getUser(layout: string) {
     return null;
   }
 }
+
+
+export async function logOut() {
+  const cookieStore = await cookies();
+  try {
+    cookieStore.delete("user");
+    cookieStore.delete("token");
+  } catch (error) {
+    console.error("logOut error:", error);
+  }
+}

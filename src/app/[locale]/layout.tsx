@@ -6,6 +6,8 @@ import "./globals.css";
 import StoreProvider from "@/store/StoreProvider";
 import { getUser } from "../actions";
 import AuthProvider from "@/context/AuthContext";
+import { AxiosInterceptor } from "@/request/axiosClient";
+import { api_base_url } from "@/constants/apiUrls";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -27,12 +29,16 @@ export default async function RootLayout({
 
   const user = await getUser("root layout");
 
+  console.log("apiurl", api_base_url);
+
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={` antialiased`}>
         <StoreProvider>
           <AuthProvider user={user}>
-            <NextIntlClientProvider>{children}</NextIntlClientProvider>
+            <NextIntlClientProvider>
+              <AxiosInterceptor>{children}</AxiosInterceptor>
+            </NextIntlClientProvider>
           </AuthProvider>
         </StoreProvider>
       </body>

@@ -12,7 +12,7 @@ export default function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
   const protectedRoutes = ["/seller", "/superadmin", "/register"];
-  if (protectedRoutes.some((route) => pathname.startsWith(route)) && !token) {
+  if (protectedRoutes.some((route) => pathname.includes(route)) && !token) {
     const loginUrl = new URL(`/login`, request.url);
     return NextResponse.redirect(loginUrl);
   }
