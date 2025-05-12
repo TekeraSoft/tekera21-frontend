@@ -8,6 +8,7 @@ import { getUser } from "../actions";
 import AuthProvider from "@/context/AuthContext";
 import { AxiosInterceptor } from "@/request/axiosClient";
 import { api_base_url } from "@/constants/apiUrls";
+import DialogProvider from "@/context/DialogContext";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -37,7 +38,9 @@ export default async function RootLayout({
         <StoreProvider>
           <AuthProvider user={user}>
             <NextIntlClientProvider>
-              <AxiosInterceptor>{children}</AxiosInterceptor>
+              <AxiosInterceptor>
+                <DialogProvider>{children}</DialogProvider>
+              </AxiosInterceptor>
             </NextIntlClientProvider>
           </AuthProvider>
         </StoreProvider>

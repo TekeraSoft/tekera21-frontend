@@ -29,6 +29,8 @@ import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "@/i18n/navigation";
+import { useDialogContext } from "@/context/DialogContext";
+import ApproveDelete from "@/components/superadmin/Dialog/ApproveDelete";
 
 // TypeScript interfaces
 interface Document {
@@ -36,7 +38,7 @@ interface Document {
   name: string;
   type: string;
   uploadDate: string;
-  status: "verified" | "pending";
+  status: "verified" | "pending" | "deleted" | "rejected" | "inceleniyor";
   fileUrl: string;
 }
 
@@ -114,6 +116,7 @@ export default function EditDocumentsPage(): JSX.Element {
   const { toast } = useToast();
   const [user, setUser] = useState<UserData>(userData);
 
+  const { setDialogStatus } = useDialogContext();
   const documentNameRef = useRef<HTMLInputElement>(null);
   const documentTypeRef = useRef<HTMLSelectElement>(null);
   const documentFileRef = useRef<HTMLInputElement>(null);
@@ -151,10 +154,23 @@ export default function EditDocumentsPage(): JSX.Element {
   };
 
   // Handle document deletion
-  const handleDeleteDocument = (docId: string): void => {
+  const handleDeleteDocument = (docType?: string): void => {
+    const doc = user.documents.find((d) => d.type === docType);
+    if (!doc) {
+      toast({
+        title: "Hata",
+        description: "Belge bulunamadı.",
+        variant: "destructive",
+      });
+      return;
+    }
+    const updatedDocuments = user.documents.map((d) =>
+      d.type === docType ? { ...d, status: "deleted" as "deleted" } : d
+    );
+    setDialogStatus({ isOpen: false, value: "" });
     setUser((prev) => ({
       ...prev,
-      documents: prev.documents.filter((doc) => doc.id !== docId),
+      documents: updatedDocuments,
     }));
 
     toast({
@@ -446,10 +462,7 @@ export default function EditDocumentsPage(): JSX.Element {
                                   Yükleme: {doc.uploadDate}
                                 </p>
                                 <p className="text-xs text-muted-foreground">
-                                  Durum:{" "}
-                                  {doc.status === "verified"
-                                    ? "Onaylandı"
-                                    : "İnceleniyor"}
+                                  Durum: {doc.status}
                                 </p>
                               </div>
                             </div>
@@ -461,7 +474,12 @@ export default function EditDocumentsPage(): JSX.Element {
                             <Button
                               variant="destructive"
                               size="sm"
-                              onClick={() => handleDeleteDocument(doc.id)}
+                              onClick={() =>
+                                setDialogStatus({
+                                  isOpen: true,
+                                  value: doc.type,
+                                })
+                              }
                               className="flex items-center gap-1"
                             >
                               <Trash2 className="h-3 w-3" />
@@ -484,6 +502,8 @@ export default function EditDocumentsPage(): JSX.Element {
           </TabsContent>
         </Tabs>
       </form>
+
+      <ApproveDelete handler={handleDeleteDocument} />
     </div>
   );
 }
