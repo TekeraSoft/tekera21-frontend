@@ -7,6 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@radix-ui/react-popover";
+import { Info } from "lucide-react";
 
 export default function SellerOrderHeader() {
   const pathname = usePathname();
@@ -14,28 +15,28 @@ export default function SellerOrderHeader() {
   const navItems = [
     {
       name: "Tüm Siparişler",
-      path: "/orders/shipping",
+      path: "/seller/orders",
       count: 23,
       badge: true,
-      badgeText: "",
+      badgeText: "Tüm siparişlerinizi inceleyin.",
     },
     { name: "Yeni Siparişleriniz", path: "/new-order", badge: true },
     {
       name: "İşleme Alınanlar",
-      path: "/order/in-process",
+      path: "/seller/order/in-process",
       badge: true,
       badgeText: "İşleme alınan siparişlerinizi inceleyin.",
     },
     {
       name: "Teslim Edilenler",
-      path: "/orders/delivered",
+      path: "/seller/orders/delivered",
       count: 23,
       badge: true,
       badgeText: "Teslim edilen siparişlerinizi inceleyin.",
     },
     {
       name: "İptal Edilenler",
-      path: "/orders/cancels",
+      path: "/seller/orders/cancels",
       count: 23,
       badge: true,
       badgeText: "İptal edilen siparişlerinizi inceleyin.",
@@ -47,18 +48,20 @@ export default function SellerOrderHeader() {
       <div className="flex items-center justify-between px-4 py-2 bg-gray-50">
         <div className="flex overflow-x-auto hide-scrollbar">
           {navItems.map((item) => (
-            <Link
+            <div
               key={item.path}
-              href={item.path}
               className={cn(
-                "whitespace-nowrap px-4 py-2 border-r last:border-r-0 hover:bg-gray-100 transition-colors",
+                "whitespace-nowrap px-4 py-2 border-r last:border-r-0  ur transition-colors",
                 pathname === item.path
                   ? "font-medium border-b-2 border-b-primary"
                   : ""
               )}
             >
               <div className="flex items-center gap-2">
-                {item.name}
+                <Link href={item.path} className="hover:underline">
+                  {item.name}
+                </Link>
+
                 {item.count && (
                   <span className="text-xs bg-gray-200 px-1.5 py-0.5 rounded-full">
                     {item.count} Paket
@@ -66,14 +69,14 @@ export default function SellerOrderHeader() {
                 )}
                 {item.badge && (
                   <Popover>
-                    <PopoverTrigger>Open</PopoverTrigger>
-                    <PopoverContent>
-                      Place content for the popover here.
-                    </PopoverContent>
+                    <PopoverTrigger>
+                      <Info />
+                    </PopoverTrigger>
+                    <PopoverContent>{item.badgeText}</PopoverContent>
                   </Popover>
                 )}
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </div>

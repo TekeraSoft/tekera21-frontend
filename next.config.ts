@@ -5,7 +5,12 @@ const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["fakeimg.pl"],
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "fakeimg.pl",
+      },
+    ],
   },
 };
 

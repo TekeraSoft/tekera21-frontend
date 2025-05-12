@@ -1,4 +1,4 @@
-import SellerShippingHeader from "@/components/seller-components/order-and-shipping/SellerOrderHeader";
+import SellerOrderHeader from "@/components/seller-components/order-and-shipping/SellerOrderHeader";
 
 interface SellerShippingLayoutProps {
   children: React.ReactNode;
@@ -9,7 +9,7 @@ export default function SellerShippingLayout({
 }: SellerShippingLayoutProps) {
   return (
     <div className="flex flex-col min-h-screen">
-      <SellerShippingHeader />
+      <SellerOrderHeader />
       {children}
     </div>
   );
