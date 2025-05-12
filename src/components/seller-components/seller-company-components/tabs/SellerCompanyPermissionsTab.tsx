@@ -37,7 +37,7 @@ export default function SellerCompanyPermissionsTab() {
                     Tahmini Teslimat Tarihi Gösterim İzni - Tüm Mecralar
                   </span>
                   <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                    Trendyol Talebi
+                    tekera21 Talebi
                   </span>
                 </div>
               </td>
@@ -64,7 +64,7 @@ export default function SellerCompanyPermissionsTab() {
                 <div className="flex items-center gap-2">
                   <span>Termin Gösterim İzni</span>
                   <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                    Trendyol Talebi
+                    tekera21 Talebi
                   </span>
                 </div>
               </td>
@@ -91,7 +91,7 @@ export default function SellerCompanyPermissionsTab() {
                 <div className="flex items-center gap-2">
                   <span>Tahmini Teslimat Süresi Gösterim İzni</span>
                   <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                    Trendyol Talebi
+                    tekera21 Talebi
                   </span>
                 </div>
               </td>
@@ -117,11 +117,11 @@ export default function SellerCompanyPermissionsTab() {
               <td className="p-3 text-sm">
                 <div className="flex items-center gap-2">
                   <span>
-                    Trendyol Karşılamalı İndirim, Promosyon ve Kampanya
+                    tekera21 Karşılamalı İndirim, Promosyon ve Kampanya
                     Uygulamaları İzni
                   </span>
                   <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                    Trendyol Talebi
+                    tekera21 Talebi
                   </span>
                 </div>
               </td>

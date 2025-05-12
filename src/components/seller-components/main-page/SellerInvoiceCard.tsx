@@ -14,7 +14,7 @@ const SellerInvoiceCard = () => {
           <Info className="h-4 w-4 text-gray-400" />
         </CardTitle>
         <Button variant="link" className="text-sm p-0 h-auto text-blue-500">
-          Trendyol Akademi
+          tekera21 Akademi
         </Button>
       </CardHeader>
       <CardContent className="space-y-4">

@@ -26,7 +26,7 @@ const SellerAnnouncementsCard = () => {
               <div className="flex items-center gap-2">
                 <Bell className="h-4 w-4 text-orange-500" />
                 <span className="text-sm font-medium">
-                  Bugün Açılan Trendyol Karşılamalı Türkiye Kampanyalarınız Var!
+                  Bugün Açılan tekera21 Karşılamalı Türkiye Kampanyalarınız Var!
                 </span>
               </div>
               <Button variant="ghost" size="icon" className="h-6 w-6">

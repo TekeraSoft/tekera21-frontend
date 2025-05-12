@@ -502,7 +502,7 @@ function SellerCalendarPage() {
                   <td className="border p-1 align-top">
                     <div className="text-sm font-medium">26</div>
                     <div className="text-xs p-1 my-0.5 rounded bg-green-500 text-white">
-                      Trendyol'a Kazanmız Gereken Faturalar Ola...
+                      tekera21'a Kazanmız Gereken Faturalar Ola...
                     </div>
                   </td>
                   <td className="border p-1 align-top">
