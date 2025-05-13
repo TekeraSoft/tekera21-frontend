@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { ArrowUpDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +22,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { fetchProducts } from "@/store/superadminSlices/product/productSlice";
 
 export function ProductsTable() {
   const [products, setProducts] = useState([
@@ -116,6 +118,22 @@ export function ProductsTable() {
       status: "In Stock",
     },
   ]);
+
+  const {
+    products: productsFake,
+    error,
+    loading,
+  } = useAppSelector((state) => state.adminProducts);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+
+    return () => {};
+  }, []);
+
+  console.log("first", productsFake, error, loading);
 
   const getStatusColor = (status: string) => {
     switch (status) {

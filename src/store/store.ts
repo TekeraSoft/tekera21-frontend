@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import SellerCompanyReducer from "./sellerSlices/SellerCompanySlice";
 import globalSettingsReducer from "./generalSlices/globalSettingsSlice";
 import formControlReducer from "./generalSlices/formControlSlice";
+import adminProductsReducer from "./superadminSlices/product/productSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 export const store = configureStore({
@@ -9,6 +10,7 @@ export const store = configureStore({
     SellerCompany: SellerCompanyReducer,
     formControl: formControlReducer,
     globalSettings: globalSettingsReducer,
+    adminProducts: adminProductsReducer,
   },
 });
 

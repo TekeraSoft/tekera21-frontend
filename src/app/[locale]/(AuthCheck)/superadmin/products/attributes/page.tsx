@@ -306,7 +306,7 @@ export default function ProductAttributesAdmin() {
                               key={attribute.id}
                               className="border rounded-md p-4"
                             >
-                              <div className="flex items-center gap-4 mb-4">
+                              <div className="flex items-center mb-4 gap-4">
                                 <div className="flex-1">
                                   <Label htmlFor={`attr-${attribute.id}`}>
                                     Özellik Adı
@@ -327,6 +327,7 @@ export default function ProductAttributesAdmin() {
                                 <Button
                                   variant="destructive"
                                   size="icon"
+                                  className="mt-4"
                                   onClick={() =>
                                     removeAttribute(category.id, attribute.id)
                                   }
