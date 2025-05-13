@@ -1,7 +1,5 @@
-// redux/slices/productSlice.ts
-import { getAdminProducts } from "@/fetchers/superadmin/product";
+import { getAdminProducts } from "@/services/superadmin/product";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
 
 interface Product {
   id: number;
