@@ -103,7 +103,7 @@ const menuItems: MenuItem[] = [
         key: "returns",
         label: "İadeler",
         requiredRole: "orders",
-        href: "/seller/orders/cancels",
+        href: "/seller/return-transactions",
       },
     ],
   },
