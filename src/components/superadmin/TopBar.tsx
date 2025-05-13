@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import {
   AlertTriangle,
@@ -14,6 +14,7 @@ import {
 import ToggleSidebarButton from "./ToggleSidebarButton";
 import { Link } from "@/i18n/navigation";
 import { useAuthContext } from "@/context/AuthContext";
+import axiosClient from "@/request/axiosClient";
 
 type AlertItem = {
   id: string;
@@ -74,6 +75,27 @@ const TopBar = ({ children }: { children: React.ReactNode }) => {
   };
 
   const { userInfo } = useAuthContext();
+
+  // useEffect(() => {
+  //   const getUser = async () => {
+  //     try {
+  //       const userFromApi = await axiosClient.post(
+  //         "https://dummyjson.com/auth/login",
+  //         {
+  //           username: "emilys",
+  //           password: "emilyspass",
+  //           expiresInMins: 30, // optional, defaults to 60
+  //         },
+  //         { withCredentials: false }
+  //       );
+  //       // console.log("user client", userFromApi);
+  //     } catch (error) {
+  //       console.log("error", error);
+  //     }
+  //   };
+  //   getUser();
+  //   return () => {};
+  // }, []);
 
   console.log("userinfo topbar", userInfo);
   return (

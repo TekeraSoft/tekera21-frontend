@@ -1,7 +1,19 @@
 "use client";
 import { useEffect, useState } from "react";
 import { logOut } from "../app/actions";
-import axiosInstance from "./axiosInstance";
+import axios from "axios";
+import { api_base_url } from "@/constants/apiUrls";
+
+const axiosClient = axios.create({
+  baseURL: api_base_url,
+  timeout: 5000,
+  withCredentials: true,
+  xsrfCookieName: "token",
+  xsrfHeaderName: "token",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
   const [isSet, setIsSet] = useState(false);
@@ -9,7 +21,7 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     // Response interceptor
 
-    const responseInterceptor = axiosInstance.interceptors.response.use(
+    const responseInterceptor = axiosClient.interceptors.response.use(
       (response) => response, // Başarılı cevapları direkt döndür
       async (error) => {
         if (error.response) {
@@ -27,8 +39,9 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
     );
 
     // Request interceptor
-    const requestInterceptor = axiosInstance.interceptors.request.use(
+    const requestInterceptor = axiosClient.interceptors.request.use(
       (config) => {
+        console.log("request config", config);
         if (config.data instanceof FormData) {
           config.headers["Content-Type"] = "multipart/form-data";
         }
@@ -39,13 +52,13 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
     setIsSet(true);
 
     return () => {
-      axiosInstance.interceptors.response.eject(responseInterceptor);
-      axiosInstance.interceptors.request.eject(requestInterceptor);
+      axiosClient.interceptors.response.eject(responseInterceptor);
+      axiosClient.interceptors.request.eject(requestInterceptor);
     };
   }, []); // handleLogout bağımlılığa eklendi
 
   return isSet ? children : null;
 };
 
-export default axiosInstance;
+export default axiosClient;
 export { AxiosInterceptor };
