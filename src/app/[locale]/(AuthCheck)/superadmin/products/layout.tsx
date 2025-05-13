@@ -1,3 +1,5 @@
+import AdminInnerLayout from "@/components/superadmin/AdminInnerLayout";
+import TopBar from "@/components/superadmin/TopBar";
 import React from "react";
 
 export default function AdminProductsLayout({
@@ -5,5 +7,12 @@ export default function AdminProductsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      <TopBar>
+        <></>
+      </TopBar>
+      <AdminInnerLayout>{children}</AdminInnerLayout>
+    </>
+  );
 }
