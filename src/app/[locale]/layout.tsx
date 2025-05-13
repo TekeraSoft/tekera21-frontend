@@ -7,7 +7,6 @@ import StoreProvider from "@/store/StoreProvider";
 import { getUser } from "../actions";
 import AuthProvider from "@/context/AuthContext";
 import { AxiosInterceptor } from "@/request/axiosClient";
-import { api_base_url } from "@/constants/apiUrls";
 import DialogProvider from "@/context/DialogContext";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -30,8 +29,6 @@ export default async function RootLayout({
   }
 
   const user = await getUser("root layout");
-
-  console.log("apiurl", api_base_url);
 
   return (
     <html lang={locale} suppressHydrationWarning>

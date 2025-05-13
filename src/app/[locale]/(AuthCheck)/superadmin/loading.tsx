@@ -1,6 +1,8 @@
 import LoadingBigCircle from "@/components/shared/Loading/LoadingBigCircle";
+import React from "react";
 
-export default function Loading() {
-  console.log("Loading...");
+const Loading = () => {
   return <LoadingBigCircle />;
-}
+};
+
+export default Loading;

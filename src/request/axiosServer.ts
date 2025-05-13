@@ -1,22 +1,10 @@
-import { api_base_url } from "@/constants/apiUrls";
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
-const axiosServer = axios.create({
-  baseURL: api_base_url,
-  timeout: 5000,
-  withCredentials: true,
-  xsrfCookieName: "token",
-  xsrfHeaderName: "token",
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-axiosServer.interceptors.request.use((request) => {
+axiosInstance.interceptors.request.use((request) => {
   return request;
 });
 
-axiosServer.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -29,4 +17,4 @@ axiosServer.interceptors.response.use(
   }
 );
 
-export default axiosServer;
+export default axiosInstance;

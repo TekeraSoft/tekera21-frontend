@@ -1,20 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-
-import axios from "axios";
 import { logOut } from "../app/actions";
-import { api_base_url } from "@/constants/apiUrls";
-
-const axiosClient = axios.create({
-  baseURL: api_base_url,
-  timeout: 5000,
-  withCredentials: true,
-  xsrfCookieName: "token",
-  xsrfHeaderName: "token",
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+import axiosInstance from "./axiosInstance";
 
 const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
   const [isSet, setIsSet] = useState(false);
@@ -22,7 +9,7 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     // Response interceptor
 
-    const responseInterceptor = axiosClient.interceptors.response.use(
+    const responseInterceptor = axiosInstance.interceptors.response.use(
       (response) => response, // Başarılı cevapları direkt döndür
       async (error) => {
         if (error.response) {
@@ -40,7 +27,7 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
     );
 
     // Request interceptor
-    const requestInterceptor = axiosClient.interceptors.request.use(
+    const requestInterceptor = axiosInstance.interceptors.request.use(
       (config) => {
         if (config.data instanceof FormData) {
           config.headers["Content-Type"] = "multipart/form-data";
@@ -52,13 +39,13 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
     setIsSet(true);
 
     return () => {
-      axiosClient.interceptors.response.eject(responseInterceptor);
-      axiosClient.interceptors.request.eject(requestInterceptor);
+      axiosInstance.interceptors.response.eject(responseInterceptor);
+      axiosInstance.interceptors.request.eject(requestInterceptor);
     };
   }, []); // handleLogout bağımlılığa eklendi
 
   return isSet ? children : null;
 };
 
-export default axiosClient;
+export default axiosInstance;
 export { AxiosInterceptor };
