@@ -11,7 +11,7 @@ const SellerAnnouncementsCard = () => {
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-lg font-semibold flex items-center gap-2">
           Duyurularım
-          <Badge className="bg-orange-500 text-white rounded-full h-5 w-5 flex items-center justify-center p-0 text-xs">
+          <Badge className=" text-white rounded-full h-5 w-5 flex items-center justify-center p-0 text-xs">
             36
           </Badge>
         </CardTitle>
@@ -24,7 +24,7 @@ const SellerAnnouncementsCard = () => {
           <div className="border rounded-md">
             <div className="p-3 border-b flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Bell className="h-4 w-4 text-orange-500" />
+                <Bell className="h-4 w-4 " />
                 <span className="text-sm font-medium">
                   Bugün Açılan tekera21 Karşılamalı Türkiye Kampanyalarınız Var!
                 </span>
@@ -36,9 +36,7 @@ const SellerAnnouncementsCard = () => {
             <div className="p-3 flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <Badge className="bg-orange-100 text-orange-700 border-orange-200">
-                    Kampanya Duyurusu
-                  </Badge>
+                  <Badge className="  ">Kampanya Duyurusu</Badge>
                 </div>
                 <div className="flex justify-between w-full">
                   <span className="text-sm">Genel</span>
@@ -51,9 +49,7 @@ const SellerAnnouncementsCard = () => {
                   Paketlerinde %50'ye Varan İndirim Kaçmaz!
                 </p>
                 <div className="flex items-center gap-2 mt-1">
-                  <Badge className="bg-orange-100 text-orange-700 border-orange-200">
-                    Kampanya Duyurusu
-                  </Badge>
+                  <Badge className=" ">Kampanya Duyurusu</Badge>
                 </div>
               </div>
             </div>
@@ -62,7 +58,7 @@ const SellerAnnouncementsCard = () => {
           <div className="border rounded-md">
             <div className="p-3 border-b flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Bell className="h-4 w-4 text-orange-500" />
+                <Bell className="h-4 w-4 " />
                 <span className="text-sm font-medium">
                   Ürün Komisyon Tarifeleri Başladı!
                 </span>

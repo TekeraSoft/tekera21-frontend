@@ -1,7 +1,7 @@
 "use client";
 import SellerFooter from "@/components/seller-components/layout/footer/SellerFooter";
 import SellerHeader from "@/components/seller-components/layout/header/SellerHeader";
-import SellerSupport from "@/components/seller-components/support/SellerSupport";
+import SellerLiveSupport from "@/components/seller-components/support/SellerLiveSupport";
 import RouteProtect from "@/components/shared/RouteProtect";
 import { useAuthContext } from "@/context/AuthContext";
 import { companies } from "@/data/companies";
@@ -39,7 +39,7 @@ export default function SellerLayout({ children }: SellerLayoutProps) {
         <div className="relative min-h-screen flex flex-col">
           <SellerHeader />
           <div className="flex-1 ">{children}</div>
-          <SellerSupport />
+          <SellerLiveSupport />
           <SellerFooter />
         </div>
       </div>

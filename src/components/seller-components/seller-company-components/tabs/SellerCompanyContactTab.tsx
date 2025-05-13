@@ -10,7 +10,7 @@ export default function SellerCompanyContactTab() {
       <div>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">Adres Bilgileri</h2>
-          <Button className="bg-orange-500 hover:bg-orange-600 text-white flex items-center gap-2">
+          <Button className=" text-white flex items-center gap-2">
             <PlusCircle className="h-4 w-4" />
             Adres Bilgisi Ekle
           </Button>
@@ -82,7 +82,7 @@ export default function SellerCompanyContactTab() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="h-6 p-0 px-2 text-orange-500 text-xs"
+                  className="h-6 p-0 px-2  text-xs"
                 >
                   Güncelle
                 </Button>
@@ -143,7 +143,7 @@ export default function SellerCompanyContactTab() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="h-6 p-0 px-2 text-orange-500 text-xs"
+                  className="h-6 p-0 px-2  text-xs"
                 >
                   Güncelle
                 </Button>
@@ -162,7 +162,8 @@ export default function SellerCompanyContactTab() {
                     <circle cx="12" cy="12" r="1" />
                     <circle cx="19" cy="12" r="1" />
                     <circle cx="5" cy="12" r="1" />
-                  </svg>
+                  </svg>{" "}
+                  butonu guncelle
                 </Button>
               </div>
             </div>
@@ -196,7 +197,7 @@ export default function SellerCompanyContactTab() {
       <div>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">İletişim Bilgileri</h2>
-          <Button className="bg-orange-500 hover:bg-orange-600 text-white flex items-center gap-2">
+          <Button className=" text-white flex items-center gap-2">
             <PlusCircle className="h-4 w-4" />
             İletişim Bilgisi Ekle
           </Button>
@@ -207,11 +208,7 @@ export default function SellerCompanyContactTab() {
             <div className="flex items-center gap-2">
               <span className="font-medium">1. İletişim Bilgisi</span>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-6 p-0 px-2 text-orange-500 text-xs"
-            >
+            <Button variant="ghost" size="sm" className="h-6 p-0 px-2  text-xs">
               Güncelle
             </Button>
           </div>

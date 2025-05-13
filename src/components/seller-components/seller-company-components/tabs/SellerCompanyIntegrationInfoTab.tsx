@@ -112,9 +112,7 @@ export default function SellerCompanyIntegrationInfoTab() {
         </div>
       </div>
 
-      <Button className="bg-orange-500 hover:bg-orange-600 text-white">
-        API Bilgilerini Güncelle
-      </Button>
+      <Button className=" text-white">API Bilgilerini Güncelle</Button>
     </div>
   );
 }

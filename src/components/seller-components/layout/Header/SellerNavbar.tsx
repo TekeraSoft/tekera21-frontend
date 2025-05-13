@@ -8,6 +8,7 @@ import {
   BarChart2,
   FileText,
   UserRoundCog,
+  LayoutDashboard,
 } from "lucide-react";
 import {
   Menubar,
@@ -28,6 +29,7 @@ import SellerNavbarMobile from "./SellerNavbarMobile";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { useAuthContext } from "@/context/AuthContext";
+import { Button } from "@/components/ui/button";
 
 // Define the menu structure
 
@@ -101,9 +103,29 @@ const menuItems: MenuItem[] = [
       },
       {
         key: "returns",
-        label: "İadeler",
+        label: "İade İşlemleri",
         requiredRole: "orders",
         href: "/seller/return-transactions",
+      },
+    ],
+  },
+  {
+    key: "cargo",
+    label: "Kargo",
+    icon: <Truck className="mr-2 h-4 w-4" />,
+    requiredRole: "cargo",
+    subItems: [
+      {
+        key: "shippingSettings",
+        label: "Kargo Ayarları",
+        requiredRole: "cargo",
+        href: "/seller/cargo/cargo-actions",
+      },
+      {
+        key: "carriers",
+        label: "Kargo Firmaları",
+        requiredRole: "cargo",
+        href: "/seller/cargo/carriers",
       },
     ],
   },
@@ -129,26 +151,7 @@ const menuItems: MenuItem[] = [
       },
     ],
   },
-  {
-    key: "shipping",
-    label: "Kargo",
-    icon: <Truck className="mr-2 h-4 w-4" />,
-    requiredRole: "shipping",
-    subItems: [
-      {
-        key: "shippingSettings",
-        label: "Kargo Ayarları",
-        requiredRole: "shipping",
-        href: "/seller/shipping/settings",
-      },
-      {
-        key: "carriers",
-        label: "Kargo Firmaları",
-        requiredRole: "shipping",
-        href: "/seller/shipping/carriers",
-      },
-    ],
-  },
+
   {
     key: "adds",
     label: "Reklamlar",
@@ -170,7 +173,7 @@ const menuItems: MenuItem[] = [
     ],
   },
   {
-    key: "home",
+    key: "analytics",
     label: "Analitik",
     icon: <BarChart2 className="mr-2 h-4 w-4" />,
     requiredRole: "analytics",
@@ -226,6 +229,13 @@ function SellerNavbar() {
           />
         </Link>
         <Menubar className="border-none rounded-none px-2 lg:px-4">
+          <Button size={"sm"}>
+            <Link href={"/seller"} className="flex-center gap-2">
+              <LayoutDashboard size={18} />
+              <span>Anasayfa</span>
+            </Link>
+          </Button>
+
           {menuItems.map((item) => (
             <MenubarMenu key={item.key}>
               <MenubarTrigger

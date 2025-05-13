@@ -142,7 +142,7 @@ export default function SellerOrderManagement() {
   };
 
   return (
-    <SellerInnerContainer>
+    <>
       <Tabs
         value={activeTab}
         onValueChange={(value) => setActiveTab(value as TabStatus)}
@@ -255,115 +255,116 @@ export default function SellerOrderManagement() {
             </Tabs>
           </div>
         )}
+        <SellerInnerContainer>
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <Input
+              name="customerName"
+              placeholder="Müşteri Adı"
+              value={filters.customerName}
+              onChange={handleFilterChange}
+            />
+            <Input
+              name="orderNo"
+              placeholder="Sipariş No"
+              value={filters.orderNo}
+              onChange={handleFilterChange}
+            />
+            <Input
+              name="packageNo"
+              placeholder="Paket No"
+              value={filters.packageNo}
+              onChange={handleFilterChange}
+            />
+            <Input
+              name="barcode"
+              placeholder="Barkod"
+              value={filters.barcode}
+              onChange={handleFilterChange}
+            />
+            <Input
+              name="cargoCode"
+              placeholder="Kargo Kodu"
+              value={filters.cargoCode}
+              onChange={handleFilterChange}
+            />
+            <Input
+              name="productName"
+              placeholder="Ürün Adı / Model Kodu"
+              value={filters.productName}
+              onChange={handleFilterChange}
+            />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start text-left font-normal"
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {startDate
+                    ? format(startDate, "dd MMM yyyy", {
+                        locale: dateFnsLocale,
+                      })
+                    : "Sipariş Başlangıç Tarihi"}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={startDate}
+                  onSelect={setStartDate}
+                />
+              </PopoverContent>
+            </Popover>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start text-left font-normal"
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {endDate
+                    ? format(endDate, "dd MMM yyyy", { locale: dateFnsLocale })
+                    : "Sipariş Bitiş Tarihi"}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={endDate}
+                  onSelect={setEndDate}
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
 
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <Input
-            name="customerName"
-            placeholder="Müşteri Adı"
-            value={filters.customerName}
-            onChange={handleFilterChange}
-          />
-          <Input
-            name="orderNo"
-            placeholder="Sipariş No"
-            value={filters.orderNo}
-            onChange={handleFilterChange}
-          />
-          <Input
-            name="packageNo"
-            placeholder="Paket No"
-            value={filters.packageNo}
-            onChange={handleFilterChange}
-          />
-          <Input
-            name="barcode"
-            placeholder="Barkod"
-            value={filters.barcode}
-            onChange={handleFilterChange}
-          />
-          <Input
-            name="cargoCode"
-            placeholder="Kargo Kodu"
-            value={filters.cargoCode}
-            onChange={handleFilterChange}
-          />
-          <Input
-            name="productName"
-            placeholder="Ürün Adı / Model Kodu"
-            value={filters.productName}
-            onChange={handleFilterChange}
-          />
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className="w-full justify-start text-left font-normal"
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {startDate
-                  ? format(startDate, "dd MMM yyyy", { locale: dateFnsLocale })
-                  : "Sipariş Başlangıç Tarihi"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={startDate}
-                onSelect={setStartDate}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className="w-full justify-start text-left font-normal"
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {endDate
-                  ? format(endDate, "dd MMM yyyy", { locale: dateFnsLocale })
-                  : "Sipariş Bitiş Tarihi"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={endDate}
-                onSelect={setEndDate}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
+          <div className="mt-4 flex justify-end gap-2">
+            <Button variant="outline" onClick={clearFilters}>
+              Temizle
+            </Button>
+            <Button>Filtrele</Button>
+          </div>
 
-        <div className="mt-4 flex justify-end gap-2">
-          <Button variant="outline" onClick={clearFilters}>
-            Temizle
-          </Button>
-          <Button>Filtrele</Button>
-        </div>
+          <TabsContent value="all" className="mt-6">
+            <SellerOrdersTable orders={filteredOrders} />
+          </TabsContent>
 
-        <TabsContent value="all" className="mt-6">
-          <SellerOrdersTable orders={filteredOrders} />
-        </TabsContent>
+          <TabsContent value="new" className="mt-6">
+            <SellerOrdersTable orders={filteredOrders} />
+          </TabsContent>
 
-        <TabsContent value="new" className="mt-6">
-          <SellerOrdersTable orders={filteredOrders} />
-        </TabsContent>
+          <TabsContent value="processing" className="mt-6">
+            <SellerOrdersTable orders={filteredOrders} />
+          </TabsContent>
 
-        <TabsContent value="processing" className="mt-6">
-          <SellerOrdersTable orders={filteredOrders} />
-        </TabsContent>
+          <TabsContent value="delivered" className="mt-6">
+            <SellerOrdersTable orders={filteredOrders} />
+          </TabsContent>
 
-        <TabsContent value="delivered" className="mt-6">
-          <SellerOrdersTable orders={filteredOrders} />
-        </TabsContent>
-
-        <TabsContent value="canceled" className="mt-6">
-          <SellerOrdersTable orders={filteredOrders} />
-        </TabsContent>
+          <TabsContent value="canceled" className="mt-6">
+            <SellerOrdersTable orders={filteredOrders} />
+          </TabsContent>
+        </SellerInnerContainer>
       </Tabs>
-    </SellerInnerContainer>
+    </>
   );
 }

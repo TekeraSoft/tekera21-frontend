@@ -39,7 +39,7 @@ const SellerRecommendationsCard = () => {
               className="rounded-none data-[state=active]:border-b data-[state=active]:border-rose-500 data-[state=active]:shadow-none py-2 text-sm font-medium"
             >
               <span className="flex items-center gap-1">
-                <Heart className="h-4 w-4 text-orange-500" />
+                <Heart className="h-4 w-4 " />
                 Promosyon ve Fiyatlandırma
               </span>
             </TabsTrigger>
@@ -251,7 +251,7 @@ const SellerRecommendationsCard = () => {
                       </span>
                     </div>
                     <div className="flex items-center gap-1 mt-1">
-                      <span className="text-xs px-1.5 py-0.5 bg-orange-100 text-orange-700 rounded-sm">
+                      <span className="text-xs px-1.5 py-0.5  rounded-sm">
                         Avantajlı Ürün
                       </span>
                     </div>
