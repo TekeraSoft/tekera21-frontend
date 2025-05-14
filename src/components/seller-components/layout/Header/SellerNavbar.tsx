@@ -165,22 +165,28 @@ const menuItems: MenuItem[] = [
       },
       {
         key: "analyticPerform",
-        label: "Performansım",
+        label: "Satış ve Performans",
         requiredRole: "analytics",
         flyout: [
           {
             key: "analyticOverallPerformance",
-            label: "Genel Performans",
+            label: "Satış",
             requiredRole: "analytics",
-            href: "/seller/reports/overall-performance",
+            href: "/seller/reports/sales-and-operations/sales",
           },
           {
             key: "analyticProductPerformance",
-            label: "Ürün Performans",
+            label: "Operasyon",
             requiredRole: "analytics",
-            href: "/seller/reports/product-performance",
+            href: "/seller/reports/sales-and-operations/operations",
           },
         ],
+      },
+      {
+        key: "analyticReportShop",
+        label: "Mağaza",
+        requiredRole: "analytics",
+        href: "/seller/reports/shop",
       },
     ],
   },
