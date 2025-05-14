@@ -33,8 +33,8 @@ export default function UserSettings() {
             className="text-xs md:text-sm font-medium"
           >
             <div className="flex flex-col items-center">
-              <span className="text-orange-500 font-bold">Kullanıcı</span>
-              <span className="text-orange-500">Bilgileri</span>
+              <span className=" font-bold">Kullanıcı</span>
+              <span className="">Bilgileri</span>
             </div>
           </TabsTrigger>
           <TabsTrigger

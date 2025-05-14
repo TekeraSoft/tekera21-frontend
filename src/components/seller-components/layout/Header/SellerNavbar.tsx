@@ -8,6 +8,7 @@ import {
   BarChart2,
   FileText,
   UserRoundCog,
+  LayoutDashboard,
 } from "lucide-react";
 import {
   Menubar,
@@ -28,6 +29,7 @@ import SellerNavbarMobile from "./SellerNavbarMobile";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { useAuthContext } from "@/context/AuthContext";
+import { Button } from "@/components/ui/button";
 
 // Define the menu structure
 
@@ -66,25 +68,25 @@ const menuItems: MenuItem[] = [
         href: "/seller/product/create",
       },
 
-      {
-        key: "automaticPricing",
-        label: "Otomatik Fiyatlandırma",
-        requiredRole: "products",
-        flyout: [
-          {
-            key: "buyboxRules",
-            label: "Buybox Kuralları",
-            requiredRole: "products",
-            href: "/seller/products/buybox-rules",
-          },
-          {
-            key: "advantageousProductRules",
-            label: "Avantajlı Ürün Kuralları",
-            requiredRole: "products",
-            href: "/seller/products/advantageous-product-rules",
-          },
-        ],
-      },
+      // {
+      //   key: "automaticPricing",
+      //   label: "Otomatik Fiyatlandırma",
+      //   requiredRole: "products",
+      //   flyout: [
+      //     {
+      //       key: "buyboxRules",
+      //       label: "Buybox Kuralları",
+      //       requiredRole: "products",
+      //       href: "/seller/products/buybox-rules",
+      //     },
+      //     {
+      //       key: "advantageousProductRules",
+      //       label: "Avantajlı Ürün Kuralları",
+      //       requiredRole: "products",
+      //       href: "/seller/products/advantageous-product-rules",
+      //     },
+      //   ],
+      // },
     ],
   },
   {
@@ -101,9 +103,29 @@ const menuItems: MenuItem[] = [
       },
       {
         key: "returns",
-        label: "İadeler",
+        label: "İade İşlemleri",
         requiredRole: "orders",
         href: "/seller/return-transactions",
+      },
+    ],
+  },
+  {
+    key: "cargo",
+    label: "Kargo",
+    icon: <Truck className="mr-2 h-4 w-4" />,
+    requiredRole: "cargo",
+    subItems: [
+      {
+        key: "shippingSettings",
+        label: "Kargo Ayarları",
+        requiredRole: "cargo",
+        href: "/seller/cargo/cargo-actions",
+      },
+      {
+        key: "cargo",
+        label: "Kargo Firmaları",
+        requiredRole: "cargo",
+        href: "/seller/cargo/carriers",
       },
     ],
   },
@@ -119,33 +141,46 @@ const menuItems: MenuItem[] = [
         key: "userList",
         label: "Kullanıcı Listesi",
         requiredRole: "users",
-        href: "/seller/users/list",
-      },
-      {
-        key: "roles",
-        label: "Roller",
-        requiredRole: "users",
-        href: "/seller/users/roles",
+        href: "/seller/users",
       },
     ],
   },
   {
-    key: "shipping",
-    label: "Kargo",
-    icon: <Truck className="mr-2 h-4 w-4" />,
-    requiredRole: "shipping",
+    key: "analytics",
+    label: "Analitik",
+    icon: <BarChart2 className="mr-2 h-4 w-4" />,
+    requiredRole: "analytics",
     subItems: [
       {
-        key: "shippingSettings",
-        label: "Kargo Ayarları",
-        requiredRole: "shipping",
-        href: "/seller/shipping/settings",
+        key: "analytics",
+        label: "Anasayfa",
+        requiredRole: "analytics",
+        href: "/seller/reports",
       },
       {
-        key: "carriers",
-        label: "Kargo Firmaları",
-        requiredRole: "shipping",
-        href: "/seller/shipping/carriers",
+        key: "analyticsFavoritesAndViews",
+        label: "Favori ve Görüntülenme",
+        requiredRole: "analytics",
+        href: "/seller/reports/favorites-and-views",
+      },
+      {
+        key: "analyticPerform",
+        label: "Performansım",
+        requiredRole: "analytics",
+        flyout: [
+          {
+            key: "analyticOverallPerformance",
+            label: "Genel Performans",
+            requiredRole: "analytics",
+            href: "/seller/reports/overall-performance",
+          },
+          {
+            key: "analyticProductPerformance",
+            label: "Ürün Performans",
+            requiredRole: "analytics",
+            href: "/seller/reports/product-performance",
+          },
+        ],
       },
     ],
   },
@@ -166,32 +201,6 @@ const menuItems: MenuItem[] = [
         label: "Performans",
         href: "/seller/adds/performance",
         requiredRole: "adds",
-      },
-    ],
-  },
-  {
-    key: "home",
-    label: "Analitik",
-    icon: <BarChart2 className="mr-2 h-4 w-4" />,
-    requiredRole: "analytics",
-    subItems: [
-      {
-        key: "analytics",
-        label: "Anasayfa",
-        requiredRole: "analytics",
-        href: "/seller",
-      },
-      {
-        key: "dashboard",
-        label: "Dashboard",
-        requiredRole: "analytics",
-        href: "/seller/analytics/dashboard",
-      },
-      {
-        key: "reports",
-        label: "Raporlar",
-        requiredRole: "analytics",
-        href: "/seller/analytics/reports",
       },
     ],
   },
@@ -226,6 +235,13 @@ function SellerNavbar() {
           />
         </Link>
         <Menubar className="border-none rounded-none px-2 lg:px-4">
+          <Button size={"sm"}>
+            <Link href={"/seller"} className="flex-center gap-2">
+              <LayoutDashboard size={18} />
+              <span>Anasayfa</span>
+            </Link>
+          </Button>
+
           {menuItems.map((item) => (
             <MenubarMenu key={item.key}>
               <MenubarTrigger

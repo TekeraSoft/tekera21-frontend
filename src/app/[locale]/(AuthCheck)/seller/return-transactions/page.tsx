@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import { tr, enUS } from "date-fns/locale";
 import { Input } from "@/components/ui/input";
 import { format } from "date-fns";
+import SellerInnerContainer from "@/components/seller-components/containers/SellerInnerContainer";
 
 // Define TypeScript interfaces
 interface ReturnItem {
@@ -243,138 +244,139 @@ export default function SellerReturnManagement() {
                 </span>
               )}
               {activeTab === tab.id && (
-                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500"></div>
+                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary"></div>
               )}
             </TabsTrigger>
           ))}
         </TabsList>
 
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <Input
-            name="customerName"
-            placeholder="Müşteri Adı"
-            value={filters.customerName}
-            onChange={handleFilterChange}
-          />
-          <Input
-            name="orderNo"
-            placeholder="Sipariş No"
-            value={filters.orderNo}
-            onChange={handleFilterChange}
-          />
-          <Input
-            name="returnCode"
-            placeholder="İade Kodu"
-            value={filters.returnCode}
-            onChange={handleFilterChange}
-          />
-          <Input
-            name="barcode"
-            placeholder="Barkod"
-            value={filters.barcode}
-            onChange={handleFilterChange}
-          />
-          <Select
-            value={filters.returnReason}
-            onValueChange={(value) =>
-              setFilters((prev) => ({ ...prev, returnReason: value }))
-            }
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="İade Sebebi" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Tüm Sebepler</SelectItem>
-              <SelectItem value="küçük">Beden/Ebat: Küçük Geldi</SelectItem>
-              <SelectItem value="büyük">Beden/Ebat: Büyük Geldi</SelectItem>
-              <SelectItem value="hasarlı">Ürün Hasarlı/Defolu</SelectItem>
-              <SelectItem value="yanlış">Yanlış Ürün Gönderildi</SelectItem>
-            </SelectContent>
-          </Select>
-          <div className="flex gap-2">
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start text-left font-normal"
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {startDate
-                    ? format(startDate, "dd MMM yyyy", {
-                        locale: dateFnsLocale,
-                      })
-                    : "İade Talep Başlangıç Tarihi"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={startDate}
-                  onSelect={setStartDate}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
-          <div className="flex gap-2">
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start text-left font-normal"
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {endDate
-                    ? format(endDate, "dd MMM yyyy", { locale: tr })
-                    : "İade Talep Bitiş Tarihi"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={endDate}
-                  onSelect={setEndDate}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
-        </div>
-
-        <div className="mt-4 flex justify-end gap-2">
-          <Button variant="outline" onClick={clearFilters}>
-            Temizle
-          </Button>
-          <Button>Filtrele</Button>
-        </div>
-
-        {tabs.map((tab) => (
-          <TabsContent key={tab.id} value={tab.id} className="mt-6">
-            <div className="mb-4">
-              <h2 className="text-xl font-bold">{tab.label}</h2>
-              <div className="text-sm text-gray-500">
-                Filtreleme Sonuçları: Toplam {filteredReturns.length} iade
-                bilgisi
-                <div className="text-xs">
-                  Son Güncellenme: 13 Mayıs 2023 12:04
-                </div>
-              </div>
+        <SellerInnerContainer>
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
+            <Input
+              name="customerName"
+              placeholder="Müşteri Adı"
+              value={filters.customerName}
+              onChange={handleFilterChange}
+            />
+            <Input
+              name="orderNo"
+              placeholder="Sipariş No"
+              value={filters.orderNo}
+              onChange={handleFilterChange}
+            />
+            <Input
+              name="returnCode"
+              placeholder="İade Kodu"
+              value={filters.returnCode}
+              onChange={handleFilterChange}
+            />
+            <Input
+              name="barcode"
+              placeholder="Barkod"
+              value={filters.barcode}
+              onChange={handleFilterChange}
+            />
+            <Select
+              value={filters.returnReason}
+              onValueChange={(value) =>
+                setFilters((prev) => ({ ...prev, returnReason: value }))
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="İade Sebebi" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Tüm Sebepler</SelectItem>
+                <SelectItem value="küçük">Beden/Ebat: Küçük Geldi</SelectItem>
+                <SelectItem value="büyük">Beden/Ebat: Büyük Geldi</SelectItem>
+                <SelectItem value="hasarlı">Ürün Hasarlı/Defolu</SelectItem>
+                <SelectItem value="yanlış">Yanlış Ürün Gönderildi</SelectItem>
+              </SelectContent>
+            </Select>
+            <div className="mt-4 flex justify-end gap-2">
+              <Button variant="outline" onClick={clearFilters}>
+                Temizle
+              </Button>
+              <Button>Filtrele</Button>
             </div>
+            <div className="flex gap-2">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start text-left font-normal"
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {startDate
+                      ? format(startDate, "dd MMM yyyy", {
+                          locale: dateFnsLocale,
+                        })
+                      : "İade Talep Başlangıç Tarihi"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={startDate}
+                    onSelect={setStartDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div className="flex gap-2">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start text-left font-normal"
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {endDate
+                      ? format(endDate, "dd MMM yyyy", { locale: tr })
+                      : "İade Talep Bitiş Tarihi"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={endDate}
+                    onSelect={setEndDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
 
-            {filteredReturns.length > 0 ? (
-              <SellerOrderReturnTable returns={filteredReturns} />
-            ) : (
-              <div className="flex flex-col items-center justify-center py-12 text-center">
-                <div className="bg-gray-100 p-6 rounded-lg mb-4">
-                  <PackageOpen />
+          {tabs.map((tab) => (
+            <TabsContent key={tab.id} value={tab.id} className="mt-6">
+              <div className="mb-4">
+                <h2 className="text-xl font-bold">{tab.label}</h2>
+                <div className="text-sm text-gray-500">
+                  Filtreleme Sonuçları: Toplam {filteredReturns.length} iade
+                  bilgisi
+                  <div className="text-xs">
+                    Son Güncellenme: 13 Mayıs 2023 12:04
+                  </div>
                 </div>
-                <h3 className="text-lg font-medium">
-                  Siparişin Bulunmamaktadır.
-                </h3>
               </div>
-            )}
-          </TabsContent>
-        ))}
+
+              {filteredReturns.length > 0 ? (
+                <SellerOrderReturnTable returns={filteredReturns} />
+              ) : (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <div className="bg-gray-100 p-6 rounded-lg mb-4">
+                    <PackageOpen />
+                  </div>
+                  <h3 className="text-lg font-medium">
+                    Siparişin Bulunmamaktadır.
+                  </h3>
+                </div>
+              )}
+            </TabsContent>
+          ))}
+        </SellerInnerContainer>
       </Tabs>
     </div>
   );

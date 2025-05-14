@@ -30,7 +30,7 @@ export const jane = {
     "orders",
     "products",
     "users",
-    "shipping",
+    "cargo",
     "analytics",
     "customers",
     "seller",

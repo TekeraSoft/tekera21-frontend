@@ -1,6 +1,6 @@
 import { Link } from "@/i18n/navigation";
-import SellerAnnouncementPopover from "./SellerAnnouncementPopover";
-import SellerCompanyPopoverTopbar from "./SellerCompanyPopoverTopbar";
+import SellerAnnouncementPopover from "./Popovers/SellerAnnouncementPopover";
+import SellerCompanyPopoverTopbar from "./Popovers/SellerCompanyPopoverTopbar";
 
 interface NavItem {
   label: string;

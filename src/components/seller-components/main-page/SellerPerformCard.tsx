@@ -10,11 +10,8 @@ function SellerPerformCard() {
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-xl font-bold">Satış Performansım</CardTitle>
         <div className="flex items-center gap-2">
-          <Badge
-            variant="outline"
-            className="bg-orange-50 text-orange-600 border-orange-200 flex items-center gap-1"
-          >
-            <span className="h-2 w-2 rounded-full bg-orange-500 animate-pulse"></span>
+          <Badge variant="outline" className=" flex items-center gap-1">
+            <span className="h-2 w-2 rounded-full  animate-pulse"></span>
             Canlı Performansım
           </Badge>
         </div>
@@ -65,8 +62,8 @@ function SellerPerformCard() {
           </div>
         </div>
 
-        <div className="mt-4 bg-orange-50 p-3 rounded-lg border border-orange-100 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-orange-600">
+        <div className="mt-4  p-3 rounded-lg border  flex items-center justify-between">
+          <div className="flex items-center gap-2 0">
             <Bell className="h-5 w-5" />
             <span>Vadenizi beklemeden 4.751₺ alabilirsiniz!</span>
           </div>

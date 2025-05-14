@@ -210,7 +210,7 @@ export default function SelllerCompanyInfoTab() {
                 </div>
                 <div className="flex gap-2">
                   <Button variant="ghost" size="sm">
-                    <Pencil className="h-4 w-4 text-orange-500" />
+                    <Pencil className="h-4 w-4" />
                   </Button>
                   <Button variant="ghost" size="sm">
                     <ChevronDown className="h-4 w-4" />
@@ -285,7 +285,7 @@ export default function SelllerCompanyInfoTab() {
               </span>
             </div>
 
-            <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+            <Button className=" text-white">
               Beyan Yapılması Gereken Kişi Sayısını Göster
             </Button>
           </>
@@ -333,7 +333,7 @@ export default function SelllerCompanyInfoTab() {
                 </div>
                 <div className="flex gap-2">
                   <Button variant="ghost" size="sm">
-                    <Pencil className="h-4 w-4 text-orange-500" />
+                    <Pencil className="h-4 w-4 " />
                   </Button>
                   <Button variant="ghost" size="sm">
                     <ChevronDown className="h-4 w-4" />
@@ -487,9 +487,7 @@ export default function SelllerCompanyInfoTab() {
           </div>
         </div>
 
-        <Button className="bg-orange-500 hover:bg-orange-600 text-white">
-          Güncelle
-        </Button>
+        <Button className=" text-white">Güncelle</Button>
       </div>
     </div>
   );
