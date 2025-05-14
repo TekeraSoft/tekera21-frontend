@@ -211,7 +211,7 @@ export default function DocumentsPage() {
   );
 }
 
-function DocumentCard({
+export function DocumentCard({
   document,
 }: {
   document: typeUserData["documents"][number];

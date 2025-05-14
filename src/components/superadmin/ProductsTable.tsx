@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { fetchProducts } from "@/store/superadminSlices/product/productSlice";
+import ProductTableSkeleton from "./Skeletons/Products/ProductTableSkeleton";
 
 export function ProductsTable() {
   const [products, setProducts] = useState([
@@ -133,8 +134,6 @@ export function ProductsTable() {
     return () => {};
   }, []);
 
-  console.log("first", productsFake, error, loading);
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case "In Stock":
@@ -148,7 +147,13 @@ export function ProductsTable() {
     }
   };
 
-  return (
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  return loading ? (
+    <ProductTableSkeleton />
+  ) : (
     <Card>
       <div className="flex items-center justify-between p-4">
         <div className="flex flex-1 flex-wrap gap-y-2 items-center space-x-2">
