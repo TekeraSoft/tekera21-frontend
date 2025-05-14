@@ -39,12 +39,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { formSchema } from "@/data/users";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { enUS, tr as dateFnsTr } from "date-fns/locale";
 import { useLocale } from "next-intl";
+import { TabsList, Tabs, TabsTrigger, TabsContent } from "../ui/tabs";
+import { DocumentCard } from "@/app/[locale]/(AuthCheck)/register/page";
 
 const countries = [
   { label: "Türkiye", value: "tr" },
@@ -402,6 +410,51 @@ export function AdminCustomerEditForm({
               </div>
             </form>
           </Form>
+        </CardContent>
+      </Card>
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle>Belgeler</CardTitle>
+          <CardDescription>
+            Kayıt sürecinde yüklenen tüm belgeler
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="all" className="w-full">
+            <TabsList className="mb-4">
+              <TabsTrigger value="all">Tümü</TabsTrigger>
+              <TabsTrigger value="verified">Onaylananlar</TabsTrigger>
+              <TabsTrigger value="pending">Bekleyenler</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="all" className="mt-0">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {customer?.documents.map((doc) => (
+                  <DocumentCard key={doc.id} document={doc} />
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="verified" className="mt-0">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {customer?.documents
+                  .filter((doc) => doc.status === "verified")
+                  .map((doc) => (
+                    <DocumentCard key={doc.id} document={doc} />
+                  ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="pending" className="mt-0">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {customer?.documents
+                  .filter((doc) => doc.status === "pending")
+                  .map((doc) => (
+                    <DocumentCard key={doc.id} document={doc} />
+                  ))}
+              </div>
+            </TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
     </div>
