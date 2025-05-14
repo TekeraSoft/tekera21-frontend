@@ -28,7 +28,6 @@ import {
   fetchProducts,
   fetchProductsByCategory,
   setError,
-  setSelectedCategory,
 } from "@/store/superadminSlices/product/productSlice";
 import ProductTableSkeleton from "./Skeletons/Products/ProductTableSkeleton";
 
@@ -85,7 +84,6 @@ export function ProductsTable() {
             onValueChange={(value) => {
               if (value !== "all") {
                 dispatch(fetchProductsByCategory({ catSlug: value }));
-                dispatch(setSelectedCategory(value));
               } else {
                 dispatch(fetchProducts({ limit: 10, skip: 10 }));
               }

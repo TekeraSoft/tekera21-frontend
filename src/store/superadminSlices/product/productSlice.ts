@@ -126,9 +126,6 @@ const adminProductSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
-    setSelectedCategory: (state, action) => {
-      state.selectedCategory = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -147,7 +144,8 @@ const adminProductSlice = createSlice({
       })
 
       //fetchProductsByCategory
-      .addCase(fetchProductsByCategory.pending, (state) => {
+      .addCase(fetchProductsByCategory.pending, (state, action) => {
+        state.selectedCategory = action.meta.arg.catSlug;
         state.loading = true;
         state.error = null;
       })
@@ -177,6 +175,6 @@ const adminProductSlice = createSlice({
   },
 });
 
-export const { setError, setSelectedCategory } = adminProductSlice.actions;
+export const { setError } = adminProductSlice.actions;
 
 export default adminProductSlice.reducer;
