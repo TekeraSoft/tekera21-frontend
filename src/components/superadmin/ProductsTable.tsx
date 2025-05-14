@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Image from "next/image";
 import { ArrowUpDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -24,120 +24,29 @@ import {
 } from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import {
+  fetchCategories,
   fetchProducts,
+  fetchProductsByCategory,
   setError,
+  setSelectedCategory,
 } from "@/store/superadminSlices/product/productSlice";
 import ProductTableSkeleton from "./Skeletons/Products/ProductTableSkeleton";
 
 export function ProductsTable() {
-  const [products, setProducts] = useState([
-    {
-      id: "PROD-001",
-      name: "Wireless Headphones",
-      image: "/placeholder.svg?height=40&width=40",
-      category: "Electronics",
-      price: "$129.99",
-      stock: 45,
-      status: "In Stock",
-    },
-    {
-      id: "PROD-002",
-      name: "Smart Watch",
-      image: "/placeholder.svg?height=40&width=40",
-      category: "Electronics",
-      price: "$199.99",
-      stock: 32,
-      status: "In Stock",
-    },
-    {
-      id: "PROD-003",
-      name: "Cotton T-Shirt",
-      image: "/placeholder.svg?height=40&width=40",
-      category: "Clothing",
-      price: "$24.99",
-      stock: 89,
-      status: "In Stock",
-    },
-    {
-      id: "PROD-004",
-      name: "Bluetooth Speaker",
-      image: "/placeholder.svg?height=40&width=40",
-      category: "Electronics",
-      price: "$79.99",
-      stock: 21,
-      status: "In Stock",
-    },
-    {
-      id: "PROD-005",
-      name: "Running Shoes",
-      image: "/placeholder.svg?height=40&width=40",
-      category: "Footwear",
-      price: "$89.99",
-      stock: 54,
-      status: "In Stock",
-    },
-    {
-      id: "PROD-006",
-      name: "Leather Wallet",
-      image: "/placeholder.svg?height=40&width=40",
-      category: "Accessories",
-      price: "$49.99",
-      stock: 76,
-      status: "In Stock",
-    },
-    {
-      id: "PROD-007",
-      name: "Smartphone Case",
-      image: "/placeholder.svg?height=40&width=40",
-      category: "Accessories",
-      price: "$19.99",
-      stock: 120,
-      status: "In Stock",
-    },
-    {
-      id: "PROD-008",
-      name: "Desk Lamp",
-      image: "/placeholder.svg?height=40&width=40",
-      category: "Home",
-      price: "$34.99",
-      stock: 0,
-      status: "Out of Stock",
-    },
-    {
-      id: "PROD-009",
-      name: "Coffee Mug",
-      image: "/placeholder.svg?height=40&width=40",
-      category: "Home",
-      price: "$14.99",
-      stock: 65,
-      status: "In Stock",
-    },
-    {
-      id: "PROD-010",
-      name: "Yoga Mat",
-      image: "/placeholder.svg?height=40&width=40",
-      category: "Fitness",
-      price: "$29.99",
-      stock: 42,
-      status: "In Stock",
-    },
-  ]);
-
-  const {
-    products: productsFake,
-    error,
-    loading,
-  } = useAppSelector((state) => state.adminProducts);
+  const { data, error, loading, categories, selectedCategory } = useAppSelector(
+    (state) => state.adminProducts
+  );
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!productsFake.length) {
-      dispatch(fetchProducts());
+    if (!data.products.length) {
+      dispatch(fetchProducts({ limit: 10, skip: 10 }));
+      dispatch(fetchCategories({ limit: 10, skip: 10 }));
     }
 
     return () => {};
-  }, [productsFake]);
+  }, [data.products]);
 
   useEffect(() => {
     return () => {
@@ -146,8 +55,6 @@ export function ProductsTable() {
       }
     };
   }, [error]);
-
-  console.log("productsFake", productsFake);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -172,18 +79,29 @@ export function ProductsTable() {
     <Card>
       <div className="flex items-center justify-between p-4">
         <div className="flex flex-1 flex-wrap gap-y-2 items-center space-x-2">
-          <Select defaultValue="all">
+          <Select
+            defaultValue="all"
+            value={selectedCategory}
+            onValueChange={(value) => {
+              if (value !== "all") {
+                dispatch(fetchProductsByCategory({ catSlug: value }));
+                dispatch(setSelectedCategory(value));
+              } else {
+                dispatch(fetchProducts({ limit: 10, skip: 10 }));
+              }
+            }}
+          >
             <SelectTrigger className="h-8 w-[150px]">
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Categories</SelectItem>
-              <SelectItem value="electronics">Electronics</SelectItem>
-              <SelectItem value="clothing">Clothing</SelectItem>
-              <SelectItem value="footwear">Footwear</SelectItem>
-              <SelectItem value="accessories">Accessories</SelectItem>
-              <SelectItem value="home">Home</SelectItem>
-              <SelectItem value="fitness">Fitness</SelectItem>
+              {categories.length &&
+                categories.map((cat) => (
+                  <SelectItem key={cat.slug} value={cat.slug}>
+                    {cat.name}
+                  </SelectItem>
+                ))}
             </SelectContent>
           </Select>
           <Select defaultValue="all">
@@ -200,7 +118,8 @@ export function ProductsTable() {
         </div>
         <div className="flex items-center space-x-2">
           <p className="text-sm text-muted-foreground">
-            Showing <strong>10</strong> of <strong>100</strong> products
+            Showing <strong>{data.limit}</strong> of{" "}
+            <strong>{data.total}</strong> products
           </p>
         </div>
       </div>
@@ -222,27 +141,27 @@ export function ProductsTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {products.map((product) => (
+          {data.products.map((product) => (
             <TableRow key={product.id}>
               <TableCell>
                 <Image
-                  src={product.image || "/placeholder.svg"}
-                  alt={product.name}
+                  src={product.thumbnail || "/placeholder.svg"}
+                  alt={product.title}
                   width={40}
                   height={40}
                   className="rounded-md object-cover"
                 />
               </TableCell>
-              <TableCell className="font-medium">{product.name}</TableCell>
+              <TableCell className="font-medium">{product.title}</TableCell>
               <TableCell>{product.category}</TableCell>
               <TableCell>{product.price}</TableCell>
               <TableCell>{product.stock}</TableCell>
               <TableCell>
                 <Badge
-                  className={getStatusColor(product.status)}
+                  className={getStatusColor(product.availabilityStatus)}
                   variant="outline"
                 >
-                  {product.status}
+                  {product.availabilityStatus}
                 </Badge>
               </TableCell>
               {/* <TableCell className="text-right">
@@ -276,10 +195,24 @@ export function ProductsTable() {
         </TableBody>
       </Table>
       <div className="flex items-center justify-end space-x-2 p-4">
-        <Button variant="outline" size="sm">
+        <Button
+          onClick={() =>
+            dispatch(fetchProducts({ limit: 10, skip: data.skip - 10 }))
+          }
+          disabled={data.skip <= 10}
+          variant="outline"
+          size="sm"
+        >
           Previous
         </Button>
-        <Button variant="outline" size="sm">
+        <Button
+          onClick={() =>
+            dispatch(fetchProducts({ limit: 10, skip: data.skip + 10 }))
+          }
+          disabled={data.total <= data.skip + data.limit}
+          variant="outline"
+          size="sm"
+        >
           Next
         </Button>
       </div>
