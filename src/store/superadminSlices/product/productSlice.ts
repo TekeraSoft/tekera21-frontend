@@ -17,15 +17,20 @@ interface ProductState {
 
 const initialState: ProductState = {
   products: [],
-  loading: false,
+  loading: true,
   error: null,
 };
 
-export const fetchProducts = createAsyncThunk(
+export const fetchProducts = createAsyncThunk<Product[]>(
   "products/fetchProducts",
-  async () => {
-    const data = await getAdminProducts();
-    return data as Product[];
+  async (_, thunkAPI) => {
+    try {
+      const data = await getAdminProducts();
+      return data;
+    } catch (error:any) {
+      console.log("Fetch error:", error);
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
 );
 
@@ -45,7 +50,7 @@ const adminProductSlice = createSlice({
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Bir hata oluştu.";
+        state.error = (action.payload as string) || "Bir hata oluştu.";
       });
   },
 });

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { logOut } from "../app/actions";
 import axios from "axios";
 import { api_base_url } from "@/constants/apiUrls";
+import { useRouter } from "@/i18n/navigation";
 
 const axiosClient = axios.create({
   baseURL: api_base_url,
@@ -18,6 +19,8 @@ const axiosClient = axios.create({
 const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
   const [isSet, setIsSet] = useState(false);
 
+  const router = useRouter()
+
   useEffect(() => {
     // Response interceptor
 
@@ -29,6 +32,7 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
 
           if (error.response.status === 401) {
             await logOut();
+            router.replace("/login")
           }
 
           return Promise.reject(error.response.data);
@@ -55,7 +59,7 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
       axiosClient.interceptors.response.eject(responseInterceptor);
       axiosClient.interceptors.request.eject(requestInterceptor);
     };
-  }, []); // handleLogout bağımlılığa eklendi
+  }, [logOut]); // handleLogout bağımlılığa eklendi
 
   return isSet ? children : null;
 };
