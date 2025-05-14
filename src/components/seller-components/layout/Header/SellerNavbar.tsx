@@ -68,25 +68,25 @@ const menuItems: MenuItem[] = [
         href: "/seller/product/create",
       },
 
-      {
-        key: "automaticPricing",
-        label: "Otomatik Fiyatlandırma",
-        requiredRole: "products",
-        flyout: [
-          {
-            key: "buyboxRules",
-            label: "Buybox Kuralları",
-            requiredRole: "products",
-            href: "/seller/products/buybox-rules",
-          },
-          {
-            key: "advantageousProductRules",
-            label: "Avantajlı Ürün Kuralları",
-            requiredRole: "products",
-            href: "/seller/products/advantageous-product-rules",
-          },
-        ],
-      },
+      // {
+      //   key: "automaticPricing",
+      //   label: "Otomatik Fiyatlandırma",
+      //   requiredRole: "products",
+      //   flyout: [
+      //     {
+      //       key: "buyboxRules",
+      //       label: "Buybox Kuralları",
+      //       requiredRole: "products",
+      //       href: "/seller/products/buybox-rules",
+      //     },
+      //     {
+      //       key: "advantageousProductRules",
+      //       label: "Avantajlı Ürün Kuralları",
+      //       requiredRole: "products",
+      //       href: "/seller/products/advantageous-product-rules",
+      //     },
+      //   ],
+      // },
     ],
   },
   {
@@ -122,7 +122,7 @@ const menuItems: MenuItem[] = [
         href: "/seller/cargo/cargo-actions",
       },
       {
-        key: "carriers",
+        key: "cargo",
         label: "Kargo Firmaları",
         requiredRole: "cargo",
         href: "/seller/cargo/carriers",
@@ -141,17 +141,49 @@ const menuItems: MenuItem[] = [
         key: "userList",
         label: "Kullanıcı Listesi",
         requiredRole: "users",
-        href: "/seller/users/list",
-      },
-      {
-        key: "roles",
-        label: "Roller",
-        requiredRole: "users",
-        href: "/seller/users/roles",
+        href: "/seller/users",
       },
     ],
   },
-
+  {
+    key: "analytics",
+    label: "Analitik",
+    icon: <BarChart2 className="mr-2 h-4 w-4" />,
+    requiredRole: "analytics",
+    subItems: [
+      {
+        key: "analytics",
+        label: "Anasayfa",
+        requiredRole: "analytics",
+        href: "/seller/reports",
+      },
+      {
+        key: "analyticsFavoritesAndViews",
+        label: "Favori ve Görüntülenme",
+        requiredRole: "analytics",
+        href: "/seller/reports/favorites-and-views",
+      },
+      {
+        key: "analyticPerform",
+        label: "Performansım",
+        requiredRole: "analytics",
+        flyout: [
+          {
+            key: "analyticOverallPerformance",
+            label: "Genel Performans",
+            requiredRole: "analytics",
+            href: "/seller/reports/overall-performance",
+          },
+          {
+            key: "analyticProductPerformance",
+            label: "Ürün Performans",
+            requiredRole: "analytics",
+            href: "/seller/reports/product-performance",
+          },
+        ],
+      },
+    ],
+  },
   {
     key: "adds",
     label: "Reklamlar",
@@ -169,32 +201,6 @@ const menuItems: MenuItem[] = [
         label: "Performans",
         href: "/seller/adds/performance",
         requiredRole: "adds",
-      },
-    ],
-  },
-  {
-    key: "analytics",
-    label: "Analitik",
-    icon: <BarChart2 className="mr-2 h-4 w-4" />,
-    requiredRole: "analytics",
-    subItems: [
-      {
-        key: "analytics",
-        label: "Anasayfa",
-        requiredRole: "analytics",
-        href: "/seller",
-      },
-      {
-        key: "dashboard",
-        label: "Dashboard",
-        requiredRole: "analytics",
-        href: "/seller/analytics/dashboard",
-      },
-      {
-        key: "reports",
-        label: "Raporlar",
-        requiredRole: "analytics",
-        href: "/seller/analytics/reports",
       },
     ],
   },
