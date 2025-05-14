@@ -23,7 +23,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import { fetchProducts } from "@/store/superadminSlices/product/productSlice";
+import {
+  fetchProducts,
+  setError,
+} from "@/store/superadminSlices/product/productSlice";
 import ProductTableSkeleton from "./Skeletons/Products/ProductTableSkeleton";
 
 export function ProductsTable() {
@@ -129,10 +132,22 @@ export function ProductsTable() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchProducts());
+    if (!productsFake.length) {
+      dispatch(fetchProducts());
+    }
 
     return () => {};
-  }, []);
+  }, [productsFake]);
+
+  useEffect(() => {
+    return () => {
+      if (error) {
+        dispatch(setError(null));
+      }
+    };
+  }, [error]);
+
+  console.log("productsFake", productsFake);
 
   const getStatusColor = (status: string) => {
     switch (status) {

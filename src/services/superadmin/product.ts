@@ -1,14 +1,20 @@
 import axiosClient from "@/request/axiosClient";
 
 export const getAdminProducts = async () => {
-  const response = await axiosClient.get(
-    "https://dummyjson.com/http/404/Products Could Not Be Received",
-    {
-      withCredentials: false,
-    }
-  );
+  const response = await axiosClient.get("https://dummyjson.com/products", {
+    withCredentials: false,
+  });
   return response.data;
 };
+// export const getAdminProducts = async () => {
+//   const response = await axiosClient.get(
+//     "https://dummyjson.com/http/404/Products Could Not Be Received",
+//     {
+//       withCredentials: false,
+//     }
+//   );
+//   return response.data;
+// };
 
 export const searchProducts = async (query: string) => {
   const response = await axiosClient.get(`/products?${query}`);

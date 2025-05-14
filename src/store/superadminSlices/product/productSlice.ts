@@ -26,8 +26,8 @@ export const fetchProducts = createAsyncThunk<Product[]>(
   async (_, thunkAPI) => {
     try {
       const data = await getAdminProducts();
-      return data;
-    } catch (error:any) {
+      return data.products;
+    } catch (error: any) {
       console.log("Fetch error:", error);
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -37,7 +37,11 @@ export const fetchProducts = createAsyncThunk<Product[]>(
 const adminProductSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {},
+  reducers: {
+    setError: (state, action) => {
+      state.error = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProducts.pending, (state) => {
@@ -54,5 +58,7 @@ const adminProductSlice = createSlice({
       });
   },
 });
+
+export const { setError } = adminProductSlice.actions;
 
 export default adminProductSlice.reducer;
