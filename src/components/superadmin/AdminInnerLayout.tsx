@@ -6,7 +6,7 @@ const AdminInnerLayout = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     setTimeout(() => {
       setAnimated(true);
-    }, 500);
+    }, 10);
 
     return () => {
       setAnimated(false);
