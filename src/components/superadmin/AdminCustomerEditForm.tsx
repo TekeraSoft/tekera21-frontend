@@ -52,7 +52,7 @@ import { PopoverClose } from "@radix-ui/react-popover";
 import { enUS, tr as dateFnsTr } from "date-fns/locale";
 import { useLocale } from "next-intl";
 import { TabsList, Tabs, TabsTrigger, TabsContent } from "../ui/tabs";
-import { DocumentCard } from "@/app/[locale]/(AuthCheck)/register/page";
+import DocumentCard from "./DocumentCard";
 
 const countries = [
   { label: "Türkiye", value: "tr" },
