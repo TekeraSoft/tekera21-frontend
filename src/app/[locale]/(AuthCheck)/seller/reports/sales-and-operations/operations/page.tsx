@@ -1,4 +1,3 @@
-import SellerInnerContainer from "@/components/seller-components/containers/SellerInnerContainer";
 import { SellerReportsDateRangePicker } from "@/components/seller-components/seller-reports/SellerReportsDateRangePicker";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,7 +14,7 @@ import { Download, Info } from "lucide-react";
 
 export default function OperasyonPage() {
   return (
-    <SellerInnerContainer>
+    <>
       <div className="flex flex-wrap items-center gap-2">
         <SellerReportsDateRangePicker
           defaultValue={{
@@ -36,7 +35,6 @@ export default function OperasyonPage() {
             Operasyon Performans Metrikleri
           </h2>
           <div className="text-sm text-muted-foreground">
-            Son Güncelleme: 14/05/2025 05:50
             <Button variant="outline" size="sm" className="gap-2 ml-2">
               <Download className="h-4 w-4" />
               Excel İle İndir
@@ -203,6 +201,6 @@ export default function OperasyonPage() {
           </TableBody>
         </Table>
       </div>
-    </SellerInnerContainer>
+    </>
   );
 }

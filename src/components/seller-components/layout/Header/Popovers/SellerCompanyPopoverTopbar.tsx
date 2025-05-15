@@ -53,8 +53,12 @@ export default function SellerCompanyPopoverTopbar() {
         <div className="flex items-center gap-4 border-b pb-4">
           <Image src={logoUrl} alt="Logo" width={48} height={48} />
           <div>
-            <h3 className="text-lg font-semibold text-gray-800">Mağaza Adı</h3>
-            <p className="text-sm text-gray-500">Puan: 4.8 | ID: #12345</p>
+            <h3 className="text-lg font-semibold text-gray-800">
+              {SellerCompanyInfo?.name}
+            </h3>
+            <p className="text-sm text-gray-500">
+              Puan: {SellerCompanyInfo?.score} | ID: #{SellerCompanyInfo?.id}
+            </p>
           </div>
         </div>
 

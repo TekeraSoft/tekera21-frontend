@@ -21,10 +21,25 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 
+interface PopoverLink {
+  text: string;
+  href: string;
+}
+
 export default function SellerCompanyPopover() {
+  const { SellerCompanyInfo } = useSelector(
+    (state: RootState) => state.SellerCompany
+  );
   const { logoUrl } = useSelector((state: RootState) => state.globalSettings);
 
   const [openDialog, setOpenDialog] = useState(false);
+
+  const popoverLinks: PopoverLink[] = [
+    { text: "Hesap Bilgileri", href: "/seller/company" },
+    { text: "Kullanıcı Yönetimi", href: "/seller/users" },
+    { text: "Ticari Şartlar", href: "/sartlar" },
+    { text: "Platform Kuralları", href: "/kurallar" },
+  ];
 
   return (
     <Popover>
@@ -55,32 +70,25 @@ export default function SellerCompanyPopover() {
             />
           </Link>
           <div className="min-w-0">
-            <h3 className="text-lg font-semibold truncate">Mağaza Adı</h3>
+            <h3 className="text-lg font-semibold truncate">
+              {SellerCompanyInfo?.name}
+            </h3>
             <p className="text-sm text-gray-500 truncate">
-              Puan: 4.8 | ID: #12345
+              Puan: {SellerCompanyInfo?.score}| ID: #{SellerCompanyInfo?.id}
             </p>
           </div>
         </div>
 
         <div className="mt-4 space-y-2 text-sm">
-          <Link href="/hesap" className="block text-gray-800 hover:underline">
-            Hesap Bilgileri
-          </Link>
-          <Link
-            href="/kullanicilar"
-            className="block text-gray-800 hover:underline"
-          >
-            Kullanıcı Yönetimi
-          </Link>
-          <Link href="/sartlar" className="block text-gray-800 hover:underline">
-            Ticari Şartlar
-          </Link>
-          <Link
-            href="/kurallar"
-            className="block text-gray-800 hover:underline"
-          >
-            Platform Kuralları
-          </Link>
+          {popoverLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="block text-gray-800 hover:underline"
+            >
+              {link.text}
+            </Link>
+          ))}
         </div>
 
         <div className="pt-4">

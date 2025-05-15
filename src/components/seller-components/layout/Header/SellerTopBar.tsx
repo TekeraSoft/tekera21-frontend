@@ -37,7 +37,7 @@ const alertItems: AlertItem[] = [
   },
 ];
 
-function Topbar() {
+function SellerTopbar() {
   return (
     <div className="hidden lg:flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 py-2 border-b text-sm bg-gray-100 gap-2">
       {/* Left Nav */}
@@ -86,4 +86,4 @@ function Topbar() {
   );
 }
 
-export default Topbar;
+export default SellerTopbar;
