@@ -65,6 +65,7 @@ interface ProductState {
   error: string | null;
   categories: ICategory[];
   selectedCategory: string;
+  searchTerm: string;
 }
 
 const initialState: ProductState = {
@@ -73,6 +74,7 @@ const initialState: ProductState = {
   error: null,
   categories: [],
   selectedCategory: "all",
+  searchTerm: "",
 };
 
 interface FetchProductsParams {
@@ -139,6 +141,9 @@ const adminProductSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
+    setSearchTerm: (state, action) => {
+      state.searchTerm = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -189,13 +194,15 @@ const adminProductSlice = createSlice({
       // Search Products
       .addCase(searchProduct.pending, (state) => {
         state.loading = true;
+        state.selectedCategory = "all";
         state.error = null;
       })
       .addCase(searchProduct.fulfilled, (state, action) => {
         state.loading = false;
-        state.error =  action.payload.products.length
+
+        state.error = action.payload.products.length
           ? null
-          : "Aradığınız kriterlere uygun ürün Bulunamadı."
+          : "Aradığınız kriterlere uygun ürün Bulunamadı.";
         state.data = action.payload.products.length
           ? action.payload
           : state.data;
@@ -207,6 +214,6 @@ const adminProductSlice = createSlice({
   },
 });
 
-export const { setError } = adminProductSlice.actions;
+export const { setError, setSearchTerm } = adminProductSlice.actions;
 
 export default adminProductSlice.reducer;
