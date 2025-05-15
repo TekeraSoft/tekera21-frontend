@@ -35,6 +35,15 @@ export const getProductsByCategory = async (catSlug: string) => {
   );
   return response.data;
 };
+export const searchProducts = async (query: string) => {
+  const response = await axiosClient.get(
+    `https://dummyjson.com/products/search?q=${query}`,
+    {
+      withCredentials: false,
+    }
+  );
+  return response.data;
+};
 // export const getAdminProducts = async () => {
 //   const response = await axiosClient.get(
 //     "https://dummyjson.com/http/404/Products Could Not Be Received",
@@ -45,10 +54,10 @@ export const getProductsByCategory = async (catSlug: string) => {
 //   return response.data;
 // };
 
-export const searchProducts = async (query: string) => {
-  const response = await axiosClient.get(`/products?${query}`);
-  return response.data;
-};
+// export const searchProducts = async (query: string) => {
+//   const response = await axiosClient.get(`/products?${query}`);
+//   return response.data;
+// };
 
 export const filterProducts = async (
   query: string,

@@ -2,6 +2,7 @@ import {
   getAdminProductCategories,
   getAdminProducts,
   getProductsByCategory,
+  searchProducts,
 } from "@/services/superadmin/product";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -64,6 +65,7 @@ interface ProductState {
   error: string | null;
   categories: ICategory[];
   selectedCategory: string;
+  searchTerm: string;
 }
 
 const initialState: ProductState = {
@@ -72,6 +74,7 @@ const initialState: ProductState = {
   error: null,
   categories: [],
   selectedCategory: "all",
+  searchTerm: "",
 };
 
 interface FetchProductsParams {
@@ -109,7 +112,6 @@ export const fetchProductsByCategory = createAsyncThunk<
   IData,
   { catSlug: string }
 >("products/fetchProductsByCategory", async (params, thunkAPI) => {
-  console.log("fetch by category");
   try {
     const data = await getProductsByCategory(params.catSlug); // bu fonksiyon parametreleri almalı
     return data; // Assuming the API returns an array and we need the first item
@@ -119,6 +121,19 @@ export const fetchProductsByCategory = createAsyncThunk<
   }
 });
 
+export const searchProduct = createAsyncThunk<IData, { query: string }>(
+  "products/searchProducts",
+  async (params, thunkAPI) => {
+    try {
+      const data = await searchProducts(params.query); // bu fonksiyon parametreleri almalı
+      return data; // Assuming the API returns an array and we need the first item
+    } catch (error: any) {
+      console.log("Fetch error:", error);
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
 const adminProductSlice = createSlice({
   name: "products",
   initialState,
@@ -126,8 +141,8 @@ const adminProductSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
-    setSelectedCategory: (state, action) => {
-      state.selectedCategory = action.payload;
+    setSearchTerm: (state, action) => {
+      state.searchTerm = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -147,7 +162,8 @@ const adminProductSlice = createSlice({
       })
 
       //fetchProductsByCategory
-      .addCase(fetchProductsByCategory.pending, (state) => {
+      .addCase(fetchProductsByCategory.pending, (state, action) => {
+        state.selectedCategory = action.meta.arg.catSlug;
         state.loading = true;
         state.error = null;
       })
@@ -173,10 +189,31 @@ const adminProductSlice = createSlice({
       .addCase(fetchCategories.rejected, (state, action) => {
         state.loading = false;
         state.error = (action.payload as string) || "Bir hata oluştu.";
+      })
+
+      // Search Products
+      .addCase(searchProduct.pending, (state) => {
+        state.loading = true;
+        state.selectedCategory = "all";
+        state.error = null;
+      })
+      .addCase(searchProduct.fulfilled, (state, action) => {
+        state.loading = false;
+
+        state.error = action.payload.products.length
+          ? null
+          : "Aradığınız kriterlere uygun ürün Bulunamadı.";
+        state.data = action.payload.products.length
+          ? action.payload
+          : state.data;
+      })
+      .addCase(searchProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = (action.payload as string) || "Bir hata oluştu.";
       });
   },
 });
 
-export const { setError, setSelectedCategory } = adminProductSlice.actions;
+export const { setError, setSearchTerm } = adminProductSlice.actions;
 
 export default adminProductSlice.reducer;

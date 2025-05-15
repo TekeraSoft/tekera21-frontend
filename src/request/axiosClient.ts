@@ -45,7 +45,7 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
     // Request interceptor
     const requestInterceptor = axiosClient.interceptors.request.use(
       (config) => {
-        console.log("request config", config);
+        // console.log("request config", config);
         if (config.data instanceof FormData) {
           config.headers["Content-Type"] = "multipart/form-data";
         }

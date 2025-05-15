@@ -97,7 +97,7 @@ const TopBar = ({ children }: { children: React.ReactNode }) => {
   //   return () => {};
   // }, []);
 
-  console.log("userinfo topbar", userInfo);
+
   return (
     <div className="w-full bg-white h-[52px] flex items-center justify-between px-4 shadow-sm border-b">
       <ToggleSidebarButton />
