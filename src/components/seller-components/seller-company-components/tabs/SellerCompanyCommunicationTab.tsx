@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
-import { Info } from "lucide-react";
 
 export default function SellerCompanyCommunicationTab() {
   const [preferences, setPreferences] = useState({
@@ -39,21 +38,6 @@ export default function SellerCompanyCommunicationTab() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-medium">Pazarlama Araçları</h3>
-          <button className="text-gray-400">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="m18 15-6-6-6 6" />
-            </svg>
-          </button>
         </div>
         <p className="text-sm text-gray-600">
           tekera21 Pazaryeri'nde işinizi büyütmeniz ve geliştirmeniz için
@@ -98,21 +82,6 @@ export default function SellerCompanyCommunicationTab() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-medium">Operasyonel</h3>
-          <button className="text-gray-400">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="m18 15-6-6-6 6" />
-            </svg>
-          </button>
         </div>
         <p className="text-sm text-gray-600">
           tekera21 Pazaryeri'nde sürdürdüğünüz operasyon, ticari ve finansal
@@ -139,7 +108,6 @@ export default function SellerCompanyCommunicationTab() {
                   handleToggle("operational", "email", value)
                 }
               />
-              <Info className="h-4 w-4 text-gray-400" />
             </div>
           </div>
 
@@ -159,21 +127,6 @@ export default function SellerCompanyCommunicationTab() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-medium">Sipariş</h3>
-          <button className="text-gray-400">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="m18 15-6-6-6 6" />
-            </svg>
-          </button>
         </div>
         <p className="text-sm text-gray-600">
           Sipariş aldığınızda tarafınıza gelen bilgilendirme iletişimlerini

@@ -1,3 +1,4 @@
+import SellerInnerContainer from "@/components/seller-components/containers/SellerInnerContainer";
 import { SellerReportsSalesAndOperationsNavTabs } from "@/components/seller-components/seller-reports/SellerReportsSalesAndOperationsNavTabs";
 import React from "react";
 
@@ -20,7 +21,7 @@ export default function SalesAndOperationsLayout({
   return (
     <>
       <SellerReportsSalesAndOperationsNavTabs tabs={tabs} />
-      {children}
+      <SellerInnerContainer> {children}</SellerInnerContainer>
     </>
   );
 }

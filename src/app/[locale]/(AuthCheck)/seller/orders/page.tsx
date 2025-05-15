@@ -14,7 +14,17 @@ import SellerOrdersTable from "@/components/seller-components/orders/SellerOrder
 import { Input } from "@/components/ui/input";
 import { useLocale } from "next-intl";
 import SellerInnerContainer from "@/components/seller-components/containers/SellerInnerContainer";
-import { CalendarIcon } from "lucide-react";
+import {
+  AlertTriangle,
+  Ban,
+  CalendarIcon,
+  Clock,
+  Hammer,
+  ListOrdered,
+  ShieldX,
+  Truck,
+  UserX,
+} from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { tr, enUS } from "date-fns/locale";
 
@@ -24,6 +34,12 @@ type CancelType =
   | "customer-cancellations"
   | "my-cancellations"
   | "tekera21-cancellations";
+
+interface TabItem {
+  label: string;
+  value: string;
+  icon: React.ReactNode;
+}
 
 export default function SellerOrderManagement() {
   const localeString = useLocale();
@@ -38,6 +54,61 @@ export default function SellerOrderManagement() {
     "my-cancellations": "seller",
     "tekera21-cancellations": "tekera21",
   };
+  const tabItems: TabItem[] = [
+    {
+      label: "Tüm Siparişler",
+      value: "all",
+      icon: <ListOrdered className="w-4 h-4" />,
+    },
+    {
+      label: "Yeni Siparişleriniz",
+      value: "new",
+      icon: <Clock className="w-4 h-4" />,
+    },
+    {
+      label: "İşleme Alınanlar",
+      value: "processing",
+      icon: <Hammer className="w-4 h-4" />,
+    },
+    {
+      label: "Teslim Edilenler",
+      value: "delivered",
+      icon: <Truck className="w-4 h-4" />,
+    },
+    {
+      label: "İptal Edilenler",
+      value: "canceled",
+      icon: <Ban className="w-4 h-4" />,
+    },
+  ];
+
+  const cancelTabItems: {
+    label: string;
+    value: CancelType;
+    icon: React.ReactNode;
+  }[] = [
+    {
+      label: "Tüm İptaller",
+      value: "all-cancellations",
+      icon: <Ban className="w-4 h-4" />,
+    },
+    {
+      label: "Müşterinin İptal Ettiği",
+      value: "customer-cancellations",
+      icon: <UserX className="w-4 h-4" />,
+    },
+    {
+      label: "Benim İptal Ettiğim",
+      value: "my-cancellations",
+      icon: <ShieldX className="w-4 h-4" />,
+    },
+    {
+      label: "tekera21'un İptal Ettiği",
+      value: "tekera21-cancellations",
+      icon: <AlertTriangle className="w-4 h-4" />,
+    },
+  ];
+
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
   const [filteredOrders, setFilteredOrders] = useState<any[]>([]);
@@ -148,52 +219,26 @@ export default function SellerOrderManagement() {
         onValueChange={(value) => setActiveTab(value as TabStatus)}
         className="w-full"
       >
-        <TabsList className="w-full border-b flex justify-start overflow-x-auto">
-          <TabsTrigger value="all" className="relative py-2 px-4">
-            Tüm Siparişler
-            <span className="ml-2 bg-gray-100 text-xs px-2 py-0.5 rounded-full">
-              {getOrderCount("all")}
-            </span>
-            {activeTab === "all" && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500"></div>
-            )}
-          </TabsTrigger>
-          <TabsTrigger value="new" className="relative py-2 px-4">
-            Yeni Siparişleriniz
-            <span className="ml-2 bg-gray-100 text-xs px-2 py-0.5 rounded-full">
-              {getOrderCount("new")}
-            </span>
-            {activeTab === "new" && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500"></div>
-            )}
-          </TabsTrigger>
-          <TabsTrigger value="processing" className="relative py-2 px-4">
-            İşleme Alınanlar
-            <span className="ml-2 bg-gray-100 text-xs px-2 py-0.5 rounded-full">
-              {getOrderCount("processing")}
-            </span>
-            {activeTab === "processing" && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500"></div>
-            )}
-          </TabsTrigger>
-          <TabsTrigger value="delivered" className="relative py-2 px-4">
-            Teslim Edilenler
-            <span className="ml-2 bg-gray-100 text-xs px-2 py-0.5 rounded-full">
-              {getOrderCount("delivered")}
-            </span>
-            {activeTab === "delivered" && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500"></div>
-            )}
-          </TabsTrigger>
-          <TabsTrigger value="canceled" className="relative py-2 px-4">
-            İptal Edilenler
-            <span className="ml-2 bg-gray-100 text-xs px-2 py-0.5 rounded-full">
-              {getOrderCount("canceled")}
-            </span>
-            {activeTab === "canceled" && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500"></div>
-            )}
-          </TabsTrigger>
+        <TabsList className="w-full border-b grid grid-cols-2 md:grid-cols-5 gap-2 px-2 py-2 md:p-0 ">
+          {tabItems.map((tab) => (
+            <TabsTrigger
+              key={tab.value}
+              value={tab.value}
+              className="relative  py-3 px-4 flex flex-col items-center justify-center text-sm font-medium text-gray-700 hover:text-black transition border md:border-none cursor-pointer"
+            >
+              <div className="flex items-center gap-1">
+                {tab.icon}
+                <span>{tab.label}</span>
+                <span className="mt-1 bg-gray-100 text-xs px-2 py-0.5 rounded-full">
+                  {getOrderCount(tab.value)}
+                </span>
+              </div>
+
+              {activeTab === tab.value && (
+                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary"></div>
+              )}
+            </TabsTrigger>
+          ))}
         </TabsList>
 
         {activeTab === "canceled" && (
@@ -202,61 +247,32 @@ export default function SellerOrderManagement() {
               value={cancelType}
               onValueChange={(value) => setCancelType(value as CancelType)}
             >
-              <TabsList className="bg-transparent">
-                <TabsTrigger
-                  value="all-cancellations"
-                  className={`relative py-2 px-4 ${
-                    cancelType === "all-cancellations" ? "text-green-500" : ""
-                  }`}
-                >
-                  Tüm İptaller
-                  {cancelType === "all-cancellations" && (
-                    <div className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500"></div>
-                  )}
-                </TabsTrigger>
-                <TabsTrigger
-                  value="customer-cancellations"
-                  className={`relative py-2 px-4 ${
-                    cancelType === "customer-cancellations"
-                      ? "text-green-500"
-                      : ""
-                  }`}
-                >
-                  Müşterinin İptal Ettiği
-                  {cancelType === "customer-cancellations" && (
-                    <div className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500"></div>
-                  )}
-                </TabsTrigger>
-                <TabsTrigger
-                  value="my-cancellations"
-                  className={`relative py-2 px-4 ${
-                    cancelType === "my-cancellations" ? "text-green-500" : ""
-                  }`}
-                >
-                  Benim İptal Ettiğim
-                  {cancelType === "my-cancellations" && (
-                    <div className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500"></div>
-                  )}
-                </TabsTrigger>
-                <TabsTrigger
-                  value="tekera21-cancellations"
-                  className={`relative py-2 px-4 ${
-                    cancelType === "tekera21-cancellations"
-                      ? "text-green-500"
-                      : ""
-                  }`}
-                >
-                  tekera21&apos;un İptal Ettiği
-                  {cancelType === "tekera21-cancellations" && (
-                    <div className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500"></div>
-                  )}
-                </TabsTrigger>
+              <TabsList className="w-full grid grid-cols-2 sm:grid-cols-4 gap-2 border-b bg-transparent">
+                {cancelTabItems.map((tab) => (
+                  <TabsTrigger
+                    key={tab.value}
+                    value={tab.value}
+                    className={`relative py-2 px-4 flex flex-col items-center text-sm font-medium transition ${
+                      cancelType === tab.value
+                        ? "text-primary"
+                        : "text-gray-700"
+                    }`}
+                  >
+                    <div className="flex items-center gap-1">
+                      {tab.icon}
+                      <span className="text-xs sm:text-sm">{tab.label}</span>
+                    </div>
+                    {cancelType === tab.value && (
+                      <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary"></div>
+                    )}
+                  </TabsTrigger>
+                ))}
               </TabsList>
             </Tabs>
           </div>
         )}
         <SellerInnerContainer>
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="mt-4 px-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <Input
               name="customerName"
               placeholder="Müşteri Adı"

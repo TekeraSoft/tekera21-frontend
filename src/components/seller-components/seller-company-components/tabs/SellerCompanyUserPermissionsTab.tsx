@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Pencil, Check, Info } from "lucide-react";
+import { Pencil, Check, Info, User } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 
 interface UserInfoTabProps {
   userData: {
@@ -30,20 +31,7 @@ export default function SellerCompanyUserPermissionsTab({
     <div className="space-y-6">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-            <circle cx="12" cy="7" r="4" />
-          </svg>
+          <User />
         </div>
         <div>
           <h2 className="text-lg font-bold">{userData.name}</h2>
@@ -52,11 +40,13 @@ export default function SellerCompanyUserPermissionsTab({
       </div>
 
       <p className="text-sm text-gray-500">
-        Satıcı Paneli'ne erişim yetkisi olan diğer kullanıcıları görüntülemek
-        için{" "}
-        <a href="#" className="text-blue-500 hover:underline">
+        Diğer kullanıcıları görüntülemek için
+        <Link
+          href={"/seller/users"}
+          className="ml-1 text-primary hover:underline"
+        >
           tıklayınız.
-        </a>
+        </Link>
       </p>
 
       <div className="space-y-4">
@@ -185,48 +175,6 @@ export default function SellerCompanyUserPermissionsTab({
         <p className="text-xs text-gray-500">
           Mail ile İki Adımlı Doğrulama Kodu
         </p>
-
-        <div className="flex gap-4 pt-2">
-          <Button variant="outline" className="flex-1">
-            Aktif Oturumlar ve Girişler
-          </Button>
-          <Button variant="outline" className="flex-1">
-            Aktif Cihazlar
-          </Button>
-        </div>
-
-        <div className="pt-4">
-          <h3 className="text-base font-medium text-gray-800">MSS Bilgileri</h3>
-          <p className="text-sm text-gray-600 mt-1">
-            Mesafeli Satış Sözleşmesi ve Ön Bilgilendirme Formu'nda görünecek
-            bilgiler.
-          </p>
-
-          <div className="mt-4">
-            <Label className="text-sm text-green-500 font-normal">
-              MSS Telefon Numarası
-            </Label>
-            <div className="mt-1 relative">
-              <Input
-                value={userData.mssPhone}
-                disabled={true}
-                className="pr-16 border-green-500 focus:ring-green-500"
-              />
-              <div className="absolute right-2 top-1/2 -translate-y-1/2 flex gap-1">
-                <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <Pencil className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 text-green-500"
-                >
-                  <Check className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

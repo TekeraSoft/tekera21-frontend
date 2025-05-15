@@ -9,6 +9,7 @@ import {
   FileText,
   UserRoundCog,
   LayoutDashboard,
+  Store,
 } from "lucide-react";
 import {
   Menubar,
@@ -46,6 +47,27 @@ const menuItems: MenuItem[] = [
         label: "Profil",
         requiredRole: "users",
         href: "/seller/user/profile",
+      },
+    ],
+  },
+  {
+    key: "sellerSuperAdmin",
+    label: "Mağaza Bilgileri",
+
+    icon: <Store className="mr-2 h-4 w-4" />,
+    requiredRole: "sellerSuperAdmin",
+    subItems: [
+      {
+        key: "campaigns",
+        label: "Kampanyalar",
+        requiredRole: "sellerSuperAdmin",
+        href: "/seller/adds/campaigns",
+      },
+      {
+        key: "performance",
+        label: "Performans",
+        href: "/seller/adds/performance",
+        requiredRole: "sellerSuperAdmin",
       },
     ],
   },
@@ -186,7 +208,7 @@ const menuItems: MenuItem[] = [
         key: "analyticReportShop",
         label: "Mağaza",
         requiredRole: "analytics",
-        href: "/seller/reports/shop",
+        href: "/seller/reports/sales-and-operations/shop",
       },
     ],
   },

@@ -16,32 +16,17 @@ export default function SellerCompanyContactTab() {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* Adres 1 */}
           <Card className="overflow-hidden">
-            <div className="bg-green-100 p-2 flex justify-between items-center">
+            <div className="bg-primary p-2 flex justify-between items-center">
               <div className="flex items-center gap-2">
-                <span className="font-medium">1. Adres (Fatura)</span>
-                <span className="bg-green-500 text-white text-xs px-2 py-0.5 rounded">
-                  Varsayılan
+                <span className="font-medium text-white">
+                  1. Adres (Fatura)
                 </span>
               </div>
-              <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="12" cy="12" r="1" />
-                  <circle cx="19" cy="12" r="1" />
-                  <circle cx="5" cy="12" r="1" />
-                </svg>
+              <Button variant="default" size="sm">
+                Güncelle
               </Button>
             </div>
             <CardContent className="p-4">
@@ -71,37 +56,15 @@ export default function SellerCompanyContactTab() {
 
           {/* Adres 2 */}
           <Card className="overflow-hidden">
-            <div className="bg-gray-100 p-2 flex justify-between items-center">
+            <div className="bg-primary p-2 flex justify-between items-center">
               <div className="flex items-center gap-2">
-                <span className="font-medium">2. Adres (Sevkiyat)</span>
-                <span className="bg-green-500 text-white text-xs px-2 py-0.5 rounded">
-                  Varsayılan
+                <span className="font-medium text-white">
+                  2. Adres (Sevkiyat)
                 </span>
               </div>
               <div className="flex items-center gap-1">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-6 p-0 px-2  text-xs"
-                >
+                <Button variant="default" size="sm">
                   Güncelle
-                </Button>
-                <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="1" />
-                    <circle cx="19" cy="12" r="1" />
-                    <circle cx="5" cy="12" r="1" />
-                  </svg>
                 </Button>
               </div>
             </div>
@@ -132,38 +95,13 @@ export default function SellerCompanyContactTab() {
 
           {/* Adres 3 */}
           <Card className="overflow-hidden">
-            <div className="bg-gray-100 p-2 flex justify-between items-center">
+            <div className="bg-primary p-2 flex justify-between items-center">
               <div className="flex items-center gap-2">
-                <span className="font-medium">3. Adres (İade)</span>
-                <span className="bg-green-500 text-white text-xs px-2 py-0.5 rounded">
-                  Varsayılan
-                </span>
+                <span className="font-medium text-white">3. Adres (İade)</span>
               </div>
               <div className="flex items-center gap-1">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-6 p-0 px-2  text-xs"
-                >
+                <Button variant="default" size="sm">
                   Güncelle
-                </Button>
-                <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="1" />
-                    <circle cx="19" cy="12" r="1" />
-                    <circle cx="5" cy="12" r="1" />
-                  </svg>{" "}
-                  butonu guncelle
                 </Button>
               </div>
             </div>

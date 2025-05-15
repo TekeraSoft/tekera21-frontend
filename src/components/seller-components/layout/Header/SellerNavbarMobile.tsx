@@ -27,6 +27,8 @@ interface SellerNavbarMobileProps {
 function SellerNavbarMobile({ menuItems }: SellerNavbarMobileProps) {
   const { userInfo } = useAuthContext();
 
+  const { logoUrl } = useSelector((state: RootState) => state.globalSettings);
+
   interface AlertItem {
     id: string;
     title: string;
@@ -89,8 +91,6 @@ function SellerNavbarMobile({ menuItems }: SellerNavbarMobileProps) {
     if (!userInfo) return false;
     return userInfo.role.includes(role);
   };
-
-  const { logoUrl } = useSelector((state: RootState) => state.globalSettings);
 
   return (
     <div className="lg:hidden border-b">
