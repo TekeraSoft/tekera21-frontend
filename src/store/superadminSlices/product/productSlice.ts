@@ -2,6 +2,7 @@ import {
   getAdminProductCategories,
   getAdminProducts,
   getProductsByCategory,
+  searchProducts,
 } from "@/services/superadmin/product";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -109,7 +110,6 @@ export const fetchProductsByCategory = createAsyncThunk<
   IData,
   { catSlug: string }
 >("products/fetchProductsByCategory", async (params, thunkAPI) => {
-  console.log("fetch by category");
   try {
     const data = await getProductsByCategory(params.catSlug); // bu fonksiyon parametreleri almalı
     return data; // Assuming the API returns an array and we need the first item
@@ -118,6 +118,19 @@ export const fetchProductsByCategory = createAsyncThunk<
     return thunkAPI.rejectWithValue(error.message);
   }
 });
+
+export const searchProduct = createAsyncThunk<IData, { query: string }>(
+  "products/searchProducts",
+  async (params, thunkAPI) => {
+    try {
+      const data = await searchProducts(params.query); // bu fonksiyon parametreleri almalı
+      return data; // Assuming the API returns an array and we need the first item
+    } catch (error: any) {
+      console.log("Fetch error:", error);
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
 
 const adminProductSlice = createSlice({
   name: "products",
@@ -169,6 +182,25 @@ const adminProductSlice = createSlice({
         state.categories = action.payload;
       })
       .addCase(fetchCategories.rejected, (state, action) => {
+        state.loading = false;
+        state.error = (action.payload as string) || "Bir hata oluştu.";
+      })
+
+      // Search Products
+      .addCase(searchProduct.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(searchProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error =  action.payload.products.length
+          ? null
+          : "Aradığınız kriterlere uygun ürün Bulunamadı."
+        state.data = action.payload.products.length
+          ? action.payload
+          : state.data;
+      })
+      .addCase(searchProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = (action.payload as string) || "Bir hata oluştu.";
       });
