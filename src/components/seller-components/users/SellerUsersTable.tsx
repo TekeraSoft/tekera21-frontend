@@ -137,7 +137,7 @@ export function SellerUsersTable() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 px-1 md:px-0">
         <div className="relative flex-1">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
@@ -176,8 +176,8 @@ export function SellerUsersTable() {
             <TableRow>
               <TableHead>İsim</TableHead>
               <TableHead>E-posta</TableHead>
-              <TableHead>Telefon</TableHead>
-              <TableHead>Roller</TableHead>
+              <TableHead className="hidden md:block">Telefon</TableHead>
+              <TableHead className="min-w-50">Roller</TableHead>
               <TableHead className="text-right">Aksiyonlar</TableHead>
             </TableRow>
           </TableHeader>
@@ -187,7 +187,7 @@ export function SellerUsersTable() {
                 <TableRow key={user.id}>
                   <TableCell className="font-medium">{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.phone}</TableCell>
+                  <TableCell className="hidden md:flex">{user.phone}</TableCell>
                   <TableCell>
                     <div className="flex flex-wrap gap-1">
                       {user.roles.map((role) => (

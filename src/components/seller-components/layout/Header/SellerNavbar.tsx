@@ -6,10 +6,10 @@ import {
   ShoppingCart,
   Truck,
   BarChart2,
-  FileText,
   UserRoundCog,
   LayoutDashboard,
   Store,
+  LifeBuoy,
 } from "lucide-react";
 import {
   Menubar,
@@ -24,8 +24,7 @@ import {
 import { cn } from "@/lib/utils";
 
 import type { MenuItem } from "../../../../../types/SellerTypes/SellerNavbarTypes";
-import { RootState } from "@/store/store";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "@/store/store";
 import SellerNavbarMobile from "./SellerNavbarMobile";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
@@ -143,12 +142,12 @@ const menuItems: MenuItem[] = [
         requiredRole: "cargo",
         href: "/seller/cargo/cargo-actions",
       },
-      {
-        key: "cargo",
-        label: "Kargo Firmaları",
-        requiredRole: "cargo",
-        href: "/seller/cargo/carriers",
-      },
+      // {
+      //   key: "cargo",
+      //   label: "Kargo Firmaları",
+      //   requiredRole: "cargo",
+      //   href: "/seller/cargo/carriers",
+      // },
     ],
   },
 
@@ -213,31 +212,58 @@ const menuItems: MenuItem[] = [
     ],
   },
   {
-    key: "adds",
-    label: "Reklamlar",
-    icon: <FileText className="mr-2 h-4 w-4" />,
-    requiredRole: "adds",
+    key: "support",
+    label: "Destek",
+
+    icon: <LifeBuoy className="mr-2 h-4 w-4" />,
+    requiredRole: "help",
     subItems: [
       {
-        key: "campaigns",
-        label: "Kampanyalar",
-        requiredRole: "adds",
-        href: "/seller/adds/campaigns",
+        key: "supportTicketCreate",
+        label: "Talep Oluştur",
+        requiredRole: "help",
+        href: "/seller/help",
       },
       {
-        key: "performance",
-        label: "Performans",
-        href: "/seller/adds/performance",
-        requiredRole: "adds",
+        key: "supportMyTickets",
+        label: "Destek Taleplerim",
+        href: "/seller/help/my-requests",
+        requiredRole: "help",
+      },
+      {
+        key: "supportBuyerTickets",
+        label: "Müşteri Talepleri",
+        href: "/seller/help/buyer-requests",
+        requiredRole: "help",
       },
     ],
   },
+  // {
+  //   key: "adds",
+  //   label: "Reklamlar",
+  //   icon: <FileText className="mr-2 h-4 w-4" />,
+  //   requiredRole: "adds",
+  //   subItems: [
+  //     {
+  //       key: "campaigns",
+  //       label: "Kampanyalar",
+  //       requiredRole: "adds",
+  //       href: "/seller/adds/campaigns",
+  //     },
+  //     {
+  //       key: "performance",
+  //       label: "Performans",
+  //       href: "/seller/adds/performance",
+  //       requiredRole: "adds",
+  //     },
+  //   ],
+  // },
 ];
 
 function SellerNavbar() {
   const { userInfo } = useAuthContext();
 
-  const { logoUrl } = useSelector((state: RootState) => state.globalSettings);
+  const { logoUrl } = useAppSelector((state) => state.globalSettings);
 
   // Check if the user has the required role
   const hasRole = (role: string): boolean => {

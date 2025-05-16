@@ -59,23 +59,15 @@ function SellerTopbar() {
         <SellerAnnouncementPopover alertItems={alertItems} />
 
         <Link
-          href="/seller"
-          target="_blank"
-          className="text-gray-600 hover:text-blue-500 transition-all duration-300"
-        >
-          Destek
-        </Link>
-
-        <Link
           href="/seller/calendar"
           target="_blank"
-          className="text-gray-600 hover:text-blue-500 transition-all duration-300"
+          className=" text-secondary transition-all duration-300"
         >
           Takvim
         </Link>
         <Link
           href={"/shop/arzuamber"}
-          className="text-gray-600 hover:text-blue-500 transition-all duration-300"
+          className=" text-secondary transition-all duration-300"
         >
           Mağazaya Git
         </Link>

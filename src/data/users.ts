@@ -36,6 +36,7 @@ export const jane = {
     "seller",
     "sellerSuperAdmin",
     "user",
+    "help",
   ],
   isActive: true,
 };

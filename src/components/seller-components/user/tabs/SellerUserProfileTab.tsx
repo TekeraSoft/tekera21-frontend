@@ -21,19 +21,16 @@ import {
   ProfileFormValues,
 } from "@/schemas/SellerUserProfileScema";
 import { setIsEditing } from "@/store/generalSlices/formControlSlice";
-import { RootState, useAppDispatch } from "@/store/store";
+import { useAppDispatch, useAppSelector } from "@/store/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, Pencil, Upload, User } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
 
 function SellerUserProfileTab() {
   const dispatch = useAppDispatch();
   const { userInfo } = useAuthContext();
-  const { SellerCompanyInfo } = useSelector(
-    (state: RootState) => state.SellerCompany
-  );
-  const { isEditing } = useSelector((state: RootState) => state.formControl);
+  const { SellerCompanyInfo } = useAppSelector((state) => state.SellerCompany);
+  const { isEditing } = useAppSelector((state) => state.formControl);
 
   // Profil resmi yükleme işlemi
   function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {

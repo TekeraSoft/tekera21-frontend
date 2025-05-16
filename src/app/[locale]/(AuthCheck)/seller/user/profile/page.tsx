@@ -7,7 +7,7 @@ import SellerUserPreferencesAndPasswordTab from "@/components/seller-components/
 export default function SellerUserProfile() {
   return (
     <SellerInnerContainer>
-      <div className="flex flex-col md:flex-row gap-6">
+      <div className="flex flex-col md:flex-row gap-6 px-2 md:px-0">
         {/* Right side with tabs */}
         <div className="w-full flex items-center justify-center">
           <Tabs defaultValue="profile" className="w-full">

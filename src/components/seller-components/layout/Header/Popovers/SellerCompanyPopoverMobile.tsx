@@ -18,8 +18,7 @@ import {
 import { Store } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useAppSelector } from "@/store/store";
 
 interface PopoverLink {
   text: string;
@@ -27,10 +26,8 @@ interface PopoverLink {
 }
 
 export default function SellerCompanyPopover() {
-  const { SellerCompanyInfo } = useSelector(
-    (state: RootState) => state.SellerCompany
-  );
-  const { logoUrl } = useSelector((state: RootState) => state.globalSettings);
+  const { SellerCompanyInfo } = useAppSelector((state) => state.SellerCompany);
+  const { logoUrl } = useAppSelector((state) => state.globalSettings);
 
   const [openDialog, setOpenDialog] = useState(false);
 

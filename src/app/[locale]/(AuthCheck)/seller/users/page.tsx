@@ -6,18 +6,20 @@ import React from "react";
 
 export default function SellerUsersListPage() {
   return (
-    <SellerInnerContainer>
-      <div className="flex items-center justify-between">
+    <>
+      <div className="flex items-center justify-between px-4 md:px-8 mt-2">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Kullanıcılar</h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Sistem kullanıcılarını yönetin ve rolleri atayın.
           </p>
         </div>
         <SellerUserCreateButton />
       </div>
       <Separator className="my-6" />
-      <SellerUsersTable />
-    </SellerInnerContainer>
+      <SellerInnerContainer>
+        <SellerUsersTable />{" "}
+      </SellerInnerContainer>
+    </>
   );
 }

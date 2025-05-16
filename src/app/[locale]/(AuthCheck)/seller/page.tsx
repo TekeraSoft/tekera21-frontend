@@ -1,8 +1,6 @@
 "use client";
 
-import { useSelector } from "react-redux";
-
-import { RootState } from "@/store/store";
+import { useAppSelector } from "@/store/store";
 import SellerHomePageSlider from "@/components/seller-components/sliders/SellerHomePageSlider";
 import SellerInfoCard from "@/components/seller-components/cards/SellerInfoCard";
 import SellerActionsCard from "@/components/seller-components/main-page/SellerActionsCard";
@@ -13,10 +11,9 @@ import SellerCalendar from "@/components/seller-components/main-page/SellerCalen
 import SellerAnnouncementsCard from "@/components/seller-components/main-page/SellerAnnouncementsCard";
 import SellerInvoiceCard from "@/components/seller-components/main-page/SellerInvoiceCard";
 import SellerInnerContainer from "@/components/seller-components/containers/SellerInnerContainer";
+
 const SellerPage = () => {
-  const { SellerCompanyInfo } = useSelector(
-    (state: RootState) => state.SellerCompany
-  );
+  const { SellerCompanyInfo } = useAppSelector((state) => state.SellerCompany);
 
   if (!SellerCompanyInfo) {
     return <div>Loading...</div>; // Veriler henüz yüklenmediyse "Loading..." mesajı gösterelim

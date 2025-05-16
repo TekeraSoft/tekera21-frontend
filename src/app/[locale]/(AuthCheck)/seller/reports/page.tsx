@@ -30,6 +30,7 @@ export default function SellerReportsHomePage() {
                 <div className="text-sm text-muted-foreground">
                   Bugünkü Net Cirom:
                 </div>
+
                 <div className="text-xs text-muted-foreground">0 ₺</div>
               </div>
               <div className="text-4xl font-bold mt-2">0 ₺</div>

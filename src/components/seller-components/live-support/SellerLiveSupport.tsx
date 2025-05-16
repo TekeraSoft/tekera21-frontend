@@ -12,7 +12,7 @@ function SellerSupport() {
     <div className="fixed bottom-0 left-32">
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="outline">Canlı Destek</Button>
+          <Button variant="default">Canlı Destek</Button>
         </PopoverTrigger>
         <PopoverContent>Place content for the popover here.</PopoverContent>
       </Popover>
