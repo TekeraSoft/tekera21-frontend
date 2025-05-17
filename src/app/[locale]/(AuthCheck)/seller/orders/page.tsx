@@ -272,7 +272,7 @@ export default function SellerOrderManagement() {
           </div>
         )}
         <SellerInnerContainer>
-          <div className="mt-4 px-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="mt-4 px-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 border-b pb-4">
             <Input
               name="customerName"
               placeholder="Müşteri Adı"
@@ -353,7 +353,7 @@ export default function SellerOrderManagement() {
             </Popover>
           </div>
 
-          <div className="mt-4 flex justify-end gap-2">
+          <div className="mt-4 flex justify-end gap-2 ">
             <Button variant="outline" onClick={clearFilters}>
               Temizle
             </Button>

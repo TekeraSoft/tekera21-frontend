@@ -4,19 +4,26 @@ import SellerInnerContainer from "@/components/seller-components/containers/Sell
 import { useAppSelector } from "@/store/store";
 import { useParams } from "next/navigation";
 
-export const SellerHelpRequest = () => {
-  const { SellerRequestsBuyer } = useAppSelector(
+const SellerMyHelpRequestDetail = () => {
+  const { id } = useParams() as { id: string };
+
+  const { SellerRequestsCompany } = useAppSelector(
     (state) => state.SellerRequests
   );
 
-  const { id } = useParams() as { id: string };
-
-  const ticket: any = SellerRequestsBuyer.find(
-    (customer) => customer.id === id
-  );
+  const ticket: any = SellerRequestsCompany.find((ticket) => ticket.id === id);
   if (!ticket) {
     return <div>Ticket not found</div>;
   }
 
-  return <SellerInnerContainer>dfsfsdf</SellerInnerContainer>;
+  return (
+    <SellerInnerContainer>
+      <div>{ticket.id}</div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </SellerInnerContainer>
+  );
 };
+
+export default SellerMyHelpRequestDetail;

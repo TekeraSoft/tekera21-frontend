@@ -51,22 +51,16 @@ const menuItems: MenuItem[] = [
   },
   {
     key: "sellerSuperAdmin",
-    label: "Mağaza Bilgileri",
+    label: "Mağaza ",
 
     icon: <Store className="mr-2 h-4 w-4" />,
     requiredRole: "sellerSuperAdmin",
     subItems: [
       {
         key: "campaigns",
-        label: "Kampanyalar",
+        label: "Mağaza Bilgileri",
         requiredRole: "sellerSuperAdmin",
-        href: "/seller/adds/campaigns",
-      },
-      {
-        key: "performance",
-        label: "Performans",
-        href: "/seller/adds/performance",
-        requiredRole: "sellerSuperAdmin",
+        href: "/seller/company",
       },
     ],
   },

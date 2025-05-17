@@ -142,7 +142,7 @@ export default function SellerFavoritesAndViewsPage() {
             </div>
           </div>
 
-          <Table>
+          <Table className="border">
             <TableHeader>
               <TableRow>
                 <TableHead>Ürün Bilgileri</TableHead>

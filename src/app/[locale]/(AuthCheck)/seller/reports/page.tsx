@@ -268,7 +268,6 @@ export default function SellerReportsHomePage() {
                 to: new Date(2025, 4, 14),
               }}
             />
-            <Button variant="outline">Mega Mayıs</Button>
             <Button variant="outline" size="sm" className="gap-2">
               <Download className="h-4 w-4" />
               Excel İle İndir

@@ -1,5 +1,5 @@
 export interface SellerCompanyProps {
-  id: number;
+  id: string;
   name: string;
   email: string;
   logo: string;

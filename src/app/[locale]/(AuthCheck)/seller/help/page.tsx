@@ -1,5 +1,6 @@
 "use client";
 
+import { SellerHeLCreateTicketSenderInfoCard } from "@/components/seller-components/help/SellerHeLCreateTicketSenderInfoCard";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -28,6 +29,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { useAuthContext } from "@/context/AuthContext";
+import { useAppSelector } from "@/store/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
@@ -61,6 +63,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function SupportTicketForm() {
+  const { SellerCompanyInfo } = useAppSelector((state) => state.SellerCompany);
   const { userInfo: user } = useAuthContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -113,17 +116,30 @@ export default function SupportTicketForm() {
     }
   }
 
+  console.log(SellerCompanyInfo);
+
   return (
     <>
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl text-primary">
-            Destek Taleplerim
+          <CardTitle className="text-2xl text-primary underline underline-offset-8 flex gap-1 justify-start items-center">
+            Talep Oluştur
           </CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              {/* Sender Info Card Start */}
+
+              {SellerCompanyInfo && (
+                <SellerHeLCreateTicketSenderInfoCard
+                  user={user}
+                  SellerCompanyInfo={SellerCompanyInfo}
+                />
+              )}
+
+              {/* Sender Info Card End */}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
                   control={form.control}
@@ -169,7 +185,6 @@ export default function SupportTicketForm() {
                   )}
                 />{" "}
               </div>
-
               <FormField
                 control={form.control}
                 name="aciklama"
@@ -187,29 +202,6 @@ export default function SupportTicketForm() {
                   </FormItem>
                 )}
               />
-
-              <div className="bg-gray-50 p-4 rounded-md">
-                <h3 className="font-medium text-sm mb-2">Gönderen Bilgileri</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="font-medium">Ad Soyad:</span>{" "}
-                    {user?.name || "Kullanıcı Adı"}
-                  </div>
-                  <div>
-                    <span className="font-medium">E-posta:</span>{" "}
-                    {user?.email || "kullanici@ornek.com"}
-                  </div>
-                  <div>
-                    <span className="font-medium">Mağaza:</span>{" "}
-                    {user?.store || "Mağaza Adı"}
-                  </div>
-                  <div>
-                    <span className="font-medium">Kullanıcı ID:</span>{" "}
-                    {user?.id || "USR12345"}
-                  </div>
-                </div>
-              </div>
-
               <CardFooter className="flex justify-between px-0">
                 <Button
                   variant="outline"
