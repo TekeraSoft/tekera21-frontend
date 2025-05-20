@@ -19,16 +19,16 @@ export function SellerHelpNavBar() {
     },
   ];
   return (
-    <div className="border-b">
+    <div className="border-b ">
       <div className="flex h-10 items-center px-4">
         {tabs.map((tab) => (
           <Link
             key={tab.href}
             href={tab.href}
             className={cn(
-              "inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 relative",
+              "inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-sm font-medium transition-all focus-visible:outline-none  relative",
               pathname === tab.href
-                ? "text-foreground border-b-2 border-primary"
+                ? "text-foreground border-b-2 border-primary "
                 : "text-muted-foreground hover:text-foreground"
             )}
           >

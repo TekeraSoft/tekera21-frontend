@@ -1,4 +1,4 @@
-import SellerSubHeader from "@/components/seller-components/layout/header/SellerSubHeader";
+import SellerSubHeader from "@/components/seller-components/layout/Header/SellerSubHeader";
 import SellerProductList from "@/components/seller-components/product/list-page/SellerProductList";
 
 export default function SellerProductsPage() {
