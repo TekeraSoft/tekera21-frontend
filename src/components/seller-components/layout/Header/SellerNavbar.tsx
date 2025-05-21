@@ -22,7 +22,6 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 
-import type { MenuItem } from "../../../../../types/SellerTypes/SellerNavbarTypes";
 import { useAppSelector } from "@/store/store";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
@@ -31,10 +30,11 @@ import { Button } from "@/components/ui/button";
 import SellerNavbarMobile from "./SellerNavbarMobile";
 import { useState } from "react";
 import RestrictedAccessDialog from "./RestrictedAccessDialog";
+import { SellerMenuItem } from "../../../../../types/SellerTypes/SellerNavbarTypes";
 
 // Define the menu structure
 
-const menuItems: MenuItem[] = [
+const menuItems: SellerMenuItem[] = [
   {
     key: "user",
     label: "Kullanıcı",

@@ -12,16 +12,16 @@ import React, { useState } from "react";
 
 import { cn } from "@/lib/utils";
 import { NotificationPopover } from "./Popovers/SellerNotificationPopover";
-import { MenuItem } from "../../../../../types/SellerTypes/SellerNavbarTypes";
 import SellerCompanyPopover from "./Popovers/SellerCompanyPopoverMobile";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { useAuthContext } from "@/context/AuthContext";
+import { SellerMenuItem } from "../../../../../types/SellerTypes/SellerNavbarTypes";
 
 // import SellerMobileSearchButton from "./NavButtons/SellerMobileSearchButton";
 
 interface SellerNavbarMobileProps {
-  menuItems: MenuItem[];
+  menuItems: SellerMenuItem[];
 }
 
 function SellerNavbarMobile({ menuItems }: SellerNavbarMobileProps) {

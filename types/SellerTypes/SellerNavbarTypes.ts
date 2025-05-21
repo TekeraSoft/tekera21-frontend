@@ -9,11 +9,19 @@ export type User = {
 };
 
 // Define the menu structure with roles
-export type MenuItem = {
+export type SellerMenuItem = {
   key: string;
   label: string;
   icon?: React.ReactNode;
   requiredRole: string;
+  subItems?: SubMenuItem[];
+};
+
+// Define the menu structure with roles
+export type BuyerMenuItem = {
+  key: string;
+  label: string;
+  icon?: React.ReactNode;
   subItems?: SubMenuItem[];
 };
 
