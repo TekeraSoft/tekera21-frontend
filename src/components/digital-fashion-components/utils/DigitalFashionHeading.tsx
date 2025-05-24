@@ -8,6 +8,7 @@ type HeadingProps = {
   align?: string; // örn: "text-left md:text-center"
   variant?: "default" | "primary" | "secondary" | "white";
   className?: string;
+  font?: string;
 };
 
 const variantMap = {
@@ -23,6 +24,7 @@ export default function DigitalFashionHeading({
   size = "text-2xl", // responsive yazılabilir: "text-2xl md:text-4xl"
   align = "text-left", // responsive yazılabilir: "text-left md:text-center"
   variant = "default",
+  font,
   className,
 }: HeadingProps) {
   return (
@@ -32,7 +34,8 @@ export default function DigitalFashionHeading({
         size,
         variantMap[variant],
         align,
-        className
+        className,
+        font
       )}
     >
       {children}

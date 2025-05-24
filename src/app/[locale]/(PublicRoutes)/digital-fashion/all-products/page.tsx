@@ -1,238 +1,351 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Filter, ChevronDown, X } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { setBuyerProducts } from "@/store/buyerSlices/product/productSlice";
 import { BuyerProductsData } from "@/data/BuyerProductsData";
-import DigitalFashionBuyerProductCard from "@/components/digital-fashion-components/product/DigitalFashionBuyerProductCard";
 
-export default function ProductsPage() {
+import DigitalFashionBuyerProductCard from "@/components/digital-fashion-components/product/DigitalFashionBuyerProductCard";
+import DigitalFashionHeading from "@/components/digital-fashion-components/utils/DigitalFashionHeading";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Separator } from "@/components/ui/separator";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
+import { Funnel, ListFilter, PackageX, X } from "lucide-react";
+
+function DigitalFashionAllProduct() {
   const dispatch = useAppDispatch();
+  const { products } = useAppSelector((state) => state.DigitalFashionProducts);
+
+  const [sortBy, setSortBy] = useState<string | null>("featured");
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+
+  const allColors = [
+    "black",
+    "red",
+    "white",
+    "colorful",
+    "purple",
+    "cream",
+    "brown",
+    "blue",
+    "green",
+  ];
 
   useEffect(() => {
     dispatch(setBuyerProducts(BuyerProductsData));
   }, []);
 
-  const { products } = useAppSelector((state) => state.buyerProducts);
-  const [filterOpen, setFilterOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [sortBy, setSortBy] = useState<string>("featured");
+  const toggleColor = (color: string) => {
+    setSelectedColors((prev) =>
+      prev.includes(color) ? prev.filter((c) => c !== color) : [...prev, color]
+    );
+  };
 
-  // Filtreleme işlemi
-  const filteredProducts = selectedCategory
-    ? products.filter((product) => product.category === selectedCategory)
-    : products;
+  const filteredProducts = products.filter((product) => {
+    if (selectedColors.length === 0) return true;
+    return selectedColors.includes(product.color?.toLowerCase());
+  });
 
-  // Sıralama işlemi
   const sortedProducts = [...filteredProducts].sort((a, b) => {
-    if (sortBy === "price-low") {
-      return a.price - b.price;
-    } else if (sortBy === "price-high") {
-      return b.price - a.price;
-    }
-    // Varsayılan olarak öne çıkanlar
+    if (sortBy === "price-low") return a.price - b.price;
+    if (sortBy === "price-high") return b.price - a.price;
     return 0;
   });
 
   return (
-    <div className="bg-white">
-      <div>
-        {/* Mobile filter dialog */}
-        <div
-          className={`relative z-40 lg:hidden ${
-            filterOpen ? "hidden" : "hidden"
-          }`}
-        >
-          <div className="fixed inset-0 z-40 flex">
-            <div className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
-              <div className="flex items-center justify-between px-4">
-                <h2 className="text-lg font-medium text-gray-900">Filtreler</h2>
-                <button
-                  type="button"
-                  className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
-                  onClick={() => setFilterOpen(false)}
-                >
-                  <span className="sr-only">Filtreleri kapat</span>
-                  <X className="h-6 w-6" />
-                </button>
-              </div>
+    <div className="flex flex-col gap-2">
+      <DigitalFashionHeading
+        as="h2"
+        size="text-2xl md:text-3xl"
+        align="text-left md:text-center"
+        variant="default"
+      >
+        Tüm Ürünler
+      </DigitalFashionHeading>
 
-              {/* Filters */}
-              <div className="mt-4 border-t border-gray-200">
-                <h3 className="sr-only">Kategoriler</h3>
-                <ul className="px-2 py-3 font-medium text-gray-900">
-                  <li>
-                    <button
-                      onClick={() => setSelectedCategory(null)}
-                      className={`block px-2 py-3 ${
-                        selectedCategory === null ? "text-purple-600" : ""
-                      }`}
+      <Separator className="bg-primary" />
+
+      {/* Mobil filtre ve sıralama butonları */}
+      <div className="flex gap-2 lg:hidden">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant={"primary"} className="flex gap-1">
+              <Funnel size={20} />
+              Filtrele
+            </Button>
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle className="text-center text-xl">FİLTRE</SheetTitle>
+              <Separator className="bg-primary" />
+            </SheetHeader>
+
+            <div className="flex flex-col gap-4 mt-2">
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="color-filter">
+                  <AccordionTrigger>
+                    <DigitalFashionHeading
+                      as="h2"
+                      size="text-xl"
+                      align="text-left"
+                      variant="default"
+                      className="font-semibold"
                     >
-                      Tüm Ürünler
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => setSelectedCategory("Erkek")}
-                      className={`block px-2 py-3 ${
-                        selectedCategory === "Erkek" ? "text-purple-600" : ""
-                      }`}
-                    >
-                      Erkek T-Shirtler
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => setSelectedCategory("Kadın")}
-                      className={`block px-2 py-3 ${
-                        selectedCategory === "Kadın" ? "text-purple-600" : ""
-                      }`}
-                    >
-                      Kadın T-Shirtler
-                    </button>
-                  </li>
-                </ul>
-              </div>
+                      Renk
+                    </DigitalFashionHeading>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="flex flex-col gap-2">
+                      {allColors.map((color) => (
+                        <div
+                          key={color}
+                          className="flex items-center space-x-2"
+                        >
+                          <Checkbox
+                            id={color}
+                            checked={selectedColors.includes(color)}
+                            onCheckedChange={() => toggleColor(color)}
+                          />
+                          <label
+                            htmlFor={color}
+                            className="text-sm font-normal text-gray-700 cursor-pointer capitalize"
+                          >
+                            {color}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </div>
-          </div>
-        </div>
+          </SheetContent>
+        </Sheet>
 
-        <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-              Tüm Ürünler
-            </h1>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant={"primary"} className="flex gap-1">
+              <ListFilter size={20} />
+              Sırala
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-64 p-0 z-[999]">
+            <Card className="rounded-md shadow-md">
+              <CardContent className="p-4">
+                <div className="flex flex-col gap-3">
+                  <h4 className="text-sm font-medium text-gray-700">
+                    Fiyat Sıralaması
+                  </h4>
 
-            <div className="flex items-center">
-              <div className="relative inline-block text-left">
-                <div>
-                  <button
-                    type="button"
-                    className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
-                    onClick={() => setFilterOpen(!filterOpen)}
-                  >
-                    <Filter className="mr-2 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" />
-                    Filtrele
-                  </button>
-                </div>
-              </div>
-
-              <div className="ml-4 relative inline-block text-left">
-                <div>
-                  <button
-                    type="button"
-                    className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
-                  >
-                    Sırala
-                    <ChevronDown
-                      className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                      aria-hidden="true"
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="price-low"
+                      checked={sortBy === "price-low"}
+                      onCheckedChange={() =>
+                        setSortBy(sortBy === "price-low" ? null : "price-low")
+                      }
                     />
-                  </button>
-                </div>
-                <div className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  <div className="py-1">
-                    <button
-                      onClick={() => setSortBy("featured")}
-                      className={`block px-4 py-2 text-sm ${
-                        sortBy === "featured"
-                          ? "font-medium text-gray-900"
-                          : "text-gray-500"
-                      }`}
+                    <label
+                      htmlFor="price-low"
+                      className="text-sm font-normal text-gray-700 cursor-pointer"
                     >
-                      Öne Çıkanlar
-                    </button>
-                    <button
-                      onClick={() => setSortBy("price-low")}
-                      className={`block px-4 py-2 text-sm ${
-                        sortBy === "price-low"
-                          ? "font-medium text-gray-900"
-                          : "text-gray-500"
-                      }`}
+                      Düşükten Yükseğe
+                    </label>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="price-high"
+                      checked={sortBy === "price-high"}
+                      onCheckedChange={() =>
+                        setSortBy(sortBy === "price-high" ? null : "price-high")
+                      }
+                    />
+                    <label
+                      htmlFor="price-high"
+                      className="text-sm font-normal text-gray-700 cursor-pointer"
                     >
-                      Fiyat: Düşükten Yükseğe
-                    </button>
-                    <button
-                      onClick={() => setSortBy("price-high")}
-                      className={`block px-4 py-2 text-sm ${
-                        sortBy === "price-high"
-                          ? "font-medium text-gray-900"
-                          : "text-gray-500"
-                      }`}
-                    >
-                      Fiyat: Yüksekten Düşüğe
-                    </button>
+                      Yüksekten Düşüğe
+                    </label>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
+              </CardContent>
+            </Card>
+          </PopoverContent>
+        </Popover>
 
-          <section aria-labelledby="products-heading" className="pb-24 pt-6">
-            <h2 id="products-heading" className="sr-only">
-              Ürünler
-            </h2>
+        <Button variant={"primary"} className="flex gap-1">
+          <X size={20} /> Filtreleri Temizle
+        </Button>
+      </div>
+      <Separator className="bg-primary lg:hidden" />
+      <div className="flex  justify-between items-start gap-5">
+        <div className="hidden lg:block min-w-72 max-w-96 bg-slate-100 rounded-md p-4">
+          {/* Filtre Başlığı ve Separator */}
+          <h3 className="text-lg font-semibold mb-2 text-center">FİLTRE</h3>
+          <Separator className="bg-primary " />
 
-            <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-              {/* Filters */}
-              <div className="hidden lg:block">
-                <h3 className="text-lg font-medium text-gray-900">
-                  Kategoriler
-                </h3>
-                <ul className="mt-4 space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
-                  <li>
-                    <button
-                      onClick={() => setSelectedCategory(null)}
-                      className={`${
-                        selectedCategory === null ? "text-purple-600" : ""
-                      }`}
-                    >
-                      Tüm Ürünler
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => setSelectedCategory("Erkek")}
-                      className={`${
-                        selectedCategory === "Erkek" ? "text-purple-600" : ""
-                      }`}
-                    >
-                      Erkek T-Shirtler
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => setSelectedCategory("Kadın")}
-                      className={`${
-                        selectedCategory === "Kadın" ? "text-purple-600" : ""
-                      }`}
-                    >
-                      Kadın T-Shirtler
-                    </button>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Product grid */}
-              <div className="lg:col-span-3">
-                <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
-                  {sortedProducts.map((product, index: number) => (
-                    <DigitalFashionBuyerProductCard
-                      key={index}
-                      image={product.images[0]}
-                      category={product.category}
-                      slug={product.slug}
-                      name={product.name}
-                      price={product.price}
-                    />
+          {/* Accordion - Renk Filtreleri */}
+          <Accordion
+            type="single"
+            collapsible
+            defaultValue="color-filter"
+            className="w-full mb-6"
+          >
+            <AccordionItem value="color-filter">
+              <AccordionTrigger>
+                <DigitalFashionHeading
+                  as="h2"
+                  size="text-xl"
+                  align="text-left"
+                  variant="default"
+                  className="font-semibold"
+                >
+                  Renk
+                </DigitalFashionHeading>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="flex flex-col gap-2 mt-2">
+                  {allColors.map((color) => (
+                    <div key={color} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`color-${color}`}
+                        checked={selectedColors.includes(color)}
+                        onCheckedChange={() => toggleColor(color)}
+                      />
+                      <label
+                        htmlFor={`color-${color}`}
+                        className="text-sm font-normal text-gray-700 cursor-pointer capitalize"
+                      >
+                        {color}
+                      </label>
+                    </div>
                   ))}
                 </div>
-              </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+
+          {/* Accordion - Sıralama */}
+          <Accordion
+            type="single"
+            collapsible
+            defaultValue=""
+            className="w-full"
+          >
+            <AccordionItem value="sort-filter">
+              <AccordionTrigger>
+                <DigitalFashionHeading
+                  as="h2"
+                  size="text-xl"
+                  align="text-left"
+                  variant="default"
+                  className="font-semibold"
+                >
+                  Sırala
+                </DigitalFashionHeading>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="flex flex-col gap-3 mt-2">
+                  <h2 className="font-semibold">Fiyat</h2>
+                  <Separator className="bg-primary w-1/2" />
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="price-low-lg"
+                      checked={sortBy === "price-low"}
+                      onCheckedChange={() =>
+                        setSortBy(sortBy === "price-low" ? null : "price-low")
+                      }
+                    />
+                    <label
+                      htmlFor="price-low-lg"
+                      className="text-xs font-normal text-gray-700 cursor-pointer"
+                    >
+                      Düşükten Yükseğe
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="price-high-lg"
+                      checked={sortBy === "price-high"}
+                      onCheckedChange={() =>
+                        setSortBy(sortBy === "price-high" ? null : "price-high")
+                      }
+                    />
+                    <label
+                      htmlFor="price-high-lg"
+                      className="text-xs font-normal text-gray-700 cursor-pointer"
+                    >
+                      Yüksekten Düşüğe
+                    </label>
+                  </div>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
+
+        {/* Ürün listesi */}
+        <div className="grid gap-x-6 gap-y-10 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:gap-x-8">
+          {filteredProducts?.length || sortedProducts?.length ? (
+            (filteredProducts.length > 0
+              ? filteredProducts
+              : sortedProducts
+            ).map((product, index) => (
+              <DigitalFashionBuyerProductCard
+                key={index}
+                image={product.images[0]}
+                category={product.category}
+                slug={product.slug}
+                name={product.name}
+                price={product.price}
+              />
+            ))
+          ) : (
+            <div className="col-span-full flex flex-col items-center justify-center text-center text-gray-600 py-10">
+              <PackageX size={48} className="text-primary mb-4" />
+              <h2 className="text-lg font-semibold">Ürün bulunamadı</h2>
+              <p className="text-sm text-gray-500 mt-2">
+                Seçtiğiniz filtrelerle eşleşen bir ürün bulunamadı. Farklı
+                filtreler deneyin.
+              </p>
+              <Button
+                variant="outline"
+                className="mt-4"
+                onClick={() => {
+                  // Filtreleri sıfırlamak için örnek bir işlem
+                  setSelectedColors([]);
+                  setSortBy(null);
+                }}
+              >
+                Filtreleri Sıfırla
+              </Button>
             </div>
-          </section>
-        </main>
+          )}
+        </div>
       </div>
     </div>
   );
 }
+
+export default DigitalFashionAllProduct;

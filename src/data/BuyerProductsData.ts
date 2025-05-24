@@ -6,6 +6,7 @@ export const BuyerProductsData = [
     description: "Ürün 1 açıklaması",
     price: 199.99,
     category: "Kadın",
+    color: "white",
     images: [
       "/products/product1/1.webp",
       "/products/product1/2.webp",
@@ -20,6 +21,7 @@ export const BuyerProductsData = [
     description: "Ürün 2 açıklaması",
     price: 249.99,
     category: "Erkek",
+    color: "black",
     images: [
       "/products/product2/1.webp",
       "/products/product2/2.webp",
@@ -34,6 +36,7 @@ export const BuyerProductsData = [
     description: "Ürün 3 açıklaması",
     price: 179.99,
     category: "Kadın",
+    color: "gray",
     images: [
       "/products/product3/1.webp",
       "/products/product3/2.webp",
@@ -48,6 +51,7 @@ export const BuyerProductsData = [
     description: "Ürün 4 açıklaması",
     price: 219.99,
     category: "Erkek",
+    color: "cream",
     images: [
       "/products/product4/1.webp",
       "/products/product4/2.webp",
@@ -62,6 +66,7 @@ export const BuyerProductsData = [
     description: "Ürün 5 açıklaması",
     price: 189.99,
     category: "Kadın",
+    color: "black",
     images: [
       "/products/product5/1.webp",
       "/products/product5/2.webp",
@@ -76,6 +81,8 @@ export const BuyerProductsData = [
     description: "Ürün 6 açıklaması",
     price: 209.99,
     category: "Erkek",
+    color: "black",
+
     images: [
       "/products/product6/1.webp",
       "/products/product6/2.webp",
@@ -90,6 +97,8 @@ export const BuyerProductsData = [
     description: "Ürün 7 açıklaması",
     price: 159.99,
     category: "Kadın",
+    color: "red",
+
     images: [
       "/products/product7/1.webp",
       "/products/product7/2.webp",
@@ -104,6 +113,7 @@ export const BuyerProductsData = [
     description: "Ürün 8 açıklaması",
     price: 229.99,
     category: "Erkek",
+    color: "purple",
     images: [
       "/products/product8/1.webp",
       "/products/product8/2.webp",
@@ -118,6 +128,8 @@ export const BuyerProductsData = [
     description: "Ürün 9 açıklaması",
     price: 199.99,
     category: "Kadın",
+    color: "colourful",
+
     images: [
       "/products/product9/1.webp",
       "/products/product9/2.webp",
@@ -132,6 +144,7 @@ export const BuyerProductsData = [
     description: "Ürün 10 açıklaması",
     price: 269.99,
     category: "Erkek",
+    color: "brown",
     images: [
       "/products/product10/1.webp",
       "/products/product10/2.webp",

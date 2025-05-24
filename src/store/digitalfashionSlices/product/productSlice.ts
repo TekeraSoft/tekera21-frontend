@@ -27,7 +27,7 @@ const initialState: ProductState = {
 };
 
 // Slice oluştur
-const buyerProductSlice = createSlice({
+const DigitalFashionBuyerProductSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
@@ -48,6 +48,6 @@ const buyerProductSlice = createSlice({
 
 // Export actions ve reducer
 export const { setBuyerProducts, setBuyerLoading, setBuyerError } =
-  buyerProductSlice.actions;
+  DigitalFashionBuyerProductSlice.actions;
 
-export default buyerProductSlice.reducer;
+export default DigitalFashionBuyerProductSlice.reducer;
