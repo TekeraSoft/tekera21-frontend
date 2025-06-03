@@ -24,7 +24,6 @@ interface IData {
 export default async function CreateCategory() {
   const data: IData = await getCategories();
   const categories = data?.content || [];
-  console.log("data.content", data?.content);
 
   return (
     <div className="min-h-screen bg-background p-6">

@@ -1,0 +1,32 @@
+{
+  "variants": [
+    {
+      "modelName": "Test1",
+      "modelCode": "Test1Code",
+      "price": 5555,
+      "stock": 550,
+      "sku": "SKU123",
+      "barcode": "98989898",
+      "attributes": [
+        {
+          "key": "color",
+          "value": "White"
+        }
+      ]
+    },
+    {
+      "modelName": "ipone88",
+      "modelCode": "ipo88",
+      "price": 88,
+      "stock": 88,
+      "sku": "88888",
+      "barcode": "88888",
+      "attributes": [
+        {
+          "key": "color",
+          "value": "red"
+        }
+      ]
+    }
+  ]
+}

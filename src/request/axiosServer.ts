@@ -24,7 +24,11 @@ axiosInstance.interceptors.response.use(
   },
   async (error) => {
     if (error) {
-      throw new Error(error);
+      console.log("error in axios response interceptor", error.response.data);
+      throw new Error(
+        error?.response?.data ||
+          "An error occurred while processing your request."
+      );
     }
 
     return Promise.reject(error);

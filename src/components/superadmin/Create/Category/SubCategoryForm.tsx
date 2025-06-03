@@ -100,7 +100,7 @@ export function CreateSubcategoryForm({
       if (result.success) {
         toast({
           title: "Success",
-          description: "Subcategory created successfully",
+          description: result.message || "Subcategory created successfully",
         });
         formRef.current?.reset();
         setSelectedImage(null);
@@ -109,7 +109,7 @@ export function CreateSubcategoryForm({
       } else {
         toast({
           title: "Error",
-          description: result.error || "Failed to create subcategory",
+          description: result.message || "Failed to create subcategory",
           variant: "destructive",
         });
       }

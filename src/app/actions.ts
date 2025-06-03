@@ -2,7 +2,7 @@
 
 import axiosInstance from "@/request/axiosServer";
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 export async function getUser() {
   const cookieStore = await cookies();
@@ -34,7 +34,7 @@ export async function logOut() {
 export async function getCategories() {
   try {
     const data = await axiosInstance.get(`/super-admin/get-all-category`);
-    console.log("data", data.data);
+
     if (!data) {
       return [];
     }
@@ -43,31 +43,66 @@ export async function getCategories() {
     console.log("getCategoriesError:", error);
   }
 }
-export async function getProducts() {
+export async function getProducts(page: number = 0, size: number = 20) {
   try {
-    const data = await axiosInstance.get(`/products`);
+    const { data } = await axiosInstance.get(
+      `/product/get-all-product?page=${page}&size=${size}`
+    );
+    return { success: true, message: data.message, category: data.data };
   } catch (error) {
-    console.error("getCategoriesError:", error);
+    console.error("getProducts error:", error);
+    return { success: false, message: error || "Failed to get category" };
   }
 }
+
 export async function createCategory(formData: FormData) {
   try {
-    const data = await axiosInstance.post(
+    const { data } = await axiosInstance.post(
       `/super-admin/create-category`,
-      formData
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
-    return { success: true, category: data.data };
+    console.log("data data data", data);
+
+    revalidatePath("/");
+    return { success: true, message: data.message, category: data.data };
   } catch (error) {
     console.error("getCategoriesError:", error);
-    return { success: false, error: "Failed to create subcategory" };
+    return { success: false, message: error || "Failed to create category" };
   }
 }
 export async function createProduct(formData: FormData) {
   try {
-    const data = await axiosInstance.post(`/product`, formData);
+    const dataform = formData.get("data");
+    const images = formData.getAll("images");
+
+    console.log("datafırnorm:", dataform);
+    console.log("images:", images);
+    if (!dataform || !images) {
+      return {
+        success: false,
+        message: "Data and images are required",
+      };
+    }
+    const { data } = await axiosInstance.post(
+      `/company/create-product`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    revalidatePath("/");
+
+    return { success: true, message: data.message, product: data.data };
   } catch (error) {
     console.error("getCategoriesError:", error);
-    return { success: false, error: "Failed to create subcategory" };
+    return { success: false, message: error || "Failed to create category" };
   }
 }
 
@@ -77,29 +112,31 @@ export async function createSubcategory(formData: FormData) {
     const name = formData.get("name") as string;
     const image = formData.get("image") as File;
 
-    if (!categoryId || !name || name.trim() === "") {
+    console.log("categoryId:", categoryId);
+    console.log("name:", name);
+    console.log("image:", image);
+
+    if (!categoryId || !name || name.trim() === "" || !image) {
       return {
         success: false,
         error: "Category ID and subcategory name are required",
       };
     }
 
-    let imageUrl = "/placeholder.svg?height=32&width=32";
-
-    const newSubcategory = {
-      id: `${categoryId}-${name
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9-]/g, "")}`,
-      name: name.trim(),
-      count: 0,
-      image: imageUrl,
-    };
+    const { data } = await axiosInstance.post(
+      `/super-admin/create-sub-category`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
 
     revalidatePath("/");
-    return { success: true, subcategory: newSubcategory };
+    return { success: true, message: data.message, category: data };
   } catch (error) {
     console.error("Error creating subcategory:", error);
-    return { success: false, error: "Failed to create subcategory" };
+    return { success: false, message: error || "Failed to create subcategory" };
   }
 }

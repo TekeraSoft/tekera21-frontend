@@ -74,7 +74,7 @@ export function CreateCategoryForm() {
       if (result.success) {
         toast({
           title: "Success",
-          description: "Category created successfully",
+          description: result.message || "Category created successfully",
         });
         formRef.current?.reset();
         setSelectedImage(null);
@@ -82,7 +82,7 @@ export function CreateCategoryForm() {
       } else {
         toast({
           title: "Error",
-          description: result.error || "Failed to create category",
+          description: result.message || "Failed to create category",
           variant: "destructive",
         });
       }
@@ -127,7 +127,7 @@ export function CreateCategoryForm() {
               <div className="flex-1">
                 <Input
                   id="category-image"
-                  name="image"
+                  name="file"
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
