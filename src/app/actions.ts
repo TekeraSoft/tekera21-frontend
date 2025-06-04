@@ -140,3 +140,37 @@ export async function createSubcategory(formData: FormData) {
     return { success: false, message: error || "Failed to create subcategory" };
   }
 }
+
+export async function createTargetPicture(formData: FormData) {
+  try {
+    const targetPicture = formData.get("image");
+    const video = formData.getAll("defaultContent");
+    const productId = formData.getAll("productId");
+
+    console.log("targetPicture:", targetPicture);
+
+    // console.log("datafırnorm:", targetPicture);
+    // console.log("images:", video);
+    if (!targetPicture || !video || !productId) {
+      return {
+        success: false,
+        message: "Data and images are required",
+      };
+    }
+    const { data } = await axiosInstance.post(
+      `/digital-fashion-admin/create-target-pic`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    revalidatePath("/");
+
+    return { success: true, message: data.message, product: data.data };
+  } catch (error) {
+    console.error("getCategoriesError:", error);
+    return { success: false, message: error || "Failed to create category" };
+  }
+}
