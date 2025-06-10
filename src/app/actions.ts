@@ -33,7 +33,7 @@ export async function logOut() {
 }
 export async function getCategories() {
   try {
-    const data = await axiosInstance.get(`/super-admin/get-all-category`);
+    const data = await axiosInstance.get(`/super-admin/getAllCategory`);
 
     if (!data) {
       return [];
@@ -66,12 +66,11 @@ export async function createCategory(formData: FormData) {
         },
       }
     );
-    console.log("data data data", data);
 
     revalidatePath("/");
     return { success: true, message: data.message, category: data.data };
   } catch (error) {
-    console.error("getCategoriesError:", error);
+    console.log("getproducts:", error);
     return { success: false, message: error || "Failed to create category" };
   }
 }
@@ -89,7 +88,7 @@ export async function createProduct(formData: FormData) {
       };
     }
     const { data } = await axiosInstance.post(
-      `/company/create-product`,
+      `/company/createProduct`,
       formData,
       {
         headers: {
@@ -101,7 +100,7 @@ export async function createProduct(formData: FormData) {
 
     return { success: true, message: data.message, product: data.data };
   } catch (error) {
-    console.error("getCategoriesError:", error);
+    console.log("create Product error:", error);
     return { success: false, message: error || "Failed to create category" };
   }
 }
@@ -147,10 +146,6 @@ export async function createTargetPicture(formData: FormData) {
     const video = formData.getAll("defaultContent");
     const productId = formData.getAll("productId");
 
-    console.log("targetPicture:", targetPicture);
-
-    // console.log("datafırnorm:", targetPicture);
-    // console.log("images:", video);
     if (!targetPicture || !video || !productId) {
       return {
         success: false,
@@ -170,7 +165,7 @@ export async function createTargetPicture(formData: FormData) {
 
     return { success: true, message: data.message, product: data.data };
   } catch (error) {
-    console.error("getCategoriesError:", error);
+    console.log("create target picture error:", error);
     return { success: false, message: error || "Failed to create category" };
   }
 }

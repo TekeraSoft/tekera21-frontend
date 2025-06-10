@@ -6,23 +6,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Category } from "../../../../../types/AdminTypes/category";
+import { ICategoryData } from "../../../../../types/AdminTypes/category";
 import { CategoryNavigation } from "./navigation";
 import { CreateCategoryForm } from "./CategoryForm";
 import { CreateSubcategoryForm } from "./SubCategoryForm";
 import { getCategories } from "@/app/actions";
 
-interface IData {
-  content: Category[];
-  page: {
-    size: number;
-    number: number;
-    totalElements: number;
-    totalPages: number;
-  };
-}
 export default async function CreateCategory() {
-  const data: IData = await getCategories();
+  const data: ICategoryData = await getCategories();
   const categories = data?.content || [];
 
   return (
@@ -96,13 +87,13 @@ export default async function CreateCategory() {
                         <div>
                           <h3 className="font-semibold">{category.name}</h3>
                           <p className="text-sm text-muted-foreground">
-                            {category.subcategories?.length} subcategories
+                            {category.subCategories?.length} subcategories
                           </p>
                         </div>
                       </div>
-                      {category.subcategories?.length > 0 && (
+                      {category.subCategories?.length > 0 && (
                         <div className="ml-11 space-y-1">
-                          {category?.subcategories?.map((sub) => (
+                          {category?.subCategories?.map((sub) => (
                             <div
                               key={sub.id}
                               className="flex items-center gap-2 text-sm text-muted-foreground"

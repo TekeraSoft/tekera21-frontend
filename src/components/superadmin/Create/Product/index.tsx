@@ -26,6 +26,9 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { createProduct } from "@/app/actions";
+import { ICategory } from "../../../../../types/AdminTypes/category";
+import ImageView from "@/components/shared/ImageView";
+import { SubCategoriesSelect } from "./SubCategoriesSelect";
 
 type ProductFormData = {
   name?: string;
@@ -50,7 +53,11 @@ type ProductFormData = {
   }[];
 };
 
-export default function ProductCreateForm() {
+export default function ProductCreateForm({
+  categories,
+}: {
+  categories: ICategory[];
+}) {
   const [variantImages, setVariantImages] = useState<{ [key: number]: File[] }>(
     {}
   );
@@ -66,22 +73,12 @@ export default function ProductCreateForm() {
     defaultValues: {
       currencyType: "TRY",
       productType: "PHYSICAL",
-      companyId: "9390355b-bf31-47c8-88d1-dc91451df49b",
-      categoryId: "912844d0-f9ac-4f77-bd1f-2db9be84ea07",
-      tags: [{ value: "telefon" }],
-      attributes: [{ key: "guarante", value: "w yıl" }],
-      subCategories: [{ value: "76af090e-91e2-4c78-b892-3a4064df266e" }],
-      variants: [
-        {
-          modelName: "Test1",
-          modelCode: "Test1Code",
-          price: 5555,
-          stock: 550,
-          sku: "SKU123",
-          barcode: "98989898",
-          attributes: [{ key: "", value: "" }],
-        },
-      ],
+      companyId: "",
+      categoryId: "",
+      tags: [],
+      attributes: [],
+      subCategories: [],
+      variants: [],
     },
   });
 
@@ -135,97 +132,7 @@ export default function ProductCreateForm() {
         attributes: variant.attributes.filter((attr) => attr.key && attr.value),
       })),
     };
-    console.log("variantImages", variantImages);
-    console.log("formattedData", formattedData);
-    const sample = {
-      currencyType: "TRY",
-      productType: "PHYSICAL",
-      tags: ["telefon", "samsung"],
-      attributes: [
-        { key: "guarante", value: "2 Yıl" },
-        { key: "material", value: "Mesh" },
-      ],
-      subCategories: ["2df9eb55-68d7-4126-9335-2706db488955"],
-      variants: [
-        {
-          modelName: "ipone beyaz",
-          modelCode: "byz256",
-          price: 5555,
-          stock: 5555,
-          sku: "ip65454",
-          barcode: "5454545",
-          attributes: [
-            {
-              key: "color",
-              value: "beyaz",
-            },
-          ],
-        },
-        {
-          modelName: "ipone 555",
-          modelCode: "black",
-          price: 5855,
-          stock: 555,
-          sku: "sku-1121",
-          barcode: "54544877",
-          attributes: [
-            {
-              key: "color",
-              value: "siyah",
-            },
-          ],
-        },
-      ],
-      name: "ipone",
-      code: "ipone",
-      brandName: "ipone",
-      companyId: "551f8828-b638-467d-b150-ad1aa36216b6",
-      description: "desr",
-      categoryId: "93999be6-f3bd-4623-83a4-84176d05cd1e",
-    };
 
-    const samplePostman = {
-      name: "Beyaz T-shirt",
-      code: "A2991",
-      brandName: "Nike",
-      description: "High-quality mobile phone.",
-      currencyType: "TRY",
-      productType: "PHYSICAL",
-      companyId: "551f8828-b638-467d-b150-ad1aa36216b6",
-      tags: ["tech", "mobility"],
-      attributes: [
-        { key: "guarante", value: "2 Yıl" },
-        { key: "material", value: "Mesh" },
-      ],
-      categoryId: "93999be6-f3bd-4623-83a4-84176d05cd1e",
-      subCategories: ["2df9eb55-68d7-4126-9335-2706db488955"],
-      variants: [
-        {
-          modelName: "BLUE-123",
-          modelCode: "SPACEGRY256",
-          price: 44.9,
-          stock: 15,
-          sku: "SPRT123-RED",
-          barcode: "8680000000011",
-          attributes: [
-            { key: "cpu", value: "Apple Silicon" },
-            { key: "color", value: "Blue" },
-          ],
-        },
-        {
-          modelName: "WHITE-123",
-          modelCode: "SPACEGRY256",
-          price: 35.0,
-          stock: 10,
-          sku: "SPRT123-BLUE",
-          barcode: "8680000000012",
-          attributes: [
-            { key: "cpu", value: "Apple Slycon" },
-            { key: "color", value: "Blue" },
-          ],
-        },
-      ],
-    };
     const formData = new FormData();
     formData.append(
       "data",
@@ -243,6 +150,7 @@ export default function ProductCreateForm() {
     console.log("created product", response);
   };
 
+  console.log(watch("categoryId"), "categoryId");
   return (
     <div className="mx-auto p-6">
       <Card>
@@ -442,54 +350,44 @@ export default function ProductCreateForm() {
             <Separator />
 
             {/* Categories */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Categories</h3>
-              <div className="space-y-2">
-                <Label htmlFor="categoryId">Category ID *</Label>
-                <Input
-                  id="categoryId"
-                  {...register("categoryId", {
-                    required: "Category ID is required",
-                  })}
-                  placeholder="5f33cd34-d24e-48ea-b992-d777b70d9ce8"
-                />
-                {errors.categoryId && (
-                  <p className="text-sm text-red-500">
-                    {errors.categoryId.message}
-                  </p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label>Sub Categories</Label>
-                {subCategoryFields.map((field, index) => (
-                  <div key={field.id} className="flex gap-2">
-                    <Input
-                      {...register(`subCategories.${index}.value`)}
-                      placeholder="Sub category ID"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      onClick={() => removeSubCategory(index)}
-                      disabled={subCategoryFields.length === 1}
-                    >
-                      <Minus className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => appendSubCategory({ value: "" })}
-                  className="w-full"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Sub Category
-                </Button>
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="categoryId">Category ID *</Label>
+              <Select
+                value={watch("categoryId")}
+                onValueChange={(value) => setValue("categoryId", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories?.map((category) => (
+                    <SelectItem key={category.id} value={category.id}>
+                      <div className="flex items-center gap-2">
+                        {category.image && (
+                          <ImageView
+                            className="h-4 w-4 rounded"
+                            imageInfo={{
+                              url: category.image,
+                              name: category.name,
+                            }}
+                          />
+                        )}
+                        {category.name}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-
+            <SubCategoriesSelect
+              control={control}
+              name="subCategories"
+              label="Subcategories"
+              subCategories={
+                categories.find((cat) => cat.id === watch("categoryId"))
+                  ?.subCategories || []
+              }
+            />
             <Separator />
 
             {/* Variants */}

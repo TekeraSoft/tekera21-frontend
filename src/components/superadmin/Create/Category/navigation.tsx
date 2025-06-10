@@ -15,11 +15,11 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Category } from "../../../../../types/AdminTypes/category";
+import { ICategory } from "../../../../../types/AdminTypes/category";
 import ImageView from "@/components/shared/ImageView";
 
 interface CategoryNavigationProps {
-  categories: Category[];
+  categories: ICategory[];
   onCategorySelect?: (categoryId: string) => void;
   onSubcategorySelect?: (categoryId: string, subcategoryId: string) => void;
   selectedCategory?: string;
@@ -101,7 +101,7 @@ export function CategoryNavigation({
                     {category.count}
                   </span>
                 )}
-                {category.subcategories?.length > 0 && (
+                {category.subCategories?.length > 0 && (
                   <div className="ml-auto">
                     {isOpen ? (
                       <ChevronDown className="h-4 w-4" />
@@ -113,10 +113,10 @@ export function CategoryNavigation({
               </Button>
             </CollapsibleTrigger>
 
-            {category.subcategories?.length > 0 && (
+            {category.subCategories?.length > 0 && (
               <CollapsibleContent className="space-y-1">
                 <div className="ml-6 space-y-1 border-l border-border pl-4">
-                  {category?.subcategories?.map((subcategory) => {
+                  {category?.subCategories?.map((subcategory) => {
                     const isSubSelected =
                       selectedCategory === category.id &&
                       selectedSubcategory === subcategory.id;

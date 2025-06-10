@@ -21,12 +21,12 @@ import {
 } from "@/components/ui/select";
 import { PlusCircle, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Category } from "../../../../../types/AdminTypes/category";
+import { ICategory } from "../../../../../types/AdminTypes/category";
 import { createSubcategory } from "@/app/actions";
 import ImageView from "@/components/shared/ImageView";
 
 interface CreateSubcategoryFormProps {
-  categories: Category[];
+  categories: ICategory[];
 }
 
 export function CreateSubcategoryForm({
