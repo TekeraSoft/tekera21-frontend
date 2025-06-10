@@ -33,14 +33,11 @@ export async function logOut() {
 }
 export async function getCategories() {
   try {
-    const data = await axiosInstance.get(`/super-admin/getAllCategory`);
-
-    if (!data) {
-      return [];
-    }
-    return data.data;
+    const { data } = await axiosInstance.get(`/super-admin/getAllCategory`);
+    console.log("data from getCategories:", data);
+    return { success: true, message: data.message, data: data };
   } catch (error) {
-    console.log("getCategoriesError:", error);
+    return { success: false, message: error || "Failed to get categories" };
   }
 }
 

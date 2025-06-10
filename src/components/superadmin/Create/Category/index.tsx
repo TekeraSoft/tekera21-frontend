@@ -6,15 +6,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ICategoryData } from "../../../../../types/AdminTypes/category";
+import { ICategory } from "@/types/AdminTypes/category";
 import { CategoryNavigation } from "./navigation";
 import { CreateCategoryForm } from "./CategoryForm";
 import { CreateSubcategoryForm } from "./SubCategoryForm";
 import { getCategories } from "@/app/actions";
+import ImageView from "@/components/shared/ImageView";
 
 export default async function CreateCategory() {
-  const data: ICategoryData = await getCategories();
-  const categories = data?.content || [];
+  const { message, success, data } = await getCategories();
+  const categories: ICategory[] = data?.content || [];
 
   return (
     <div className="min-h-screen bg-background p-6">
@@ -99,9 +100,11 @@ export default async function CreateCategory() {
                               className="flex items-center gap-2 text-sm text-muted-foreground"
                             >
                               {sub.image && (
-                                <img
-                                  src={sub.image || "/placeholder.svg"}
-                                  alt=""
+                                <ImageView
+                                  imageInfo={{
+                                    url: sub.image,
+                                    name: sub.name,
+                                  }}
                                   className="h-4 w-4 rounded object-cover"
                                 />
                               )}
