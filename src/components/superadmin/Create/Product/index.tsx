@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Control } from "react-hook-form";
 import { Plus, Minus, Upload, X } from "lucide-react";
 import Resizer from "react-image-file-resizer";
 import { Button } from "@/components/ui/button";
@@ -100,14 +100,14 @@ export default function ProductCreateForm({
     name: "attributes",
   });
 
-  const {
-    fields: subCategoryFields,
-    append: appendSubCategory,
-    remove: removeSubCategory,
-  } = useFieldArray({
-    control,
-    name: "subCategories",
-  });
+  // const {
+  //   fields: subCategoryFields,
+  //   append: appendSubCategory,
+  //   remove: removeSubCategory,
+  // } = useFieldArray({
+  //   control,
+  //   name: "subCategories",
+  // });
 
   const {
     fields: variantFields,
@@ -123,9 +123,7 @@ export default function ProductCreateForm({
     const formattedData = {
       ...data,
       tags: data.tags?.map((tag) => tag.value).filter(Boolean),
-      subCategories: data.subCategories
-        ?.map((sub) => sub.value)
-        .filter(Boolean),
+
       attributes: data.attributes?.filter((attr) => attr.key && attr.value),
       variants: data.variants?.map((variant, index) => ({
         ...variant,
@@ -150,7 +148,6 @@ export default function ProductCreateForm({
     console.log("created product", response);
   };
 
-  console.log(watch("categoryId"), "categoryId");
   return (
     <div className="mx-auto p-6">
       <Card>
@@ -528,7 +525,7 @@ function VariantAttributes({
   variantIndex,
   setValue,
 }: {
-  control: any;
+  control: Control<ProductFormData, any, ProductFormData>;
   variantIndex: number;
   setValue: any;
 }) {
@@ -555,6 +552,7 @@ function VariantAttributes({
     { value: "connectivity", label: "Connectivity" },
     { value: "compatibility", label: "Compatibility" },
   ];
+  console.log("fields", fields);
 
   return (
     <div className="space-y-2">
@@ -575,7 +573,11 @@ function VariantAttributes({
               </SelectTrigger>
               <SelectContent>
                 {attributeOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
+                  <SelectItem
+                    disabled={fields.some((elem) => elem.key === option.value)}
+                    key={option.value}
+                    value={option.value}
+                  >
                     {option.label}
                   </SelectItem>
                 ))}

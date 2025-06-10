@@ -19,7 +19,7 @@ export function SubCategoriesSelect({
   required = false,
 }: SubCategoriesSelectProps) {
   // Convert subcategories to option format
-  console.log("subCategories:", subCategories);
+
   const options: OptionType[] = subCategories.map((subCategory) => ({
     value: subCategory.id,
     label: subCategory.name,

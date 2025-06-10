@@ -43,18 +43,35 @@ export async function getCategories() {
     console.log("getCategoriesError:", error);
   }
 }
-export async function getProducts(page: number = 0, size: number = 20) {
+
+export async function getProducts(page: string = "0", size: string = "20") {
   try {
+    console.log("getproducsts called with page:", page, "size:", size);
     const { data } = await axiosInstance.get(
-      `/product/get-all-product?page=${page}&size=${size}`
+      `/product/getAllProduct?page=${page}&size=${size}`
     );
-    return { success: true, message: data.message, category: data.data };
+    console.log("data from getProducts:", data);
+    return { success: true, message: data.message, data: data };
   } catch (error) {
-    console.error("getProducts error:", error);
-    return { success: false, message: error || "Failed to get category" };
+    console.log("getProducts error:", error);
+    return { success: false, message: error || "Failed to get products" };
   }
 }
 
+export async function getCompanyProducts(
+  companyId: string = "a17eba7f-97f0-45f1-b533-fa931a8c770c"
+) {
+  try {
+    const { data } = await axiosInstance.get(
+      `/company/findCompanyReturnProducts/${companyId}`
+    );
+
+    return { success: true, message: data.message, data: data };
+  } catch (error) {
+    console.log("getProducts error:", error);
+    return { success: false, message: error || "Failed to get products" };
+  }
+}
 export async function createCategory(formData: FormData) {
   try {
     const { data } = await axiosInstance.post(

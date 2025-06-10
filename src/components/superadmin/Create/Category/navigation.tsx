@@ -15,7 +15,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ICategory } from "../../../../../types/AdminTypes/category";
+import { ICategory } from "@/types/AdminTypes/category";
 import ImageView from "@/components/shared/ImageView";
 
 interface CategoryNavigationProps {
