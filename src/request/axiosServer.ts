@@ -26,8 +26,10 @@ axiosInstance.interceptors.response.use(
     if (error) {
       console.log("error in axios response interceptor", error.response.data);
       throw new Error(
-        error?.response?.data ||
-          "An error occurred while processing your request."
+        typeof error?.response?.data === "string"
+          ? error?.response?.data
+          : error?.response?.data?.detail ||
+            "An error occurred while processing your request."
       );
     }
 

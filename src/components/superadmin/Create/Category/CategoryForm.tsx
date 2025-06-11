@@ -13,9 +13,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { PlusCircle, X } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+
 import { createCategory } from "@/app/actions";
-import ImageView from "@/components/shared/ImageView";
+import { useToast } from "@/hooks/use-toast";
 
 export function CreateCategoryForm() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -69,12 +69,15 @@ export function CreateCategoryForm() {
     setIsSubmitting(true);
 
     try {
-      const result = await createCategory(formData);
+      const { success, message, data } = await createCategory(formData);
 
-      if (result.success) {
+      if (success) {
         toast({
           title: "Success",
-          description: result.message || "Category created successfully",
+          description:
+            typeof message === "string"
+              ? message
+              : message?.message || "Category created successfully",
         });
         formRef.current?.reset();
         setSelectedImage(null);
@@ -82,7 +85,10 @@ export function CreateCategoryForm() {
       } else {
         toast({
           title: "Error",
-          description: result.message || "Failed to create category",
+          description:
+            typeof message === "string"
+              ? message
+              : message?.message || "Failed to create category",
           variant: "destructive",
         });
       }
@@ -122,7 +128,7 @@ export function CreateCategoryForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="category-image">Category Image (Optional)</Label>
+            <Label htmlFor="category-image">Category Image</Label>
             <div className="flex items-center gap-4">
               <div className="flex-1">
                 <Input
@@ -137,12 +143,10 @@ export function CreateCategoryForm() {
               </div>
               {imagePreview && (
                 <div className="relative">
-                  <ImageView
+                  <img
                     className="h-12 w-12 rounded-md object-cover border"
-                    imageInfo={{
-                      url: imagePreview || "/placeholder.svg",
-                      name: "preview",
-                    }}
+                    src={imagePreview || "/placeholder.svg"}
+                    alt="preview"
                   />
                   <Button
                     type="button"

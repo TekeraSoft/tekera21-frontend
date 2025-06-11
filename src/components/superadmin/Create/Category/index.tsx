@@ -14,7 +14,7 @@ import { getCategories } from "@/app/actions";
 import ImageView from "@/components/shared/ImageView";
 
 export default async function CreateCategory() {
-  const { message, success, data } = await getCategories();
+  const { data } = await getCategories();
   const categories: ICategory[] = data?.content || [];
 
   return (
@@ -79,9 +79,11 @@ export default async function CreateCategory() {
                     <div key={category.id} className="border rounded-lg p-4">
                       <div className="flex items-center gap-3 mb-2">
                         {category.image && (
-                          <img
-                            src={category.image || "/placeholder.svg"}
-                            alt={category.name}
+                          <ImageView
+                            imageInfo={{
+                              url: category.image || "/placeholder.svg",
+                              name: category.name,
+                            }}
                             className="h-8 w-8 rounded object-cover"
                           />
                         )}

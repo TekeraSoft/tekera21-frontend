@@ -34,7 +34,7 @@ export async function logOut() {
 export async function getCategories() {
   try {
     const { data } = await axiosInstance.get(`/super-admin/getAllCategory`);
-    console.log("data from getCategories:", data);
+
     return { success: true, message: data.message, data: data };
   } catch (error) {
     return { success: false, message: error || "Failed to get categories" };
@@ -72,7 +72,7 @@ export async function getCompanyProducts(
 export async function createCategory(formData: FormData) {
   try {
     const { data } = await axiosInstance.post(
-      `/super-admin/create-category`,
+      `/super-admin/createCategory`,
       formData,
       {
         headers: {
@@ -80,9 +80,8 @@ export async function createCategory(formData: FormData) {
         },
       }
     );
-
     revalidatePath("/");
-    return { success: true, message: data.message, category: data.data };
+    return { success: true, message: data.message, data: data.data };
   } catch (error) {
     console.log("getproducts:", error);
     return { success: false, message: error || "Failed to create category" };
