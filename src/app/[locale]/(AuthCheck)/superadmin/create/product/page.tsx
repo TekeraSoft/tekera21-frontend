@@ -1,11 +1,11 @@
 import ProductCreateForm from "@/components/superadmin/Create/Product";
 import React from "react";
-import { ICategoryData } from "../../../../../../../types/AdminTypes/category";
+import { ICategory } from "@/types/AdminTypes/category";
 import { getCategories } from "@/app/actions";
 
 const CreateProductPage = async () => {
-  const data: ICategoryData = await getCategories();
-  const categories = data?.content || [];
+  const { message, success, data } = await getCategories();
+  const categories: ICategory[] = data.content || [];
   return (
     <div>
       <ProductCreateForm categories={categories} />
