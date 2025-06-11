@@ -81,7 +81,7 @@ export default async function CreateCategory() {
                         {category.image && (
                           <img
                             src={category.image || "/placeholder.svg"}
-                            alt=""
+                            alt={category.name}
                             className="h-8 w-8 rounded object-cover"
                           />
                         )}
