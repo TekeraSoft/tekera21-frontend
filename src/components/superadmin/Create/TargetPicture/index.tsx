@@ -22,6 +22,7 @@ import { Upload } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { IProduct } from "@/types/product";
 import ImageView from "@/components/shared/ImageView";
+import { toast } from "@/hooks/use-toast";
 
 interface ITargetPictureFormData {
   productId: string;
@@ -31,8 +32,6 @@ interface ITargetPictureFormData {
 
 export default function TargetCreate({ products }: { products: IProduct[] }) {
   const {
-    register,
-    control,
     handleSubmit,
     formState: { errors },
     setValue,
@@ -47,17 +46,34 @@ export default function TargetCreate({ products }: { products: IProduct[] }) {
     console.log("onsubmit data:", data);
     // Transform data to match the required format
     const formData = new FormData();
-    formData.append("productId", "077f77a0-a873-4a45-a5d6-3b74099b759e");
+    formData.append("productId", data.productId);
     if (data.image) {
       formData.append("image", data.image);
     }
     if (data.defaultContent) {
       formData.append("defaultContent", data.defaultContent);
     }
-    const result = await createTargetPicture(formData);
 
-    if (result.success) {
-      alert("Media uploaded successfully!");
+    const { success, message } = await createTargetPicture(formData);
+
+    if (success) {
+      toast({
+        title: "Success",
+        description:
+          typeof message === "string"
+            ? message
+            : message?.message || "Target Image is Created.",
+        variant: "default",
+      });
+    } else {
+      toast({
+        title: "Error",
+        description:
+          typeof message === "string"
+            ? message
+            : message?.message || "Failed to create category",
+        variant: "destructive",
+      });
     }
   };
   return (
@@ -74,7 +90,11 @@ export default function TargetCreate({ products }: { products: IProduct[] }) {
             {/* Product Selection */}
             <div className="space-y-2">
               <Label htmlFor="product-select">Select Product</Label>
-              <Select name="product" required>
+              <Select
+                onValueChange={(val) => setValue("productId", val)}
+                name="product"
+                required
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Choose a product..." />
                 </SelectTrigger>

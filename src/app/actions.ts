@@ -159,14 +159,14 @@ export async function createTargetPicture(formData: FormData) {
     const video = formData.getAll("defaultContent");
     const productId = formData.getAll("productId");
 
-    if (!targetPicture || !video || !productId) {
+    if ( !video || !productId) {
       return {
         success: false,
         message: "Data and images are required",
       };
     }
     const { data } = await axiosInstance.post(
-      `/digital-fashion-admin/create-target-pic`,
+      `/digital-fashion-admin/createTargetPic`,
       formData,
       {
         headers: {
@@ -176,7 +176,7 @@ export async function createTargetPicture(formData: FormData) {
     );
     revalidatePath("/");
 
-    return { success: true, message: data.message, product: data.data };
+    return { success: true, message: data.message, data: data.data };
   } catch (error) {
     console.log("create target picture error:", error);
     return { success: false, message: error || "Failed to create category" };

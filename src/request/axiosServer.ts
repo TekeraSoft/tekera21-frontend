@@ -28,6 +28,8 @@ axiosInstance.interceptors.response.use(
       throw new Error(
         typeof error?.response?.data === "string"
           ? error?.response?.data
+          : error.response.data.message
+          ? error.response.data.message
           : error?.response?.data?.detail ||
             "An error occurred while processing your request."
       );
