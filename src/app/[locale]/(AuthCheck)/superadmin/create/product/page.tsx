@@ -4,8 +4,8 @@ import { ICategory } from "@/types/AdminTypes/category";
 import { getCategories } from "@/app/actions";
 
 const CreateProductPage = async () => {
-  const { data } = await getCategories();
-  const categories: ICategory[] = data.content || [];
+  const { data, success } = await getCategories();
+  const categories: ICategory[] = success ? data.content : [];
   return (
     <div>
       <ProductCreateForm categories={categories} />
