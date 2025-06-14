@@ -2,7 +2,7 @@
 
 import axiosInstance from "@/request/axiosServer";
 import { revalidatePath } from "next/cache";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 
 export async function getUser() {
   const cookieStore = await cookies();
@@ -155,11 +155,11 @@ export async function createSubcategory(formData: FormData) {
 
 export async function createTargetPicture(formData: FormData) {
   try {
-    const targetPicture = formData.get("image");
+    // const targetPicture = formData.get("image");
     const video = formData.getAll("defaultContent");
     const productId = formData.getAll("productId");
 
-    if ( !video || !productId) {
+    if (!video || !productId) {
       return {
         success: false,
         message: "Data and images are required",
