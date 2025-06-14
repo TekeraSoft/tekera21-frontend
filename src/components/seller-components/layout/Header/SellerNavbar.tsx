@@ -27,10 +27,12 @@ import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { useAuthContext } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
-import SellerNavbarMobile from "./SellerNavbarMobile";
+
 import { useState } from "react";
-import RestrictedAccessDialog from "./RestrictedAccessDialog";
+
 import { SellerMenuItem } from "../../../../../types/SellerTypes/SellerNavbarTypes";
+import SellerNavbarMobile from "./SellerNavbarMobile";
+import RestrictedAccessDialog from "./RestrictedAccessDialog";
 
 // Define the menu structure
 

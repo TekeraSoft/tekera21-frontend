@@ -9,6 +9,7 @@ export interface Product {
   price: number;
   category: string;
   images: string[];
+  color: string;
 }
 
 // ProductState arayüzü

@@ -1,11 +1,11 @@
 import React from "react";
+import SellerTopbar from "./SellerTopBar";
 import SellerNavbar from "./SellerNavbar";
-import SellerTopBar from "./SellerTopBar";
 
 function SellerHeader() {
   return (
     <div className="w-full">
-      <SellerTopBar />
+      <SellerTopbar />
       <SellerNavbar />
     </div>
   );

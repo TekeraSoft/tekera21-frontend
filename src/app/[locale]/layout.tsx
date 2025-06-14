@@ -37,11 +37,8 @@ export default async function RootLayout({
           <AuthProvider user={user}>
             <NextIntlClientProvider>
               <AxiosInterceptor>
-                <DialogProvider>
-                  {children}
-
-                  <Toaster />
-                </DialogProvider>
+                <Toaster />
+                <DialogProvider>{children}</DialogProvider>
               </AxiosInterceptor>
             </NextIntlClientProvider>
           </AuthProvider>

@@ -94,8 +94,8 @@ export function ProductsTable() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Categories</SelectItem>
-              {categories.length &&
-                categories.map((cat) => (
+              {categories?.length &&
+                categories?.map((cat) => (
                   <SelectItem key={cat.slug} value={cat.slug}>
                     {cat.name}
                   </SelectItem>

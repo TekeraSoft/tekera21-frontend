@@ -10,7 +10,10 @@ function NotFoundPage() {
     <div className="flex flex-col items-center justify-center min-h-screen text-center p-6">
       {/* İkon ile başlık */}
 
-      <Frown className="text-6xl text-gray-500 mb-4" />
+      <div className="flex items-center justify-center w-20 h-20 rounded-full bg-red-100 text-red-500 mb-6">
+        <Frown className="w-10 h-10" />
+      </div>
+
       <h1 className="text-4xl font-bold text-gray-800 mb-4">
         {t("warningText.pageNotFoundTitle")}
       </h1>

@@ -9,6 +9,8 @@ import {
   Package,
   ShoppingCart,
   BarChart3,
+  LucidePercentDiamond,
+  LucideChartNoAxesColumnDecreasing,
 } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useSidebar } from "@/context/SideBarContext";
@@ -42,6 +44,21 @@ export function SideBar() {
       name: "Analytics",
       path: "/superadmin/analytics",
       icon: BarChart3,
+    },
+    user?.role.includes("products") && {
+      name: "Create Product",
+      path: "/superadmin/create/product",
+      icon: LucidePercentDiamond,
+    },
+    user?.role.includes("products") && {
+      name: "Create Category",
+      path: "/superadmin/create/category",
+      icon: LucideChartNoAxesColumnDecreasing,
+    },
+    user?.role.includes("products") && {
+      name: "Create Target Image",
+      path: "/superadmin/create/target",
+      icon: LucideChartNoAxesColumnDecreasing,
     },
   ].filter(Boolean) as { name: string; path: string; icon: any }[]; // Filter out any undefined values
 
