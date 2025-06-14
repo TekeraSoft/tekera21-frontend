@@ -9,8 +9,16 @@ const ImageView = ({
   className: string;
 }) => {
   const { url, name } = imageInfo;
-  const baseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
-  return <Image width={"400"} height={"400"} className={className} src={baseUrl + url} alt={name} />;
+  const imageUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL + "/tekera-bucket" + url.startsWith("/") ? url : `/${url}`;
+  return (
+    <Image
+      width={"400"}
+      height={"400"}
+      className={className}
+      src={imageUrl}
+      alt={name}
+    />
+  );
 };
 
 export default ImageView;
