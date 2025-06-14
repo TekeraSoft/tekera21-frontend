@@ -32,8 +32,8 @@ export default function SellerOrdersTable({ orders }: any) {
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
+    <>
+      <div className="flex items-center justify-between mb-4 ">
         <h2 className="text-xl font-bold">
           {orders.length > 0
             ? orders[0].status === "new"
@@ -55,7 +55,7 @@ export default function SellerOrdersTable({ orders }: any) {
         </div>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto border rounded-lg  ">
         <table className="w-full border-collapse">
           <thead>
             <tr className="border-b">
@@ -196,6 +196,6 @@ export default function SellerOrdersTable({ orders }: any) {
           </Button>
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Link } from "@/i18n/navigation";
-import { RootState } from "@/store/store";
+import { useAppSelector } from "@/store/store";
 import {
   Popover,
   PopoverContent,
@@ -19,7 +19,6 @@ import {
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 
 interface MenuItem {
   label: string;
@@ -27,10 +26,8 @@ interface MenuItem {
 }
 
 export default function SellerCompanyPopoverTopbar() {
-  const { SellerCompanyInfo } = useSelector(
-    (state: RootState) => state.SellerCompany
-  );
-  const { logoUrl } = useSelector((state: RootState) => state.globalSettings);
+  const { SellerCompanyInfo } = useAppSelector((state) => state.SellerCompany);
+  const { logoUrl } = useAppSelector((state) => state.globalSettings);
 
   const menuItems: MenuItem[] = [
     { label: "Mağaza Bilgileri", href: "/seller/company" },

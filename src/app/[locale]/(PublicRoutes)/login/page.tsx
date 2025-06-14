@@ -22,12 +22,16 @@ export default async function LoginPage({
             <p className="text-gray-500 dark:text-gray-400">
               Enter your credentials to access your account <br />
               <br />
-              <span className="font-bold text-gray-600">Super Admin</span>: ken<br />
-              <span className="font-bold text-gray-600">Seller</span>: jane<br />
-              <span className="font-bold text-gray-600">Standard User</span>: john<br />
+              <span className="font-bold text-gray-600">Super Admin</span>: ken
               <br />
-
-              <span className="font-bold text-gray-600">password</span>: enter anything
+              <span className="font-bold text-gray-600">Seller</span>: jane
+              <br />
+              <span className="font-bold text-gray-600">Standard User</span>:
+              john
+              <br />
+              <br />
+              <span className="font-bold text-gray-600">password</span>: enter
+              anything
             </p>
           </div>
           <LoginForm locale={locale} />

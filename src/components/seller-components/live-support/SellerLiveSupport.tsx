@@ -9,10 +9,10 @@ import React from "react";
 
 function SellerSupport() {
   return (
-    <div className="fixed bottom-0 left-32">
+    <div className="fixed bottom-0 left-26">
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="outline">Canlı Destek</Button>
+          <Button variant="default">Canlı Destek</Button>
         </PopoverTrigger>
         <PopoverContent>Place content for the popover here.</PopoverContent>
       </Popover>

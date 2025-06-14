@@ -1,13 +1,13 @@
-"use client"
-import { RootState } from "@/store/store";
-import { useSelector } from "react-redux";
+"use client";
+import { useAppSelector } from "@/store/store";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Facebook, Instagram, Twitter } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 const SellerFooter = () => {
-  const { logoUrl } = useSelector((state: RootState) => state.globalSettings);
+  const { logoUrl } = useAppSelector((state) => state.globalSettings);
 
   return (
     <footer className="bg-gray-100 py-6 mt-12 border-t">

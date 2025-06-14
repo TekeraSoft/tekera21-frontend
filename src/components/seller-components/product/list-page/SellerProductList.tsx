@@ -1,7 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Filter, MoreHorizontal, ChevronDown } from "lucide-react";
+import {
+  Filter,
+  ChevronDown,
+  ChevronRight,
+  X,
+  Pencil,
+  AlertCircle,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
@@ -14,14 +21,6 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -36,89 +35,16 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Badge } from "@/components/ui/badge";
-
-import SellerProductListTabsHeader from "./SellerProductListTabsHeader";
-import SellerInnerContainer from "../../containers/SellerInnerContainer";
-
-// Sample product data
-const products = [
-  {
-    id: 1,
-    name: "Varak Baskılı Siyah Midi Elbise",
-    sku: "TYO92E7C97DB0BF8EBEA3A009",
-    variant: "3 Varyant",
-    variantStatus: "Orta",
-    stockRatio: "---",
-    trendPrice: "1.200,00 ₺",
-    stock: 5,
-
-    expiryDate: "-",
-    category: "Elbise",
-    color: "Siyah Siyah",
-    status: "active",
-  },
-  {
-    id: 2,
-    name: "Varak Baskılı Beyaz Midi Elbise",
-    sku: "TYO92E7C97DB0BF8EBEA3A009",
-    variant: "3 Varyant",
-    variantStatus: "Orta",
-    stockRatio: "---",
-    trendPrice: "1.200,00 ₺",
-    stock: 5,
-
-    expiryDate: "-",
-    category: "Elbise",
-    color: "Beyaz Beyaz",
-    status: "active",
-  },
-  {
-    id: 3,
-    name: "Yüksek Bel Elastolu Bej Pantolon",
-    sku: "TYCC62DA16214B6EAB6506200T11",
-    variant: "M Beden",
-    variantStatus: "Zayıf",
-    stockRatio: "%16.70",
-    stockCode: "3WNQJA7V",
-    trendPrice: "749 ₺",
-    stock: 1,
-
-    expiryDate: "2",
-    category: "Pantolon",
-    color: "Bej Bej",
-    status: "pending",
-  },
-  {
-    id: 4,
-    name: "Pul İşlemeli Tüllü Kol Detaylı Abiye",
-    sku: "TYCD726F5D7A7062491B571827",
-    variant: "38 Beden",
-    variantStatus: "Orta",
-    stockRatio: "%16.70",
-    stockCode: "I4YXUTB6",
-    trendPrice: "3.737,52 ₺",
-    stock: 1,
-    expiryDate: "2",
-    category: "Abiye & Mezuniyet Elbisesi",
-    color: "Pembe Pembe",
-    status: "passive",
-  },
-  {
-    id: 5,
-    name: "Keten Karışımlı Gömlek",
-    sku: "TYCD726F5D7A7062491B571828",
-    variant: "L Beden",
-    variantStatus: "Güçlü",
-    stockRatio: "%25.30",
-    stockCode: "K7LPUTB2",
-    trendPrice: "450,00 ₺",
-    stock: 8,
-    expiryDate: "5",
-    category: "Gömlek",
-    color: "Mavi Mavi",
-    status: "all",
-  },
-];
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AllproductsTableData } from "@/data/AllProductsTableData";
 
 // Filter component for each tab
 function FilterSection({ activeTab, onApplyFilter }: any) {
@@ -360,6 +286,32 @@ function ProductTable({ products, activeTab }: any) {
     return product.status === activeTab;
   });
 
+  const [expandedRows, setExpandedRows] = useState<{ [key: string]: boolean }>(
+    {}
+  );
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [productToDelete, setProductToDelete] = useState(null);
+
+  const toggleRowExpansion = (productId: any) => {
+    setExpandedRows((prev) => ({
+      ...prev,
+      [productId]: !prev[productId],
+    }));
+  };
+
+  const handleDeleteClick = (product: any) => {
+    setProductToDelete(product);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    // Handle delete logic here
+    console.log("Deleting product:", productToDelete);
+    setDeleteDialogOpen(false);
+    setProductToDelete(null);
+  };
+
   return (
     <div className="rounded-md border">
       <div className="flex justify-between items-center p-4 border-b">
@@ -417,25 +369,12 @@ function ProductTable({ products, activeTab }: any) {
           <TableRow>
             <TableHead className="w-[50px]"></TableHead>
             <TableHead>Ürün Bilgisi</TableHead>
-            <TableHead>
-              <div>Varyant</div>
-            </TableHead>
-            <TableHead>
-              <div>Doluluk Oranı</div>
-            </TableHead>
-            <TableHead>
-              <div>Stok Kodu</div>
-            </TableHead>
-            <TableHead>
-              <div>Komisyon</div>
-            </TableHead>
-            <TableHead>
-              <div>tekera21 Satış Fiyatı</div>
-            </TableHead>
-            <TableHead>
-              <div>Stok</div>
-            </TableHead>
-
+            <TableHead>Varyant</TableHead>
+            <TableHead>Doluluk Oranı</TableHead>
+            <TableHead>Stok Kodu</TableHead>
+            <TableHead>Komisyon</TableHead>
+            <TableHead>tekera21 Satış Fiyatı</TableHead>
+            <TableHead>Stok</TableHead>
             <TableHead>Termin Süresi</TableHead>
             <TableHead>Kategori</TableHead>
             <TableHead>İşlemler</TableHead>
@@ -449,93 +388,200 @@ function ProductTable({ products, activeTab }: any) {
               </TableCell>
             </TableRow>
           ) : (
-            filteredProducts.map((product: any) => (
-              <TableRow key={product.id}>
-                <TableCell>
-                  <Checkbox id={`select-${product.id}`} />
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-start gap-3">
-                    <div className="w-16 h-20 bg-gray-100 rounded-md flex items-center justify-center">
-                      <div className="w-12 h-16 bg-gray-200 rounded"></div>
-                    </div>
-                    <div>
-                      <div className="font-medium">{product.name}</div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        Model Kodu: {product.sku}
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        Renk: {product.color}
-                      </div>
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell></TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    {product.variant}
-                    <Badge
-                      variant={
-                        product.variantStatus === "Güçlü"
-                          ? "success"
-                          : product.variantStatus === "Orta"
-                          ? "warning"
-                          : "destructive"
-                      }
-                      className="ml-2"
+            filteredProducts.map((product: any, index: number) => (
+              <>
+                <TableRow key={index} className="relative">
+                  <TableCell>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 p-0"
+                      onClick={() => toggleRowExpansion(product.id)}
                     >
-                      {product.variantStatus}
-                    </Badge>
-                  </div>
-                </TableCell>
-                <TableCell>{product.stockCode || "---"}</TableCell>
-                <TableCell> {product.stockRatio}</TableCell>
-                <TableCell>{product.trendPrice}</TableCell>
-                <TableCell>{product.stock}</TableCell>
-
-                <TableCell>{product.expiryDate}</TableCell>
-                <TableCell>{product.category}</TableCell>
-                <TableCell>
-                  <div className="flex flex-col gap-2">
-                    <Button variant="outline" size="sm" className="w-full">
-                      Varyant Ekle
+                      {expandedRows[product.id] ? (
+                        <ChevronDown className="h-4 w-4" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4" />
+                      )}
                     </Button>
-                    <Button variant="outline" size="sm" className="w-full">
-                      Detaya Git
-                    </Button>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-start gap-3">
+                      <div className="w-16 h-20 bg-gray-100 rounded-md flex items-center justify-center">
+                        <div className="w-12 h-16 bg-gray-200 rounded"></div>
+                      </div>
+                      <div>
+                        <div className="font-medium">{product.name}</div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          Model Kodu: {product.sku}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          Renk: {product.color}
+                        </div>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    {product.variant}{" "}
+                    {product.variant && (
+                      <Badge
+                        variant={
+                          product.variantStatus === "Güçlü"
+                            ? "success"
+                            : product.variantStatus === "Orta"
+                            ? "warning"
+                            : "destructive"
+                        }
+                        className="ml-2"
+                      >
+                        {product.variantStatus}
+                      </Badge>
+                    )}
+                  </TableCell>
+                  <TableCell>{product.stockRatio}</TableCell>
+                  <TableCell>{product.stockCode || "---"}</TableCell>
+                  <TableCell>{product.commission || "---"}</TableCell>
+                  <TableCell>{product.trendPrice}</TableCell>
+                  <TableCell>{product.stock}</TableCell>
+                  <TableCell>{product.expiryDate}</TableCell>
+                  <TableCell>{product.category}</TableCell>
+                  <TableCell>
+                    <div className="flex flex-col gap-2">
+                      <Button variant="outline" size="sm" className="w-full">
+                        Varyant Ekle
+                      </Button>
+                      <Button variant="outline" size="sm" className="w-full">
+                        Detaya Git
+                      </Button>
+                      <div className="flex gap-2">
                         <Button
-                          variant="ghost"
+                          variant="outline"
                           size="sm"
-                          className="h-8 w-8 p-0"
+                          className="flex-1 flex items-center justify-center"
+                          onClick={() =>
+                            console.log("Edit product", product.id)
+                          }
                         >
-                          <span className="sr-only">İşlemler</span>
-                          <MoreHorizontal className="h-4 w-4" />
+                          <Pencil size={16} className="mr-1" />
+                          Düzenle
                         </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>İşlemler</DropdownMenuLabel>
-                        <DropdownMenuItem>Düzenle</DropdownMenuItem>
-                        <DropdownMenuItem>Kopyala</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-destructive">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 flex items-center justify-center text-red-600 hover:bg-red-50"
+                          onClick={() => handleDeleteClick(product)}
+                        >
+                          <X size={16} className="mr-1" />
                           Sil
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                </TableCell>
-              </TableRow>
+                        </Button>
+                      </div>
+                    </div>
+                  </TableCell>
+                </TableRow>
+                {expandedRows[product.id] && (
+                  <TableRow className="bg-muted/30">
+                    <TableCell colSpan={11} className="p-0">
+                      <div className="p-4">
+                        {activeTab === "passive" && (
+                          <Alert className="mb-4 border-amber-500 bg-amber-50">
+                            <AlertCircle className="h-4 w-4 text-amber-500" />
+                            <AlertTitle className="text-amber-700">
+                              Pasif Ürün Bilgisi
+                            </AlertTitle>
+                            <AlertDescription className="text-amber-700">
+                              Bu ürün{" "}
+                              {product.passiveReason || "stok yetersizliği"}{" "}
+                              nedeniyle pasif durumda.
+                            </AlertDescription>
+                          </Alert>
+                        )}
+
+                        <h3 className="font-medium mb-2">Ürün Varyantları</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          {product.variants ? (
+                            product.variants.map(
+                              (variant: any, index: number) => (
+                                <Card key={index} className="overflow-hidden">
+                                  <div className="flex items-center p-3 border-b">
+                                    <div className="w-10 h-10 bg-gray-200 rounded-md mr-3"></div>
+                                    <div>
+                                      <div className="font-medium">
+                                        {variant.name ||
+                                          "Varyant " + (index + 1)}
+                                      </div>
+                                      <div className="text-xs text-muted-foreground">
+                                        {variant.sku || "SKU-" + (index + 1)}
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <CardContent className="p-3">
+                                    <div className="grid grid-cols-2 gap-2 text-sm">
+                                      <div className="text-muted-foreground">
+                                        Renk:
+                                      </div>
+                                      <div>{variant.color || "-"}</div>
+                                      <div className="text-muted-foreground">
+                                        Beden:
+                                      </div>
+                                      <div>{variant.size || "-"}</div>
+                                      <div className="text-muted-foreground">
+                                        Stok:
+                                      </div>
+                                      <div>{variant.stock || "0"}</div>
+                                      <div className="text-muted-foreground">
+                                        Fiyat:
+                                      </div>
+                                      <div>{variant.price || "-"}</div>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              )
+                            )
+                          ) : (
+                            <div className="col-span-3 text-center py-4 text-muted-foreground">
+                              Bu ürün için varyant bulunmamaktadır.
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </>
             ))
           )}
         </TableBody>
       </Table>
+
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Ürünü Silmek İstediğinize Emin Misiniz?</DialogTitle>
+            <DialogDescription>
+              Bu işlem geri alınamaz. Ürün kalıcı olarak silinecektir.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:justify-end">
+            <Button
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+            >
+              İptal
+            </Button>
+            <Button variant="destructive" onClick={confirmDelete}>
+              Evet, Sil
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
 
-export default function SellerProductList() {
+export default function ProductList() {
+  // Sample product data
+  const products = AllproductsTableData;
+
   const [activeTab, setActiveTab] = useState("all");
   const [filteredProducts, setFilteredProducts] = useState(products);
 
@@ -550,8 +596,14 @@ export default function SellerProductList() {
   };
 
   return (
-    <SellerInnerContainer>
-      <SellerProductListTabsHeader />
+    <div className="p-4">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Ürün Listesi</h1>
+        <div className="flex gap-2">
+          <Button variant="outline">Excel İle İndir</Button>
+          <Button>Ürün Ekle</Button>
+        </div>
+      </div>
 
       <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
         <div className="mb-4">
@@ -561,7 +613,7 @@ export default function SellerProductList() {
           />
         </div>
 
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4  items-center gap-5 min-h-24 px-2">
+        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 items-center gap-5 min-h-24 px-2">
           <TabsTrigger
             value="all"
             className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground min-w-12"
@@ -616,6 +668,6 @@ export default function SellerProductList() {
           <ProductTable products={filteredProducts} activeTab="passive" />
         </TabsContent>
       </Tabs>
-    </SellerInnerContainer>
+    </div>
   );
 }

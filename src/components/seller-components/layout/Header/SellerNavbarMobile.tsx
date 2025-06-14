@@ -6,28 +6,28 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { RootState } from "@/store/store";
+import { useAppSelector } from "@/store/store";
 import { ChevronDown, ChevronRight, Menu, Search, User, X } from "lucide-react";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+
 import { cn } from "@/lib/utils";
 import { NotificationPopover } from "./Popovers/SellerNotificationPopover";
-import { MenuItem } from "../../../../../types/SellerTypes/SellerNavbarTypes";
 import SellerCompanyPopover from "./Popovers/SellerCompanyPopoverMobile";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { useAuthContext } from "@/context/AuthContext";
+import { SellerMenuItem } from "../../../../../types/SellerTypes/SellerNavbarTypes";
 
 // import SellerMobileSearchButton from "./NavButtons/SellerMobileSearchButton";
 
 interface SellerNavbarMobileProps {
-  menuItems: MenuItem[];
+  menuItems: SellerMenuItem[];
 }
 
 function SellerNavbarMobile({ menuItems }: SellerNavbarMobileProps) {
   const { userInfo } = useAuthContext();
 
-  const { logoUrl } = useSelector((state: RootState) => state.globalSettings);
+  const { logoUrl } = useAppSelector((state) => state.globalSettings);
 
   interface AlertItem {
     id: string;

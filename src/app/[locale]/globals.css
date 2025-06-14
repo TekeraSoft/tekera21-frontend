@@ -17,6 +17,10 @@
     width: 100dvw;
     overflow-x: hidden;
   }
+  ::selection {
+    background-color: #33bba9; /* Seçim arka plan rengi */
+    color: white; /* Seçilen metin rengi */
+  }
 }
 
 @theme {
