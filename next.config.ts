@@ -25,7 +25,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "cdn.tekera21.com",
+        hostname: "api.tekera21.com",
       },
     ],
   },

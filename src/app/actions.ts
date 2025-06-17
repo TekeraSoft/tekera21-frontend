@@ -56,7 +56,7 @@ export async function getProducts(page: string = "0", size: string = "20") {
 }
 
 export async function getCompanyProducts(
-  companyId: string = "a17eba7f-97f0-45f1-b533-fa931a8c770c"
+  companyId: string = "f8406fa3-d9d0-4644-b797-7d51cb926bfc"
 ) {
   try {
     const { data } = await axiosInstance.get(
@@ -176,7 +176,11 @@ export async function createTargetPicture(formData: FormData) {
     );
     revalidatePath("/");
 
-    return { success: true, message: data.message, data: data.data };
+    return {
+      success: true,
+      message: data?.message || "Success",
+      data: data.data || "success",
+    };
   } catch (error) {
     console.log("create target picture error:", error);
     return { success: false, message: error || "Failed to create category" };

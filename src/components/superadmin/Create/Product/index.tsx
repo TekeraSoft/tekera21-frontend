@@ -552,7 +552,6 @@ function VariantAttributes({
     { value: "connectivity", label: "Connectivity" },
     { value: "compatibility", label: "Compatibility" },
   ];
-  console.log("fields", fields);
 
   return (
     <div className="space-y-2">

@@ -9,7 +9,8 @@ const ImageView = ({
   className: string;
 }) => {
   const { url, name } = imageInfo;
-  const imageUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL + "/tekera-bucket" + url.startsWith("/") ? url : `/${url}`;
+  const imageUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL + (url.startsWith("/") ? url : `/${url}`);
+
   return (
     <Image
       width={"400"}
