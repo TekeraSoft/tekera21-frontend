@@ -181,8 +181,12 @@ export async function createTargetPicture(formData: FormData) {
       message: data?.message || "Success",
       data: data.data || "success",
     };
-  } catch (error) {
-    console.log("create target picture error:", error);
-    return { success: false, message: error || "Failed to create category" };
+  } catch (error: any) {
+    const errorMsg = error?.message || String(error);
+
+    return {
+      success: false,
+      message: errorMsg || "Failed to create target picture",
+    };
   }
 }

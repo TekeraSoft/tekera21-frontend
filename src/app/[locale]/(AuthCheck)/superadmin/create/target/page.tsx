@@ -4,7 +4,7 @@ import React from "react";
 import { IProduct } from "@/types/product";
 
 const CreateTargetPicture = async () => {
-  const { data, success, message } = await getCompanyProducts();
+  const { data, success } = await getCompanyProducts();
   if (!success) {
     return (
       <div className="container mx-auto px-4 py-8">
