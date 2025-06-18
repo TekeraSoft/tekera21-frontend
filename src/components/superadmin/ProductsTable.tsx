@@ -2,7 +2,14 @@
 
 import { useEffect } from "react";
 import Image from "next/image";
-import { ArrowUpDown } from "lucide-react";
+import {
+  ArrowUpDown,
+  Check,
+  MoreHorizontal,
+  Pencil,
+  Target,
+  Trash2,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -30,6 +37,16 @@ import {
   setError,
 } from "@/store/superadminSlices/product/productSlice";
 import ProductTableSkeleton from "./Skeletons/Products/ProductTableSkeleton";
+import ImageView from "../shared/ImageView";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Link } from "@/i18n/navigation";
 
 export function ProductsTable() {
   const { data, error, loading, categories, selectedCategory } = useAppSelector(
@@ -39,13 +56,13 @@ export function ProductsTable() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!data.products.length) {
+    if (!data.content.length) {
       dispatch(fetchProducts({ page: 0, size: 10 }));
       dispatch(fetchCategories({ page: 0, size: 10 }));
     }
 
     return () => {};
-  }, [data.products]);
+  }, [data.content]);
 
   useEffect(() => {
     return () => {
@@ -116,8 +133,8 @@ export function ProductsTable() {
         </div>
         <div className="flex items-center space-x-2">
           <p className="text-sm text-muted-foreground">
-            Showing <strong>{data.size}</strong> of{" "}
-            <strong>{data.total}</strong> products
+            Showing <strong>{data.page.size}</strong> of{" "}
+            <strong>{data.page.totalElements}</strong> products
           </p>
         </div>
       </div>
@@ -139,30 +156,30 @@ export function ProductsTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.products.map((product) => (
+          {data.content.map((product) => (
             <TableRow key={product.id}>
               <TableCell>
-                <Image
-                  src={product.thumbnail || "/placeholder.svg"}
-                  alt={product.title}
-                  width={40}
-                  height={40}
+                <ImageView
+                  imageInfo={{
+                    url: product.variations[0].images[0] || "/placeholder.svg",
+                    name: product.name,
+                  }}
                   className="rounded-md object-cover"
                 />
               </TableCell>
-              <TableCell className="font-medium">{product.title}</TableCell>
-              <TableCell>{product.category}</TableCell>
-              <TableCell>{product.price}</TableCell>
-              <TableCell>{product.stock}</TableCell>
-              <TableCell>
+              <TableCell className="font-medium">{product.name}</TableCell>
+              <TableCell>{product.category?.name || ""}</TableCell>
+              <TableCell>{product.variations[0].price}</TableCell>
+              <TableCell>{product.variations[0].stock}</TableCell>
+              {/* <TableCell>
                 <Badge
                   className={getStatusColor(product.availabilityStatus)}
                   variant="outline"
                 >
                   {product.availabilityStatus}
                 </Badge>
-              </TableCell>
-              {/* <TableCell className="text-right">
+              </TableCell> */}
+              <TableCell className="text-right">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="icon">
@@ -177,6 +194,12 @@ export function ProductsTable() {
                       Edit
                     </DropdownMenuItem>
                     <DropdownMenuItem>
+                      <Link className="flex items-center" href={`/superadmin/create/target/${product.slug}`}>
+                        <Target className="mr-2 h-4 w-4" />
+                        Create Target Picture
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
                       <Check className="mr-2 h-4 w-4" />
                       Mark as featured
                     </DropdownMenuItem>
@@ -187,7 +210,7 @@ export function ProductsTable() {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-              </TableCell> */}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -195,9 +218,11 @@ export function ProductsTable() {
       <div className="flex items-center justify-end space-x-2 p-4">
         <Button
           onClick={() =>
-            dispatch(fetchProducts({ page: 10, size: data.size - 10 }))
+            dispatch(
+              fetchProducts({ page: 10, size: data.page.totalElements - 10 })
+            )
           }
-          disabled={data.size <= 10}
+          disabled={data.page.totalElements <= 10}
           variant="outline"
           size="sm"
         >
@@ -205,9 +230,14 @@ export function ProductsTable() {
         </Button>
         <Button
           onClick={() =>
-            dispatch(fetchProducts({ page: 10, size: data.size + 10 }))
+            dispatch(
+              fetchProducts({ page: 10, size: data.page.totalElements + 10 })
+            )
           }
-          disabled={data.total <= data.page * data.size}
+          disabled={
+            data.page.totalElements <=
+            data.page.number * data.page.totalElements
+          }
           variant="outline"
           size="sm"
         >

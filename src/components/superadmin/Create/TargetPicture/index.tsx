@@ -9,19 +9,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 import { Upload } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { IProduct } from "@/types/product";
-import ImageView from "@/components/shared/ImageView";
 import { toast } from "@/hooks/use-toast";
 
 interface ITargetPictureFormData {
@@ -30,7 +21,7 @@ interface ITargetPictureFormData {
   defaultContent: File | null;
 }
 
-export default function TargetCreate({ products }: { products: IProduct[] }) {
+export default function TargetCreate({ product }: { product: IProduct }) {
   const {
     handleSubmit,
     formState: { errors },
@@ -38,7 +29,7 @@ export default function TargetCreate({ products }: { products: IProduct[] }) {
     watch,
   } = useForm<ITargetPictureFormData>({
     defaultValues: {
-      productId: "",
+      productId: product.id,
     },
   });
 
@@ -46,7 +37,7 @@ export default function TargetCreate({ products }: { products: IProduct[] }) {
     console.log("onsubmit data:", data);
     // Transform data to match the required format
     const formData = new FormData();
-    formData.append("productId", data.productId);
+    formData.append("productId", product.id);
     if (data.image) {
       formData.append("image", data.image);
     }
@@ -88,36 +79,6 @@ export default function TargetCreate({ products }: { products: IProduct[] }) {
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Product Selection */}
-            <div className="space-y-2">
-              <Label htmlFor="product-select">Select Product</Label>
-              <Select
-                onValueChange={(val) => setValue("productId", val)}
-                name="product"
-                required
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Choose a product..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {products.map((product) => (
-                    <SelectItem key={product.id} value={product.id}>
-                      <div className="flex items-center gap-3">
-                        <ImageView
-                          imageInfo={{
-                            url:
-                              product.variations[0].images[0] ||
-                              "/placeholder.svg",
-                            name: product.name,
-                          }}
-                          className="rounded-md object-cover w-8 h-8"
-                        />
-                        <span>{product.name}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
 
             {/* Image Upload */}
             <FileUploadEnhanced

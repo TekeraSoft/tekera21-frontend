@@ -190,3 +190,26 @@ export async function createTargetPicture(formData: FormData) {
     };
   }
 }
+
+export async function getSingleProductById(id: string) {
+  try {
+    const { data } = await axiosInstance.get(
+      `/product/getProductBySlug?slug=${id}`
+    );
+    return { success: true, message: data.message, data: data };
+  } catch (error) {
+    console.log("getProducts error:", error);
+    return { success: false, message: error || "Failed to get products" };
+  }
+}
+export async function getTargetPictureByProductById(prodId: string) {
+  try {
+    const { data } = await axiosInstance.get(
+      `/digital-fashion/getTargetImageByProductId?productId=${prodId}`
+    );
+    return { success: true, message: data.message, data: data };
+  } catch (error) {
+    console.log("getProducts error:", error);
+    return { success: false, message: error || "Failed to get products" };
+  }
+}

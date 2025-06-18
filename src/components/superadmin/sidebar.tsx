@@ -55,11 +55,11 @@ export function SideBar() {
       path: "/superadmin/create/category",
       icon: LucideChartNoAxesColumnDecreasing,
     },
-    user?.role.includes("products") && {
-      name: "Create Target Image",
-      path: "/superadmin/create/target",
-      icon: LucideChartNoAxesColumnDecreasing,
-    },
+    // user?.role.includes("products") && {
+    //   name: "Create Target Image",
+    //   path: "/superadmin/create/target",
+    //   icon: LucideChartNoAxesColumnDecreasing,
+    // },
   ].filter(Boolean) as { name: string; path: string; icon: any }[]; // Filter out any undefined values
 
   const { isMobile, openMobile, setOpenMobile, toggleSidebar, isOpen } =

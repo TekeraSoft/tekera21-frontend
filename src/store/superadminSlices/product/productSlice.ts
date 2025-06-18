@@ -7,50 +7,55 @@ import {
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export interface IProduct {
-  id: number;
-  title: string;
+  id: string;
+  name: string;
+  slug: string;
+  code: string;
+  brandName: string;
   description: string;
-  category: string;
-  price: number;
-  discountPercentage: number;
-  rating: number;
-  stock: number;
-  tags: string[];
-  brand: string;
-  sku: string;
-  weight: number;
-  dimensions: {
-    width: number;
-    height: number;
-    depth: number;
+  category?: {
+    id: string;
+    name: string;
+    image: string;
+    subCategories: {
+      id: string;
+      name: string;
+      image: string;
+    }[];
   };
-  warrantyInformation: string;
-  shippingInformation: string;
-  availabilityStatus: string;
-  reviews: {
-    rating: number;
-    comment: string;
-    date: string; // ISO format (string olarak tutulur)
-    reviewerName: string;
-    reviewerEmail: string;
-  }[];
-  returnPolicy: string;
-  minimumOrderQuantity: number;
-  meta: {
-    createdAt: string; // ISO tarih formatı
-    updatedAt: string;
+  variations: {
+    id: string;
+    modelName: string;
+    modelCode: string;
+    price: number;
+    stock: number;
+    sku: string;
     barcode: string;
-    qrCode: string;
-  };
-  images: string[];
-  thumbnail: string;
+    attributes: {
+      key: string;
+      value: string;
+    }[];
+    images: string[];
+  }[];
+  currencyType: string;
+  tags: string[];
+  productType: string;
+  attributes: {
+    key: string;
+    value: string;
+  }[];
+  rate: number;
+  comments: any[]; // yorumlar daha sonra tanımlanacaksa bu şekilde kalabilir
 }
 
 interface IData {
-  products: IProduct[];
-  total: number;
-  page: number;
-  size: number;
+  content: IProduct[];
+  page: {
+    number: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
+  };
 }
 
 interface ICategory {
@@ -69,7 +74,15 @@ interface ProductState {
 }
 
 const initialState: ProductState = {
-  data: { products: [], page: 0, size: 0, total: 0 },
+  data: {
+    content: [],
+    page: {
+      number: 0,
+      size: 0,
+      totalElements: 0,
+      totalPages: 0,
+    },
+  },
   loading: true,
   error: null,
   categories: [],
@@ -87,6 +100,7 @@ export const fetchProducts = createAsyncThunk<IData, FetchProductsParams>(
   async (params, thunkAPI) => {
     try {
       const data = await getAdminProducts(params.page, params.size); // bu fonksiyon parametreleri almalı
+      console.log("adminproducts", data);
       return data;
     } catch (error: any) {
       console.log("Fetch error:", error);
@@ -200,10 +214,10 @@ const adminProductSlice = createSlice({
       .addCase(searchProduct.fulfilled, (state, action) => {
         state.loading = false;
 
-        state.error = action.payload.products.length
+        state.error = action.payload.content.length
           ? null
           : "Aradığınız kriterlere uygun ürün Bulunamadı.";
-        state.data = action.payload.products.length
+        state.data = action.payload.content.length
           ? action.payload
           : state.data;
       })
