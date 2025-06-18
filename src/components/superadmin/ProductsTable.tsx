@@ -40,8 +40,8 @@ export function ProductsTable() {
 
   useEffect(() => {
     if (!data.products.length) {
-      dispatch(fetchProducts({ limit: 10, skip: 10 }));
-      dispatch(fetchCategories({ limit: 10, skip: 10 }));
+      dispatch(fetchProducts({ page: 10, size: 10 }));
+      dispatch(fetchCategories({ page: 10, size: 10 }));
     }
 
     return () => {};
@@ -85,7 +85,7 @@ export function ProductsTable() {
               if (value !== "all") {
                 dispatch(fetchProductsByCategory({ catSlug: value }));
               } else {
-                dispatch(fetchProducts({ limit: 10, skip: 10 }));
+                dispatch(fetchProducts({ page: 10, size: 10 }));
               }
             }}
           >
@@ -116,7 +116,7 @@ export function ProductsTable() {
         </div>
         <div className="flex items-center space-x-2">
           <p className="text-sm text-muted-foreground">
-            Showing <strong>{data.limit}</strong> of{" "}
+            Showing <strong>{data.size}</strong> of{" "}
             <strong>{data.total}</strong> products
           </p>
         </div>
@@ -195,9 +195,9 @@ export function ProductsTable() {
       <div className="flex items-center justify-end space-x-2 p-4">
         <Button
           onClick={() =>
-            dispatch(fetchProducts({ limit: 10, skip: data.skip - 10 }))
+            dispatch(fetchProducts({ page: 10, size: data.size - 10 }))
           }
-          disabled={data.skip <= 10}
+          disabled={data.size <= 10}
           variant="outline"
           size="sm"
         >
@@ -205,9 +205,9 @@ export function ProductsTable() {
         </Button>
         <Button
           onClick={() =>
-            dispatch(fetchProducts({ limit: 10, skip: data.skip + 10 }))
+            dispatch(fetchProducts({ page: 10, size: data.size + 10 }))
           }
-          disabled={data.total <= data.skip + data.limit}
+          disabled={data.total <= data.page * data.size}
           variant="outline"
           size="sm"
         >

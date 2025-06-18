@@ -49,8 +49,8 @@ export interface IProduct {
 interface IData {
   products: IProduct[];
   total: number;
-  skip: number;
-  limit: number;
+  page: number;
+  size: number;
 }
 
 interface ICategory {
@@ -69,7 +69,7 @@ interface ProductState {
 }
 
 const initialState: ProductState = {
-  data: { products: [], limit: 0, skip: 0, total: 0 },
+  data: { products: [], page: 0, size: 0, total: 0 },
   loading: true,
   error: null,
   categories: [],
@@ -78,15 +78,15 @@ const initialState: ProductState = {
 };
 
 interface FetchProductsParams {
-  skip: number;
-  limit: number;
+  page: number;
+  size: number;
 }
 
 export const fetchProducts = createAsyncThunk<IData, FetchProductsParams>(
   "products/fetchProducts",
   async (params, thunkAPI) => {
     try {
-      const data = await getAdminProducts(params.limit, params.skip); // bu fonksiyon parametreleri almalı
+      const data = await getAdminProducts(params.page, params.size); // bu fonksiyon parametreleri almalı
       return data;
     } catch (error: any) {
       console.log("Fetch error:", error);
@@ -100,7 +100,7 @@ export const fetchCategories = createAsyncThunk<
   FetchProductsParams
 >("products/fetchCategories", async (params, thunkAPI) => {
   try {
-    const data = await getAdminProductCategories(params.limit, params.skip); // bu fonksiyon parametreleri almalı
+    const data = await getAdminProductCategories(params.page, params.size); // bu fonksiyon parametreleri almalı
     return data;
   } catch (error: any) {
     console.log("Fetch error:", error);

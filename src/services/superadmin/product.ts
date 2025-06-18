@@ -1,28 +1,22 @@
 import axiosClient from "@/request/axiosClient";
 
 export const getAdminProducts = async (
-  limit: number,
-  skip: number,
+  page: number,
+  size: number,
   sortBy: string = ""
 ) => {
   const response = await axiosClient.get(
-    `https://dummyjson.com/products?limit=${limit}&skip=${skip}`,
-    {
-      withCredentials: false,
-    }
+    `https://api.tekera21.com/v1-api/product/getAllProduct?page=${page}&size=${size}`
   );
   return response.data;
 };
 export const getAdminProductCategories = async (
-  limit: number = 10,
-  skip: number = 10,
+  page: number = 10,
+  size: number = 10,
   sortBy: string = ""
 ) => {
   const response = await axiosClient.get(
-    `https://dummyjson.com/products/categories`,
-    {
-      withCredentials: false,
-    }
+    `https://api.tekera21.com/v1-api/category/get-all-category?page=${page}&size=${size}`
   );
   return response.data;
 };
