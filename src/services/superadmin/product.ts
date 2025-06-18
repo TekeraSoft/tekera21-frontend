@@ -6,20 +6,22 @@ export const getAdminProducts = async (
   sortBy: string = ""
 ) => {
   const response = await axiosClient.get(
-    `https://api.tekera21.com/v1-api/product/getAllProduct?page=${page}&size=${size}`
+    `/product/getAllProduct?page=${page}&size=${size}`
   );
   return response.data;
 };
+
 export const getAdminProductCategories = async (
   page: number = 10,
   size: number = 10,
   sortBy: string = ""
 ) => {
   const response = await axiosClient.get(
-    `https://api.tekera21.com/v1-api/category/get-all-category?page=${page}&size=${size}`
+    `/category/get-all-category?page=${page}&size=${size}`
   );
   return response.data;
 };
+
 export const getProductsByCategory = async (catSlug: string) => {
   const response = await axiosClient.get(
     `https://dummyjson.com/products/category/${catSlug}`,
@@ -29,6 +31,7 @@ export const getProductsByCategory = async (catSlug: string) => {
   );
   return response.data;
 };
+
 export const searchProducts = async (query: string) => {
   const response = await axiosClient.get(
     `https://dummyjson.com/products/search?q=${query}`,

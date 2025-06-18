@@ -40,8 +40,8 @@ export function ProductsTable() {
 
   useEffect(() => {
     if (!data.products.length) {
-      dispatch(fetchProducts({ page: 10, size: 10 }));
-      dispatch(fetchCategories({ page: 10, size: 10 }));
+      dispatch(fetchProducts({ page: 0, size: 10 }));
+      dispatch(fetchCategories({ page: 0, size: 10 }));
     }
 
     return () => {};
@@ -85,7 +85,7 @@ export function ProductsTable() {
               if (value !== "all") {
                 dispatch(fetchProductsByCategory({ catSlug: value }));
               } else {
-                dispatch(fetchProducts({ page: 10, size: 10 }));
+                dispatch(fetchProducts({ page: 0, size: 10 }));
               }
             }}
           >
