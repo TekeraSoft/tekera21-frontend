@@ -12,7 +12,7 @@ const CreateTargetPage = async ({
   params: Promise<{ id: string }>;
 }) => {
   const prodId = (await params).id;
-  console.log("render ", prodId);
+
   const { data, success } = await getSingleProductById(prodId);
 
   if (!success || !data.id) {

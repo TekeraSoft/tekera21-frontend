@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -29,6 +28,7 @@ import { createProduct } from "@/app/actions";
 import { ICategory } from "../../../../../types/AdminTypes/category";
 import ImageView from "@/components/shared/ImageView";
 import { SubCategoriesSelect } from "./SubCategoriesSelect";
+import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
 
 type ProductFormData = {
   name?: string;
@@ -74,6 +74,7 @@ export default function ProductCreateForm({
       currencyType: "TRY",
       productType: "PHYSICAL",
       companyId: "",
+      code: "",
       categoryId: "",
       tags: [],
       attributes: [],
@@ -177,21 +178,6 @@ export default function ProductCreateForm({
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="code">Product Code *</Label>
-                  <Input
-                    id="code"
-                    {...register("code", {
-                      required: "Product code is required",
-                    })}
-                    placeholder="A2991"
-                  />
-                  {errors.code && (
-                    <p className="text-sm text-red-500">
-                      {errors.code.message}
-                    </p>
-                  )}
-                </div>
-                <div className="space-y-2">
                   <Label htmlFor="brandName">Brand Name *</Label>
                   <Input
                     id="brandName"
@@ -206,31 +192,41 @@ export default function ProductCreateForm({
                     </p>
                   )}
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="companyId">Company ID *</Label>
+                {/* <div className="space-y-2">
+                  <Label htmlFor="code">Product Code *</Label>
                   <Input
-                    id="companyId"
-                    {...register("companyId", {
-                      required: "Company ID is required",
+                    id="code"
+                    {...register("code", {
+                      required: "Product code is required",
                     })}
-                    placeholder="5bb243a1-084d-4930-ab9f-7ded184fd4c5"
+                    placeholder="A2991"
                   />
-                  {errors.companyId && (
+                  {errors.code && (
                     <p className="text-sm text-red-500">
-                      {errors.companyId.message}
+                      {errors.code.message}
                     </p>
                   )}
-                </div>
+                </div> */}
+              </div>
+              <div className="space-y-2 w-full">
+                <Label htmlFor="companyId">Company ID *</Label>
+                <Input
+                  id="companyId"
+                  {...register("companyId", {
+                    required: "Company ID is required",
+                  })}
+                  placeholder="5bb243a1-084d-4930-ab9f-7ded184fd4c5"
+                />
+                {errors.companyId && (
+                  <p className="text-sm text-red-500">
+                    {errors.companyId.message}
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="description">Description *</Label>
-                <Textarea
-                  id="description"
-                  {...register("description", {
-                    required: "Description is required",
-                  })}
-                  placeholder="High-quality mobile phone."
-                  rows={3}
+                <MarkdownEditor
+                  onChange={(value) => setValue("description", value)}
                 />
                 {errors.description && (
                   <p className="text-sm text-red-500">
@@ -238,6 +234,7 @@ export default function ProductCreateForm({
                   </p>
                 )}
               </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="currencyType">Currency Type *</Label>

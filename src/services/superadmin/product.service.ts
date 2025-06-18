@@ -11,13 +11,6 @@ export const getAdminProducts = async (
   return response.data;
 };
 
-// export const getSingleProductById = async (id: string) => {
-//   const response = await axiosClient.get(
-//     `/product/getProductBySlug?slug=${id}`
-//   );
-//   return response.data;
-// };
-
 export const getAdminProductCategories = async (
   page: number = 10,
   size: number = 10,

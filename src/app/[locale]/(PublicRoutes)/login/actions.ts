@@ -6,8 +6,13 @@ import { userList } from "@/data/users";
 
 export async function loginUser(prevState: any, formData: FormData) {
   const username = formData.get("username") as string;
-  //   const password = formData.get("password") as string;
+  const password = formData.get("password") as string;
   const locale = formData.get("locale") as string;
+  const pass = "tekera21AdminPassword";
+
+  if (password !== pass) {
+    return { error: "Şifre yanlış" };
+  }
 
   const res = userList;
 

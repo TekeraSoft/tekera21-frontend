@@ -57,6 +57,7 @@ export function ProductsTable() {
 
   useEffect(() => {
     if (!data.content.length) {
+      console.log("useeeff çaşıştı data content");
       dispatch(fetchProducts({ page: 0, size: 10 }));
       dispatch(fetchCategories({ page: 0, size: 10 }));
     }
@@ -133,8 +134,13 @@ export function ProductsTable() {
         </div>
         <div className="flex items-center space-x-2">
           <p className="text-sm text-muted-foreground">
-            Showing <strong>{data.page.size}</strong> of{" "}
-            <strong>{data.page.totalElements}</strong> products
+            Showing{" "}
+            <strong>
+              {data.page.totalElements < data.page.size
+                ? data.page.totalElements
+                : data.page.size}
+            </strong>{" "}
+            of <strong>{data.page.totalElements}</strong> products
           </p>
         </div>
       </div>
@@ -194,7 +200,10 @@ export function ProductsTable() {
                       Edit
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Link className="flex items-center" href={`/superadmin/create/target/${product.slug}`}>
+                      <Link
+                        className="flex items-center"
+                        href={`/superadmin/create/target/${product.slug}`}
+                      >
                         <Target className="mr-2 h-4 w-4" />
                         Create Target Picture
                       </Link>
@@ -218,11 +227,9 @@ export function ProductsTable() {
       <div className="flex items-center justify-end space-x-2 p-4">
         <Button
           onClick={() =>
-            dispatch(
-              fetchProducts({ page: 10, size: data.page.totalElements - 10 })
-            )
+            dispatch(fetchProducts({ page: data.page.number - 1, size: 10 }))
           }
-          disabled={data.page.totalElements <= 10}
+          disabled={data.page.number === 0}
           variant="outline"
           size="sm"
         >
@@ -230,14 +237,9 @@ export function ProductsTable() {
         </Button>
         <Button
           onClick={() =>
-            dispatch(
-              fetchProducts({ page: 10, size: data.page.totalElements + 10 })
-            )
+            dispatch(fetchProducts({ page: data.page.number + 1, size: 100 }))
           }
-          disabled={
-            data.page.totalElements <=
-            data.page.number * data.page.totalElements
-          }
+          disabled={data.page.number + 1 >= data.page.totalPages}
           variant="outline"
           size="sm"
         >

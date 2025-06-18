@@ -3,7 +3,7 @@ import {
   getAdminProducts,
   getProductsByCategory,
   searchProducts,
-} from "@/services/superadmin/product";
+} from "@/services/superadmin/product.service";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export interface IProduct {
