@@ -68,6 +68,7 @@ export function LoginForm({ locale }: { locale: string }) {
           </div>
           <Input
             id="password"
+            name="password"
             type="password"
             required
             autoComplete="current-password"
