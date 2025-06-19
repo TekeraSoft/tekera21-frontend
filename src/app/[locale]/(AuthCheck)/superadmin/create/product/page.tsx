@@ -9,7 +9,6 @@ const CreateProductPage = async () => {
   const categories: ICategory[] = success ? data.content : [];
   return (
     <div>
-      {/* <ProductCreateForm categories={categories} /> */}
       <ProductCreateFormNew categories={categories} />
     </div>
   );
