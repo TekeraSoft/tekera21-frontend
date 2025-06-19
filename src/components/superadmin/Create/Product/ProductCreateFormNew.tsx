@@ -94,7 +94,7 @@ export default function ProductCreateFormNew({
               price: 0,
               sku: "",
               barcode: "",
-              discountPrice: null,
+              discountPrice: 0,
             },
           ],
         },
@@ -476,7 +476,7 @@ export default function ProductCreateFormNew({
                         stockAttribute: [{ key: "", value: "" }],
                         stock: 0,
                         price: 0,
-                        discountPrice: null,
+                        discountPrice: 0,
                         sku: "",
                         barcode: "",
                       },
@@ -632,7 +632,7 @@ function VariationAttributes({
                   valueAsNumber: false,
                 }
               )}
-              placeholder="-"
+              placeholder="0"
               className="mt-1"
             />
           </div>
