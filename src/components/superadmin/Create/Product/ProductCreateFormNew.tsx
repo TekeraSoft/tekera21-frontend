@@ -36,6 +36,7 @@ type ProductFormData = {
   slug: string;
   code: string;
   brandName: string;
+  companyId: string;
   description: string;
   currencyType: string;
   categoryId: string;
@@ -80,6 +81,7 @@ export default function ProductCreateFormNew({
       productType: "PHYSICAL",
       tags: [{ value: "" }],
       categoryId: "",
+      companyId: "",
       subCategories: [],
       attributes: [{ key: "", value: "" }],
       variants: [
@@ -136,7 +138,7 @@ export default function ProductCreateFormNew({
     const formattedData = {
       name: data.name,
       code: data.code,
-      companyId: "dfc9a257-a4bc-4bc3-89ee-8727a129efd2",
+      companyId: data.companyId,
       brandName: data.brandName,
       description: data.description,
       categoryId: data.categoryId,
@@ -207,21 +209,21 @@ export default function ProductCreateFormNew({
                     </p>
                   )}
                 </div>
-                {/* <div className="space-y-2">
-                  <Label htmlFor="slug">Product Slug *</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="slug">Company Id *</Label>
                   <Input
-                    id="slug"
-                    {...register("slug", {
-                      required: "Product slug is required",
+                    id="companyId"
+                    {...register("companyId", {
+                      required: "Company Id is required",
                     })}
-                    placeholder="kalp-nakis-islemeli-yelek-94950"
+                    placeholder="dfc9a257-a4bc-4bc3-89ee-8727a129efd2"
                   />
                   {errors.slug && (
                     <p className="text-sm text-red-500">
-                      {errors.slug.message}
+                      {errors.companyId?.message}
                     </p>
                   )}
-                </div> */}
+                </div>
                 <div className="space-y-2">
                   <Label htmlFor="code">Product Code *</Label>
                   <Input
