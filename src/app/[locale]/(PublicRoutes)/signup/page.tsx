@@ -1,11 +1,5 @@
-import Link from "next/link"
-import type { Metadata } from "next"
-import { SignUpForm } from "@/components/auth/SignupForm"
-
-export const metadata: Metadata = {
-  title: "Sign Up",
-  description: "Create a new account",
-}
+import Link from "next/link";
+import { SignUpForm } from "@/components/auth/SignupForm";
 
 export default function SignUpPage() {
   return (
@@ -14,12 +8,19 @@ export default function SignUpPage() {
         <div className="mx-auto w-full max-w-sm">
           <div className="space-y-2 text-center">
             <h1 className="text-3xl font-bold">Sign Up</h1>
-            <p className="text-gray-500 dark:text-gray-400">Create a new account to get started</p>
+            <p className="text-gray-500 dark:text-gray-400">
+              Create a new account to get started
+            </p>
           </div>
           <SignUpForm />
           <div className="mt-4 text-center text-sm">
-            <span className="text-gray-500 dark:text-gray-400">Already have an account? </span>
-            <Link href="/login" className="font-medium text-primary underline-offset-4 hover:underline">
+            <span className="text-gray-500 dark:text-gray-400">
+              Already have an account?{" "}
+            </span>
+            <Link
+              href="/login"
+              className="font-medium text-primary underline-offset-4 hover:underline"
+            >
               Login
             </Link>
           </div>
@@ -37,5 +38,5 @@ export default function SignUpPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

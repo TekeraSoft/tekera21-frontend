@@ -34,7 +34,7 @@ export async function logOut() {
 export async function getCategories() {
   try {
     const { data } = await axiosInstance.get(`/super-admin/getAllCategory`);
-    console.log("data", data);
+
     return { success: true, message: data.message, data: data };
   } catch (error) {
     return { success: false, message: error || "Failed to get categories" };
@@ -43,11 +43,10 @@ export async function getCategories() {
 
 export async function getProducts(page: string = "0", size: string = "20") {
   try {
-    console.log("getproducsts called with page:", page, "size:", size);
     const { data } = await axiosInstance.get(
       `/product/getAllProduct?page=${page}&size=${size}`
     );
-    console.log("data from getProducts:", data);
+
     return { success: true, message: data.message, data: data };
   } catch (error) {
     console.log("getProducts error:", error);
@@ -65,7 +64,7 @@ export async function getCompanyProducts(
 
     return { success: true, message: data.message, data: data };
   } catch (error) {
-    console.log("getProducts error:", error);
+    console.log("getCompanyProducts error:", error);
     return { success: false, message: error || "Failed to get products" };
   }
 }
@@ -92,8 +91,6 @@ export async function createProduct(formData: FormData) {
     const dataform = formData.get("data");
     const images = formData.getAll("images");
 
-    console.log("datafırnorm:", dataform);
-    console.log("images:", images);
     if (!dataform || !images) {
       return {
         success: false,
@@ -110,7 +107,7 @@ export async function createProduct(formData: FormData) {
       }
     );
     revalidatePath("/");
-
+    console.log("data");
     return { success: true, message: data.message, product: data.data };
   } catch (error) {
     console.log("create Product error:", error);
@@ -123,10 +120,6 @@ export async function createSubcategory(formData: FormData) {
     const categoryId = formData.get("categoryId") as string;
     const name = formData.get("name") as string;
     const image = formData.get("image") as File;
-
-    console.log("categoryId:", categoryId);
-    console.log("name:", name);
-    console.log("image:", image);
 
     if (!categoryId || !name || name.trim() === "" || !image) {
       return {

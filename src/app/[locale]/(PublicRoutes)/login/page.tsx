@@ -1,11 +1,5 @@
 import Link from "next/link";
-import type { Metadata } from "next";
 import { LoginForm } from "@/components/auth/LoginForm";
-
-export const metadata: Metadata = {
-  title: "Login Page",
-  description: "Login to your account",
-};
 
 export default async function LoginPage({
   params,

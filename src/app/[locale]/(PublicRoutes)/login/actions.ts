@@ -9,7 +9,7 @@ export async function loginUser(prevState: any, formData: FormData) {
   const password = formData.get("password") as string;
   const locale = formData.get("locale") as string;
   const pass = "tekera21AdminPassword";
-  console.log("password", password);
+
   if (password !== pass) {
     return { error: "Şifre yanlış" };
   }
