@@ -30,6 +30,7 @@ import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
 import ImageView from "@/components/shared/ImageView";
 import { SubCategoriesSelect } from "./SubCategoriesSelect";
 import { createProduct } from "@/app/actions";
+import { useToast } from "@/hooks/use-toast";
 
 type ProductFormData = {
   name: string;
@@ -67,6 +68,7 @@ export default function ProductCreateFormNew({
   const [stockAttributeImages, setStockAttributeImages] = useState<{
     [key: string]: File[];
   }>({});
+  const { toast } = useToast();
 
   const {
     register,
@@ -162,14 +164,12 @@ export default function ProductCreateFormNew({
       productType: data.productType,
       attributes: data.attributes.filter((attr) => attr.key && attr.value),
     };
-
+    console.log("formatted", formattedData);
     const formData = new FormData();
     formData.append(
       "data",
       new Blob([JSON.stringify(formattedData)], { type: "application/json" })
     );
-
-    console.log("stockAttributeImages", stockAttributeImages);
 
     Object.values(stockAttributeImages).forEach((fileArray) => {
       fileArray.forEach((file) => {
@@ -177,8 +177,22 @@ export default function ProductCreateFormNew({
       });
     });
 
-    const response = await createProduct(formData);
-    console.log("response", response);
+    const { message, success } = await createProduct(formData);
+    if (success) {
+      console.log("message", message);
+      toast({
+        title: "Success",
+        description: "Product is created.",
+        variant: "default",
+      });
+    } else {
+      console.log("message", message);
+      toast({
+        title: "Error",
+        description: "Product cannot be created.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
