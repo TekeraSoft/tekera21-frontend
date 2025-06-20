@@ -1,16 +1,26 @@
 "use client";
 
-import { useEffect } from "react";
-import Image from "next/image";
+import { useEffect, useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   ArrowUpDown,
   Check,
   MoreHorizontal,
+  ParenthesesIcon,
   Pencil,
   Target,
   Trash2,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -47,13 +57,17 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Link } from "@/i18n/navigation";
+import { deleteProductById } from "@/app/actions";
+import { useToast } from "@/hooks/use-toast";
 
 export function ProductsTable() {
   const { data, error, loading, categories, selectedCategory } = useAppSelector(
     (state) => state.adminProducts
   );
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const dispatch = useAppDispatch();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!data.content.length) {
@@ -73,18 +87,38 @@ export function ProductsTable() {
     };
   }, [error]);
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "In Stock":
-        return "bg-green-100 text-green-800";
-      case "Low Stock":
-        return "bg-yellow-100 text-yellow-800";
-      case "Out of Stock":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
+  const handleDelete = async (productId: string) => {
+    const { success } = await deleteProductById(productId);
+
+    if (success) {
+      setShowDeleteDialog(false);
+      toast({
+        title: "Success",
+        description: "Product is deleted.",
+        variant: "default",
+      });
+      dispatch(fetchProducts({ page: data.page.number, size: data.page.size }));
+    } else {
+      toast({
+        title: "Error!",
+        description: "Product isnt deleted.",
+        variant: "destructive",
+      });
     }
   };
+
+  // const getStatusColor = (status: string) => {
+  //   switch (status) {
+  //     case "In Stock":
+  //       return "bg-green-100 text-green-800";
+  //     case "Low Stock":
+  //       return "bg-yellow-100 text-yellow-800";
+  //     case "Out of Stock":
+  //       return "bg-red-100 text-red-800";
+  //     default:
+  //       return "bg-gray-100 text-gray-800";
+  //   }
+  // };
 
   if (error) {
     return <div>{error}</div>;
@@ -170,7 +204,7 @@ export function ProductsTable() {
                     url: product.variations[0].images[0] || "/placeholder.svg",
                     name: product.name,
                   }}
-                  className="rounded-md object-cover"
+                  className="rounded-md object-cover w-16 h-16"
                 />
               </TableCell>
               <TableCell className="font-medium">{product.name}</TableCell>
@@ -197,7 +231,12 @@ export function ProductsTable() {
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuItem>
                       <Pencil className="mr-2 h-4 w-4" />
-                      Edit
+                      <Link
+                        className="flex items-center"
+                        href={`/superadmin/update/product/${product.id}`}
+                      >
+                        Edit Product
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <Link
@@ -212,14 +251,41 @@ export function ProductsTable() {
                       <Check className="mr-2 h-4 w-4" />
                       Mark as featured
                     </DropdownMenuItem>
+
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-red-600">
+                    <DropdownMenuItem
+                      className="text-red-600"
+                      onClick={() => setShowDeleteDialog(true)}
+                    >
                       <Trash2 className="mr-2 h-4 w-4" />
                       Delete
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>
+              <AlertDialog
+                open={showDeleteDialog}
+                onOpenChange={setShowDeleteDialog}
+              >
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Emin misiniz?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Bu işlem geri alınamaz. {product.name || "Bu ürün"} kalıcı
+                      olarak silinecek ve tüm veriler kaybolacak.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>İptal</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => handleDelete(product.id)}
+                      className="bg-red-600 hover:bg-red-700"
+                    >
+                      Sil
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </TableRow>
           ))}
         </TableBody>

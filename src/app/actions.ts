@@ -1,6 +1,8 @@
 "use server";
 
+import { IUProduct } from "@/components/superadmin/Create/Product/ProductUpdateForm";
 import axiosInstance from "@/request/axiosServer";
+import { IProduct } from "@/types/product";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
@@ -90,6 +92,10 @@ export async function createProduct(formData: FormData) {
   try {
     const dataform = formData.get("data");
     const images = formData.getAll("images");
+
+    console.log("data", dataform);
+
+    console.log("images", images);
 
     if (!dataform || !images) {
       return {
@@ -187,12 +193,36 @@ export async function createTargetPicture(formData: FormData) {
 export async function getSingleProductById(id: string) {
   try {
     const { data } = await axiosInstance.get(
-      `/product/getProductBySlug?slug=${id}`
+      `/super-admin/getCustomerProduct?id=${id}`
     );
     return { success: true, message: data.message, data: data };
   } catch (error) {
     console.log("getProducts error:", error);
     return { success: false, message: error || "Failed to get products" };
+  }
+}
+export async function deleteProductById(id: string) {
+  try {
+    const { data } = await axiosInstance.delete(
+      `/super-admin/deleteProduct?productId=${id}`
+    );
+    revalidatePath("/");
+
+    return { success: true, message: data.message, data: data };
+  } catch (error) {
+    console.log("deleteProductById error:", error);
+    return { success: false, message: error || "Failed to get deleteProduct" };
+  }
+}
+export async function updateProduct(updates: IUProduct) {
+  try {
+    const { data } = await axiosInstance.put(`/company/updateProduct`, updates);
+    revalidatePath("/");
+
+    return { success: true, message: data.message, data: data };
+  } catch (error) {
+    console.log("deleteProductById error:", error);
+    return { success: false, message: error || "Failed to get deleteProduct" };
   }
 }
 export async function getTargetPictureByProductById(prodId: string) {

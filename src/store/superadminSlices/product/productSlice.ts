@@ -100,7 +100,6 @@ export const fetchProducts = createAsyncThunk<IData, FetchProductsParams>(
   async (params, thunkAPI) => {
     try {
       const data = await getAdminProducts(params.page, params.size); // bu fonksiyon parametreleri almalı
-      console.log("adminproducts", data);
       return data;
     } catch (error: any) {
       console.log("Fetch error:", error);

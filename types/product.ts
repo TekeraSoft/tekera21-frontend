@@ -5,7 +5,14 @@ export interface IProduct {
   code: string;
   brandName: string;
   description: string;
-  category?: {
+  variations: TVariation[];
+  company: {
+    name: string;
+    logo: string;
+    rate: 0.0;
+    id: string;
+  };
+  category: {
     id: string;
     name: string;
     image: string;
@@ -15,41 +22,36 @@ export interface IProduct {
       image: string;
     }[];
   };
-  variations: {
-    id: string;
-    modelName: string;
-    modelCode: string;
-    price: number;
-    stock: number;
-    sku: string;
-    barcode: string;
-    attributes: {
-      key: string;
-      value: string;
-    }[];
-    images: string[];
-  }[];
   currencyType: string;
   tags: string[];
-  productType: string;
-  attributes: {
-    key: string;
-    value: string;
-  }[];
+  productType: "PHYSICAL" | "DIGITAL" | string;
+  attributes: ProductAttribute[];
   rate: number;
-  comments: any[]; // yorumlar daha sonra tanımlanacaksa bu şekilde kalabilir
 }
 
-const attr = {
-  color: {
-    value: "sarı",
-    sizes: [
-      { size: "S", price: 100, stock: 10, sku: "RED-S", barcode: "123456" },
-      { size: "M", price: 105, stock: 5, sku: "RED-M", barcode: "123457" },
-    ],
-    weights: [
-      { size: "7", price: 100, stock: 10, sku: "Yedi-S", barcode: "123456" },
-    ],
-    cpu: "amd64",
-  },
+export type TVariation = {
+  id: string;
+  modelName: string;
+  modelCode: string;
+  attributes: VariationAttribute[];
+  images: string[];
+};
+
+type VariationAttribute = {
+  stockAttribute: StockAttribute[];
+  stock: number;
+  price: number;
+  discountPrice: number;
+  sku: string;
+  barcode: string;
+};
+
+type StockAttribute = {
+  key: string;
+  value: string;
+};
+
+type ProductAttribute = {
+  key: string;
+  value: string;
 };

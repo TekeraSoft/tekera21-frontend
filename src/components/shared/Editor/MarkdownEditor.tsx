@@ -10,8 +10,10 @@ import Link from "@tiptap/extension-link";
 import TextEditorToolBar from "./Toolbar";
 
 const MarkdownEditor = ({
+  defaultValue,
   onChange,
 }: {
+  defaultValue?: string;
   onChange: (value: string) => void;
 }) => {
   const extensions = [
@@ -49,7 +51,7 @@ const MarkdownEditor = ({
     }),
   ];
 
-  const content = "";
+  const content = defaultValue || "";
   const editor = useEditor({
     extensions,
     content,
