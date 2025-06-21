@@ -31,7 +31,7 @@ import ImageView from "@/components/shared/ImageView";
 import { SubCategoriesSelect } from "./SubCategoriesSelect";
 import { updateProduct } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
-import { IProduct } from "@/types/product";
+import { IGetByIdProduct } from "@/types/SingleProduct";
 
 export type IUProduct = {
   id: string;
@@ -81,7 +81,7 @@ export default function ProductUpdateForm({
   product,
 }: {
   categories: ICategory[];
-  product: IProduct;
+  product: IGetByIdProduct;
 }) {
   const [stockAttributeImages, setStockAttributeImages] = useState<{
     [key: string]: File[];
@@ -105,10 +105,9 @@ export default function ProductUpdateForm({
       currencyType: product.currencyType,
       productType: product.productType,
       tags: product.tags?.map((tag) => ({ value: tag })) || [],
-      categoryId: product.category?.id || "",
+      categoryId: product.categoryId || "",
       subCategories:
-        product.category?.subCategories?.map((sub) => ({ value: sub.id })) ||
-        [],
+        product.subCategoriesId?.map((sub) => ({ value: sub })) || [],
       attributes: product.attributes,
       variants: product.variations,
     },

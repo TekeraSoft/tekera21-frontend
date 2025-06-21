@@ -2,6 +2,7 @@ import { getCategories, getSingleProductById } from "@/app/actions";
 import ProductUpdateForm from "@/components/superadmin/Create/Product/ProductUpdateForm";
 import { ICategory } from "@/types/AdminTypes/category";
 import { IProduct } from "@/types/product";
+import { IGetByIdProduct } from "@/types/SingleProduct";
 import React from "react";
 
 const UpdateProductPage = async ({
@@ -25,7 +26,7 @@ const UpdateProductPage = async ({
     ? categoriesData.data.content
     : [];
 
-  const product: IProduct = (data as IProduct) || ({} as any);
+  const product: IGetByIdProduct = (data as IGetByIdProduct) || ({} as any);
   return <ProductUpdateForm product={product} categories={categories} />;
 };
 
