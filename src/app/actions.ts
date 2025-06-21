@@ -203,11 +203,11 @@ export async function getSingleProductById(id: string) {
 }
 export async function deleteProductById(id: string) {
   try {
+    console.log("delete product byId", id);
     const { data } = await axiosInstance.delete(
       `/super-admin/deleteProduct?productId=${id}`
     );
     revalidatePath("/");
-
     return { success: true, message: data.message, data: data };
   } catch (error) {
     console.log("deleteProductById error:", error);

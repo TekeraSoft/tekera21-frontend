@@ -71,6 +71,7 @@ interface ProductState {
   categories: ICategory[];
   selectedCategory: string;
   searchTerm: string;
+  success: boolean;
 }
 
 const initialState: ProductState = {
@@ -88,6 +89,7 @@ const initialState: ProductState = {
   categories: [],
   selectedCategory: "all",
   searchTerm: "",
+  success: false,
 };
 
 interface FetchProductsParams {
@@ -168,9 +170,11 @@ const adminProductSlice = createSlice({
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.loading = false;
         state.data = action.payload;
+        state.success = true;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
+        state.success = false;
         state.error = (action.payload as string) || "Bir hata oluştu.";
       })
 

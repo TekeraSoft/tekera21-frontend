@@ -61,23 +61,21 @@ import { deleteProductById } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 
 export function ProductsTable() {
-  const { data, error, loading, categories, selectedCategory } = useAppSelector(
-    (state) => state.adminProducts
-  );
+  const { data, error, loading, categories, selectedCategory, success } =
+    useAppSelector((state) => state.adminProducts);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const dispatch = useAppDispatch();
   const { toast } = useToast();
 
   useEffect(() => {
-    if (!data.content.length) {
-      console.log("useeeff çaşıştı data content");
+    if (!success && !error) {
       dispatch(fetchProducts({ page: 0, size: 10 }));
       dispatch(fetchCategories({ page: 0, size: 10 }));
     }
 
     return () => {};
-  }, [data.content]);
+  }, [success, error]);
 
   useEffect(() => {
     return () => {
