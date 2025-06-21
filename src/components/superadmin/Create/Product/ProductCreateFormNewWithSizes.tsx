@@ -583,14 +583,14 @@ function VariationAttributes({
             </Button>
           </div>
 
-          <StockAttributeFields
+          {/* <StockAttributeFields
             watch={watch}
             control={control}
             variationIndex={variationIndex}
             attributeIndex={attributeIndex}
             setValue={setValue}
             attributeOptions={attributeOptions}
-          />
+          /> */}
 
           <ProductAttributeManager
             variationIndex={variationIndex}

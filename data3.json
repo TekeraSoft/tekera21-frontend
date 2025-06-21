@@ -1,0 +1,134 @@
+{
+    "id": "e5c72bd0-53c0-4742-b312-735c06770d0f",
+    "name": "Deniz Kızı Geniş Yaka Tshirt",
+    "code": "DK-BYZT1",
+    "brandName": "ARZUAMBER MODA",
+    "description": "Ürün Detayı ",
+    "categoryId": "8a622754-994d-4054-8bad-164db2f14725",
+    "subCategories": [
+        "7aa966cc-2cdb-444a-be18-4473eb2dd3aa"
+    ],
+    "variants": [
+        {
+            "modelName": "DF-TSH1",
+            "modelCode": "TS-111111",
+            "id": "66113457-5f48-4264-8ea3-ece1072ac2b1",
+            "attributes": [
+                {
+                    "stockAttribute": [
+                        {
+                            "key": "color",
+                            "value": "Beyaz"
+                        },
+                        {
+                            "key": "size",
+                            "value": "S"
+                        }
+                    ],
+                    "stock": 20,
+                    "price": 1500,
+                    "discountPrice": 0,
+                    "sku": "1111111111",
+                    "barcode": "1111111111"
+                },
+                {
+                    "stockAttribute": [
+                        {
+                            "key": "color",
+                            "value": "Siyah"
+                        },
+                        {
+                            "key": "size",
+                            "value": "S"
+                        }
+                    ],
+                    "stock": 20,
+                    "price": 1500,
+                    "discountPrice": 0,
+                    "sku": "2222222222",
+                    "barcode": "2222222222"
+                },
+                {
+                    "stockAttribute": [
+                        {
+                            "key": "color",
+                            "value": "Beyaz"
+                        },
+                        {
+                            "key": "size",
+                            "value": "S"
+                        }
+                    ],
+                    "stock": 20,
+                    "price": 1500,
+                    "discountPrice": 0,
+                    "sku": "1111111111",
+                    "barcode": "1111111111"
+                },
+                {
+                    "stockAttribute": [
+                        {
+                            "key": "color",
+                            "value": "Siyah"
+                        },
+                        {
+                            "key": "size",
+                            "value": "S"
+                        }
+                    ],
+                    "stock": 20,
+                    "price": 1500,
+                    "discountPrice": 0,
+                    "sku": "2222222222",
+                    "barcode": "2222222222"
+                },
+                {
+                    "stockAttribute": [
+                        {
+                            "key": "color",
+                            "value": "Beyaz"
+                        },
+                        {
+                            "key": "size",
+                            "value": "S"
+                        }
+                    ],
+                    "stock": 20,
+                    "price": 1500,
+                    "discountPrice": 0,
+                    "sku": "1111111111",
+                    "barcode": "1111111111"
+                },
+                {
+                    "stockAttribute": [
+                        {
+                            "key": "color",
+                            "value": "Siyah"
+                        },
+                        {
+                            "key": "size",
+                            "value": "S"
+                        }
+                    ],
+                    "stock": 20,
+                    "price": 1500,
+                    "discountPrice": 0,
+                    "sku": "2222222222",
+                    "barcode": "2222222222"
+                }
+            ]
+        }
+    ],
+    "currencyType": "TRY",
+    "tags": [
+        "digital fashion"
+    ],
+    "productType": "PHYSICAL",
+    "attributes": [
+        {
+            "key": "Video",
+            "value": "Var"
+        }
+    ],
+    "deleteImages": []
+}

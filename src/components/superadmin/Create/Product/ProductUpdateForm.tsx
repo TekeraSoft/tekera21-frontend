@@ -74,13 +74,14 @@ export type IUProduct = {
   tags: { value: string }[];
   productType: string; // enum gibi değer bekleniyorsa
   attributes: Attribute[];
-  deleteImages: string[];
+  deleteImages?: string[];
 };
 
 type Variant = {
   modelName: string;
   modelCode: string;
-  images: string[];
+  images?: string[];
+  id?: string;
   attributes: StockDetail[];
 };
 
@@ -171,7 +172,7 @@ export default function ProductUpdateForm({
 
   const onSubmit = async (data: IUProduct) => {
     // Transform data to match the required format
-    const formattedData: IUProduct = {
+    const formattedData = {
       id: product.id,
       name: data.name,
       code: data.code,
@@ -182,7 +183,7 @@ export default function ProductUpdateForm({
       variants: data.variants.map((variation) => ({
         modelName: variation.modelName,
         modelCode: variation.modelCode,
-        images: variation.images ?? [],
+        id: variation.id,
         attributes: variation.attributes.map((attr, attrIndex) => ({
           stockAttribute: attr.stockAttribute.filter(
             (sa) => sa.key && sa.value
@@ -195,48 +196,52 @@ export default function ProductUpdateForm({
         })),
       })),
       currencyType: data.currencyType,
-      tags: data.tags,
+      tags: data.tags.map((tag) => tag.value).filter(Boolean),
       productType: data.productType,
       attributes: data.attributes.filter((attr) => attr.key && attr.value),
       deleteImages: [],
     };
-
+    console.log("formatted", formattedData);
     const formData = new FormData();
     formData.append(
       "data",
       new Blob([JSON.stringify(formattedData)], { type: "application/json" })
     );
 
-    Object.values(stockAttributeImages).forEach((fileArray) => {
-      fileArray.forEach((file) => {
-        formData.append(`images`, file);
+    if (Object.values(stockAttributeImages).length) {
+      Object.values(stockAttributeImages).forEach((fileArray) => {
+        fileArray.forEach((file) => {
+          formData.append(`images`, file);
+        });
       });
-    });
+    } else {
+      formData.append("images", new File([""], ""), "empty.jpg");
+    }
 
-    const { message, success } = await updateProduct(formattedData);
+    const { message, success } = await updateProduct(formData);
     if (success) {
       console.log("message", message);
       toast({
         title: "Success",
-        description: "Product is created.",
+        description: "Product is updated.",
         variant: "default",
       });
     } else {
       console.log("message", message);
       toast({
         title: "Error",
-        description: "Product cannot be created.",
+        description: "Product cannot be updated.",
         variant: "destructive",
       });
     }
   };
-console.log("product", product)
+  console.log("product", product);
   return (
     <div className=" mx-auto p-6">
       <Card>
         <CardHeader>
-          <CardTitle>Create New Product</CardTitle>
-          <CardDescription>Fill in the product details below</CardDescription>
+          <CardTitle>Updata Product</CardTitle>
+          <CardDescription>Update in the product details below</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -616,6 +621,17 @@ function VariationAttributes({
     return true;
   };
 
+  const imagesDb = watch("variants")[variationIndex].images;
+
+  async function urlToFile(url: string, filename: string): Promise<File> {
+    const uri =
+      process.env.NEXT_PUBLIC_IMAGE_BASE_URL +
+      (url.startsWith("/") ? url : `/${url}`);
+    const res = await fetch(uri);
+    const blob = await res.blob();
+    return new File([blob], filename, { type: blob.type });
+  }
+
   return (
     <div className="space-y-4">
       <Label className="text-sm font-medium">Stock Attributes</Label>
@@ -731,6 +747,7 @@ function VariationAttributes({
               }.webp`}
               variationIndex={variationIndex}
               attributeIndex={attributeIndex}
+              imagesFromDb={imagesDb}
               images={
                 stockAttributeImages[`${variationIndex}-${attributeIndex}`] ||
                 []
@@ -897,12 +914,14 @@ function StockAttributeImageUpload({
   images,
   onImagesChange,
   imageName,
+  imagesFromDb,
 }: {
   variationIndex: number;
   attributeIndex: number;
   images: File[];
   onImagesChange: (images: File[]) => void;
   imageName: string;
+  imagesFromDb?: string[];
 }) {
   const resizeImage = (file: File) => {
     const fileResized = new Promise((resolve) => {
@@ -1004,6 +1023,31 @@ function StockAttributeImageUpload({
           </p>
         </div>
       </div>
+
+      {!!imagesFromDb?.length && (
+        <div className="grid grid-cols-3 gap-2">
+          {imagesFromDb.map((url, imageIndex) => (
+            <div key={imageIndex} className="relative group">
+              <img
+                src={
+                  process.env.NEXT_PUBLIC_IMAGE_BASE_URL +
+                    (url.startsWith("/") ? url : `/${url}`) ||
+                  "/placeholder.svg"
+                }
+                alt={`Stock ${attributeIndex + 1} - Image ${imageIndex + 1}`}
+                className="w-full h-16 object-cover rounded border"
+              />
+              <button
+                type="button"
+                onClick={() => removeImage(imageIndex)}
+                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <X className="h-2 w-2" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
 
       {images.length > 0 && (
         <div className="grid grid-cols-3 gap-2">

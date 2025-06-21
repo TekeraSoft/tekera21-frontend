@@ -214,14 +214,28 @@ export async function deleteProductById(id: string) {
     return { success: false, message: error || "Failed to get deleteProduct" };
   }
 }
-export async function updateProduct(updates: IUProduct) {
+export async function updateProduct(formData: FormData) {
+  const updates = formData.get("data");
+  const images = formData.getAll("images");
+
+  console.log("data", updates);
+
+  console.log("images", images);
   try {
-    const { data } = await axiosInstance.put(`/company/updateProduct`, updates);
+    const { data } = await axiosInstance.put(
+      `/company/updateProduct`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     revalidatePath("/");
 
     return { success: true, message: data.message, data: data };
   } catch (error) {
-    console.log("deleteProductById error:", error);
+    console.log("update Product error:", error);
     return { success: false, message: error || "Failed to get deleteProduct" };
   }
 }

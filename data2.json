@@ -1,0 +1,60 @@
+{
+  "id": "e5c72bd0-53c0-4742-b312-735c06770d0f",
+  "name": "Deniz Kızı Geniş Yaka Tshirt 2",
+  "code": "DK-BYZT1",
+  "brandName": "ARZUAMBER MODA",
+  "description": "Ürün Detayı asdasdas",
+  "variations": [
+    {
+      "id": "66113457-5f48-4264-8ea3-ece1072ac2b1",
+      "modelName": "DF-TSH1",
+      "modelCode": "TS-111111",
+      "attributes": [
+        {
+          "stockAttribute": [
+            {
+              "key": "color",
+              "value": "Beyaz"
+            },
+            {
+              "key": "size",
+              "value": "S"
+            }
+          ],
+          "stock": 20,
+          "price": 1500,
+          "discountPrice": 0,
+          "sku": "1111111111",
+          "barcode": "1111111111"
+        },
+        {
+          "stockAttribute": [
+            {
+              "key": "color",
+              "value": "Siyah"
+            },
+            {
+              "key": "size",
+              "value": "S"
+            }
+          ],
+          "stock": 20,
+          "price": 1500,
+          "discountPrice": 0,
+          "sku": "2222222222",
+          "barcode": "2222222222"
+        }
+      ]
+    }
+  ],
+  "currencyType": "TRY",
+  "tags": ["digital fashion"],
+  "productType": "PHYSICAL",
+  "attributes": [
+    {
+      "key": "Video",
+      "value": "Var"
+    }
+  ],
+  "deleteProducts": []
+}

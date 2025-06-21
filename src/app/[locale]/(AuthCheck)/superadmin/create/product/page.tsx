@@ -10,7 +10,7 @@ const CreateProductPage = async () => {
   const categories: ICategory[] = success ? data.content : [];
   return (
     <div>
-      <ProductCreateFormNew categories={categories} />
+      <ProductCreateFormNewWithSize categories={categories} />
     </div>
   );
 };
