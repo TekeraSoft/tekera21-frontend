@@ -33,34 +33,6 @@ import { updateProduct } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import { IProduct } from "@/types/product";
 
-type ProductFormData33 = {
-  name: string;
-  slug: string;
-  code: string;
-  brandName: string;
-  companyId: string;
-  description: string;
-  currencyType: string;
-  categoryId: string;
-  subCategories?: { value: string }[];
-  productType: string;
-  tags: { value: string }[];
-  attributes: { key: string; value: string }[];
-  variants: {
-    modelName: string;
-    modelCode: string;
-    images: string[];
-    attributes: {
-      stockAttribute: { key: string; value: string }[];
-      stock: number;
-      price: number;
-      sku: string;
-      barcode: string;
-      discountPrice?: number | null;
-    }[];
-  }[];
-};
-
 export type IUProduct = {
   id: string;
   name: string;
@@ -114,6 +86,7 @@ export default function ProductUpdateForm({
   const [stockAttributeImages, setStockAttributeImages] = useState<{
     [key: string]: File[];
   }>({});
+  const [deleteImages, setDeleteImages] = useState<string[]>([]);
   const { toast } = useToast();
 
   const {
@@ -199,7 +172,7 @@ export default function ProductUpdateForm({
       tags: data.tags.map((tag) => tag.value).filter(Boolean),
       productType: data.productType,
       attributes: data.attributes.filter((attr) => attr.key && attr.value),
-      deleteImages: [],
+      deleteImages: deleteImages,
     };
     console.log("formatted", formattedData);
     const formData = new FormData();
@@ -220,14 +193,12 @@ export default function ProductUpdateForm({
 
     const { message, success } = await updateProduct(formData);
     if (success) {
-      console.log("message", message);
       toast({
         title: "Success",
         description: "Product is updated.",
         variant: "default",
       });
     } else {
-      console.log("message", message);
       toast({
         title: "Error",
         description: "Product cannot be updated.",
@@ -235,12 +206,12 @@ export default function ProductUpdateForm({
       });
     }
   };
-  console.log("product", product);
+
   return (
     <div className=" mx-auto p-6">
       <Card>
         <CardHeader>
-          <CardTitle>Updata Product</CardTitle>
+          <CardTitle>Update Product</CardTitle>
           <CardDescription>Update in the product details below</CardDescription>
         </CardHeader>
         <CardContent>
@@ -497,6 +468,8 @@ export default function ProductUpdateForm({
                     </div>
                   </div>
                   <VariationAttributes
+                    deleteImages={deleteImages}
+                    setDeleteImages={setDeleteImages}
                     control={control}
                     watch={watch}
                     variationIndex={variationIndex}
@@ -550,6 +523,8 @@ function VariationAttributes({
   control,
   variationIndex,
   setValue,
+  deleteImages,
+  setDeleteImages,
   watchedVariations,
   stockAttributeImages,
   setStockAttributeImages,
@@ -559,6 +534,8 @@ function VariationAttributes({
   variationIndex: number;
   setValue: any;
   watchedVariations: any[];
+  deleteImages: string[];
+  setDeleteImages: React.Dispatch<React.SetStateAction<string[]>>;
   stockAttributeImages: { [key: string]: File[] };
   setStockAttributeImages: React.Dispatch<
     React.SetStateAction<{ [key: string]: File[] }>
@@ -621,16 +598,7 @@ function VariationAttributes({
     return true;
   };
 
-  const imagesDb = watch("variants")[variationIndex].images;
-
-  async function urlToFile(url: string, filename: string): Promise<File> {
-    const uri =
-      process.env.NEXT_PUBLIC_IMAGE_BASE_URL +
-      (url.startsWith("/") ? url : `/${url}`);
-    const res = await fetch(uri);
-    const blob = await res.blob();
-    return new File([blob], filename, { type: blob.type });
-  }
+  const imagesFromDb = watch("variants")[variationIndex].images;
 
   return (
     <div className="space-y-4">
@@ -739,6 +707,10 @@ function VariationAttributes({
 
           {shouldShowImageUpload(attributeIndex) && (
             <StockAttributeImageUpload
+              setValue={setValue}
+              deleteImages={deleteImages}
+              setDeleteImages={setDeleteImages}
+              watch={watch}
               imageName={`${watch("variants")[variationIndex].modelCode}_${
                 watch(
                   `variants.${variationIndex}.attributes.${attributeIndex}`
@@ -747,7 +719,7 @@ function VariationAttributes({
               }.webp`}
               variationIndex={variationIndex}
               attributeIndex={attributeIndex}
-              imagesFromDb={imagesDb}
+              imagesFromDb={imagesFromDb}
               images={
                 stockAttributeImages[`${variationIndex}-${attributeIndex}`] ||
                 []
@@ -807,11 +779,6 @@ function StockAttributeFields({
       control._formValues?.variants?.[variationIndex]?.attributes?.[
         attributeIndex
       ]?.stockAttribute ?? [];
-
-    // const stockAttributes =
-    //   watch(
-    //     `variants.${variationIndex}.attributes.${attributeIndex}.stockAttribute`
-    //   ) ?? [];
 
     return stockAttribute.map((attr: any) => attr.key).filter(Boolean);
   };
@@ -911,6 +878,10 @@ function StockAttributeFields({
 function StockAttributeImageUpload({
   variationIndex,
   attributeIndex,
+  deleteImages,
+  setDeleteImages,
+  setValue,
+  watch,
   images,
   onImagesChange,
   imageName,
@@ -920,8 +891,12 @@ function StockAttributeImageUpload({
   attributeIndex: number;
   images: File[];
   onImagesChange: (images: File[]) => void;
+  deleteImages: string[];
+  setDeleteImages: React.Dispatch<React.SetStateAction<string[]>>;
+  setValue: any;
   imageName: string;
   imagesFromDb?: string[];
+  watch: UseFormWatch<IUProduct>;
 }) {
   const resizeImage = (file: File) => {
     const fileResized = new Promise((resolve) => {
@@ -988,13 +963,29 @@ function StockAttributeImageUpload({
       console.error("Resim küçültme hatası:", error);
     }
   };
-  // const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const files = Array.from(event.target.files || []);
-  //   onImagesChange([...images, ...files]);
-  // };
 
   const removeImage = (imageIndex: number) => {
     onImagesChange(images.filter((_, i) => i !== imageIndex));
+  };
+
+  function extractColorFromUrl(url: string): string | null {
+    const match = url.match(/clr_(.*?)\./);
+    return match ? match[1] : null;
+  }
+
+  function extractColorFromFilename(name: string): string | null {
+    const match = name.match(/_(.*?)\.[^.]+$/);
+    return match ? match[1] : null;
+  }
+
+  const handleDeleteImages = (url: string) => {
+    const variants = watch("variants");
+    const currentImages = variants[variationIndex].images as string[];
+
+    const updatedImages = currentImages.filter((img) => img !== url);
+
+    setValue(`variants.${variationIndex}.images`, updatedImages);
+    setDeleteImages((prev) => [...prev, url]);
   };
 
   return (
@@ -1026,26 +1017,31 @@ function StockAttributeImageUpload({
 
       {!!imagesFromDb?.length && (
         <div className="grid grid-cols-3 gap-2">
-          {imagesFromDb.map((url, imageIndex) => (
-            <div key={imageIndex} className="relative group">
-              <img
-                src={
-                  process.env.NEXT_PUBLIC_IMAGE_BASE_URL +
-                    (url.startsWith("/") ? url : `/${url}`) ||
-                  "/placeholder.svg"
-                }
-                alt={`Stock ${attributeIndex + 1} - Image ${imageIndex + 1}`}
-                className="w-full h-16 object-cover rounded border"
-              />
-              <button
-                type="button"
-                onClick={() => removeImage(imageIndex)}
-                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <X className="h-2 w-2" />
-              </button>
-            </div>
-          ))}
+          {imagesFromDb
+            .filter(
+              (uri) =>
+                extractColorFromUrl(uri) === extractColorFromFilename(imageName)
+            )
+            .map((url, imageIndex) => (
+              <div key={imageIndex} className="relative group">
+                <img
+                  src={
+                    process.env.NEXT_PUBLIC_IMAGE_BASE_URL +
+                      (url.startsWith("/") ? url : `/${url}`) ||
+                    "/placeholder.svg"
+                  }
+                  alt={`Stock ${attributeIndex + 1} - Image ${imageIndex + 1}`}
+                  className="w-full h-16 object-cover rounded border"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleDeleteImages(url)}
+                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <X className="h-2 w-2" />
+                </button>
+              </div>
+            ))}
         </div>
       )}
 

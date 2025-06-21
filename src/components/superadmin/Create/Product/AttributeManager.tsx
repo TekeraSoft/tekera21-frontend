@@ -506,7 +506,6 @@ export default function ProductAttributeManager({
 
     return true;
   };
-  console.log("images", stockAttributeImages);
 
   const groups = Object.entries(
     attributes.reduce((groups, variant) => {
@@ -519,7 +518,6 @@ export default function ProductAttributeManager({
     }, {} as Record<string, typeof attributes>)
   );
 
-  console.log("groups", groups);
   return (
     <div className="w-full max-w-7xl mx-auto p-6 space-y-6">
       {/* Top Filter Section */}
@@ -774,9 +772,9 @@ export default function ProductAttributeManager({
                             <div className="w-12 h-12 border-2 border-dashed border-orange-300 rounded flex items-center justify-center">
                               {shouldShowImageUpload(attributeIndex) && (
                                 <StockAttributeImageUpload
-                                    imageName={`${
-                                      watch("variants")[variationIndex].modelCode
-                                    }_${variant.color || "default"}.webp`}
+                                  imageName={`${
+                                    watch("variants")[variationIndex].modelCode
+                                  }_${variant.color || "default"}.webp`}
                                   variationIndex={variationIndex}
                                   attributeIndex={attributeIndex}
                                   images={
