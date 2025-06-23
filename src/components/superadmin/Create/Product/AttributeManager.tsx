@@ -159,6 +159,7 @@ function StockAttributeImageUpload({
   onImagesChange: (images: File[]) => void;
   imageName: string;
 }) {
+  console.log("imageName", imageName);
   const resizeImage = (file: File) => {
     const fileResized = new Promise((resolve) => {
       Resizer.imageFileResizer(
@@ -218,7 +219,7 @@ function StockAttributeImageUpload({
       // Check if the image already exist
 
       const reNamedImage = new File([resizedImage], imageName);
-      console.log("variantFields", imageName);
+
       onImagesChange([...images, reNamedImage]);
     } catch (error) {
       console.error("Resim küçültme hatası:", error);
@@ -230,6 +231,8 @@ function StockAttributeImageUpload({
   };
 
   const [showMediaLibrary, setShowMediaLibrary] = useState(false);
+
+  console.log("images", images);
 
   return (
     <div>
@@ -397,7 +400,7 @@ export default function ProductAttributeManager({
   const [attributes, setAttributes] = useState<TVariant[]>([]);
   const [globalPrice, setGlobalPrice] = useState("0,00₺");
   const [globalTax, setGlobalTax] = useState("");
-  const [globalStock, setGlobalStock] = useState("");
+  const [globalStock, setGlobalStock] = useState(0);
 
   const removeColor = (colorName: string) => {
     setSelectedColors((prev) =>
@@ -441,7 +444,6 @@ export default function ProductAttributeManager({
   };
 
   const handleAddVariant = () => {
-    console.log("selecteds", selectedColor, selectedSizes);
     if (!selectedColors.length || !selectedSizes.length) return;
 
     const existingCombinations = new Set(
@@ -517,6 +519,26 @@ export default function ProductAttributeManager({
       return groups;
     }, {} as Record<string, typeof attributes>)
   );
+
+  console.log("color variants", attributes);
+
+  const attributesForBackend = attributes.map((item) => {
+    return {
+      stockAttribute: [
+        { key: "color", value: item.color },
+        { key: "size", value: item.size },
+      ],
+      stock: item.stock,
+      sku: `${item.stockCode}-${item.color}`, // veya başka bir mantıkla
+      barcode: item.barcode,
+      price: item.price,
+      discountPrice: 0,
+    };
+  });
+
+  console.log("attrss", attributesForBackend);
+
+  console.log("stockAttributeImages", stockAttributeImages);
 
   return (
     <div className="w-full max-w-7xl mx-auto p-6 space-y-6">
@@ -701,7 +723,7 @@ export default function ProductAttributeManager({
           </Label>
           <Input
             value={globalStock}
-            onChange={(e) => setGlobalStock(e.target.value)}
+            onChange={(e) => setGlobalStock(Number(e.target.value))}
             placeholder="0"
           />
         </div>

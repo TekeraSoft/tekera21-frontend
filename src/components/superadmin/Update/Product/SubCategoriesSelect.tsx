@@ -1,7 +1,7 @@
 "use client";
 import { type Control, Controller } from "react-hook-form";
 import { Label } from "@/components/ui/label";
-import { MultiSelect, OptionType } from "../../MultiSelect";
+import { MultiSelect, OptionType } from "./MultiSelect";
 
 interface SubCategoriesSelectProps {
   control: Control<any>;
@@ -25,8 +25,6 @@ export function SubCategoriesSelect({
     label: subCategory.name,
     image: subCategory.image,
   }));
-
-  console.log("options in subcategoryis", options)
 
   return (
     <div className="space-y-2">

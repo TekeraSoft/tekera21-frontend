@@ -18,7 +18,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import ImageView from "../shared/ImageView";
+import ImageView from "@/components/shared/ImageView";
 
 export type OptionType = {
   value: string;
@@ -28,7 +28,7 @@ export type OptionType = {
 
 interface MultiSelectProps {
   options: OptionType[];
-  selected: string[];
+  selected: { value: string }[];
   onChange: (selected: string[]) => void;
   placeholder?: string;
   emptyMessage?: string;
@@ -46,24 +46,28 @@ export function MultiSelect({
   const [open, setOpen] = React.useState(false);
 
   const handleUnselect = (item: string) => {
-    onChange(selected.filter((i) => i !== item));
+    onChange(selected.filter((i) => i.value !== item).map((i) => i.value));
   };
 
   const handleSelect = (value: string) => {
-    if (selected.includes(value)) {
-      onChange(selected.filter((item) => item !== value));
+    if (selected.find((item) => item.value === value)) {
+      onChange(
+        selected
+          .filter((item) => item.value !== value)
+          .map((item) => item.value)
+      );
     } else {
-      onChange([...selected, value]);
+      onChange([...selected, { value }].map((item) => item.value));
     }
   };
 
   // Get display labels for selected items
-  const selectedLabels = selected.map((value) => {
-    const option = options.find((option) => option.value === value);
-    return option?.label || value;
-  });
+  // const selectedLabels = [""],
 
-  console.log("selectedLAbels", selectedLabels)
+  const selectedLabels = selected.map((selected) => {
+    const option = options.find((option) => option.value === selected.value);
+    return option?.label || selected.value;
+  });
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -107,7 +111,9 @@ export function MultiSelect({
             <CommandEmpty>{emptyMessage}</CommandEmpty>
             <CommandGroup className="max-h-64 overflow-auto">
               {options.map((option) => {
-                const isSelected = selected.includes(option.value);
+                const isSelected = selected.filter(
+                  (item) => item.value === option.value
+                ).length;
                 return (
                   <CommandItem
                     key={option.value}
@@ -137,27 +143,33 @@ export function MultiSelect({
         </Command>
         {selected.length > 0 && (
           <div className="p-2 border-t flex flex-wrap gap-1">
-            {selected.map((value) => {
-              const option = options.find((option) => option.value === value);
+            {selected.map((selectedItem) => {
+              const option = options.find(
+                (option) => option.value === selectedItem.value
+              );
               return (
-                <Badge key={value} variant="warning" className="rounded-sm">
-                  {option?.label || value}
+                <Badge
+                  key={selectedItem.value}
+                  variant="warning"
+                  className="rounded-sm"
+                >
+                  {option?.label || selectedItem.value}
                   <button
                     className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
-                        handleUnselect(value);
+                        handleUnselect(selectedItem.value);
                       }
                     }}
                     onMouseDown={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                     }}
-                    onClick={() => handleUnselect(value)}
+                    onClick={() => handleUnselect(selectedItem.value)}
                   >
                     <X className="h-3 w-3" />
                     <span className="sr-only">
-                      Remove {option?.label || value}
+                      Remove {option?.label || selectedItem.value}
                     </span>
                   </button>
                 </Badge>

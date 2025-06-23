@@ -5,6 +5,7 @@ import type React from "react";
 import { useState } from "react";
 import { useForm, useFieldArray, UseFormWatch } from "react-hook-form";
 import { Plus, Minus, Upload, X } from "lucide-react";
+import Resizer from "react-image-file-resizer";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -30,7 +31,7 @@ import ImageView from "@/components/shared/ImageView";
 import { SubCategoriesSelect } from "./SubCategoriesSelect";
 import { createProduct } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
-import ProductAttributeManager from "./AttributeManager";
+import ProductVariantForm from "./ProductVariantForm";
 
 export type ProductFormData = {
   name: string;
@@ -49,18 +50,27 @@ export type ProductFormData = {
     modelName: string;
     modelCode: string;
     images: string[];
+    color: string;
     attributes: {
-      stockAttribute: { key: string; value: string }[];
+      attributeDetails: { key: string; value: string }[];
       stock: number;
-      price: number;
       sku: string;
       barcode: string;
-      discountPrice?: number | null;
+      price: number;
+      discountPrice: number;
     }[];
+    // attributes: {
+    //   stockAttribute: { key: string; value: string }[];
+    //   stock: number;
+    //   price: number;
+    //   sku: string;
+    //   barcode: string;
+    //   discountPrice?: number | null;
+    // }[];
   }[];
 };
 
-export default function ProductCreateFormNewWithSize({
+export default function ProductCreateForm({
   categories,
 }: {
   categories: ICategory[];
@@ -91,13 +101,14 @@ export default function ProductCreateFormNewWithSize({
           modelName: "",
           modelCode: "",
           images: [],
+          color: "",
           attributes: [
             {
-              stockAttribute: [{ key: "", value: "" }],
+              attributeDetails: [{ key: "", value: "" }],
               stock: 0,
-              price: 0,
               sku: "",
               barcode: "",
+              price: 0,
               discountPrice: 0,
             },
           ],
@@ -124,17 +135,6 @@ export default function ProductCreateFormNewWithSize({
     name: "attributes",
   });
 
-  const {
-    fields: variationFields,
-    append: appendVariation,
-    remove: removeVariation,
-  } = useFieldArray({
-    control,
-    name: "variants",
-  });
-
-  const watchedVariations = watch("variants");
-
   const onSubmit = async (data: ProductFormData) => {
     // Transform data to match the required format
     const formattedData = {
@@ -148,8 +148,9 @@ export default function ProductCreateFormNewWithSize({
       variants: data.variants.map((variation) => ({
         modelName: variation.modelName,
         modelCode: variation.modelCode,
+        color: variation.color,
         attributes: variation.attributes.map((attr, attrIndex) => ({
-          stockAttribute: attr.stockAttribute.filter(
+          attributeDetails: attr.attributeDetails.filter(
             (sa) => sa.key && sa.value
           ),
           stock: attr.stock,
@@ -164,7 +165,8 @@ export default function ProductCreateFormNewWithSize({
       productType: data.productType,
       attributes: data.attributes.filter((attr) => attr.key && attr.value),
     };
-    console.log("formatted", formattedData);
+    // console.log("formatted", formattedData);
+    // console.log("stockImages", stockAttributeImages);
     const formData = new FormData();
     formData.append(
       "data",
@@ -179,14 +181,12 @@ export default function ProductCreateFormNewWithSize({
 
     const { message, success } = await createProduct(formData);
     if (success) {
-      console.log("message", message);
       toast({
         title: "Success",
         description: "Product is created.",
         variant: "default",
       });
     } else {
-      console.log("message", message);
       toast({
         title: "Error",
         description: "Product cannot be created.",
@@ -195,8 +195,11 @@ export default function ProductCreateFormNewWithSize({
     }
   };
 
+  console.log("categories", categories);
+  console.log("subs", watch("subCategories"));
+
   return (
-    <div className="container mx-auto p-6">
+    <div className=" mx-auto p-6">
       <Card>
         <CardHeader>
           <CardTitle>Create New Product</CardTitle>
@@ -430,81 +433,14 @@ export default function ProductCreateFormNewWithSize({
             <Separator />
 
             {/* Variations */}
-            <div className="space-y-6">
-              <h3 className="text-lg font-semibold">Product variants</h3>
-              {variationFields.map((variation, variationIndex) => (
-                <Card key={variation.id} className="p-4">
-                  <div className="flex justify-between items-center mb-4">
-                    <h4 className="font-medium">
-                      Variation {variationIndex + 1}
-                    </h4>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => removeVariation(variationIndex)}
-                      disabled={variationFields.length === 1}
-                    >
-                      <Minus className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div className="space-y-2">
-                      <Label>Model Name *</Label>
-                      <Input
-                        {...register(`variants.${variationIndex}.modelName`, {
-                          required: true,
-                        })}
-                        placeholder="BLUE-321"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Model Code *</Label>
-                      <Input
-                        {...register(`variants.${variationIndex}.modelCode`, {
-                          required: true,
-                        })}
-                        placeholder="SPACEGRY256"
-                      />
-                    </div>
-                  </div>
-                  <VariationAttributes
-                    control={control}
-                    watch={watch}
-                    variationIndex={variationIndex}
-                    setValue={setValue}
-                    watchedVariations={watchedVariations}
-                    stockAttributeImages={stockAttributeImages}
-                    setStockAttributeImages={setStockAttributeImages}
-                  />
-                </Card>
-              ))}
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() =>
-                  appendVariation({
-                    modelName: "",
-                    modelCode: "",
-                    images: [],
-                    attributes: [
-                      {
-                        stockAttribute: [{ key: "", value: "" }],
-                        stock: 0,
-                        price: 0,
-                        discountPrice: 0,
-                        sku: "",
-                        barcode: "",
-                      },
-                    ],
-                  })
-                }
-                className="w-full"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Variation
-              </Button>
-            </div>
+
+            <ProductVariantForm
+              setValue={setValue}
+              watch={watch}
+              control={control}
+              stockAttributeImages={stockAttributeImages}
+              setStockAttributeImages={setStockAttributeImages}
+            />
 
             <div className="flex gap-4">
               <Button type="submit" className="flex-1">
@@ -514,315 +450,6 @@ export default function ProductCreateFormNewWithSize({
           </form>
         </CardContent>
       </Card>
-    </div>
-  );
-}
-
-function VariationAttributes({
-  control,
-  variationIndex,
-  setValue,
-  watchedVariations,
-  stockAttributeImages,
-  setStockAttributeImages,
-  watch,
-}: {
-  control: any;
-  variationIndex: number;
-  setValue: any;
-  watchedVariations: any[];
-  stockAttributeImages: { [key: string]: File[] };
-  setStockAttributeImages: React.Dispatch<
-    React.SetStateAction<{ [key: string]: File[] }>
-  >;
-  watch: UseFormWatch<ProductFormData>;
-}) {
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: `variants.${variationIndex}.attributes`,
-  });
-
-  const attributeOptions = [
-    { value: "color", label: "Color" },
-    { value: "size", label: "Size" },
-    { value: "material", label: "Material" },
-    { value: "weight", label: "Weight" },
-    { value: "dimensions", label: "Dimensions" },
-    { value: "cpu", label: "CPU" },
-    { value: "memory", label: "Memory" },
-    { value: "storage", label: "Storage" },
-    { value: "guarantee", label: "Guarantee" },
-    { value: "brand", label: "Brand" },
-    { value: "model", label: "Model" },
-    { value: "capacity", label: "Capacity" },
-    { value: "voltage", label: "Voltage" },
-    { value: "power", label: "Power" },
-    { value: "connectivity", label: "Connectivity" },
-    { value: "compatibility", label: "Compatibility" },
-  ];
-
-  const isWeHaveModelCode = !!watch(
-    `variants.${variationIndex}.modelCode`
-  ).length;
-
-  // Function to check if color value already exists in previous stock attributes
-
-  return (
-    isWeHaveModelCode && (
-      <div className="space-y-4">
-        <Label className="text-sm font-medium">Stock Attributes</Label>
-        {fields.map((field, attributeIndex) => (
-          <Card key={field.id} className="p-3 bg-gray-50">
-            <div className="flex justify-between items-center mb-3">
-              <h5 className="text-sm font-medium">
-                Stock Attribute {attributeIndex + 1}
-              </h5>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => remove(attributeIndex)}
-                disabled={fields.length === 1}
-              >
-                <Minus className="h-4 w-4" />
-              </Button>
-            </div>
-
-            {/* <StockAttributeFields
-            watch={watch}
-            control={control}
-            variationIndex={variationIndex}
-            attributeIndex={attributeIndex}
-            setValue={setValue}
-            attributeOptions={attributeOptions}
-          /> */}
-
-            <ProductAttributeManager
-              variationIndex={variationIndex}
-              watch={watch}
-              attributeIndex={attributeIndex}
-              setValue={setValue}
-              setStockAttributeImages={setStockAttributeImages}
-              stockAttributeImages={stockAttributeImages}
-            />
-
-            {/* <div className="mt-3">
-            <Label className="text-sm">Price *</Label>
-            <Input
-              type="string"
-              {...control.register(
-                `variants.${variationIndex}.attributes.${attributeIndex}.price`,
-                {
-                  required: true,
-                  valueAsNumber: false,
-                }
-              )}
-              placeholder="10"
-              className="mt-1"
-            />
-          </div>
-          <div className="mt-3">
-            <Label className="text-sm">Discount Price</Label>
-            <Input
-              type="string"
-              {...control.register(
-                `variants.${variationIndex}.attributes.${attributeIndex}.discountPrice`,
-                {
-                  required: true,
-                  valueAsNumber: false,
-                }
-              )}
-              placeholder="0"
-              className="mt-1"
-            />
-          </div>
-          <div className="mt-3">
-            <Label className="text-sm">Stock Quantity *</Label>
-            <Input
-              type="number"
-              {...control.register(
-                `variants.${variationIndex}.attributes.${attributeIndex}.stock`,
-                {
-                  required: true,
-                  valueAsNumber: true,
-                }
-              )}
-              placeholder="10"
-              className="mt-1"
-            />
-          </div>
-          <div className="mt-3">
-            <Label className="text-sm">Barcode *</Label>
-            <Input
-              type="string"
-              {...control.register(
-                `variants.${variationIndex}.attributes.${attributeIndex}.barcode`,
-                {
-                  required: true,
-                  valueAsNumber: false,
-                }
-              )}
-              placeholder="8691234567890"
-              className="mt-1"
-            />
-          </div>
-          <div className="mt-3">
-            <Label className="text-sm">SKU *</Label>
-            <Input
-              type="string"
-              {...control.register(
-                `variants.${variationIndex}.attributes.${attributeIndex}.sku`,
-                {
-                  required: true,
-                  valueAsNumber: false,
-                }
-              )}
-              placeholder="SKU"
-              className="mt-1"
-            />
-          </div> */}
-          </Card>
-        ))}
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() =>
-            append({
-              stockAttribute: [{ key: "", value: "" }],
-              stock: 0,
-              images: [],
-            })
-          }
-          className="w-full"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Add Stock Attribute
-        </Button>
-      </div>
-    )
-  );
-}
-
-function StockAttributeFields({
-  control,
-  watch,
-  variationIndex,
-  attributeIndex,
-  setValue,
-  attributeOptions,
-}: {
-  control: any;
-  variationIndex: number;
-  attributeIndex: number;
-  setValue: any;
-  watch: UseFormWatch<ProductFormData>;
-  attributeOptions: { value: string; label: string }[];
-}) {
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: `variants.${variationIndex}.attributes.${attributeIndex}.stockAttribute`,
-  });
-
-  // Get currently selected attribute keys for this stock attribute
-  const getSelectedKeys = () => {
-    const stockAttribute =
-      control._formValues?.variants?.[variationIndex]?.attributes?.[
-        attributeIndex
-      ]?.stockAttribute ?? [];
-
-    // const stockAttributes =
-    //   watch(
-    //     `variants.${variationIndex}.attributes.${attributeIndex}.stockAttribute`
-    //   ) ?? [];
-
-    return stockAttribute.map((attr: any) => attr.key).filter(Boolean);
-  };
-
-  // Check if color is already selected in this stock attribute
-  // const isColorSelected = () => {
-  //   const selectedKeys = getSelectedKeys();
-  //   return selectedKeys.includes("color");
-  // };
-
-  // Get available options for each field (excluding already selected keys)
-  const getAvailableOptions = (currentFieldIndex: number) => {
-    const selectedKeys = getSelectedKeys();
-    const currentFieldKey =
-      control._formValues?.variants?.[variationIndex]?.attributes?.[
-        attributeIndex
-      ]?.stockAttribute?.[currentFieldIndex]?.key;
-
-    return attributeOptions.filter((option) => {
-      // Always show the current field's selected option
-      if (option.value === currentFieldKey) return true;
-
-      // For color: only show if not already selected in this stock attribute
-      if (option.value === "color") {
-        return !selectedKeys.includes("color") || currentFieldKey === "color";
-      }
-      if (option.value === "size") {
-        return !selectedKeys.includes("size") || currentFieldKey === "size";
-      }
-
-      // For other attributes: always show (can be selected multiple times)
-      return true;
-    });
-  };
-
-  return (
-    <div className="space-y-2">
-      <Label className="text-xs font-medium">Attributes</Label>
-      {fields.map((field, stockAttrIndex) => (
-        <div key={field.id} className="flex gap-2">
-          <div className="flex-1">
-            <Select
-              onValueChange={(value) =>
-                setValue(
-                  `variants.${variationIndex}.attributes.${attributeIndex}.stockAttribute.${stockAttrIndex}.key`,
-                  value
-                )
-              }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select attribute" />
-              </SelectTrigger>
-              <SelectContent>
-                {getAvailableOptions(stockAttrIndex).map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <Input
-            {...control.register(
-              `variants.${variationIndex}.attributes.${attributeIndex}.stockAttribute.${stockAttrIndex}.value`
-            )}
-            placeholder="Attribute value"
-            className="flex-1"
-          />
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            onClick={() => remove(stockAttrIndex)}
-            disabled={fields.length === 1}
-          >
-            <Minus className="h-4 w-4" />
-          </Button>
-        </div>
-      ))}
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
-        onClick={() => append({ key: "", value: "" })}
-        className="w-full"
-      >
-        <Plus className="h-3 w-3 mr-2" />
-        Add Attribute
-      </Button>
     </div>
   );
 }
