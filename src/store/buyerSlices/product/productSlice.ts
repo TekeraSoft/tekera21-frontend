@@ -1,20 +1,8 @@
+import { IProduct } from "@/types/product";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-// Product arayüzü
-export interface Product {
-  id: number;
-  name: string;
-  slug: string;
-  description: string;
-  price: number;
-  category: string;
-  images: string[];
-  color: string;
-}
-
-// ProductState arayüzü
 interface ProductState {
-  products: Product[];
+  products: IProduct[];
   loading: boolean;
   error: string | null;
 }
@@ -31,7 +19,7 @@ const buyerProductSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
-    setBuyerProducts(state, action: PayloadAction<Product[]>) {
+    setBuyerProducts(state, action: PayloadAction<IProduct[]>) {
       state.products = action.payload;
       state.loading = false;
       state.error = null;

@@ -6,6 +6,7 @@ import {
 import React from "react";
 import { IProduct } from "@/types/product";
 import TargetCreate from "@/components/superadmin/TargetPicture/Create";
+import TargetDelete from "@/components/superadmin/TargetPicture/Delete";
 
 const CreateTargetPage = async ({
   params,
@@ -27,8 +28,7 @@ const CreateTargetPage = async ({
     );
   }
 
-  const { data: targetData, success: successTarget } =
-    await getTargetPictureByProductById(data.id);
+  const { data: targetData } = await getTargetPictureByProductById(data.id);
 
   if (targetData) {
     return (
@@ -39,6 +39,7 @@ const CreateTargetPage = async ({
         <p className="text-muted-foreground">
           Lütfen önce ürünün target picture alanını temizleyin.
         </p>
+        <TargetDelete id={targetData.id} />
       </div>
     );
   }

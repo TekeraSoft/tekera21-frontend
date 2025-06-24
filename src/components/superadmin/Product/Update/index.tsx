@@ -30,40 +30,11 @@ import ImageView from "@/components/shared/ImageView";
 
 import { updateProduct } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
-import ProductVariantForm from "./ProductVariantForm";
+import ProductVariantForm from "../Shared/ProductVariantForm";
 
 import { IGetByIdProduct } from "@/types/SingleProduct";
 import { SubCategoriesSelect } from "./SubCategoriesSelect";
-
-export type ProductFormData = {
-  name: string;
-  slug: string;
-  code: string;
-  brandName: string;
-  companyId: string;
-  description: string;
-  currencyType: string;
-  categoryId: string;
-  subCategories?: { value: string }[];
-  productType: string;
-  tags: { value: string }[];
-  attributes: { key: string; value: string }[];
-  variants: {
-    id?: string;
-    modelName: string;
-    modelCode: string;
-    images: string[];
-    color: string;
-    attributes: {
-      attributeDetails: { key: string; value: string }[];
-      stock: number;
-      sku: string;
-      barcode: string;
-      price: number;
-      discountPrice: number;
-    }[];
-  }[];
-};
+import { TProductFormData } from "@/types/ProductFormData";
 
 export default function ProductUpdateForm({
   categories,
@@ -86,7 +57,7 @@ export default function ProductUpdateForm({
     formState: { errors },
     setValue,
     watch,
-  } = useForm<ProductFormData>({
+  } = useForm<TProductFormData>({
     defaultValues: {
       name: product.name,
       code: product.code,
@@ -124,7 +95,7 @@ export default function ProductUpdateForm({
     name: "attributes",
   });
 
-  const onSubmit = async (data: ProductFormData) => {
+  const onSubmit = async (data: TProductFormData) => {
     // Transform data to match the required format
     const formattedData = {
       name: data.name,
@@ -189,6 +160,16 @@ export default function ProductUpdateForm({
         variant: "destructive",
       });
     }
+  };
+
+  const handleDeleteImages = (url: string, variationIndex: number) => {
+    const variants = watch("variants");
+    const currentImages = variants[variationIndex].images as string[];
+
+    const updatedImages = currentImages.filter((img) => img !== url);
+
+    setValue(`variants.${variationIndex}.images`, updatedImages);
+    setDeleteImages((prev) => [...prev, url]);
   };
 
   return (
@@ -434,8 +415,7 @@ export default function ProductUpdateForm({
               control={control}
               stockAttributeImages={stockAttributeImages}
               setStockAttributeImages={setStockAttributeImages}
-              deleteImages={deleteImages}
-              setDeleteImages={setDeleteImages}
+              handleDeleteImages={handleDeleteImages}
             />
 
             <div className="flex gap-4">

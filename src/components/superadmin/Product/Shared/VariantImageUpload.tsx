@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Upload, X } from "lucide-react";
 import React from "react";
 import Resizer from "react-image-file-resizer";
-import { ProductFormData } from ".";
+import { ProductFormData } from "../Update/index";
 import { UseFormWatch } from "react-hook-form";
 
 export default function VariantImageUpload({
@@ -19,7 +19,9 @@ export default function VariantImageUpload({
   onImagesChange: (images: File[]) => void;
   imageName: string;
   watch: UseFormWatch<ProductFormData>;
-  handleDeleteImages: (url: string, variationIndex: number) => void;
+  handleDeleteImages:
+    | ((url: string, variationIndex: number) => void)
+    | undefined;
 }) {
   const resizeImage = (file: File) => {
     const fileResized = new Promise((resolve) => {
@@ -129,7 +131,7 @@ export default function VariantImageUpload({
               />
               <button
                 type="button"
-                onClick={() => handleDeleteImages(url, variationIndex)}
+                onClick={() => handleDeleteImages?.(url, variationIndex)}
                 className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <X className="h-2 w-2" />

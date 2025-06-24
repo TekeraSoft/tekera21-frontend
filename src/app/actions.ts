@@ -189,6 +189,33 @@ export async function createTargetPicture(formData: FormData) {
     };
   }
 }
+export async function deleteTargetPicture(targetPictureId: string) {
+  try {
+    if (!targetPictureId) {
+      return {
+        success: false,
+        message: "targetPictureId is required",
+      };
+    }
+    const { data } = await axiosInstance.delete(
+      `/digital-fashion-admin/deleteTargetPic?id=${targetPictureId}`
+    );
+    revalidatePath("/");
+
+    return {
+      success: true,
+      message: data?.message || "Success",
+      data: data.data || "success",
+    };
+  } catch (error: any) {
+    const errorMsg = error?.message || String(error);
+
+    return {
+      success: false,
+      message: errorMsg || "Failed to delete target picture",
+    };
+  }
+}
 
 export async function getSingleProductById(id: string) {
   try {

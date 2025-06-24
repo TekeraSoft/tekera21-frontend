@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Trash2, Copy } from "lucide-react";
+import { Plus, Trash2, Copy, PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,13 +21,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ProductFormData } from "./index";
-import Attributes from "./Attributes";
+
+import Attributes from "../Update/Attributes";
+import { TProductFormData } from "@/types/ProductFormData";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { TooltipArrow, TooltipPortal } from "@radix-ui/react-tooltip";
 
 interface IProps {
-  watch: UseFormWatch<ProductFormData>;
-  control: Control<ProductFormData, any, ProductFormData>;
-  setValue: UseFormSetValue<ProductFormData>;
+  watch: UseFormWatch<TProductFormData>;
+  control: Control<TProductFormData, any, TProductFormData>;
+  setValue: UseFormSetValue<TProductFormData>;
   stockAttributeImages: {
     [key: string]: File[];
   };
@@ -36,8 +44,9 @@ interface IProps {
       [key: string]: File[];
     }>
   >;
-  setDeleteImages: React.Dispatch<React.SetStateAction<string[]>>;
-  deleteImages: string[];
+  handleDeleteImages:
+    | ((url: string, variationIndex: number) => void)
+    | undefined;
 }
 
 export default function ProductVariantForm({
@@ -46,8 +55,7 @@ export default function ProductVariantForm({
   stockAttributeImages,
   setStockAttributeImages,
   setValue,
-  deleteImages,
-  setDeleteImages,
+  handleDeleteImages,
 }: IProps) {
   const variants = watch("variants");
 
@@ -143,15 +151,23 @@ export default function ProductVariantForm({
     { name: "Ten Rengi", hex: "#F5CBA7" },
   ];
 
-  const handleDeleteImages = (url: string, variationIndex: number) => {
-    const variants = watch("variants");
-    const currentImages = variants[variationIndex].images as string[];
+  console.log(
+    "  stockAttributeImages[0]?.length",
+    !!stockAttributeImages[0]?.length
+  );
+  console.log(
+    "variants[variantIndex].images.length",
+    !!variants[0].images.length
+  );
 
-    const updatedImages = currentImages.filter((img) => img !== url);
+  const getIsDisabled = (variantIndex: number) => {
 
-    setValue(`variants.${variationIndex}.images`, updatedImages);
-    setDeleteImages((prev) => [...prev, url]);
+    return (
+      !!stockAttributeImages[variantIndex]?.length ||
+      !!variants[variantIndex].images.length
+    );
   };
+
   return (
     <div className="mx-auto space-y-6">
       <div className="flex items-center justify-between">
@@ -200,47 +216,87 @@ export default function ProductVariantForm({
                     placeholder="Enter model name"
                   />
                 </div>
-                <div>
-                  <Label htmlFor={`modelCode-${variantIndex}`}>
-                    Model Code
-                  </Label>
-                  <Input
-                    disabled={
-                      stockAttributeImages[variantIndex]?.length ? true : false
-                    }
-                    id={`modelCode-${variantIndex}`}
-                    value={variant.modelCode}
-                    {...control.register(`variants.${variantIndex}.modelCode`, {
-                      required: true,
-                      valueAsNumber: false,
-                    })}
-                    placeholder="Enter model code"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor={`color-${variantIndex}`}>Color</Label>
 
-                  <Select
-                    disabled={
-                      stockAttributeImages[variantIndex]?.length ? true : false
-                    }
-                    defaultValue={watch(`variants.${variantIndex}.color`)}
-                    onValueChange={(value) =>
-                      setValue(`variants.${variantIndex}.color`, value)
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Color" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {colors.map((color) => (
-                        <SelectItem key={color.name} value={color.name}>
-                          {color.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div>
+                        <Label htmlFor={`modelCode-${variantIndex}`}>
+                          Model Code
+                        </Label>
+                        <Input
+                          disabled={getIsDisabled(variantIndex)}
+                          id={`modelCode-${variantIndex}`}
+                          value={variant.modelCode}
+                          {...control.register(
+                            `variants.${variantIndex}.modelCode`,
+                            {
+                              required: true,
+                              valueAsNumber: false,
+                            }
+                          )}
+                          placeholder="Enter model code"
+                        />
+                      </div>
+                    </TooltipTrigger>
+                    {getIsDisabled(variantIndex) && (
+                      <TooltipPortal>
+                        <TooltipContent
+                          className="TooltipContent"
+                          sideOffset={5}
+                        >
+                          <Button variant={"info"}>
+                            Bu alan, varyasyon görselleri yüklendiği için
+                            düzenlenemez. Tüm görselleri silip
+                            güncelleyebilirsiniz.
+                          </Button>
+                          <TooltipArrow className="TooltipArrow" />
+                        </TooltipContent>
+                      </TooltipPortal>
+                    )}
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div>
+                        <Label htmlFor={`color-${variantIndex}`}>Color</Label>
+
+                        <Select
+                          disabled={getIsDisabled(variantIndex)}
+                          defaultValue={watch(`variants.${variantIndex}.color`)}
+                          onValueChange={(value) =>
+                            setValue(`variants.${variantIndex}.color`, value)
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Color" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {colors.map((color) => (
+                              <SelectItem key={color.name} value={color.name}>
+                                {color.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </TooltipTrigger>
+                    {getIsDisabled(variantIndex) && (
+                      <TooltipPortal>
+                        <TooltipContent
+                          className="TooltipContent"
+                          sideOffset={5}
+                        >
+                          <Button variant={"info"}>
+                            Bu alan, varyasyon görselleri yüklendiği için
+                            düzenlenemez. Tüm görselleri silip
+                            güncelleyebilirsiniz.
+                          </Button>
+                          <TooltipArrow className="TooltipArrow" />
+                        </TooltipContent>
+                      </TooltipPortal>
+                    )}
+                  </Tooltip>
+                </TooltipProvider>
               </div>
 
               <Separator />

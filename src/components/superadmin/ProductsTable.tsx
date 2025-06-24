@@ -186,7 +186,7 @@ export function ProductsTable() {
                 <ArrowUpDown className="ml-2 h-4 w-4" />
               </div>
             </TableHead>
-            <TableHead>Category</TableHead>
+            <TableHead>Brand</TableHead>
             <TableHead>Price</TableHead>
             <TableHead>Stock</TableHead>
             <TableHead>Status</TableHead>
@@ -206,9 +206,9 @@ export function ProductsTable() {
                 />
               </TableCell>
               <TableCell className="font-medium">{product.name}</TableCell>
-              <TableCell>{product.category?.name || ""}</TableCell>
-              <TableCell>{product.variations[0].price}</TableCell>
-              <TableCell>{product.variations[0].stock}</TableCell>
+              <TableCell>{product.brandName || ""}</TableCell>
+              <TableCell>{product.variations[0].attributes[0].price}</TableCell>
+              <TableCell>{product.variations[0].attributes[0].stock}</TableCell>
               {/* <TableCell>
                 <Badge
                   className={getStatusColor(product.availabilityStatus)}

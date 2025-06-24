@@ -30,44 +30,8 @@ import ImageView from "@/components/shared/ImageView";
 import { SubCategoriesSelect } from "./SubCategoriesSelect";
 import { createProduct } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
-import ProductVariantForm from "./ProductVariantForm";
-
-export type ProductFormData = {
-  name: string;
-  slug: string;
-  code: string;
-  brandName: string;
-  companyId: string;
-  description: string;
-  currencyType: string;
-  categoryId: string;
-  subCategories?: { value: string }[];
-  productType: string;
-  tags: { value: string }[];
-  attributes: { key: string; value: string }[];
-  variants: {
-    modelName: string;
-    modelCode: string;
-    images: string[];
-    color: string;
-    attributes: {
-      attributeDetails: { key: string; value: string }[];
-      stock: number;
-      sku: string;
-      barcode: string;
-      price: number;
-      discountPrice: number;
-    }[];
-    // attributes: {
-    //   stockAttribute: { key: string; value: string }[];
-    //   stock: number;
-    //   price: number;
-    //   sku: string;
-    //   barcode: string;
-    //   discountPrice?: number | null;
-    // }[];
-  }[];
-};
+import ProductVariantForm from "../Shared/ProductVariantForm";
+import { TProductFormData } from "@/types/ProductFormData";
 
 export default function ProductCreateForm({
   categories,
@@ -86,7 +50,7 @@ export default function ProductCreateForm({
     formState: { errors },
     setValue,
     watch,
-  } = useForm<ProductFormData>({
+  } = useForm<TProductFormData>({
     defaultValues: {
       currencyType: "TRY",
       productType: "PHYSICAL",
@@ -134,7 +98,7 @@ export default function ProductCreateForm({
     name: "attributes",
   });
 
-  const onSubmit = async (data: ProductFormData) => {
+  const onSubmit = async (data: TProductFormData) => {
     // Transform data to match the required format
     const formattedData = {
       name: data.name,
@@ -164,8 +128,8 @@ export default function ProductCreateForm({
       productType: data.productType,
       attributes: data.attributes.filter((attr) => attr.key && attr.value),
     };
-    // console.log("formatted", formattedData);
-    // console.log("stockImages", stockAttributeImages);
+    console.log("formatted", formattedData);
+    console.log("stockImages", stockAttributeImages);
     const formData = new FormData();
     formData.append(
       "data",
@@ -436,6 +400,7 @@ export default function ProductCreateForm({
               control={control}
               stockAttributeImages={stockAttributeImages}
               setStockAttributeImages={setStockAttributeImages}
+              handleDeleteImages={undefined}
             />
 
             <div className="flex gap-4">
