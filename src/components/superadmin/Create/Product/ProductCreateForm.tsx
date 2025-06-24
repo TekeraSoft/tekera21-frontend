@@ -5,7 +5,6 @@ import type React from "react";
 import { useState } from "react";
 import { useForm, useFieldArray, UseFormWatch } from "react-hook-form";
 import { Plus, Minus, Upload, X } from "lucide-react";
-import Resizer from "react-image-file-resizer";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -194,9 +193,6 @@ export default function ProductCreateForm({
       });
     }
   };
-
-  console.log("categories", categories);
-  console.log("subs", watch("subCategories"));
 
   return (
     <div className=" mx-auto p-6">

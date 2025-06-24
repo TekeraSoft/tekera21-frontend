@@ -29,7 +29,7 @@ export type OptionType = {
 interface MultiSelectProps {
   options: OptionType[];
   selected: { value: string }[];
-  onChange: (selected: string[]) => void;
+  onChange: (selected: { value: string }[]) => void;
   placeholder?: string;
   emptyMessage?: string;
   className?: string;
@@ -46,23 +46,16 @@ export function MultiSelect({
   const [open, setOpen] = React.useState(false);
 
   const handleUnselect = (item: string) => {
-    onChange(selected.filter((i) => i.value !== item).map((i) => i.value));
+    onChange(selected.filter((i) => i.value !== item));
   };
 
   const handleSelect = (value: string) => {
     if (selected.find((item) => item.value === value)) {
-      onChange(
-        selected
-          .filter((item) => item.value !== value)
-          .map((item) => item.value)
-      );
+      onChange(selected.filter((item) => item.value !== value));
     } else {
-      onChange([...selected, { value }].map((item) => item.value));
+      onChange([...selected, { value }]);
     }
   };
-
-  // Get display labels for selected items
-  // const selectedLabels = [""],
 
   const selectedLabels = selected.map((selected) => {
     const option = options.find((option) => option.value === selected.value);

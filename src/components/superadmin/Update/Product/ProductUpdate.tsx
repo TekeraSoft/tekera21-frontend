@@ -97,8 +97,12 @@ export default function ProductUpdate({
       tags: product.tags?.map((tag) => ({ value: tag })) || [],
       companyId: product.company.id,
       categoryId: product.categoryId || "",
-      subCategories:
-        product.subCategoriesId?.map((sub) => ({ value: sub })) || [],
+      subCategories: categories
+        .flatMap((cat) => cat.subCategories)
+        .filter((sub) => product.subCategoriesId?.includes(sub.id))
+        .map((sub) => ({ value: sub.id, name: sub.name, image: sub.image })),
+      // subCategories:
+      //   product.subCategoriesId?.map((sub) => ({ value: sub })) || [],
       attributes: product.attributes,
       variants: product.variations,
     },
@@ -154,9 +158,9 @@ export default function ProductUpdate({
       attributes: data.attributes.filter((attr) => attr.key && attr.value),
       deleteImages: deleteImages,
     };
-    console.log("formatted", formattedData);
-    console.log("deleteImages", deleteImages);
-    console.log("stockImages", stockAttributeImages);
+    // console.log("formatted", formattedData);
+    // console.log("deleteImages", deleteImages);
+    // console.log("stockImages", stockAttributeImages);
     const formData = new FormData();
     formData.append(
       "data",
