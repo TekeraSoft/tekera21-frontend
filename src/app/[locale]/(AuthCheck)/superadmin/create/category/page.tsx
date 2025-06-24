@@ -1,5 +1,6 @@
+import CreateCategory from "@/components/superadmin/Category/Create";
 import React from "react";
-import CreateCategory from "@/components/superadmin/Create/Category";
+
 
 const CategoryCreatePage = async () => {
   return (
