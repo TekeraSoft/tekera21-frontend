@@ -6,7 +6,7 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from "react-hook-form";
-import { ProductFormData } from "./ProductUpdate";
+import { ProductFormData } from ".";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import {

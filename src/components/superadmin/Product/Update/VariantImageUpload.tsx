@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Upload, X } from "lucide-react";
 import React from "react";
 import Resizer from "react-image-file-resizer";
-import { ProductFormData } from "./ProductUpdate";
+import { ProductFormData } from ".";
 import { UseFormWatch } from "react-hook-form";
 
 export default function VariantImageUpload({

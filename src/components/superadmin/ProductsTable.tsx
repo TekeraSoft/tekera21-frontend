@@ -239,7 +239,7 @@ export function ProductsTable() {
                     <DropdownMenuItem>
                       <Link
                         className="flex items-center"
-                        href={`/superadmin/create/target/${product.slug}`}
+                        href={`/superadmin/create/target/${product.id}`}
                       >
                         <Target className="mr-2 h-4 w-4" />
                         Create Target Picture

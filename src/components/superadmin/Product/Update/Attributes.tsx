@@ -10,7 +10,7 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from "react-hook-form";
-import { ProductFormData } from "./ProductUpdate";
+import { ProductFormData } from ".";
 import AttributeDetails from "./AttributeDetails";
 
 interface IProps {

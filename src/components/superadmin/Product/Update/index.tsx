@@ -65,7 +65,7 @@ export type ProductFormData = {
   }[];
 };
 
-export default function ProductUpdate({
+export default function ProductUpdateForm({
   categories,
   product,
 }: {
@@ -101,8 +101,6 @@ export default function ProductUpdate({
         .flatMap((cat) => cat.subCategories)
         .filter((sub) => product.subCategoriesId?.includes(sub.id))
         .map((sub) => ({ value: sub.id, name: sub.name, image: sub.image })),
-      // subCategories:
-      //   product.subCategoriesId?.map((sub) => ({ value: sub })) || [],
       attributes: product.attributes,
       variants: product.variations,
     },
@@ -177,7 +175,7 @@ export default function ProductUpdate({
       formData.append("images", new File([""], ""), "empty.jpg");
     }
 
-    const { message, success } = await updateProduct(formData);
+    const { success } = await updateProduct(formData);
     if (success) {
       toast({
         title: "Success",

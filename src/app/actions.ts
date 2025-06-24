@@ -1,6 +1,6 @@
 "use server";
 
-import { IUProduct } from "@/components/superadmin/Create/Product/ProductUpdateForm";
+import { IUProduct } from "@/components/superadmin/Product/Create/ProductUpdateForm";
 import axiosInstance from "@/request/axiosServer";
 import { IProduct } from "@/types/product";
 import { revalidatePath } from "next/cache";

@@ -12,8 +12,7 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from "react-hook-form";
-import { ProductFormData } from "./ProductUpdate";
-import Attributes from "./Attributes";
+
 import VariantImageUpload from "./VariantImageUpload";
 import {
   Select,
@@ -22,6 +21,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ProductFormData } from "./index";
+import Attributes from "./Attributes";
 
 interface IProps {
   watch: UseFormWatch<ProductFormData>;
@@ -152,7 +153,7 @@ export default function ProductVariantForm({
     setDeleteImages((prev) => [...prev, url]);
   };
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-6">
+    <div className="mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Product Variants Editor</h1>
         <div className="flex gap-2">

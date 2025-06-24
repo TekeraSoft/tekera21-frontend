@@ -63,8 +63,6 @@ export function MultiSelect({
     return option?.label || value;
   });
 
-  console.log("selectedLAbels", selectedLabels)
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>

@@ -3,6 +3,7 @@ import { type Control, Controller } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import { MultiSelect, OptionType } from "./MultiSelect";
 
+
 interface SubCategoriesSelectProps {
   control: Control<any>;
   name: string;

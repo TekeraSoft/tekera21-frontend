@@ -8,7 +8,7 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from "react-hook-form";
-import { ProductFormData } from "./ProductUpdate";
+import { ProductFormData } from ".";
 import { Plus } from "lucide-react";
 
 interface IProps {

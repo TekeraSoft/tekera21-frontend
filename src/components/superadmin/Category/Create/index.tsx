@@ -9,9 +9,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ICategory } from "@/types/AdminTypes/category";
 import { CategoryNavigation } from "./navigation";
 import { CreateCategoryForm } from "./CategoryForm";
-import { CreateSubcategoryForm } from "./SubCategoryForm";
+
 import { getCategories } from "@/app/actions";
 import ImageView from "@/components/shared/ImageView";
+import { CreateSubcategoryForm } from "./SubCategoryForm";
 
 export default async function CreateCategory() {
   const { data } = await getCategories();
