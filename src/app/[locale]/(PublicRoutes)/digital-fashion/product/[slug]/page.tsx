@@ -7,9 +7,7 @@ import { useParams } from "next/navigation";
 function DigitalFashionProductDetailPage() {
   const { slug } = useParams() as { slug: string };
 
-  const product: any = BuyerProductsData.find(
-    (product) => product.slug === slug
-  );
+  const product: any = {}
   if (!product) {
     return <div>Product not found</div>;
   }

@@ -51,9 +51,9 @@ function DigitalFashionAllProduct() {
     "green",
   ];
 
-  useEffect(() => {
-    dispatch(setBuyerProducts(BuyerProductsData));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(setBuyerProducts(BuyerProductsData));
+  // }, []);
 
   const toggleColor = (color: string) => {
     setSelectedColors((prev) =>
