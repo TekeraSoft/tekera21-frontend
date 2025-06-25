@@ -68,7 +68,7 @@ const AttributeDetail = ({
     { id: "5xl", label: "5xl" },
   ];
 
-  console.log("getSelectedKeys()", getSelectedKeys());
+
   // const getAvailableOptions = (currentFieldIndex: number) => {
   //   const selectedKeys = getSelectedKeys();
   //   const currentFieldKey =

@@ -42,6 +42,7 @@ import ProductAttributes from "../Shared/ProductAttributes";
 import CategorySelect from "../Shared/CategorySelect";
 import GenderSelect from "../Shared/GenderSelect";
 import { genders } from "../Shared/Data/Genders";
+import { cn } from "@/lib/utils";
 
 export default function ProductCreateForm({
   categories,
@@ -110,7 +111,7 @@ export default function ProductCreateForm({
       brandName: data.brandName,
       description: data.description,
       categoryId: data.categoryId,
-      subCategories: data.subCategories?.map((sub)=> sub.value),
+      subCategories: data.subCategories?.map((sub) => sub.value),
       variants: data.variants.map((variation) => ({
         modelName: variation.modelName,
         modelCode: variation.modelCode,
@@ -133,7 +134,7 @@ export default function ProductCreateForm({
         (attr) => attr.key && attr.value
       ),
     };
-   console.log("formatted", formattedData);
+    console.log("formatted", formattedData);
     // console.log("stockImages", stockAttributeImages);
     const formData = new FormData();
     formData.append(
@@ -305,25 +306,29 @@ export default function ProductCreateForm({
             {/* Tags */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Tags</h3>
-              {tagFields
-                .filter((tag) => genders.includes(tag.value))
-                .map((field, index) => (
-                  <div key={field.id} className="flex gap-2">
-                    <Input
-                      {...register(`tags.${index}.value`)}
-                      placeholder="Enter tag"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      onClick={() => removeTag(index)}
-                      disabled={tagFields.length === 1}
-                    >
-                      <Minus className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
+              {tagFields.map((field, index) => (
+                <div
+                  key={field.id}
+                  className={cn(
+                    "flex gap-2",
+                    genders.includes(field.value) && "hidden"
+                  )}
+                >
+                  <Input
+                    {...register(`tags.${index}.value`)}
+                    placeholder="Enter tag"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    onClick={() => removeTag(index)}
+                    disabled={tagFields.length === 1}
+                  >
+                    <Minus className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
               <Button
                 type="button"
                 variant="outline"
