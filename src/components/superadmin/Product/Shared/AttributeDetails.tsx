@@ -52,13 +52,10 @@ const AttributeDetails = ({
       </div>
       {attributeDetails.map((detail, detailIndex) => (
         <AttributeDetail
-          setValue={setValue}
           key={detailIndex}
           attributeIndex={attributeIndex}
-          control={control}
           detailIndex={detailIndex}
           variationIndex={variationIndex}
-          watch={watch}
         />
       ))}
     </div>
