@@ -6,7 +6,7 @@ export const getAdminProducts = async (
   sortBy: string = ""
 ) => {
   const response = await axiosClient.get(
-    `/product/getAllProduct?page=${page}&size=${size}`
+    `/super-admin/getAllAdminProduct?page=${page}&size=${size}`
   );
   return response.data;
 };

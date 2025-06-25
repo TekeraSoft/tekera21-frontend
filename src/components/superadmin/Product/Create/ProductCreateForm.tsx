@@ -110,7 +110,7 @@ export default function ProductCreateForm({
       brandName: data.brandName,
       description: data.description,
       categoryId: data.categoryId,
-      subCategories: data.subCategories,
+      subCategories: data.subCategories?.map((sub)=> sub.value),
       variants: data.variants.map((variation) => ({
         modelName: variation.modelName,
         modelCode: variation.modelCode,
@@ -133,7 +133,7 @@ export default function ProductCreateForm({
         (attr) => attr.key && attr.value
       ),
     };
-    // console.log("formatted", formattedData);
+   console.log("formatted", formattedData);
     // console.log("stockImages", stockAttributeImages);
     const formData = new FormData();
     formData.append(

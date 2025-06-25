@@ -53,6 +53,22 @@ export async function getProducts(page: string = "0", size: string = "20") {
     return { success: false, message: error || "Failed to get products" };
   }
 }
+export async function getSuperAdminProducts(
+  page: string = "0",
+  size: string = "20"
+) {
+  try {
+    const { data } = await axiosInstance.get(
+      `/super-admin/getAllAdminProduct?page=${page}&size=${size}`
+    );
+
+    return { success: true, message: data.message, data: data };
+  } catch (error) {
+    console.log("getProducts error:", error);
+    return { success: false, message: error || "Failed to get products" };
+  }
+}
+
 export async function getFilteredProducts(
   page: string = "0",
   size: string = "20",
