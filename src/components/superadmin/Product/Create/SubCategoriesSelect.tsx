@@ -26,8 +26,6 @@ export function SubCategoriesSelect({
     image: subCategory.image,
   }));
 
-  console.log("options in subcategoryis", options)
-
   return (
     <div className="space-y-2">
       <Label htmlFor={name}>

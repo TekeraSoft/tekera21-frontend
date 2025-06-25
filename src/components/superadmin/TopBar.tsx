@@ -76,28 +76,6 @@ const TopBar = ({ children }: { children: React.ReactNode }) => {
 
   const { userInfo } = useAuthContext();
 
-  // useEffect(() => {
-  //   const getUser = async () => {
-  //     try {
-  //       const userFromApi = await axiosClient.post(
-  //         "https://dummyjson.com/auth/login",
-  //         {
-  //           username: "emilys",
-  //           password: "emilyspass",
-  //           expiresInMins: 30, // optional, defaults to 60
-  //         },
-  //         { withCredentials: false }
-  //       );
-  //       // console.log("user client", userFromApi);
-  //     } catch (error) {
-  //       console.log("error", error);
-  //     }
-  //   };
-  //   getUser();
-  //   return () => {};
-  // }, []);
-
-
   return (
     <div className="w-full bg-white h-[52px] flex items-center justify-between px-4 shadow-sm border-b">
       <ToggleSidebarButton />

@@ -59,11 +59,13 @@ import {
 import { Link } from "@/i18n/navigation";
 import { deleteProductById } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
+import { IProduct } from "@/types/product";
 
 export function ProductsTable() {
   const { data, error, loading, categories, selectedCategory, success } =
     useAppSelector((state) => state.adminProducts);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
 
   const dispatch = useAppDispatch();
   const { toast } = useToast();
@@ -85,8 +87,16 @@ export function ProductsTable() {
     };
   }, [error]);
 
-  const handleDelete = async (productId: string) => {
-    const { success } = await deleteProductById(productId);
+  const handleDelete = async () => {
+    if (!selectedProduct) {
+      toast({
+        title: "Error",
+        description: "Product is not selected.",
+        variant: "default",
+      });
+      return;
+    }
+    const { success } = await deleteProductById(selectedProduct.id);
 
     if (success) {
       setShowDeleteDialog(false);
@@ -95,6 +105,7 @@ export function ProductsTable() {
         description: "Product is deleted.",
         variant: "default",
       });
+      setSelectedProduct(null);
       dispatch(fetchProducts({ page: data.page.number, size: data.page.size }));
     } else {
       toast({
@@ -227,33 +238,31 @@ export function ProductsTable() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuItem>
-                      <Pencil className="mr-2 h-4 w-4" />
+                    <DropdownMenuItem className="px-0">
                       <Link
-                        className="flex items-center"
+                        className="flex items-center w-full px-2"
                         href={`/superadmin/update/product/${product.id}`}
                       >
-                        Edit Product
+                        <Pencil className="mr-2 h-4 w-4" /> Düzenle
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem className="px-0">
                       <Link
-                        className="flex items-center"
+                        className="flex items-center w-full px-2"
                         href={`/superadmin/create/target/${product.id}`}
                       >
-                        <Target className="mr-2 h-4 w-4" />
-                        Create Target Picture
+                        <Target className="mr-2 h-4 w-4" /> Create Target
+                        Picture
                       </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Check className="mr-2 h-4 w-4" />
-                      Mark as featured
                     </DropdownMenuItem>
 
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      className="text-red-600"
-                      onClick={() => setShowDeleteDialog(true)}
+                      className="text-red-600 cursor-pointer"
+                      onClick={() => {
+                        setSelectedProduct(product);
+                        setShowDeleteDialog(true);
+                      }}
                     >
                       <Trash2 className="mr-2 h-4 w-4" />
                       Delete
@@ -276,7 +285,7 @@ export function ProductsTable() {
                   <AlertDialogFooter>
                     <AlertDialogCancel>İptal</AlertDialogCancel>
                     <AlertDialogAction
-                      onClick={() => handleDelete(product.id)}
+                      onClick={handleDelete}
                       className="bg-red-600 hover:bg-red-700"
                     >
                       Sil

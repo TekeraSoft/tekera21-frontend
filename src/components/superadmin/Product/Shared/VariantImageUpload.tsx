@@ -82,7 +82,7 @@ export default function VariantImageUpload({
       // Check if the image already exist
 
       const reNamedImage = new File([resizedImage], imageName);
-      // console.log("imageName", imageName);
+      console.log("imageName", imageName);
       onImagesChange([...images, reNamedImage]);
     } catch (error) {
       console.error("Resim küçültme hatası:", error);

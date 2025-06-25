@@ -176,7 +176,7 @@ export default function ProductUpdateForm({
     <div className=" mx-auto p-6">
       <Card>
         <CardHeader>
-          <CardTitle>Create New Product</CardTitle>
+          <CardTitle>Ürün düzenle</CardTitle>
           <CardDescription>Fill in the product details below</CardDescription>
         </CardHeader>
         <CardContent>

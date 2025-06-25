@@ -151,17 +151,7 @@ export default function ProductVariantForm({
     { name: "Ten Rengi", hex: "#F5CBA7" },
   ];
 
-  console.log(
-    "  stockAttributeImages[0]?.length",
-    !!stockAttributeImages[0]?.length
-  );
-  console.log(
-    "variants[variantIndex].images.length",
-    !!variants[0].images.length
-  );
-
   const getIsDisabled = (variantIndex: number) => {
-
     return (
       !!stockAttributeImages[variantIndex]?.length ||
       !!variants[variantIndex].images.length
