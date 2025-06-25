@@ -24,6 +24,7 @@ const UpdateProductPage = async ({
     ? categoriesData.content
     : [];
   const product: IGetByIdProduct = (data as IGetByIdProduct) || ({} as any);
+
   return <ProductUpdateForm product={product} categories={categories} />;
 };
 

@@ -4,8 +4,8 @@ export type IGetByIdProduct = {
   slug: string;
   code: string;
   brandName: string;
-  categoryId: string;
-  subCategoriesId: string[];
+  category: Category;
+  subCategories: Category[];
   company: Company;
   description: string;
   variations: Variation[];
@@ -15,6 +15,12 @@ export type IGetByIdProduct = {
   attributeDetails: Attribute[];
   rate: number;
   comments: any[]; // Eğer yorumların yapısı belli değilse `any[]` bırakabiliriz
+};
+
+type Category = {
+  id: string;
+  name: string;
+  image: string;
 };
 
 type Company = {
@@ -42,11 +48,11 @@ type StockItem = {
 };
 
 type StockAttribute = {
-  key: string;   // örn: "color" veya "size"
+  key: string; // örn: "color" veya "size"
   value: string; // örn: "Beyaz", "XS"
 };
 
 type Attribute = {
-  key: string;   // örn: "kumaş"
+  key: string; // örn: "kumaş"
   value: string; // örn: "1.sınıf compact penye kumaş"
 };

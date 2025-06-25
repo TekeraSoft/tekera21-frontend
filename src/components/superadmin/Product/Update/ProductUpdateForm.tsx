@@ -63,10 +63,12 @@ export default function ProductUpdateForm({
       productType: product.productType,
       tags: product.tags?.map((tag) => ({ value: tag })) || [],
       companyId: product.company.id,
-      categoryId: product.categoryId || "",
+      categoryId: product.category.id || "",
       subCategories: categories
         .flatMap((cat) => cat.subCategories)
-        .filter((sub) => product.subCategoriesId?.includes(sub.id))
+        .filter((sub) =>
+          product.subCategories?.filter((prodSub) => prodSub.id === sub.id)
+        )
         .map((sub) => ({ value: sub.id, name: sub.name, image: sub.image })),
       attributeDetails: product.attributeDetails,
       variants: product.variations,

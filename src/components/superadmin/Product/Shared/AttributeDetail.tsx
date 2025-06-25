@@ -56,6 +56,19 @@ const AttributeDetail = ({
     return stockAttribute.map((attr: any) => attr.key).filter(Boolean);
   };
 
+  const sizes = [
+    { id: "xs", label: "XS" },
+    { id: "s", label: "S" },
+    { id: "m", label: "M" },
+    { id: "l", label: "L" },
+    { id: "xl", label: "XL" },
+    { id: "2xl", label: "2xl" },
+    { id: "3xl", label: "3xl" },
+    { id: "4xl", label: "4xl" },
+    { id: "5xl", label: "5xl" },
+  ];
+
+  console.log("getSelectedKeys()", getSelectedKeys());
   // const getAvailableOptions = (currentFieldIndex: number) => {
   //   const selectedKeys = getSelectedKeys();
   //   const currentFieldKey =
@@ -107,17 +120,43 @@ const AttributeDetail = ({
           </SelectContent>
         </Select>
       </div>
-      <Input
-        value={detail.value}
-        {...control.register(
-          `variants.${variationIndex}.attributes.${attributeIndex}.attributeDetails.${detailIndex}.value`,
-          {
-            required: true,
-            valueAsNumber: false,
+      {getSelectedKeys().includes("size") ? (
+        <Select
+          defaultValue={watch(
+            `variants.${variationIndex}.attributes.${attributeIndex}.attributeDetails.${detailIndex}.value`
+          )}
+          onValueChange={(value) =>
+            setValue(
+              `variants.${variationIndex}.attributes.${attributeIndex}.attributeDetails.${detailIndex}.value`,
+              value
+            )
           }
-        )}
-        placeholder="Value (e.g., M)"
-      />
+        >
+          <SelectTrigger className="min-w-32">
+            <SelectValue placeholder="Select attribute" />
+          </SelectTrigger>
+          <SelectContent>
+            {sizes.map((size) => (
+              <SelectItem key={size.id} value={size.label}>
+                {size.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      ) : (
+        <Input
+          value={detail.value}
+          {...control.register(
+            `variants.${variationIndex}.attributes.${attributeIndex}.attributeDetails.${detailIndex}.value`,
+            {
+              required: true,
+              valueAsNumber: false,
+            }
+          )}
+          placeholder="Value (e.g., M)"
+        />
+      )}
+
       <Button
         type="button"
         onClick={() => removeAttributeDetail(detailIndex)}

@@ -53,6 +53,27 @@ export async function getProducts(page: string = "0", size: string = "20") {
     return { success: false, message: error || "Failed to get products" };
   }
 }
+export async function getFilteredProducts(
+  page: string = "0",
+  size: string = "20",
+  color: string = "",
+  clothSize: string = "",
+  gender: string = ""
+) {
+  try {
+    const { data } = await axiosInstance.get(
+      `/product/filterProduct?page=${page}&size=${size}&color=${color}&clothSize=${clothSize}&gender=${gender}`
+    );
+
+    return { success: true, message: data.message, data: data };
+  } catch (error) {
+    console.log("get filteredProducts error:", error);
+    return {
+      success: false,
+      message: error || "Failed to get filtered products",
+    };
+  }
+}
 
 export async function getCompanyProducts(
   companyId: string = "f8406fa3-d9d0-4644-b797-7d51cb926bfc"

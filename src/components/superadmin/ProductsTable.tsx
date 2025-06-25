@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,6 +14,8 @@ import {
 import {
   ArrowUpDown,
   Check,
+  ChevronDown,
+  ChevronRight,
   MoreHorizontal,
   ParenthesesIcon,
   Pencil,
@@ -66,6 +68,7 @@ export function ProductsTable() {
     useAppSelector((state) => state.adminProducts);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
+  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
 
   const dispatch = useAppDispatch();
   const { toast } = useToast();
@@ -128,6 +131,25 @@ export function ProductsTable() {
   //       return "bg-gray-100 text-gray-800";
   //   }
   // };
+
+  const toggleRowExpansion = (productId: string) => {
+    const newExpandedRows = new Set(expandedRows);
+    if (newExpandedRows.has(productId)) {
+      newExpandedRows.delete(productId);
+    } else {
+      newExpandedRows.add(productId);
+    }
+    setExpandedRows(newExpandedRows);
+  };
+
+  const handleRowClick = (e: React.MouseEvent, productId: string) => {
+    // Dropdown menü tıklamalarını ignore et
+    if ((e.target as HTMLElement).closest("[data-dropdown-trigger]")) {
+      return;
+    }
+    e.preventDefault();
+    toggleRowExpansion(productId);
+  };
 
   if (error) {
     return <div>{error}</div>;
@@ -204,99 +226,287 @@ export function ProductsTable() {
             {/* <TableHead className="text-right">Actions</TableHead> */}
           </TableRow>
         </TableHeader>
-        <TableBody>
-          {data.content.map((product) => (
-            <TableRow key={product.id}>
-              <TableCell>
-                <ImageView
-                  imageInfo={{
-                    url: product.variations[0].images[0] || "/placeholder.svg",
-                    name: product.name,
-                  }}
-                  className="rounded-md object-cover w-16 h-16"
-                />
-              </TableCell>
-              <TableCell className="font-medium">{product.name}</TableCell>
-              <TableCell>{product.brandName || ""}</TableCell>
-              <TableCell>{product.variations[0].attributes[0].price}</TableCell>
-              <TableCell>{product.variations[0].attributes[0].stock}</TableCell>
-              {/* <TableCell>
-                <Badge
-                  className={getStatusColor(product.availabilityStatus)}
-                  variant="outline"
-                >
-                  {product.availabilityStatus}
-                </Badge>
-              </TableCell> */}
-              <TableCell className="text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreHorizontal className="h-4 w-4" />
-                      <span className="sr-only">Open menu</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuItem className="px-0">
-                      <Link
-                        className="flex items-center w-full px-2"
-                        href={`/superadmin/update/product/${product.id}`}
-                      >
-                        <Pencil className="mr-2 h-4 w-4" /> Düzenle
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="px-0">
-                      <Link
-                        className="flex items-center w-full px-2"
-                        href={`/superadmin/create/target/${product.id}`}
-                      >
-                        <Target className="mr-2 h-4 w-4" /> Create Target
-                        Picture
-                      </Link>
-                    </DropdownMenuItem>
 
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      className="text-red-600 cursor-pointer"
-                      onClick={() => {
-                        setSelectedProduct(product);
-                        setShowDeleteDialog(true);
-                      }}
+        <TableBody>
+          {data.content.map((product) => {
+            const isExpanded = expandedRows.has(product.id);
+
+            return (
+              <React.Fragment key={product.id}>
+                {/* Ana satır */}
+                <TableRow
+                  className="cursor-pointer hover:bg-muted/50 transition-colors"
+                  onClick={(e) => handleRowClick(e, product.id)}
+                >
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      {isExpanded ? (
+                        <ChevronDown className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                      )}
+                      <ImageView
+                        imageInfo={{
+                          url:
+                            product.variations[0].images[0] ||
+                            "/placeholder.svg?height=64&width=64",
+                          name: product.name,
+                        }}
+                        className="rounded-md object-cover w-16 h-16"
+                      />
+                    </div>
+                  </TableCell>
+                  <TableCell className="font-medium">{product.name}</TableCell>
+                  <TableCell>{product.brandName || ""}</TableCell>
+                  <TableCell>
+                    ${product.variations[0].attributes[0].price}
+                  </TableCell>
+                  <TableCell>
+                    <span
+                      className={
+                        product.variations[0].attributes[0].stock > 0
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }
                     >
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-              <AlertDialog
-                open={showDeleteDialog}
-                onOpenChange={setShowDeleteDialog}
-              >
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Emin misiniz?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Bu işlem geri alınamaz. {product.name || "Bu ürün"} kalıcı
-                      olarak silinecek ve tüm veriler kaybolacak.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>İptal</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={handleDelete}
-                      className="bg-red-600 hover:bg-red-700"
-                    >
-                      Sil
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </TableRow>
-          ))}
+                      {product.variations[0].attributes[0].stock}
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          data-dropdown-trigger
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">Open menu</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem className="px-0">
+                          <Link
+                            className="flex items-center w-full px-2"
+                            href={`/superadmin/update/product/${product.id}`}
+                          >
+                            <Pencil className="mr-2 h-4 w-4" /> Düzenle
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="px-0">
+                          <Link
+                            className="flex items-center w-full px-2"
+                            href={`/superadmin/create/target/${product.id}`}
+                          >
+                            <Target className="mr-2 h-4 w-4" /> Create Target
+                            Picture
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          className="text-red-600 cursor-pointer"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedProduct(product);
+                            setShowDeleteDialog(true);
+                          }}
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+
+                {/* Genişletilmiş içerik satırı */}
+                {isExpanded && (
+                  <TableRow>
+                    <TableCell colSpan={6} className="p-0 bg-muted/20">
+                      <div className="p-6 space-y-4">
+                        <h4 className="font-semibold text-lg">
+                          Ürün Detayları
+                        </h4>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {/* Temel Bilgiler */}
+                          <div className="space-y-2">
+                            <h5 className="font-medium text-sm text-muted-foreground uppercase">
+                              Temel Bilgiler
+                            </h5>
+                            <div className="space-y-1 text-sm">
+                              <div className="flex justify-between">
+                                <span>ID:</span>
+                                <span className="font-mono">{product.id}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span>Marka:</span>
+                                <span>
+                                  {product.brandName || "Belirtilmemiş"}
+                                </span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span>Kategori:</span>
+                                <span>{product.code || "Belirtilmemiş"}</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Fiyat ve Stok Bilgileri */}
+                          <div className="space-y-2">
+                            <h5 className="font-medium text-sm text-muted-foreground uppercase">
+                              Fiyat & Stok
+                            </h5>
+                            <div className="space-y-1 text-sm">
+                              <div className="flex justify-between">
+                                <span>Fiyat:</span>
+                                <span className="font-semibold">
+                                  ${product.variations[0].attributes[0].price}
+                                </span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span>Stok:</span>
+                                <span
+                                  className={
+                                    product.variations[0].attributes[0].stock >
+                                    0
+                                      ? "text-green-600"
+                                      : "text-red-600"
+                                  }
+                                >
+                                  {product.variations[0].attributes[0].stock}
+                                </span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span>Durum:</span>
+                                <span
+                                  className={
+                                    product.variations[0].attributes[0].stock >
+                                    0
+                                      ? "text-green-600"
+                                      : "text-red-600"
+                                  }
+                                >
+                                  {product.variations[0].attributes[0].stock > 0
+                                    ? "Stokta"
+                                    : "Tükendi"}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Varyasyon Bilgileri */}
+                          <div className="space-y-2">
+                            <h5 className="font-medium text-sm text-muted-foreground uppercase">
+                              Varyasyonlar
+                            </h5>
+                            <div className="space-y-1 text-sm">
+                              <div className="flex justify-between">
+                                <span>Toplam Varyasyon:</span>
+                                <span>{product.variations.length}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span>Toplam Resim:</span>
+                                <span>
+                                  {
+                                    product.variations.flatMap(
+                                      (variation) => variation.images
+                                    ).length
+                                  }
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Açıklama */}
+                        {product.description && (
+                          <div className="space-y-2">
+                            <h5 className="font-medium text-sm text-muted-foreground uppercase">
+                              Açıklama
+                            </h5>
+                            <p className="text-sm text-muted-foreground">
+                              {product.description}
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Tüm Resimler */}
+
+                        <div className="space-y-2">
+                          <h5 className="font-medium text-sm text-muted-foreground uppercase">
+                            Tüm Resimler
+                          </h5>
+                          <div className="space-y-4">
+                            {product.variations.map(
+                              (variation, variationIndex) => (
+                                <div key={variationIndex}>
+                                  <h3 className="font-semibold">
+                                    Varyasyon {variationIndex + 1}
+                                  </h3>
+
+                                  <div className="flex gap-2 flex-wrap">
+                                    {variation.images?.length > 0 ? (
+                                      variation.images.map(
+                                        (image: string, imageIndex: number) => (
+                                          <ImageView
+                                            key={imageIndex}
+                                            imageInfo={{
+                                              url:
+                                                image ||
+                                                "/placeholder.svg?height=80&width=80",
+                                              name: `${
+                                                product.name
+                                              } - Varyasyon ${
+                                                variationIndex + 1
+                                              } - Görsel ${imageIndex + 1}`,
+                                            }}
+                                            className="rounded-md object-cover w-20 h-20 border"
+                                          />
+                                        )
+                                      )
+                                    ) : (
+                                      <span className="text-sm text-gray-500">
+                                        Görsel yok
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              )
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </React.Fragment>
+            );
+          })}
         </TableBody>
       </Table>
+
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Emin misiniz?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Bu işlem geri alınamaz. {selectedProduct?.name || "Bu ürün"}{" "}
+              kalıcı olarak silinecek ve tüm veriler kaybolacak.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>İptal</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Sil
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <div className="flex items-center justify-end space-x-2 p-4">
         <Button
           onClick={() =>
