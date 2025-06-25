@@ -3,8 +3,8 @@ import { Label } from "@/components/ui/label";
 import { Upload, X } from "lucide-react";
 import React from "react";
 import Resizer from "react-image-file-resizer";
-import { ProductFormData } from "../Update/index";
 import { UseFormWatch } from "react-hook-form";
+import { TProductFormData } from "@/types/ProductFormData";
 
 export default function VariantImageUpload({
   variationIndex,
@@ -18,7 +18,7 @@ export default function VariantImageUpload({
   images: File[];
   onImagesChange: (images: File[]) => void;
   imageName: string;
-  watch: UseFormWatch<ProductFormData>;
+  watch: UseFormWatch<TProductFormData>;
   handleDeleteImages:
     | ((url: string, variationIndex: number) => void)
     | undefined;

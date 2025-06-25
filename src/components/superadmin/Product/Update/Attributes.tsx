@@ -10,14 +10,14 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from "react-hook-form";
-import { ProductFormData } from ".";
 import AttributeDetails from "./AttributeDetails";
+import { TProductFormData } from "@/types/ProductFormData";
 
 interface IProps {
-  watch: UseFormWatch<ProductFormData>;
-  control: Control<ProductFormData, any, ProductFormData>;
+  watch: UseFormWatch<TProductFormData>;
+  control: Control<TProductFormData, any, TProductFormData>;
   variationIndex: number;
-  setValue: UseFormSetValue<ProductFormData>;
+  setValue: UseFormSetValue<TProductFormData>;
 }
 
 const Attributes = ({ watch, control, variationIndex, setValue }: IProps) => {

@@ -6,7 +6,7 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from "react-hook-form";
-import { ProductFormData } from ".";
+
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import {
@@ -16,14 +16,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { TProductFormData } from "@/types/ProductFormData";
 
 interface IProps {
-  watch: UseFormWatch<ProductFormData>;
-  control: Control<ProductFormData, any, ProductFormData>;
+  watch: UseFormWatch<TProductFormData>;
+  control: Control<TProductFormData, any, TProductFormData>;
   variationIndex: number;
   attributeIndex: number;
   detailIndex: number;
-  setValue: UseFormSetValue<ProductFormData>;
+  setValue: UseFormSetValue<TProductFormData>;
 }
 
 const AttributeDetail = ({

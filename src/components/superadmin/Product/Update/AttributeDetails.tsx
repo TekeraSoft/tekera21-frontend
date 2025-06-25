@@ -8,15 +8,16 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from "react-hook-form";
-import { ProductFormData } from ".";
+
 import { Plus } from "lucide-react";
+import { TProductFormData } from "@/types/ProductFormData";
 
 interface IProps {
-  watch: UseFormWatch<ProductFormData>;
-  control: Control<ProductFormData, any, ProductFormData>;
+  watch: UseFormWatch<TProductFormData>;
+  control: Control<TProductFormData, any, TProductFormData>;
   variationIndex: number;
   attributeIndex: number;
-  setValue: UseFormSetValue<ProductFormData>;
+  setValue: UseFormSetValue<TProductFormData>;
 }
 
 const AttributeDetails = ({
