@@ -6,6 +6,7 @@ import { Plus, Trash2 } from "lucide-react";
 import React from "react";
 import {
   Control,
+  Controller,
   useFieldArray,
   UseFormSetValue,
   UseFormWatch,
@@ -53,6 +54,92 @@ const Attributes = ({ watch, control, variationIndex, setValue }: IProps) => {
           Add Attribute
         </Button>
       </div>
+
+      {/* {fields.length > 0 && (
+        <div className="space-y-4">
+          <Label className="text-base font-semibold">Size Attributes</Label>
+          <div className="grid gap-4">
+            {fields.map(
+              (attribute, attrIndex) => {
+                const sizeValue = attribute.attributeDetails.find(
+                  (detail) => detail.key === "size"
+                )?.value;
+                return (
+                  <Card key={attrIndex} className="p-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div>
+                        <Label className="text-sm font-medium">Size</Label>
+                        <div className="text-sm text-muted-foreground">
+                          {sizeValue}
+                        </div>
+                      </div>
+                      <div>
+                        <Label
+                          htmlFor={`stock-${variationIndex}-${attrIndex}`}
+                          className="text-sm font-medium"
+                        >
+                          Stock
+                        </Label>
+                        <Controller
+                          name={`variants.${variationIndex}.attributes.${attrIndex}.stock`}
+                          control={control}
+                          render={({ field }) => (
+                            <Input
+                              {...field}
+                              type="number"
+                              className="h-8"
+                              onChange={(e) =>
+                                field.onChange(Number(e.target.value))
+                              }
+                            />
+                          )}
+                        />
+                      </div>
+                      <div>
+                        <Label
+                          htmlFor={`price-${variationIndex}-${attrIndex}`}
+                          className="text-sm font-medium"
+                        >
+                          Price
+                        </Label>
+                        <Controller
+                          name={`variants.${variationIndex}.attributes.${attrIndex}.price`}
+                          control={control}
+                          render={({ field }) => (
+                            <Input
+                              {...field}
+                              type="number"
+                              className="h-8"
+                              onChange={(e) =>
+                                field.onChange(Number(e.target.value))
+                              }
+                            />
+                          )}
+                        />
+                      </div>
+                      <div>
+                        <Label
+                          htmlFor={`sku-${variationIndex}-${attrIndex}`}
+                          className="text-sm font-medium"
+                        >
+                          SKU
+                        </Label>
+                        <Controller
+                          name={`variants.${variationIndex}.attributes.${attrIndex}.sku`}
+                          control={control}
+                          render={({ field }) => (
+                            <Input {...field} className="h-8" />
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </Card>
+                );
+              }
+            )}
+          </div>
+        </div>
+      )} */}
 
       {fields.map((attribute, attributeIndex) => (
         <Card key={attributeIndex} className="bg-muted/50">

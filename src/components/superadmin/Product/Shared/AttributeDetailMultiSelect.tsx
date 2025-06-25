@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { TProductFormData } from "@/types/ProductFormData";
 import { variantAttributeOptions } from "./Data/AttributeOptions";
+import MultiSelectSize from "./MultiSelectSize";
 
 interface IProps {
   variationIndex: number;
@@ -26,7 +27,7 @@ interface IProps {
   detailIndex: number;
 }
 
-const AttributeDetail = ({
+const AttributeDetailMultiSelect = ({
   variationIndex,
   attributeIndex,
   detailIndex,
@@ -68,29 +69,8 @@ const AttributeDetail = ({
     { id: "5xl", label: "5xl" },
   ];
 
-  // const getAvailableOptions = (currentFieldIndex: number) => {
-  //   const selectedKeys = getSelectedKeys();
-  //   const currentFieldKey =
-  //     control._formValues?.variants?.[variationIndex]?.attributes?.[
-  //       attributeIndex
-  //     ]?.stockAttribute?.[currentFieldIndex]?.key;
+  const watchedVariants = watch("variants");
 
-  //   return variantAttributeOptions.filter((option) => {
-  //     // Always show the current field's selected option
-  //     if (option.value === currentFieldKey) return true;
-
-  //     // For color: only show if not already selected in this stock attribute
-  //     // if (option.value === "color") {
-  //     //   return !selectedKeys.includes("color") || currentFieldKey === "color";
-  //     // }
-  //     if (option.value === "size") {
-  //       return !selectedKeys.includes("size") || currentFieldKey === "size";
-  //     }
-
-  //     // For other attributes: always show (can be selected multiple times)
-  //     return true;
-  //   });
-  // };
   return (
     <div className="flex gap-2 mb-2">
       <div className="flex-1">
@@ -120,28 +100,24 @@ const AttributeDetail = ({
         </Select>
       </div>
       {getSelectedKeys().includes("size") ? (
-        <Select
-          defaultValue={watch(
-            `variants.${variationIndex}.attributes.${attributeIndex}.attributeDetails.${detailIndex}.value`
-          )}
-          onValueChange={(value) =>
-            setValue(
-              `variants.${variationIndex}.attributes.${attributeIndex}.attributeDetails.${detailIndex}.value`,
-              value
-            )
+        <MultiSelectSize
+          value={
+            watchedVariants[variationIndex]?.attributes
+              ?.map(
+                (attr) =>
+                  attr.attributeDetails.find((detail) => detail.key === "size")
+                    ?.value || ""
+              )
+              .filter(Boolean) || []
           }
-        >
-          <SelectTrigger className="min-w-32">
-            <SelectValue placeholder="Select attribute" />
-          </SelectTrigger>
-          <SelectContent>
-            {sizes.map((size) => (
-              <SelectItem key={size.id} value={size.label}>
-                {size.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+          onChange={(sizes) => {
+            // This is handled in MultiSelectSize component
+          }}
+          variantIndex={variationIndex}
+          onAttributesChange={(attributes) => {
+            setValue(`variants.${variationIndex}.attributes`, attributes);
+          }}
+        />
       ) : (
         <Input
           value={detail.value}
@@ -168,4 +144,4 @@ const AttributeDetail = ({
   );
 };
 
-export default AttributeDetail;
+export default AttributeDetailMultiSelect;

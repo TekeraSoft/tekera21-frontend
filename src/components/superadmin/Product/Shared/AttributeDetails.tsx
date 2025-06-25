@@ -11,6 +11,7 @@ import {
 
 import { Plus } from "lucide-react";
 import { TProductFormData } from "@/types/ProductFormData";
+// import AttributeDetailMultiSelect from "./AttributeDetailMultiSelect";
 
 interface IProps {
   watch: UseFormWatch<TProductFormData>;
@@ -25,7 +26,6 @@ const AttributeDetails = ({
   variationIndex,
   watch,
   attributeIndex,
-  setValue,
 }: IProps) => {
   const { append: appendAttributeDetail } = useFieldArray({
     control,
@@ -50,7 +50,7 @@ const AttributeDetails = ({
           Add Detail
         </Button>
       </div>
-      {attributeDetails.map((detail, detailIndex) => (
+      {attributeDetails.map((_, detailIndex) => (
         <AttributeDetail
           key={detailIndex}
           attributeIndex={attributeIndex}

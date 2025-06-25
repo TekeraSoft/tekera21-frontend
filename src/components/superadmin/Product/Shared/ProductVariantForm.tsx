@@ -123,6 +123,7 @@ export default function ProductVariantForm({
     { name: "Bordo", hex: "#800000" },
     { name: "Gül Kurusu", hex: "#C08081" },
     { name: "Fușya", hex: "#FF00FF" },
+    { name: "Füme", hex: "#757a80" },
     { name: "Pembe", hex: "#FFC0CB" },
     { name: "Açık Pembe", hex: "#FFD1DC" },
     { name: "Şeker Pembe", hex: "#FFB6C1" },
@@ -142,7 +143,6 @@ export default function ProductVariantForm({
     { name: "Koyu Mürdüm", hex: "#580F41" },
     { name: "Metalik Gri", hex: "#A9A9A9" },
     { name: "Gümüş", hex: "#C0C0C0" },
-    { name: "Altın", hex: "#FFD700" },
     { name: "Şampanya", hex: "#F7E7CE" },
     { name: "Ten Rengi", hex: "#F5CBA7" },
   ];
@@ -257,11 +257,15 @@ export default function ProductVariantForm({
                             <SelectValue placeholder="Select Color" />
                           </SelectTrigger>
                           <SelectContent>
-                            {colors.map((color) => (
-                              <SelectItem key={color.name} value={color.name}>
-                                {color.name}
-                              </SelectItem>
-                            ))}
+                            {colors
+                              .sort((a, b) =>
+                                a.name.localeCompare(b.name, "tr")
+                              )
+                              .map((color) => (
+                                <SelectItem key={color.name} value={color.name}>
+                                  {color.name}
+                                </SelectItem>
+                              ))}
                           </SelectContent>
                         </Select>
                       </div>
