@@ -17,11 +17,7 @@ const GenderSelect = () => {
     control,
     formState: { errors },
   } = useFormContext<TProductFormData>();
-  const {
-    fields: tagFields,
-    append: appendTag,
-    remove: removeTag,
-  } = useFieldArray({
+  const { fields: tagFields, append: appendTag } = useFieldArray({
     control,
     name: "tags",
   });

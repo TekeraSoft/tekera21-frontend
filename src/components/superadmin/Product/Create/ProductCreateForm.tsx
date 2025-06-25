@@ -41,6 +41,7 @@ import { SubCategoriesSelect } from "../Shared/SubCategoriesSelect";
 import ProductAttributes from "../Shared/ProductAttributes";
 import CategorySelect from "../Shared/CategorySelect";
 import GenderSelect from "../Shared/GenderSelect";
+import { genders } from "../Shared/Data/Genders";
 
 export default function ProductCreateForm({
   categories,
@@ -298,34 +299,31 @@ export default function ProductCreateForm({
                 }
               />
             </FormProvider>
-            <Separator />
-
-            <FormProvider {...methods}>
-              <GenderSelect />
-            </FormProvider>
 
             <Separator />
 
             {/* Tags */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Tags</h3>
-              {tagFields.map((field, index) => (
-                <div key={field.id} className="flex gap-2">
-                  <Input
-                    {...register(`tags.${index}.value`)}
-                    placeholder="Enter tag"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    onClick={() => removeTag(index)}
-                    disabled={tagFields.length === 1}
-                  >
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
+              {tagFields
+                .filter((tag) => genders.includes(tag.value))
+                .map((field, index) => (
+                  <div key={field.id} className="flex gap-2">
+                    <Input
+                      {...register(`tags.${index}.value`)}
+                      placeholder="Enter tag"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      onClick={() => removeTag(index)}
+                      disabled={tagFields.length === 1}
+                    >
+                      <Minus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
               <Button
                 type="button"
                 variant="outline"
@@ -336,6 +334,12 @@ export default function ProductCreateForm({
                 Add Tag
               </Button>
             </div>
+
+            <Separator />
+
+            <FormProvider {...methods}>
+              <GenderSelect />
+            </FormProvider>
 
             <Separator />
 
