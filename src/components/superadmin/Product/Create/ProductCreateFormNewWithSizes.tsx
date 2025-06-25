@@ -27,10 +27,11 @@ import { Separator } from "@/components/ui/separator";
 import { ICategory } from "@/types/AdminTypes/category";
 import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
 import ImageView from "@/components/shared/ImageView";
-import { SubCategoriesSelect } from "./SubCategoriesSelect";
+
 import { createProduct } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import ProductAttributeManager from "./AttributeManager";
+import { SubCategoriesSelect } from "../Shared/SubCategoriesSelect";
 
 export type ProductFormData = {
   name: string;
@@ -349,7 +350,6 @@ export default function ProductCreateFormNewWithSize({
               </Select>
             </div>
             <SubCategoriesSelect
-              control={control}
               name="subCategories"
               label="Subcategories"
               subCategories={
@@ -542,28 +542,8 @@ function VariationAttributes({
     name: `variants.${variationIndex}.attributes`,
   });
 
-  const attributeOptions = [
-    { value: "color", label: "Color" },
-    { value: "size", label: "Size" },
-    { value: "material", label: "Material" },
-    { value: "weight", label: "Weight" },
-    { value: "dimensions", label: "Dimensions" },
-    { value: "cpu", label: "CPU" },
-    { value: "memory", label: "Memory" },
-    { value: "storage", label: "Storage" },
-    { value: "guarantee", label: "Guarantee" },
-    { value: "brand", label: "Brand" },
-    { value: "model", label: "Model" },
-    { value: "capacity", label: "Capacity" },
-    { value: "voltage", label: "Voltage" },
-    { value: "power", label: "Power" },
-    { value: "connectivity", label: "Connectivity" },
-    { value: "compatibility", label: "Compatibility" },
-  ];
-
-  const isWeHaveModelCode = !!watch(
-    `variants.${variationIndex}.modelCode`
-  ).length;
+  const isWeHaveModelCode = !!watch(`variants.${variationIndex}.modelCode`)
+    .length;
 
   // Function to check if color value already exists in previous stock attributes
 
@@ -588,15 +568,6 @@ function VariationAttributes({
               </Button>
             </div>
 
-            {/* <StockAttributeFields
-            watch={watch}
-            control={control}
-            variationIndex={variationIndex}
-            attributeIndex={attributeIndex}
-            setValue={setValue}
-            attributeOptions={attributeOptions}
-          /> */}
-
             <ProductAttributeManager
               variationIndex={variationIndex}
               watch={watch}
@@ -605,82 +576,6 @@ function VariationAttributes({
               setStockAttributeImages={setStockAttributeImages}
               stockAttributeImages={stockAttributeImages}
             />
-
-            {/* <div className="mt-3">
-            <Label className="text-sm">Price *</Label>
-            <Input
-              type="string"
-              {...control.register(
-                `variants.${variationIndex}.attributes.${attributeIndex}.price`,
-                {
-                  required: true,
-                  valueAsNumber: false,
-                }
-              )}
-              placeholder="10"
-              className="mt-1"
-            />
-          </div>
-          <div className="mt-3">
-            <Label className="text-sm">Discount Price</Label>
-            <Input
-              type="string"
-              {...control.register(
-                `variants.${variationIndex}.attributes.${attributeIndex}.discountPrice`,
-                {
-                  required: true,
-                  valueAsNumber: false,
-                }
-              )}
-              placeholder="0"
-              className="mt-1"
-            />
-          </div>
-          <div className="mt-3">
-            <Label className="text-sm">Stock Quantity *</Label>
-            <Input
-              type="number"
-              {...control.register(
-                `variants.${variationIndex}.attributes.${attributeIndex}.stock`,
-                {
-                  required: true,
-                  valueAsNumber: true,
-                }
-              )}
-              placeholder="10"
-              className="mt-1"
-            />
-          </div>
-          <div className="mt-3">
-            <Label className="text-sm">Barcode *</Label>
-            <Input
-              type="string"
-              {...control.register(
-                `variants.${variationIndex}.attributes.${attributeIndex}.barcode`,
-                {
-                  required: true,
-                  valueAsNumber: false,
-                }
-              )}
-              placeholder="8691234567890"
-              className="mt-1"
-            />
-          </div>
-          <div className="mt-3">
-            <Label className="text-sm">SKU *</Label>
-            <Input
-              type="string"
-              {...control.register(
-                `variants.${variationIndex}.attributes.${attributeIndex}.sku`,
-                {
-                  required: true,
-                  valueAsNumber: false,
-                }
-              )}
-              placeholder="SKU"
-              className="mt-1"
-            />
-          </div> */}
           </Card>
         ))}
         <Button

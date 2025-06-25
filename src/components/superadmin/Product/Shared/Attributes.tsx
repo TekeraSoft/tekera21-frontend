@@ -10,8 +10,9 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from "react-hook-form";
-import AttributeDetails from "./AttributeDetails";
+
 import { TProductFormData } from "@/types/ProductFormData";
+import AttributeDetails from "./AttributeDetails";
 
 interface IProps {
   watch: UseFormWatch<TProductFormData>;

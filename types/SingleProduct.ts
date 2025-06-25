@@ -12,7 +12,7 @@ export type IGetByIdProduct = {
   currencyType: string;
   tags: string[];
   productType: "PHYSICAL" | "DIGITAL"; // enum gibi düşünebilirsin
-  attributes: Attribute[];
+  attributeDetails: Attribute[];
   rate: number;
   comments: any[]; // Eğer yorumların yapısı belli değilse `any[]` bırakabiliriz
 };

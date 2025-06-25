@@ -10,7 +10,7 @@ export type TProductFormData = {
   subCategories?: { value: string }[];
   productType: string;
   tags: { value: string }[];
-  attributes: { key: string; value: string }[];
+  attributeDetails: { key: string; value: string }[];
   variants: {
     id?: string;
     modelName: string;

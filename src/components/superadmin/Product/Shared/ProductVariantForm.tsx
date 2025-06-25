@@ -1,17 +1,12 @@
 "use client";
 
-import { Plus, Trash2, Copy, PlusIcon } from "lucide-react";
+import { Plus, Trash2, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import {
-  Control,
-  useFieldArray,
-  UseFormSetValue,
-  UseFormWatch,
-} from "react-hook-form";
+import { useFieldArray, useFormContext } from "react-hook-form";
 
 import VariantImageUpload from "./VariantImageUpload";
 import {
@@ -22,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import Attributes from "../Update/Attributes";
+import Attributes from "./Attributes";
 import { TProductFormData } from "@/types/ProductFormData";
 import {
   Tooltip,
@@ -33,9 +28,6 @@ import {
 import { TooltipArrow, TooltipPortal } from "@radix-ui/react-tooltip";
 
 interface IProps {
-  watch: UseFormWatch<TProductFormData>;
-  control: Control<TProductFormData, any, TProductFormData>;
-  setValue: UseFormSetValue<TProductFormData>;
   stockAttributeImages: {
     [key: string]: File[];
   };
@@ -50,13 +42,17 @@ interface IProps {
 }
 
 export default function ProductVariantForm({
-  watch,
-  control,
   stockAttributeImages,
   setStockAttributeImages,
-  setValue,
+
   handleDeleteImages,
 }: IProps) {
+  const {
+    control,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useFormContext<TProductFormData>();
   const variants = watch("variants");
 
   const { append: appendVariation, remove: removeVariation } = useFieldArray({

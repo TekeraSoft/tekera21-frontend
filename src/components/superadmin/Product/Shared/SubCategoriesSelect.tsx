@@ -1,26 +1,27 @@
 "use client";
-import { type Control, Controller } from "react-hook-form";
+import { type Control, Controller, useFormContext } from "react-hook-form";
 import { Label } from "@/components/ui/label";
-import { MultiSelect, OptionType } from "./MultiSelect";
-
+import { MultiSelect, OptionType } from "../Update/MultiSelect";
+import { TProductFormData } from "@/types/ProductFormData";
 
 interface SubCategoriesSelectProps {
-  control: Control<any>;
-  name: string;
+  name: keyof TProductFormData;
   label: string;
   subCategories: { id: string; name: string; image?: string }[];
   required?: boolean;
 }
 
 export function SubCategoriesSelect({
-  control,
   name,
   label,
   subCategories,
   required = false,
 }: SubCategoriesSelectProps) {
   // Convert subcategories to option format
-
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext<TProductFormData>();
   const options: OptionType[] = subCategories.map((subCategory) => ({
     value: subCategory.id,
     label: subCategory.name,
@@ -38,7 +39,21 @@ export function SubCategoriesSelect({
         render={({ field }) => (
           <MultiSelect
             options={options}
-            selected={field.value || []}
+            selected={
+              Array.isArray(field.value)
+                ? field.value.map((item) =>
+                    typeof item === "string"
+                      ? { value: item }
+                      : "value" in item
+                      ? item
+                      : "id" in item && item.id
+                      ? { value: item.id }
+                      : { value: "" }
+                  )
+                : typeof field.value === "string"
+                ? [{ value: field.value }]
+                : []
+            }
             onChange={field.onChange}
             placeholder="Select subcategories"
             emptyMessage="No subcategories found."

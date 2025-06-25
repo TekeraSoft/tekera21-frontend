@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, FormProvider } from "react-hook-form";
 import { Plus, Minus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -26,15 +26,18 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { ICategory } from "@/types/AdminTypes/category";
 import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
-import ImageView from "@/components/shared/ImageView";
 
 import { updateProduct } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import ProductVariantForm from "../Shared/ProductVariantForm";
 
 import { IGetByIdProduct } from "@/types/SingleProduct";
-import { SubCategoriesSelect } from "./SubCategoriesSelect";
+import { SubCategoriesSelect } from "../Shared/SubCategoriesSelect";
 import { TProductFormData } from "@/types/ProductFormData";
+import ProductAttributes from "../Shared/ProductAttributes";
+import CategorySelect from "../Shared/CategorySelect";
+import GenderSelect from "../Shared/GenderSelect";
+import { genders } from "../Shared/Data/Genders";
 
 export default function ProductUpdateForm({
   categories,
@@ -50,14 +53,7 @@ export default function ProductUpdateForm({
   const [deleteImages, setDeleteImages] = useState<string[]>([]);
   const { toast } = useToast();
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    watch,
-  } = useForm<TProductFormData>({
+  const methods = useForm<TProductFormData>({
     defaultValues: {
       name: product.name,
       code: product.code,
@@ -72,10 +68,19 @@ export default function ProductUpdateForm({
         .flatMap((cat) => cat.subCategories)
         .filter((sub) => product.subCategoriesId?.includes(sub.id))
         .map((sub) => ({ value: sub.id, name: sub.name, image: sub.image })),
-      attributes: product.attributes,
+      attributeDetails: product.attributeDetails,
       variants: product.variations,
     },
   });
+
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+  } = methods;
 
   const {
     fields: tagFields,
@@ -84,15 +89,6 @@ export default function ProductUpdateForm({
   } = useFieldArray({
     control,
     name: "tags",
-  });
-
-  const {
-    fields: attributeFields,
-    append: appendAttribute,
-    remove: removeAttribute,
-  } = useFieldArray({
-    control,
-    name: "attributes",
   });
 
   const onSubmit = async (data: TProductFormData) => {
@@ -124,10 +120,12 @@ export default function ProductUpdateForm({
       currencyType: data.currencyType,
       tags: data.tags.map((tag) => tag.value).filter(Boolean),
       productType: data.productType,
-      attributes: data.attributes.filter((attr) => attr.key && attr.value),
+      attributes: data.attributeDetails.filter(
+        (attr) => attr.key && attr.value
+      ),
       deleteImages: deleteImages,
     };
-    // console.log("formatted", formattedData);
+    console.log("formatted", formattedData);
     // console.log("deleteImages", deleteImages);
     // console.log("stockImages", stockAttributeImages);
     const formData = new FormData();
@@ -296,67 +294,42 @@ export default function ProductUpdateForm({
 
             <Separator />
 
-            {/* Categories */}
-            <div className="space-y-2">
-              <Label htmlFor="categoryId">Category ID *</Label>
-              <Select
-                value={watch("categoryId")}
-                onValueChange={(value) => setValue("categoryId", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories?.map((category) => (
-                    <SelectItem key={category.id} value={category.id}>
-                      <div className="flex items-center gap-2">
-                        {category.image && (
-                          <ImageView
-                            className="h-4 w-4 rounded"
-                            imageInfo={{
-                              url: category.image,
-                              name: category.name,
-                            }}
-                          />
-                        )}
-                        {category.name}
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <SubCategoriesSelect
-              control={control}
-              name="subCategories"
-              label="Subcategories"
-              subCategories={
-                categories.find((cat) => cat.id === watch("categoryId"))
-                  ?.subCategories || []
-              }
-            />
+            <FormProvider {...methods}>
+              <CategorySelect categories={categories} />
+              <SubCategoriesSelect
+                name="subCategories"
+                label="Subcategories"
+                subCategories={
+                  categories.find((cat) => cat.id === watch("categoryId"))
+                    ?.subCategories || []
+                }
+              />
+            </FormProvider>
+
             <Separator />
 
             {/* Tags */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Tags</h3>
-              {tagFields.map((field, index) => (
-                <div key={field.id} className="flex gap-2">
-                  <Input
-                    {...register(`tags.${index}.value`)}
-                    placeholder="Enter tag"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    onClick={() => removeTag(index)}
-                    disabled={tagFields.length === 1}
-                  >
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
+              {tagFields
+                .filter((tag) => genders.includes(tag.value))
+                .map((field, index) => (
+                  <div key={field.id} className="flex gap-2">
+                    <Input
+                      {...register(`tags.${index}.value`)}
+                      placeholder="Enter tag"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      onClick={() => removeTag(index)}
+                      disabled={tagFields.length === 1}
+                    >
+                      <Minus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
               <Button
                 type="button"
                 variant="outline"
@@ -370,54 +343,30 @@ export default function ProductUpdateForm({
 
             <Separator />
 
+            <FormProvider {...methods}>
+              <GenderSelect />
+            </FormProvider>
+
+            <Separator />
+
             {/* Attributes */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Product Attributes</h3>
-              {attributeFields.map((field, index) => (
-                <div key={field.id} className="flex gap-2">
-                  <Input
-                    {...register(`attributes.${index}.key`)}
-                    placeholder="Attribute key"
-                  />
-                  <Input
-                    {...register(`attributes.${index}.value`)}
-                    placeholder="Attribute value"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    onClick={() => removeAttribute(index)}
-                    disabled={attributeFields.length === 1}
-                  >
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => appendAttribute({ key: "", value: "" })}
-                className="w-full"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Attribute
-              </Button>
+              <FormProvider {...methods}>
+                <ProductAttributes />
+              </FormProvider>
             </div>
 
             <Separator />
 
             {/* Variations */}
-
-            <ProductVariantForm
-              setValue={setValue}
-              watch={watch}
-              control={control}
-              stockAttributeImages={stockAttributeImages}
-              setStockAttributeImages={setStockAttributeImages}
-              handleDeleteImages={handleDeleteImages}
-            />
-
+            <FormProvider {...methods}>
+              <ProductVariantForm
+                stockAttributeImages={stockAttributeImages}
+                setStockAttributeImages={setStockAttributeImages}
+                handleDeleteImages={handleDeleteImages}
+              />
+            </FormProvider>
             <div className="flex gap-4">
               <Button type="submit" className="flex-1">
                 Submit

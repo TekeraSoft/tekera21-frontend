@@ -3,8 +3,13 @@
 import type React from "react";
 
 import { useState } from "react";
-import { useForm, useFieldArray, UseFormWatch } from "react-hook-form";
-import { Plus, Minus, Upload, X } from "lucide-react";
+import {
+  useForm,
+  useFieldArray,
+  FormProvider,
+  Controller,
+} from "react-hook-form";
+import { Plus, Minus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -27,11 +32,15 @@ import { Separator } from "@/components/ui/separator";
 import { ICategory } from "@/types/AdminTypes/category";
 import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
 import ImageView from "@/components/shared/ImageView";
-import { SubCategoriesSelect } from "./SubCategoriesSelect";
+
 import { createProduct } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import ProductVariantForm from "../Shared/ProductVariantForm";
 import { TProductFormData } from "@/types/ProductFormData";
+import { SubCategoriesSelect } from "../Shared/SubCategoriesSelect";
+import ProductAttributes from "../Shared/ProductAttributes";
+import CategorySelect from "../Shared/CategorySelect";
+import GenderSelect from "../Shared/GenderSelect";
 
 export default function ProductCreateForm({
   categories,
@@ -43,14 +52,7 @@ export default function ProductCreateForm({
   }>({});
   const { toast } = useToast();
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    watch,
-  } = useForm<TProductFormData>({
+  const methods = useForm<TProductFormData>({
     defaultValues: {
       currencyType: "TRY",
       productType: "PHYSICAL",
@@ -58,7 +60,7 @@ export default function ProductCreateForm({
       categoryId: "",
       companyId: "",
       subCategories: [],
-      attributes: [{ key: "", value: "" }],
+      attributeDetails: [{ key: "", value: "" }],
       variants: [
         {
           modelName: "",
@@ -81,21 +83,21 @@ export default function ProductCreateForm({
   });
 
   const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+  } = methods;
+
+  const {
     fields: tagFields,
     append: appendTag,
     remove: removeTag,
   } = useFieldArray({
     control,
     name: "tags",
-  });
-
-  const {
-    fields: attributeFields,
-    append: appendAttribute,
-    remove: removeAttribute,
-  } = useFieldArray({
-    control,
-    name: "attributes",
   });
 
   const onSubmit = async (data: TProductFormData) => {
@@ -126,10 +128,12 @@ export default function ProductCreateForm({
       currencyType: data.currencyType,
       tags: data.tags.map((tag) => tag.value).filter(Boolean),
       productType: data.productType,
-      attributes: data.attributes.filter((attr) => attr.key && attr.value),
+      attributeDetails: data.attributeDetails.filter(
+        (attr) => attr.key && attr.value
+      ),
     };
-    console.log("formatted", formattedData);
-    console.log("stockImages", stockAttributeImages);
+    // console.log("formatted", formattedData);
+    // console.log("stockImages", stockAttributeImages);
     const formData = new FormData();
     formData.append(
       "data",
@@ -282,44 +286,24 @@ export default function ProductCreateForm({
             <Separator />
 
             {/* Categories */}
-            <div className="space-y-2">
-              <Label htmlFor="categoryId">Category ID *</Label>
-              <Select
-                value={watch("categoryId")}
-                onValueChange={(value) => setValue("categoryId", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories?.map((category) => (
-                    <SelectItem key={category.id} value={category.id}>
-                      <div className="flex items-center gap-2">
-                        {category.image && (
-                          <ImageView
-                            className="h-4 w-4 rounded"
-                            imageInfo={{
-                              url: category.image,
-                              name: category.name,
-                            }}
-                          />
-                        )}
-                        {category.name}
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <SubCategoriesSelect
-              control={control}
-              name="subCategories"
-              label="Subcategories"
-              subCategories={
-                categories.find((cat) => cat.id === watch("categoryId"))
-                  ?.subCategories || []
-              }
-            />
+
+            <FormProvider {...methods}>
+              <CategorySelect categories={categories} />
+              <SubCategoriesSelect
+                name="subCategories"
+                label="Subcategories"
+                subCategories={
+                  categories.find((cat) => cat.id === watch("categoryId"))
+                    ?.subCategories || []
+                }
+              />
+            </FormProvider>
+            <Separator />
+
+            <FormProvider {...methods}>
+              <GenderSelect />
+            </FormProvider>
+
             <Separator />
 
             {/* Tags */}
@@ -358,51 +342,22 @@ export default function ProductCreateForm({
             {/* Attributes */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Product Attributes</h3>
-              {attributeFields.map((field, index) => (
-                <div key={field.id} className="flex gap-2">
-                  <Input
-                    {...register(`attributes.${index}.key`)}
-                    placeholder="Attribute key"
-                  />
-                  <Input
-                    {...register(`attributes.${index}.value`)}
-                    placeholder="Attribute value"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    onClick={() => removeAttribute(index)}
-                    disabled={attributeFields.length === 1}
-                  >
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => appendAttribute({ key: "", value: "" })}
-                className="w-full"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Attribute
-              </Button>
+              <FormProvider {...methods}>
+                <ProductAttributes />
+              </FormProvider>
             </div>
 
             <Separator />
 
             {/* Variations */}
 
-            <ProductVariantForm
-              setValue={setValue}
-              watch={watch}
-              control={control}
-              stockAttributeImages={stockAttributeImages}
-              setStockAttributeImages={setStockAttributeImages}
-              handleDeleteImages={undefined}
-            />
-
+            <FormProvider {...methods}>
+              <ProductVariantForm
+                stockAttributeImages={stockAttributeImages}
+                setStockAttributeImages={setStockAttributeImages}
+                handleDeleteImages={undefined}
+              />
+            </FormProvider>
             <div className="flex gap-4">
               <Button type="submit" className="flex-1">
                 Submit
