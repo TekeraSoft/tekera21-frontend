@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 
 import VariantImageUpload from "./VariantImageUpload";
 import {
@@ -26,7 +26,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { TooltipArrow, TooltipPortal } from "@radix-ui/react-tooltip";
-import { useState } from "react";
+import React, { useState } from "react";
 
 interface IProps {
   stockAttributeImages: {
@@ -220,18 +220,21 @@ export default function ProductVariantForm({
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <Label htmlFor={`modelName-${variantIndex}`}>
-                    Model Name
-                  </Label>
+                  <Label htmlFor={`modelName-${variantIndex}`}>Model Adı</Label>
                   <Input
                     id={`modelName-${variantIndex}`}
                     value={variant.modelName}
                     {...control.register(`variants.${variantIndex}.modelName`, {
-                      required: true,
+                      required: "Model adı zorunludur.",
                       valueAsNumber: false,
                     })}
                     placeholder="Enter model name"
                   />
+                  {errors.variants?.[variantIndex]?.modelName && (
+                    <p className="text-sm text-red-500">
+                      {errors.variants[variantIndex].modelName.message}
+                    </p>
+                  )}
                 </div>
 
                 <TooltipProvider>
@@ -239,7 +242,7 @@ export default function ProductVariantForm({
                     <TooltipTrigger asChild>
                       <div>
                         <Label htmlFor={`modelCode-${variantIndex}`}>
-                          Model Code
+                          Model Kodu
                         </Label>
                         <Input
                           disabled={getIsDisabled(variantIndex)}
@@ -248,12 +251,17 @@ export default function ProductVariantForm({
                           {...control.register(
                             `variants.${variantIndex}.modelCode`,
                             {
-                              required: true,
+                              required: "Model kodu zorunludur.",
                               valueAsNumber: false,
                             }
                           )}
                           placeholder="Enter model code"
                         />
+                        {errors.variants?.[variantIndex]?.modelCode && (
+                          <p className="text-sm text-red-500">
+                            {errors.variants[variantIndex].modelCode.message}
+                          </p>
+                        )}
                       </div>
                     </TooltipTrigger>
                     {getIsDisabled(variantIndex) && (
@@ -275,30 +283,43 @@ export default function ProductVariantForm({
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <div>
-                        <Label htmlFor={`color-${variantIndex}`}>Color</Label>
+                        <Label htmlFor={`color-${variantIndex}`}>Renk</Label>
+                        <Controller
+                          control={control}
+                          name={`variants.${variantIndex}.color`}
+                          rules={{ required: "Renk seçimi zorunludur." }}
+                          render={({ field }) => (
+                            <Select
+                              disabled={getIsDisabled(variantIndex)}
+                              value={field.value}
+                              onValueChange={(value) => field.onChange(value)}
+                            >
+                              <SelectTrigger id={`color-${variantIndex}`}>
+                                <SelectValue placeholder="Select Color" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {colors
+                                  .sort((a, b) =>
+                                    a.name.localeCompare(b.name, "tr")
+                                  )
+                                  .map((color) => (
+                                    <SelectItem
+                                      key={color.name}
+                                      value={color.name}
+                                    >
+                                      {color.name}
+                                    </SelectItem>
+                                  ))}
+                              </SelectContent>
+                            </Select>
+                          )}
+                        />
 
-                        <Select
-                          disabled={getIsDisabled(variantIndex)}
-                          defaultValue={watch(`variants.${variantIndex}.color`)}
-                          onValueChange={(value) =>
-                            setValue(`variants.${variantIndex}.color`, value)
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Color" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {colors
-                              .sort((a, b) =>
-                                a.name.localeCompare(b.name, "tr")
-                              )
-                              .map((color) => (
-                                <SelectItem key={color.name} value={color.name}>
-                                  {color.name}
-                                </SelectItem>
-                              ))}
-                          </SelectContent>
-                        </Select>
+                        {errors.variants?.[variantIndex]?.color && (
+                          <p className="text-sm text-red-500">
+                            {errors.variants[variantIndex].color.message}
+                          </p>
+                        )}
                       </div>
                     </TooltipTrigger>
                     {getIsDisabled(variantIndex) && (

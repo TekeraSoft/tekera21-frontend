@@ -38,7 +38,7 @@ const Attributes = ({ variationIndex }: IProps) => {
     watch,
     formState: { errors },
   } = useFormContext<TProductFormData>();
-  const { fields, append, remove } = useFieldArray({
+  const { fields } = useFieldArray({
     control,
     name: `variants.${variationIndex}.attributes`,
   });

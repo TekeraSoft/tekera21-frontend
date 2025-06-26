@@ -31,7 +31,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { ICategory } from "@/types/AdminTypes/category";
 import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
-import ImageView from "@/components/shared/ImageView";
 
 import { createProduct } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
@@ -139,7 +138,46 @@ export default function ProductCreateForm({
       });
     });
 
-    const { message, success } = await createProduct(formData);
+    const checkForm = () => {
+      return formattedData.variants.every((variant) =>
+        variant.attributes.some((item) => {
+          if (!item.price || !item.barcode || !item.stock || !item.sku) {
+            return false;
+          } else {
+            return true;
+          }
+        })
+      );
+    };
+    const checkImages = () => {
+      return formattedData.variants.every((_, index) => {
+        const key = String(index);
+        const hasImage =
+          stockAttributeImages[key] && stockAttributeImages[key].length > 0;
+
+        return hasImage;
+      });
+    };
+
+    if (!checkForm()) {
+      toast({
+        title: "Error",
+        description:
+          "Fiyat, barkod, stok adeti veya stok kodu alanları eksik. Lütfen gözden geçirin. ",
+        variant: "default",
+      });
+      return;
+    }
+    if (!checkImages()) {
+      toast({
+        title: "Error",
+        description:
+          "Varyantlardan en az birinde resimler eksik. Lütfen gözden geçirin. ",
+        variant: "default",
+      });
+      return;
+    }
+    const { success } = await createProduct(formData);
     if (success) {
       toast({
         title: "Success",
@@ -159,8 +197,10 @@ export default function ProductCreateForm({
     <div className=" mx-auto p-6">
       <Card>
         <CardHeader>
-          <CardTitle>Create New Product</CardTitle>
-          <CardDescription>Fill in the product details below</CardDescription>
+          <CardTitle>Yeni ürün oluşturun</CardTitle>
+          <CardDescription>
+            Aşağıdaki forma ürün bilgilerinizi giriniz.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -169,7 +209,7 @@ export default function ProductCreateForm({
               <h3 className="text-lg font-semibold">Basic Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Product Name *</Label>
+                  <Label htmlFor="name">Ürün ismi *</Label>
                   <Input
                     id="name"
                     {...register("name", {
@@ -230,10 +270,18 @@ export default function ProductCreateForm({
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="description">Description *</Label>
-                <MarkdownEditor
-                  onChange={(value) => setValue("description", value)}
+                <Controller
+                  control={control}
+                  name="description"
+                  rules={{ required: "Description is required" }}
+                  render={({ field }) => (
+                    <MarkdownEditor
+                      defaultValue={field.value}
+                      onChange={field.onChange}
+                    />
+                  )}
                 />
+
                 {errors.description && (
                   <p className="text-sm text-red-500">
                     {errors.description.message}
@@ -243,19 +291,30 @@ export default function ProductCreateForm({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="currencyType">Currency Type *</Label>
-                  <Select
-                    onValueChange={(value) => setValue("currencyType", value)}
-                    defaultValue="TRY"
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select currency" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="TRY">TRY</SelectItem>
-                      <SelectItem value="USD">USD</SelectItem>
-                      <SelectItem value="EUR">EUR</SelectItem>
-                    </SelectContent>
-                  </Select>
+
+                  <Controller
+                    control={control}
+                    name="currencyType"
+                    rules={{ required: "Currency is required" }}
+                    render={({ field }) => (
+                      <Select onValueChange={field.onChange} defaultValue="TRY">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select currency" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="TRY">TRY</SelectItem>
+                          <SelectItem value="USD">USD</SelectItem>
+                          <SelectItem value="EUR">EUR</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+
+                  {errors.description && (
+                    <p className="text-sm text-red-500">
+                      {errors.description.message}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="productType">Product Type *</Label>
@@ -267,9 +326,9 @@ export default function ProductCreateForm({
                       <SelectValue placeholder="Select product type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="PHYSICAL">Physical</SelectItem>
-                      <SelectItem value="DIGITAL">Digital</SelectItem>
-                      <SelectItem value="SERVICE">Service</SelectItem>
+                      <SelectItem value="PHYSICAL">Fiziksel</SelectItem>
+                      <SelectItem value="DIGITAL">Dijital</SelectItem>
+                      <SelectItem value="SERVICE">Hizmet</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

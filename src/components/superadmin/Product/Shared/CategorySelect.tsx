@@ -57,6 +57,9 @@ const CategorySelect = ({ categories }: IProps) => {
           </Select>
         )}
       />
+      {errors.categoryId && (
+        <p className="text-sm text-red-500">{errors.categoryId.message}</p>
+      )}
     </div>
   );
 };

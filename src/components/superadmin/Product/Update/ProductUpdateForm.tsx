@@ -147,6 +147,46 @@ export default function ProductUpdateForm({
       formData.append("images", new File([""], ""), "empty.jpg");
     }
 
+    const checkForm = () => {
+      return formattedData.variants.every((variant) =>
+        variant.attributes.some((item) => {
+          if (!item.price || !item.barcode || !item.stock || !item.sku) {
+            return false;
+          } else {
+            return true;
+          }
+        })
+      );
+    };
+    const checkImages = () => {
+      return formattedData.variants.every((_, index) => {
+        const key = String(index);
+        const hasImage =
+          stockAttributeImages[key] && stockAttributeImages[key].length > 0;
+
+        return hasImage;
+      });
+    };
+
+    if (!checkForm()) {
+      toast({
+        title: "Error",
+        description:
+          "Fiyat, barkod, stok adeti veya stok kodu alanları eksik. Lütfen gözden geçirin. ",
+        variant: "default",
+      });
+      return;
+    }
+    if (!checkImages()) {
+      toast({
+        title: "Error",
+        description:
+          "Varyantlardan en az birinde resimler eksik. Lütfen gözden geçirin. ",
+        variant: "default",
+      });
+      return;
+    }
+
     const { success } = await updateProduct(formData);
     if (success) {
       toast({
@@ -172,7 +212,6 @@ export default function ProductUpdateForm({
     setValue(`variants.${variationIndex}.images`, updatedImages);
     setDeleteImages((prev) => [...prev, url]);
   };
-  
 
   return (
     <div className=" mx-auto p-6">

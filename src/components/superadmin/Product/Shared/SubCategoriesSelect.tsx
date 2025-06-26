@@ -36,6 +36,7 @@ export function SubCategoriesSelect({
       <Controller
         control={control}
         name={name}
+        rules={{ required: "Alt Kategori seçimi zorunlu" }}
         render={({ field }) => (
           <MultiSelect
             options={options}
@@ -60,6 +61,9 @@ export function SubCategoriesSelect({
           />
         )}
       />
+      {errors.subCategories && (
+        <p className="text-sm text-red-500">{errors.subCategories.message}</p>
+      )}
     </div>
   );
 }
