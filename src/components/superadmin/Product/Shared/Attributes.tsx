@@ -200,8 +200,12 @@ const Attributes = ({ variationIndex }: IProps) => {
     const currentAttributes = watchedVariants[variantIndex]?.attributes || [];
     if (currentAttributes.length === 0) return;
 
+    console.log("bulkdata", bulkData);
+    console.log("currentAttributes", currentAttributes);
+
     const updatedAttributes = applyBulkUpdates(currentAttributes, bulkData);
     setValue(`variants.${variantIndex}.attributes`, updatedAttributes);
+    console.log("watchedVariants", watchedVariants);
   };
 
   return (
@@ -273,12 +277,12 @@ const Attributes = ({ variationIndex }: IProps) => {
             <Label className="text-base font-semibold">
               Oluşturulan Özellikler ({fields.length})
             </Label>
-            {/* <BulkUpdateModal
+            <BulkUpdateModal
               onBulkUpdate={(bulkData) =>
                 handleBulkUpdate(bulkData, variationIndex)
               }
-              totalCombinations={currentSelectedAttributes.length}
-            /> */}
+              totalCombinations={`variants.${variationIndex}.attributes`.length}
+            />
             <Button
               type="button"
               variant="outline"

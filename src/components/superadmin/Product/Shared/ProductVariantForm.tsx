@@ -95,21 +95,18 @@ export default function ProductVariantForm({
   };
 
   const removeVariant = (variantIndex: number) => {
-    console.log("variantindex", variantIndex, fields);
     if (fields[variantIndex]?.images?.length && handleDeleteImages) {
-      console.log("1");
       fields[variantIndex].images.forEach((image) =>
         handleDeleteImages(image, variantIndex)
       );
     }
     if (stockAttributeImages[variantIndex]?.length) {
-      console.log("2");
       const images = stockAttributeImages;
       delete images[variantIndex];
-      console.log("images", images);
+
       setStockAttributeImages(images);
     }
-    console.log("3");
+
     removeVariation(variantIndex);
     setStockAttributeImages((prev) =>
       reindexStockAttributeImages(prev, variantIndex)
@@ -186,8 +183,6 @@ export default function ProductVariantForm({
       !!variants[variantIndex].images.length
     );
   };
-
-  // console.log("stockAttributeImages", stockAttributeImages);
 
   return (
     <div className="mx-auto space-y-6 flex flex-col">

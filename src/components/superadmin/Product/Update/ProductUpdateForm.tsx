@@ -177,15 +177,15 @@ export default function ProductUpdateForm({
       });
       return;
     }
-    if (!checkImages()) {
-      toast({
-        title: "Error",
-        description:
-          "Varyantlardan en az birinde resimler eksik. Lütfen gözden geçirin. ",
-        variant: "default",
-      });
-      return;
-    }
+    // if (!checkImages()) {
+    //   toast({
+    //     title: "Error",
+    //     description:
+    //       "Varyantlardan en az birinde resimler eksik. Lütfen gözden geçirin. ",
+    //     variant: "default",
+    //   });
+    //   return;
+    // }
 
     const { success } = await updateProduct(formData);
     if (success) {
