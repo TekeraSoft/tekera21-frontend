@@ -130,7 +130,7 @@ export default function ProductUpdateForm({
     };
     console.log("formatted", formattedData);
     // console.log("deleteImages", deleteImages);
-    // console.log("stockImages", stockAttributeImages);
+    console.log("stockImages", stockAttributeImages);
     const formData = new FormData();
     formData.append(
       "data",
@@ -147,20 +147,20 @@ export default function ProductUpdateForm({
       formData.append("images", new File([""], ""), "empty.jpg");
     }
 
-    const { success } = await updateProduct(formData);
-    if (success) {
-      toast({
-        title: "Success",
-        description: "Product is updated.",
-        variant: "default",
-      });
-    } else {
-      toast({
-        title: "Error",
-        description: "Product cannot be updated.",
-        variant: "destructive",
-      });
-    }
+    // const { success } = await updateProduct(formData);
+    // if (success) {
+    //   toast({
+    //     title: "Success",
+    //     description: "Product is updated.",
+    //     variant: "default",
+    //   });
+    // } else {
+    //   toast({
+    //     title: "Error",
+    //     description: "Product cannot be updated.",
+    //     variant: "destructive",
+    //   });
+    // }
   };
 
   const handleDeleteImages = (url: string, variationIndex: number) => {
@@ -178,20 +178,22 @@ export default function ProductUpdateForm({
       <Card>
         <CardHeader>
           <CardTitle>Ürün düzenle</CardTitle>
-          <CardDescription>Fill in the product details below</CardDescription>
+          <CardDescription>
+            Ürününüze ait aşağıdaki bilgileri güncelleyebilirsiniz
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             {/* Basic Information */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Basic Information</h3>
+              <h3 className="text-lg font-semibold">Genel Bilgiler</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Product Name *</Label>
+                  <Label htmlFor="name">Ürün Adı *</Label>
                   <Input
                     id="name"
                     {...register("name", {
-                      required: "Product name is required",
+                      required: "Ürün adı zorunludur.",
                     })}
                     placeholder="Kalp Nakış İşlemeli Yelek"
                   />
@@ -217,11 +219,11 @@ export default function ProductUpdateForm({
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="code">Product Code *</Label>
+                  <Label htmlFor="code">Ürün Kodu *</Label>
                   <Input
                     id="code"
                     {...register("code", {
-                      required: "Product code is required",
+                      required: "Ürün Kodu Zorunludur.",
                     })}
                     placeholder="A2991"
                   />
@@ -232,11 +234,11 @@ export default function ProductUpdateForm({
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="brandName">Brand Name *</Label>
+                  <Label htmlFor="brandName">Marka İsmi *</Label>
                   <Input
                     id="brandName"
                     {...register("brandName", {
-                      required: "Brand name is required",
+                      required: "Marka ismi zorunludur.",
                     })}
                     placeholder="Nike"
                   />
@@ -248,7 +250,7 @@ export default function ProductUpdateForm({
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="description">Description *</Label>
+                <Label htmlFor="description">Açıklama *</Label>
                 <MarkdownEditor
                   defaultValue={product.description}
                   onChange={(value) => setValue("description", value)}
@@ -261,7 +263,7 @@ export default function ProductUpdateForm({
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="currencyType">Currency Type *</Label>
+                  <Label htmlFor="currencyType">Para birimi *</Label>
                   <Select
                     onValueChange={(value) => setValue("currencyType", value)}
                     defaultValue="TRY"
@@ -277,18 +279,18 @@ export default function ProductUpdateForm({
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="productType">Product Type *</Label>
+                  <Label htmlFor="productType">Ürün Tipi *</Label>
                   <Select
                     onValueChange={(value) => setValue("productType", value)}
                     defaultValue="PHYSICAL"
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select product type" />
+                      <SelectValue placeholder="Ürün tipi seçin" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="PHYSICAL">Physical</SelectItem>
-                      <SelectItem value="DIGITAL">Digital</SelectItem>
-                      <SelectItem value="SERVICE">Service</SelectItem>
+                      <SelectItem value="PHYSICAL">Fiziksel</SelectItem>
+                      <SelectItem value="DIGITAL">Dijital</SelectItem>
+                      <SelectItem value="SERVICE">Hizmet</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -313,7 +315,7 @@ export default function ProductUpdateForm({
 
             {/* Tags */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Tags</h3>
+              <h3 className="text-lg font-semibold">Etiketler</h3>
               {tagFields.map((field, index) => (
                 <div
                   key={field.id}
@@ -344,7 +346,7 @@ export default function ProductUpdateForm({
                 className="w-full"
               >
                 <Plus className="h-4 w-4 mr-2" />
-                Add Tag
+                Etiket Ekle
               </Button>
             </div>
 
@@ -358,7 +360,7 @@ export default function ProductUpdateForm({
 
             {/* Attributes */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Product Attributes</h3>
+              <h3 className="text-lg font-semibold">Ürün Özellikleri</h3>
               <FormProvider {...methods}>
                 <ProductAttributes />
               </FormProvider>
@@ -376,7 +378,7 @@ export default function ProductUpdateForm({
             </FormProvider>
             <div className="flex gap-4">
               <Button type="submit" className="flex-1">
-                Submit
+                Gönder
               </Button>
             </div>
           </form>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Trash2, Copy } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,6 +26,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { TooltipArrow, TooltipPortal } from "@radix-ui/react-tooltip";
+import { useState } from "react";
 
 interface IProps {
   stockAttributeImages: {
@@ -83,11 +84,11 @@ export default function ProductVariantForm({
     removeVariation(variantIndex);
   };
 
-  const exportJSON = () => {
-    const jsonString = JSON.stringify({ variants }, null, 2);
-    navigator.clipboard.writeText(jsonString);
-    alert("JSON copied to clipboard!");
-  };
+  // const exportJSON = () => {
+  //   const jsonString = JSON.stringify({ variants }, null, 2);
+  //   navigator.clipboard.writeText(jsonString);
+  //   alert("JSON copied to clipboard!");
+  // };
 
   const colors = [
     { name: "Beyaz", hex: "#FFFFFF" },
@@ -157,15 +158,15 @@ export default function ProductVariantForm({
   return (
     <div className="mx-auto space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Product Variants Editor</h1>
+        <h1 className="text-3xl font-bold">Renk Varyantları</h1>
         <div className="flex gap-2">
-          <Button type="button" onClick={exportJSON} variant="outline">
+          {/* <Button type="button" onClick={exportJSON} variant="outline">
             <Copy className="w-4 h-4 mr-2" />
             Export JSON
-          </Button>
+          </Button> */}
           <Button type="button" onClick={addVariant}>
             <Plus className="w-4 h-4 mr-2" />
-            Add Variant
+            Renk varyantı ekle
           </Button>
         </div>
       </div>
@@ -175,7 +176,7 @@ export default function ProductVariantForm({
           <Card key={variantIndex} className="w-full">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle>Variant {variantIndex + 1}</CardTitle>
+                <CardTitle>Renk Varyantı {variantIndex + 1}</CardTitle>
                 <Button
                   type="button"
                   onClick={() => removeVariant(variantIndex)}
@@ -315,9 +316,6 @@ export default function ProductVariantForm({
                     <Separator />
 
                     <Attributes
-                      setValue={setValue}
-                      control={control}
-                      watch={watch}
                       variationIndex={variantIndex}
                       key={variantIndex}
                     />
@@ -330,10 +328,12 @@ export default function ProductVariantForm({
 
       {variants.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-muted-foreground mb-4">No variants added yet</p>
+          <p className="text-muted-foreground mb-4">
+            Henüz hiç varyant eklenmemiş.
+          </p>
           <Button type="button" onClick={addVariant}>
             <Plus className="w-4 h-4 mr-2" />
-            Add Your First Variant
+            İlk varyantınızı ekleyin.
           </Button>
         </div>
       )}

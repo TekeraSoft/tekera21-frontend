@@ -23,7 +23,7 @@ const GenderSelect = () => {
   });
   return (
     <div className="space-y-2">
-      <Label htmlFor="tags">Gender *</Label>
+      <Label htmlFor="tags">Cinsiyet *</Label>
       <Controller
         control={control}
         rules={{ required: "Cinsiyet seçimi zorunlu" }}

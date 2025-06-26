@@ -55,8 +55,8 @@ export function SubCategoriesSelect({
                 : []
             }
             onChange={field.onChange}
-            placeholder="Select subcategories"
-            emptyMessage="No subcategories found."
+            placeholder="Alt Kategori seçin"
+            emptyMessage="Alt kategori bulunamadı."
           />
         )}
       />
