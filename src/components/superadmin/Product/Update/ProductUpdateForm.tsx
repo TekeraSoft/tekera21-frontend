@@ -172,6 +172,7 @@ export default function ProductUpdateForm({
     setValue(`variants.${variationIndex}.images`, updatedImages);
     setDeleteImages((prev) => [...prev, url]);
   };
+  
 
   return (
     <div className=" mx-auto p-6">

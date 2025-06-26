@@ -64,26 +64,6 @@ export default function ProductVariantForm({
     name: "variants",
   });
 
-  const reindexStockAttributeImages = (
-    prevImages: { [key: string]: File[] },
-    removedIndex: number
-  ) => {
-    const newImages: { [key: string]: File[] } = {};
-
-    Object.keys(prevImages).forEach((key) => {
-      const index = Number(key);
-
-      if (index < removedIndex) {
-        newImages[index] = prevImages[key];
-      } else if (index > removedIndex) {
-        newImages[index - 1] = prevImages[key]; // Silinen indexten sonrakileri bir kaydır
-      }
-      // Eğer index === removedIndex ise, o zaten siliniyor
-    });
-
-    return newImages;
-  };
-
   const addVariant = () => {
     appendVariation({
       modelName: "",
@@ -111,9 +91,6 @@ export default function ProductVariantForm({
     }
     console.log("3");
     removeVariation(variantIndex);
-    setStockAttributeImages((prev) =>
-      reindexStockAttributeImages(prev, variantIndex)
-    );
   };
 
   // const exportJSON = () => {
