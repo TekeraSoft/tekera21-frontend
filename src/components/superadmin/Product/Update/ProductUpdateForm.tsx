@@ -110,7 +110,7 @@ export default function ProductUpdateForm({
         modelCode: variation.modelCode,
         color: variation.color,
         attributes: variation.attributes.map((attr, attrIndex) => ({
-          attributeDetails: attr.attributeDetails.filter(
+          attributeDetails: attr.attributeDetails?.filter(
             (sa) => sa.key && sa.value
           ),
           stock: attr.stock,
@@ -129,7 +129,7 @@ export default function ProductUpdateForm({
       deleteImages: deleteImages,
     };
     console.log("formatted", formattedData);
-    // console.log("deleteImages", deleteImages);
+    console.log("deleteImages", deleteImages);
     console.log("stockImages", stockAttributeImages);
     const formData = new FormData();
     formData.append(
@@ -147,20 +147,20 @@ export default function ProductUpdateForm({
       formData.append("images", new File([""], ""), "empty.jpg");
     }
 
-    // const { success } = await updateProduct(formData);
-    // if (success) {
-    //   toast({
-    //     title: "Success",
-    //     description: "Product is updated.",
-    //     variant: "default",
-    //   });
-    // } else {
-    //   toast({
-    //     title: "Error",
-    //     description: "Product cannot be updated.",
-    //     variant: "destructive",
-    //   });
-    // }
+    const { success } = await updateProduct(formData);
+    if (success) {
+      toast({
+        title: "Success",
+        description: "Product is updated.",
+        variant: "default",
+      });
+    } else {
+      toast({
+        title: "Error",
+        description: "Product cannot be updated.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleDeleteImages = (url: string, variationIndex: number) => {

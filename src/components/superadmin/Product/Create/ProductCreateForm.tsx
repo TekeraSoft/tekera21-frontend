@@ -69,16 +69,7 @@ export default function ProductCreateForm({
           modelCode: "",
           images: [],
           color: "",
-          attributes: [
-            {
-              attributeDetails: [{ key: "", value: "" }],
-              stock: 0,
-              sku: "",
-              barcode: "",
-              price: 0,
-              discountPrice: 0,
-            },
-          ],
+          attributes: [],
         },
       ],
     },

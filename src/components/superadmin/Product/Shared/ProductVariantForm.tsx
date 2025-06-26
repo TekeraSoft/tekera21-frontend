@@ -45,7 +45,6 @@ interface IProps {
 export default function ProductVariantForm({
   stockAttributeImages,
   setStockAttributeImages,
-
   handleDeleteImages,
 }: IProps) {
   const {
@@ -56,7 +55,11 @@ export default function ProductVariantForm({
   } = useFormContext<TProductFormData>();
   const variants = watch("variants");
 
-  const { append: appendVariation, remove: removeVariation } = useFieldArray({
+  const {
+    append: appendVariation,
+    remove: removeVariation,
+    fields,
+  } = useFieldArray({
     control,
     name: "variants",
   });
@@ -67,20 +70,26 @@ export default function ProductVariantForm({
       modelCode: "",
       images: [],
       color: "",
-      attributes: [
-        {
-          attributeDetails: [{ key: "", value: "" }],
-          stock: 0,
-          price: 0,
-          discountPrice: 0,
-          sku: "",
-          barcode: "",
-        },
-      ],
+      attributes: [],
     });
   };
 
   const removeVariant = (variantIndex: number) => {
+    console.log("variantindex", variantIndex, fields);
+    if (fields[variantIndex]?.images?.length && handleDeleteImages) {
+      console.log("1");
+      fields[variantIndex].images.forEach((image) =>
+        handleDeleteImages(image, variantIndex)
+      );
+    }
+    if (stockAttributeImages[variantIndex]?.length) {
+      console.log("2");
+      const images = stockAttributeImages;
+      delete images[variantIndex];
+      console.log("images", images);
+      setStockAttributeImages(images);
+    }
+    console.log("3");
     removeVariation(variantIndex);
   };
 
@@ -155,8 +164,10 @@ export default function ProductVariantForm({
     );
   };
 
+  // console.log("stockAttributeImages", stockAttributeImages);
+
   return (
-    <div className="mx-auto space-y-6">
+    <div className="mx-auto space-y-6 flex flex-col">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Renk Varyantları</h1>
         <div className="flex gap-2">
@@ -164,10 +175,6 @@ export default function ProductVariantForm({
             <Copy className="w-4 h-4 mr-2" />
             Export JSON
           </Button> */}
-          <Button type="button" onClick={addVariant}>
-            <Plus className="w-4 h-4 mr-2" />
-            Renk varyantı ekle
-          </Button>
         </div>
       </div>
 
@@ -325,6 +332,11 @@ export default function ProductVariantForm({
           </Card>
         ))}
       </div>
+
+      <Button type="button" className="ml-auto" onClick={addVariant}>
+        <Plus className="w-4 h-4 mr-2" />
+        Renk varyantı ekle
+      </Button>
 
       {variants.length === 0 && (
         <div className="text-center py-12">
