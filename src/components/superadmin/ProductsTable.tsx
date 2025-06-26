@@ -259,17 +259,17 @@ export function ProductsTable() {
                   <TableCell className="font-medium">{product.name}</TableCell>
                   <TableCell>{product.brandName || ""}</TableCell>
                   <TableCell>
-                    ${product.variations[0].attributes[0].price}
+                    ${product.variations[0]?.attributes[0]?.price || 0}
                   </TableCell>
                   <TableCell>
                     <span
                       className={
-                        product.variations[0].attributes[0].stock > 0
+                        product.variations[0]?.attributes[0]?.stock > 0
                           ? "text-green-600"
                           : "text-red-600"
                       }
                     >
-                      {product.variations[0].attributes[0].stock}
+                      {product.variations[0]?.attributes[0]?.stock}
                     </span>
                   </TableCell>
                   <TableCell className="text-right">
@@ -362,33 +362,33 @@ export function ProductsTable() {
                               <div className="flex justify-between">
                                 <span>Fiyat:</span>
                                 <span className="font-semibold">
-                                  ${product.variations[0].attributes[0].price}
+                                  ${product.variations[0]?.attributes[0]?.price || 0}
                                 </span>
                               </div>
                               <div className="flex justify-between">
                                 <span>Stok:</span>
                                 <span
                                   className={
-                                    product.variations[0].attributes[0].stock >
+                                    product.variations[0]?.attributes[0]?.stock >
                                     0
                                       ? "text-green-600"
                                       : "text-red-600"
                                   }
                                 >
-                                  {product.variations[0].attributes[0].stock}
+                                  {product.variations[0]?.attributes[0]?.stock}
                                 </span>
                               </div>
                               <div className="flex justify-between">
                                 <span>Durum:</span>
                                 <span
                                   className={
-                                    product.variations[0].attributes[0].stock >
+                                    product.variations[0]?.attributes[0]?.stock >
                                     0
                                       ? "text-green-600"
                                       : "text-red-600"
                                   }
                                 >
-                                  {product.variations[0].attributes[0].stock > 0
+                                  {product.variations[0]?.attributes[0]?.stock > 0
                                     ? "Stokta"
                                     : "Tükendi"}
                                 </span>
