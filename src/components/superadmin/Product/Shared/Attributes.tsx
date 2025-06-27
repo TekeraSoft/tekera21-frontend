@@ -208,11 +208,6 @@ const Attributes = ({ variationIndex }: IProps) => {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Stok Bilgileri</h3>
-
-        {/* <Button type="button" onClick={addAttribute} variant="dark" size="sm">
-          <Plus className="w-4 h-4 mr-2" />
-          Add Attribute
-        </Button> */}
       </div>
 
       <AttributeTypeSelector
