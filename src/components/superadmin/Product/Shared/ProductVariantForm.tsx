@@ -50,10 +50,9 @@ export default function ProductVariantForm({
   const {
     control,
     watch,
-    setValue,
     formState: { errors },
   } = useFormContext<TProductFormData>();
-  const variants = watch("variants");
+  const watchedVariants = watch("variants");
 
   const {
     append: appendVariation,
@@ -180,7 +179,7 @@ export default function ProductVariantForm({
   const getIsDisabled = (variantIndex: number) => {
     return (
       !!stockAttributeImages[variantIndex]?.length ||
-      !!variants[variantIndex].images.length
+      !!watchedVariants[variantIndex].images.length
     );
   };
 
@@ -197,7 +196,7 @@ export default function ProductVariantForm({
       </div>
 
       <div className="space-y-6">
-        {variants.map((variant, variantIndex) => (
+        {watchedVariants.map((variant, variantIndex) => (
           <Card key={variantIndex} className="w-full">
             <CardHeader>
               <div className="flex items-center justify-between">
@@ -377,7 +376,7 @@ export default function ProductVariantForm({
         Renk varyantı ekle
       </Button>
 
-      {variants.length === 0 && (
+      {watchedVariants.length === 0 && (
         <div className="text-center py-12">
           <p className="text-muted-foreground mb-4">
             Henüz hiç varyant eklenmemiş.

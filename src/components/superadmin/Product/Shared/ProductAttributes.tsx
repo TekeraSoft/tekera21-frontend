@@ -19,11 +19,7 @@ const ProductAttributes = () => {
     setValue,
     formState: { errors },
   } = useFormContext<TProductFormData>();
-  const {
-    fields: attributeFields,
-    append: appendAttribute,
-    remove: removeAttribute,
-  } = useFieldArray({
+  const { fields: attributeFields, append: appendAttribute } = useFieldArray({
     control,
     name: "attributeDetails",
   });

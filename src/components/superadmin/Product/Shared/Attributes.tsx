@@ -2,19 +2,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus, Trash2, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import {
-  Control,
   Controller,
   useFieldArray,
   useFormContext,
-  UseFormSetValue,
-  UseFormWatch,
+  useWatch,
 } from "react-hook-form";
 
 import { TProductFormData } from "@/types/ProductFormData";
-import AttributeDetails from "./AttributeDetails";
 import { AttributeTypeSelector } from "./AttributeTypeSelector";
 import {
   applyBulkUpdates,
@@ -26,6 +22,7 @@ import { MultiSelectAttribute } from "./MultiSelectAttribute";
 import { Separator } from "@/components/ui/separator";
 import { SingleSelectAttribute } from "./SingleSelectAttribute";
 import { BulkUpdateData, BulkUpdateModal } from "./BulkUpdateModal";
+import { X } from "lucide-react";
 
 interface IProps {
   variationIndex: number;
@@ -38,13 +35,16 @@ const Attributes = ({ variationIndex }: IProps) => {
     watch,
     formState: { errors },
   } = useFormContext<TProductFormData>();
-  const { fields } = useFieldArray({
+  const { fields, replace } = useFieldArray({
     control,
     name: `variants.${variationIndex}.attributes`,
   });
 
   const watchedVariants = watch("variants");
-
+  const watchedAttributes = useWatch({
+    control,
+    name: `variants.${variationIndex}.attributes`,
+  });
   type AttributeType = {
     key: string;
     label: string;
@@ -196,16 +196,12 @@ const Attributes = ({ variationIndex }: IProps) => {
     currentPrimaryAttributeType === "size" ? SIZE_ATTRIBUTE : WEIGHT_ATTRIBUTE;
   const currentSelectedAttributes = selectedAttributes[variationIndex] || {};
 
-  const handleBulkUpdate = (bulkData: BulkUpdateData, variantIndex: number) => {
-    const currentAttributes = watchedVariants[variantIndex]?.attributes || [];
+  const handleBulkUpdate = (bulkData: BulkUpdateData) => {
+    const currentAttributes = watchedAttributes || [];
     if (currentAttributes.length === 0) return;
 
-    console.log("bulkdata", bulkData);
-    console.log("currentAttributes", currentAttributes);
-
     const updatedAttributes = applyBulkUpdates(currentAttributes, bulkData);
-    setValue(`variants.${variantIndex}.attributes`, updatedAttributes);
-    console.log("watchedVariants", watchedVariants);
+    setValue(`variants.${variationIndex}.attributes`, updatedAttributes);
   };
 
   return (
@@ -278,10 +274,8 @@ const Attributes = ({ variationIndex }: IProps) => {
               Oluşturulan Özellikler ({fields.length})
             </Label>
             <BulkUpdateModal
-              onBulkUpdate={(bulkData) =>
-                handleBulkUpdate(bulkData, variationIndex)
-              }
-              totalCombinations={`variants.${variationIndex}.attributes`.length}
+              onBulkUpdate={(bulkData) => handleBulkUpdate(bulkData)}
+              totalCombinations={watchedAttributes.length}
             />
             <Button
               type="button"
@@ -297,7 +291,8 @@ const Attributes = ({ variationIndex }: IProps) => {
           </div>
 
           <div className="grid gap-4">
-            {fields.map((attribute, attrIndex) => {
+            {fields.map((field, attrIndex) => {
+              const attribute = watchedAttributes?.[attrIndex];
               const primaryAttr = attribute.attributeDetails.find(
                 (detail) => detail.key === currentPrimaryAttributeType
               );
@@ -306,7 +301,7 @@ const Attributes = ({ variationIndex }: IProps) => {
               );
 
               return (
-                <Card key={attrIndex} className="p-4 relative">
+                <Card key={field.id} className="p-4 relative">
                   <Button
                     variant="ghost"
                     size="sm"
@@ -352,16 +347,19 @@ const Attributes = ({ variationIndex }: IProps) => {
                       <Controller
                         name={`variants.${variationIndex}.attributes.${attrIndex}.stock`}
                         control={control}
-                        render={({ field }) => (
-                          <Input
-                            {...field}
-                            type="number"
-                            className="h-8"
-                            onChange={(e) =>
-                              field.onChange(Number(e.target.value))
-                            }
-                          />
-                        )}
+                        render={({ field }) => {
+                          return (
+                            <Input
+                              {...field}
+                              value={field.value ?? ""}
+                              type="number"
+                              className="h-8"
+                              onChange={(e) =>
+                                field.onChange(Number(e.target.value))
+                              }
+                            />
+                          );
+                        }}
                       />
                     </div>
                     <div>
@@ -377,6 +375,7 @@ const Attributes = ({ variationIndex }: IProps) => {
                         render={({ field }) => (
                           <Input
                             {...field}
+                            value={field.value ?? ""}
                             type="number"
                             className="h-8"
                             onChange={(e) =>
@@ -399,6 +398,7 @@ const Attributes = ({ variationIndex }: IProps) => {
                         render={({ field }) => (
                           <Input
                             {...field}
+                            value={field.value ?? ""}
                             type="number"
                             className="h-8"
                             onChange={(e) =>
@@ -419,7 +419,11 @@ const Attributes = ({ variationIndex }: IProps) => {
                         name={`variants.${variationIndex}.attributes.${attrIndex}.sku`}
                         control={control}
                         render={({ field }) => (
-                          <Input {...field} className="h-8" />
+                          <Input
+                            {...field}
+                            value={field.value ?? ""}
+                            className="h-8"
+                          />
                         )}
                       />
                     </div>
@@ -434,7 +438,11 @@ const Attributes = ({ variationIndex }: IProps) => {
                         name={`variants.${variationIndex}.attributes.${attrIndex}.barcode`}
                         control={control}
                         render={({ field }) => (
-                          <Input {...field} className="h-8" />
+                          <Input
+                            {...field}
+                            value={field.value ?? ""}
+                            className="h-8"
+                          />
                         )}
                       />
                     </div>
@@ -445,209 +453,6 @@ const Attributes = ({ variationIndex }: IProps) => {
           </div>
         </div>
       )}
-
-      {/* {fields.length > 0 && (
-        <div className="space-y-4">
-          <Label className="text-base font-semibold">Size Attributes</Label>
-          <div className="grid gap-4">
-            {fields.map((attribute, attrIndex) => {
-              const sizeValue = attribute.attributeDetails.find(
-                (detail) => detail.key === "size"
-              )?.value;
-              return (
-                <Card key={attrIndex} className="p-4">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div>
-                      <Label className="text-sm font-medium">Size</Label>
-                      <div className="text-sm text-muted-foreground">
-                        {sizeValue}
-                      </div>
-                    </div>
-                    <div>
-                      <Label
-                        htmlFor={`stock-${variationIndex}-${attrIndex}`}
-                        className="text-sm font-medium"
-                      >
-                        Stock
-                      </Label>
-                      <Controller
-                        name={`variants.${variationIndex}.attributes.${attrIndex}.stock`}
-                        control={control}
-                        render={({ field }) => (
-                          <Input
-                            {...field}
-                            type="number"
-                            className="h-8"
-                            onChange={(e) =>
-                              field.onChange(Number(e.target.value))
-                            }
-                          />
-                        )}
-                      />
-                    </div>
-                    <div>
-                      <Label
-                        htmlFor={`price-${variationIndex}-${attrIndex}`}
-                        className="text-sm font-medium"
-                      >
-                        Price
-                      </Label>
-                      <Controller
-                        name={`variants.${variationIndex}.attributes.${attrIndex}.price`}
-                        control={control}
-                        render={({ field }) => (
-                          <Input
-                            {...field}
-                            type="number"
-                            className="h-8"
-                            onChange={(e) =>
-                              field.onChange(Number(e.target.value))
-                            }
-                          />
-                        )}
-                      />
-                    </div>
-                    <div>
-                      <Label
-                        htmlFor={`sku-${variationIndex}-${attrIndex}`}
-                        className="text-sm font-medium"
-                      >
-                        SKU
-                      </Label>
-                      <Controller
-                        name={`variants.${variationIndex}.attributes.${attrIndex}.sku`}
-                        control={control}
-                        render={({ field }) => (
-                          <Input {...field} className="h-8" />
-                        )}
-                      />
-                    </div>
-                  </div>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-      )} */}
-
-      {/* {fields.map((attribute, attributeIndex) => (
-        <Card key={attributeIndex} className="bg-muted/50">
-          <CardContent className="pt-4">
-            <div className="flex items-center justify-between mb-4">
-              <h4 className="font-medium">Attribute {attributeIndex + 1}</h4>
-              <Button
-                type="button"
-                onClick={() => removeAttribute(attributeIndex)}
-                variant="destructive"
-                size="sm"
-              >
-                <Trash2 className="w-4 h-4" />
-              </Button>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <AttributeDetails
-                  setValue={setValue}
-                  attributeIndex={attributeIndex}
-                  control={control}
-                  variationIndex={variationIndex}
-                  watch={watch}
-                  key={attributeIndex}
-                />
-              </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div>
-                  <Label>Stock</Label>
-                  <Input
-                    type="number"
-                    value={watch(
-                      `variants.${variationIndex}.attributes.${attributeIndex}.stock`
-                    )}
-                    {...control.register(
-                      `variants.${variationIndex}.attributes.${attributeIndex}.stock`,
-                      {
-                        required: true,
-                        valueAsNumber: true,
-                      }
-                    )}
-                    placeholder="Stock"
-                  />
-                </div>
-                <div>
-                  <Label>SKU</Label>
-                  <Input
-                    value={watch(
-                      `variants.${variationIndex}.attributes.${attributeIndex}.sku`
-                    )}
-                    {...control.register(
-                      `variants.${variationIndex}.attributes.${attributeIndex}.sku`,
-                      {
-                        required: true,
-                        valueAsNumber: false,
-                      }
-                    )}
-                    placeholder="SKU"
-                  />
-                </div>
-                <div>
-                  <Label>Barcode</Label>
-                  <Input
-                    value={watch(
-                      `variants.${variationIndex}.attributes.${attributeIndex}.barcode`
-                    )}
-                    {...control.register(
-                      `variants.${variationIndex}.attributes.${attributeIndex}.barcode`,
-                      {
-                        required: true,
-                        valueAsNumber: false,
-                      }
-                    )}
-                    placeholder="Barcode"
-                  />
-                </div>
-                <div>
-                  <Label>Price</Label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    value={watch(
-                      `variants.${variationIndex}.attributes.${attributeIndex}.price`
-                    )}
-                    {...control.register(
-                      `variants.${variationIndex}.attributes.${attributeIndex}.price`,
-                      {
-                        required: true,
-                        valueAsNumber: false,
-                      }
-                    )}
-                    placeholder="Price"
-                  />
-                </div>
-                <div>
-                  <Label>Discount Price</Label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    value={watch(
-                      `variants.${variationIndex}.attributes.${attributeIndex}.discountPrice`
-                    )}
-                    {...control.register(
-                      `variants.${variationIndex}.attributes.${attributeIndex}.discountPrice`,
-                      {
-                        required: true,
-                        valueAsNumber: false,
-                      }
-                    )}
-                    placeholder="Discount Price"
-                  />
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      ))} */}
     </div>
   );
 };
