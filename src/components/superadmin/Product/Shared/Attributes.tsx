@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React, { useEffect, useState } from "react";
@@ -23,6 +23,10 @@ import { Separator } from "@/components/ui/separator";
 import { SingleSelectAttribute } from "./SingleSelectAttribute";
 import { BulkUpdateData, BulkUpdateModal } from "./BulkUpdateModal";
 import { X } from "lucide-react";
+import { sizes } from "./Data/Sizes";
+import { weightOptions } from "./Data/WeightOptions";
+import { styleOptions } from "./Data/StyleOptions";
+import { AttributeType } from "./Types";
 
 interface IProps {
   variationIndex: number;
@@ -35,7 +39,7 @@ const Attributes = ({ variationIndex }: IProps) => {
     watch,
     formState: { errors },
   } = useFormContext<TProductFormData>();
-  const { fields, replace } = useFieldArray({
+  const { fields } = useFieldArray({
     control,
     name: `variants.${variationIndex}.attributes`,
   });
@@ -45,17 +49,11 @@ const Attributes = ({ variationIndex }: IProps) => {
     control,
     name: `variants.${variationIndex}.attributes`,
   });
-  type AttributeType = {
-    key: string;
-    label: string;
-    options: string[];
-    isMultiple?: boolean;
-    hasStock?: boolean;
-  };
+
   const SIZE_ATTRIBUTE: AttributeType = {
     key: "size",
     label: "Beden",
-    options: ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
+    options: sizes,
     isMultiple: true,
     hasStock: true,
   };
@@ -63,7 +61,7 @@ const Attributes = ({ variationIndex }: IProps) => {
   const WEIGHT_ATTRIBUTE: AttributeType = {
     key: "weight",
     label: "Ağırlık",
-    options: ["100g", "250g", "500g", "1kg", "2kg", "5kg", "10kg"],
+    options: weightOptions,
     isMultiple: true,
     hasStock: true,
   };
@@ -83,7 +81,7 @@ const Attributes = ({ variationIndex }: IProps) => {
     {
       key: "style",
       label: "Kesim",
-      options: ["Regular", "Slim", "Loose", "Fitted", "Oversized", "Cropped"],
+      options: styleOptions,
       isMultiple: false,
       hasStock: false,
     },

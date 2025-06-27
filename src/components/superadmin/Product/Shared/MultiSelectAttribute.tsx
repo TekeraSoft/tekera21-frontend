@@ -77,19 +77,19 @@ export function MultiSelectAttribute({
               <CommandGroup>
                 {attribute.options.map((option) => (
                   <CommandItem
-                    key={option}
-                    value={option}
-                    onSelect={() => handleValueToggle(option)}
+                    key={option.id}
+                    value={option.label}
+                    onSelect={() => handleValueToggle(option.label)}
                   >
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        selectedValues.includes(option)
+                        selectedValues.includes(option.label)
                           ? "opacity-100"
                           : "opacity-0"
                       )}
                     />
-                    {option}
+                    {option.label}
                   </CommandItem>
                 ))}
               </CommandGroup>

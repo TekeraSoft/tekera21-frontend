@@ -18,7 +18,7 @@ export const colors = [
   { name: "Yeşil", hex: "#008000" },
   { name: "Zeytin Yeşili", hex: "#808000" },
   { name: "Açık Yeşil", hex: "#90EE90" },
-  { name: "Nane Yeşili", hex: "#98FF98" },
+  { name: "Nane Yeşili", hex: "#004925" },
   { name: "Haki", hex: "#A29F79" },
   { name: "Fıstık Yeşili", hex: "#9DC183" },
   { name: "Sarı", hex: "#FFFF00" },

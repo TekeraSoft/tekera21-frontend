@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { TProductFormData } from "@/types/ProductFormData";
 import { variantAttributeOptions } from "./Data/AttributeOptions";
+import { sizes } from "./Data/Sizes";
 
 interface IProps {
   variationIndex: number;
@@ -55,18 +56,6 @@ const AttributeDetail = ({
 
     return stockAttribute.map((attr: any) => attr.key).filter(Boolean);
   };
-
-  const sizes = [
-    { id: "xs", label: "XS" },
-    { id: "s", label: "S" },
-    { id: "m", label: "M" },
-    { id: "l", label: "L" },
-    { id: "xl", label: "XL" },
-    { id: "2xl", label: "2xl" },
-    { id: "3xl", label: "3xl" },
-    { id: "4xl", label: "4xl" },
-    { id: "5xl", label: "5xl" },
-  ];
 
   // const getAvailableOptions = (currentFieldIndex: number) => {
   //   const selectedKeys = getSelectedKeys();
