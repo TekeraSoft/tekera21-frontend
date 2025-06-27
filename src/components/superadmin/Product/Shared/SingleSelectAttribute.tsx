@@ -56,9 +56,7 @@ export function SingleSelectAttribute({
         </PopoverTrigger>
         <PopoverContent className="w-full p-0">
           <Command>
-            <CommandInput
-              placeholder={`${attribute.label} bilgisi ara`}
-            />
+            <CommandInput placeholder={`${attribute.label} bilgisi ara`} />
             <CommandList>
               <CommandEmpty>
                 No {attribute.label.toLowerCase()} found.
@@ -66,17 +64,19 @@ export function SingleSelectAttribute({
               <CommandGroup>
                 {attribute.options.map((option) => (
                   <CommandItem
-                    key={option}
-                    value={option}
-                    onSelect={() => handleValueSelect(option)}
+                    key={option.id}
+                    value={option.label}
+                    onSelect={() => handleValueSelect(option.label)}
                   >
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        selectedValue === option ? "opacity-100" : "opacity-0"
+                        selectedValue === option.label
+                          ? "opacity-100"
+                          : "opacity-0"
                       )}
                     />
-                    {option}
+                    {option.label}
                   </CommandItem>
                 ))}
               </CommandGroup>
