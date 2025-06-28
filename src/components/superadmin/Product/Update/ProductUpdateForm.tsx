@@ -129,7 +129,6 @@ export default function ProductUpdateForm({
       deleteImages: deleteImages,
     };
     console.log("formatted", formattedData);
-    console.log("deleteImages", deleteImages);
     console.log("stockImages", stockAttributeImages);
     const formData = new FormData();
     formData.append(

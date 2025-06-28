@@ -41,10 +41,6 @@ const Attributes = ({
     watch,
     formState: { errors },
   } = useFormContext<TProductFormData>();
-  // const { fields } = useFieldArray({
-  //   control,
-  //   name: `variants.${variationIndex}.attributes`,
-  // });
 
   const watchedVariants = watch("variants");
   const watchedAttributes = watch(`variants.${variationIndex}.attributes`);
@@ -94,7 +90,6 @@ const Attributes = ({
 
   useEffect(() => {
     if (watchedVariants && !isInitialized) {
-      console.log("useeeff");
       const newSelectedAttributes: Record<
         number,
         Record<string, string | string[]>
