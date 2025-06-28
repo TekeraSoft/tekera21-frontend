@@ -158,15 +158,15 @@ export default function ProductUpdateForm({
         })
       );
     };
-    const checkImages = () => {
-      return formattedData.variants.every((_, index) => {
-        const key = String(index);
-        const hasImage =
-          stockAttributeImages[key] && stockAttributeImages[key].length > 0;
+    // const checkImages = () => {
+    //   return formattedData.variants.every((_, index) => {
+    //     const key = String(index);
+    //     const hasImage =
+    //       stockAttributeImages[key] && stockAttributeImages[key].length > 0;
 
-        return hasImage;
-      });
-    };
+    //     return hasImage;
+    //   });
+    // };
 
     if (!checkForm()) {
       toast({

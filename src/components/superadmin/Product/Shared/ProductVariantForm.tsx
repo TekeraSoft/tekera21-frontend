@@ -51,9 +51,15 @@ export default function ProductVariantForm({
   const {
     control,
     watch,
+    getValues,
+    setValue,
     formState: { errors },
   } = useFormContext<TProductFormData>();
   const watchedVariants = watch("variants");
+
+  const [selectedAttributes, setSelectedAttributes] = useState<
+    Record<number, Record<string, string | string[]>>
+  >({});
 
   const {
     append: appendVariation,
@@ -93,24 +99,45 @@ export default function ProductVariantForm({
       attributes: [],
     });
   };
-
   const removeVariant = (variantIndex: number) => {
-    if (fields[variantIndex]?.images?.length && handleDeleteImages) {
-      fields[variantIndex].images.forEach((image) =>
+    // Görsel silme işlemleri
+    if (watchedVariants[variantIndex]?.images?.length && handleDeleteImages) {
+      watchedVariants[variantIndex].images.forEach((image) =>
         handleDeleteImages(image, variantIndex)
       );
     }
-    if (stockAttributeImages[variantIndex]?.length) {
-      const images = stockAttributeImages;
-      delete images[variantIndex];
 
-      setStockAttributeImages(images);
-    }
+    // Mevcut variants'ı al ve silinecek olanı çıkar
+    const currentVariants = [...watchedVariants];
+    currentVariants.splice(variantIndex, 1);
 
-    removeVariation(variantIndex);
-    setStockAttributeImages((prev) =>
-      reindexStockAttributeImages(prev, variantIndex)
-    );
+    // Form'u güncelle - bu UI'ı da güncelleyecek
+    setValue("variants", currentVariants, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+
+    // StockAttributeImages'ı reindex et
+    setStockAttributeImages((prev) => {
+      const newImages = { ...prev };
+      delete newImages[variantIndex];
+      return reindexStockAttributeImages(newImages, variantIndex);
+    });
+
+    // SelectedAttributes'ı reindex et
+    setSelectedAttributes((prev) => {
+      const entries = Object.entries(prev)
+        .filter(([key]) => Number(key) !== variantIndex)
+        .sort(([a], [b]) => Number(a) - Number(b));
+
+      const reindexed: Record<number, Record<string, string | string[]>> = {};
+      entries.forEach(([_, value], newIndex) => {
+        reindexed[newIndex] = value;
+      });
+
+      return reindexed;
+    });
   };
 
   // const exportJSON = () => {
@@ -301,6 +328,8 @@ export default function ProductVariantForm({
                     <Attributes
                       variationIndex={variantIndex}
                       key={variantIndex}
+                      selectedAttributes={selectedAttributes}
+                      setSelectedAttributes={setSelectedAttributes}
                     />
                   </>
                 )}

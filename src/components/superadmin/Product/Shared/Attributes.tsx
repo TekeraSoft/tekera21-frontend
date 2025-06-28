@@ -2,13 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React, { useEffect, useState } from "react";
-import {
-  Controller,
-  useFieldArray,
-  useFormContext,
-  useWatch,
-} from "react-hook-form";
+import React, { SetStateAction, useEffect, useState } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 
 import { IAttribute, TProductFormData } from "@/types/ProductFormData";
 import { AttributeTypeSelector } from "./AttributeTypeSelector";
@@ -29,25 +24,35 @@ import { styleOptions } from "./Data/StyleOptions";
 
 interface IProps {
   variationIndex: number;
+  selectedAttributes: Record<number, Record<string, string | string[]>>;
+  setSelectedAttributes: React.Dispatch<
+    SetStateAction<Record<number, Record<string, string | string[]>>>
+  >;
 }
 
-const Attributes = ({ variationIndex }: IProps) => {
+const Attributes = ({
+  variationIndex,
+  selectedAttributes,
+  setSelectedAttributes,
+}: IProps) => {
   const {
     control,
     setValue,
     watch,
     formState: { errors },
   } = useFormContext<TProductFormData>();
-  const { fields } = useFieldArray({
-    control,
-    name: `variants.${variationIndex}.attributes`,
-  });
+  // const { fields } = useFieldArray({
+  //   control,
+  //   name: `variants.${variationIndex}.attributes`,
+  // });
 
   const watchedVariants = watch("variants");
-  const watchedAttributes = useWatch({
-    control,
-    name: `variants.${variationIndex}.attributes`,
-  });
+  const watchedAttributes = watch(`variants.${variationIndex}.attributes`);
+
+  const [primaryAttributeTypes, setPrimaryAttributeTypes] = useState<
+    Record<number, "size" | "weight">
+  >({});
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const SIZE_ATTRIBUTE: IAttribute = {
     key: "size",
@@ -76,6 +81,7 @@ const Attributes = ({ variationIndex }: IProps) => {
         return OTHER_ATTRIBUTES;
     }
   };
+
   const OTHER_ATTRIBUTES: IAttribute[] = [
     {
       key: "style",
@@ -85,16 +91,10 @@ const Attributes = ({ variationIndex }: IProps) => {
       hasStock: false,
     },
   ];
-  const [selectedAttributes, setSelectedAttributes] = useState<
-    Record<number, Record<string, string | string[]>>
-  >({});
-  const [primaryAttributeTypes, setPrimaryAttributeTypes] = useState<
-    Record<number, "size" | "weight">
-  >({});
-  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     if (watchedVariants && !isInitialized) {
+      console.log("useeeff");
       const newSelectedAttributes: Record<
         number,
         Record<string, string | string[]>
@@ -180,11 +180,23 @@ const Attributes = ({ variationIndex }: IProps) => {
   };
 
   const removeAttribute = (variationIndex: number, attributeIndex: number) => {
-    const currentAttributes = fields || [];
+    const currentAttributes = watchedAttributes || [];
     const newAttributes = currentAttributes.filter(
       (_, index) => index !== attributeIndex
     );
     setValue(`variants.${variationIndex}.attributes`, newAttributes);
+  };
+
+  const handleBulkUpdate = (bulkData: BulkUpdateData) => {
+    const currentAttributes = watchedAttributes || [];
+    if (currentAttributes.length === 0) return;
+
+    const updatedAttributes = applyBulkUpdates(currentAttributes, bulkData);
+    setValue(`variants.${variationIndex}.attributes`, updatedAttributes, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
   };
 
   const currentPrimaryAttributeType =
@@ -192,14 +204,6 @@ const Attributes = ({ variationIndex }: IProps) => {
   const currentPrimaryAttribute =
     currentPrimaryAttributeType === "size" ? SIZE_ATTRIBUTE : WEIGHT_ATTRIBUTE;
   const currentSelectedAttributes = selectedAttributes[variationIndex] || {};
-
-  const handleBulkUpdate = (bulkData: BulkUpdateData) => {
-    const currentAttributes = watchedAttributes || [];
-    if (currentAttributes.length === 0) return;
-
-    const updatedAttributes = applyBulkUpdates(currentAttributes, bulkData);
-    setValue(`variants.${variationIndex}.attributes`, updatedAttributes);
-  };
 
   return (
     <div className="space-y-4">
@@ -258,12 +262,12 @@ const Attributes = ({ variationIndex }: IProps) => {
         </div>
       )}
 
-      {fields.length > 0 && (
+      {watchedAttributes.length > 0 && (
         <div className="space-y-4">
           <Separator />
           <div className="flex items-center justify-between">
             <Label className="text-base font-semibold">
-              Oluşturulan Özellikler ({fields.length})
+              Oluşturulan Özellikler ({watchedAttributes.length})
             </Label>
             <BulkUpdateModal
               onBulkUpdate={(bulkData) => handleBulkUpdate(bulkData)}
@@ -283,17 +287,17 @@ const Attributes = ({ variationIndex }: IProps) => {
           </div>
 
           <div className="grid gap-4">
-            {fields.map((field, attrIndex) => {
+            {watchedAttributes?.map((field, attrIndex) => {
               const attribute = watchedAttributes?.[attrIndex];
-              const primaryAttr = attribute.attributeDetails.find(
+              const primaryAttr = attribute?.attributeDetails?.find(
                 (detail) => detail.key === currentPrimaryAttributeType
               );
-              const otherAttrs = attribute.attributeDetails.filter(
+              const otherAttrs = attribute?.attributeDetails?.filter(
                 (detail) => detail.key !== currentPrimaryAttributeType
               );
 
               return (
-                <Card key={field.id} className="p-4 relative">
+                <Card key={attrIndex} className="p-4 relative">
                   <Button
                     variant="ghost"
                     size="sm"
@@ -320,7 +324,7 @@ const Attributes = ({ variationIndex }: IProps) => {
                           Diğer Özellikler
                         </Label>
                         <div className="text-sm text-muted-foreground">
-                          {otherAttrs.length > 0
+                          {otherAttrs?.length > 0
                             ? otherAttrs
                                 .map((attr) => `${attr.key}: ${attr.value}`)
                                 .join(", ")
