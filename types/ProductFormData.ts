@@ -27,3 +27,13 @@ export type TProductFormData = {
     }[];
   }[];
 };
+
+
+export interface IOption { id: string; label: string };
+export type IAttribute = {
+  key: string;
+  label: string;
+  options: IOption[];
+  isMultiple?: boolean;
+  hasStock?: boolean;
+};

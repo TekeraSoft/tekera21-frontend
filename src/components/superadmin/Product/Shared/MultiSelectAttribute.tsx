@@ -19,10 +19,10 @@ import {
 } from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { AttributeType } from "./Types";
+import { IAttribute } from "@/types/ProductFormData";
 
 interface MultiSelectAttributeProps {
-  attribute: AttributeType;
+  attribute: IAttribute;
   selectedValues: string[];
   onSelectionChange: (attributeKey: string, values: string[]) => void;
 }

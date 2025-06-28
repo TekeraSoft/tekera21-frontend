@@ -10,7 +10,7 @@ import {
   useWatch,
 } from "react-hook-form";
 
-import { TProductFormData } from "@/types/ProductFormData";
+import { IAttribute, TProductFormData } from "@/types/ProductFormData";
 import { AttributeTypeSelector } from "./AttributeTypeSelector";
 import {
   applyBulkUpdates,
@@ -26,7 +26,6 @@ import { X } from "lucide-react";
 import { sizes } from "./Data/Sizes";
 import { weightOptions } from "./Data/WeightOptions";
 import { styleOptions } from "./Data/StyleOptions";
-import { AttributeType } from "./Types";
 
 interface IProps {
   variationIndex: number;
@@ -50,7 +49,7 @@ const Attributes = ({ variationIndex }: IProps) => {
     name: `variants.${variationIndex}.attributes`,
   });
 
-  const SIZE_ATTRIBUTE: AttributeType = {
+  const SIZE_ATTRIBUTE: IAttribute = {
     key: "size",
     label: "Beden",
     options: sizes,
@@ -58,7 +57,7 @@ const Attributes = ({ variationIndex }: IProps) => {
     hasStock: true,
   };
 
-  const WEIGHT_ATTRIBUTE: AttributeType = {
+  const WEIGHT_ATTRIBUTE: IAttribute = {
     key: "weight",
     label: "Ağırlık",
     options: weightOptions,
@@ -66,7 +65,7 @@ const Attributes = ({ variationIndex }: IProps) => {
     hasStock: true,
   };
 
-  const getOtherAttributes = (primaryAttribute: string): AttributeType[] => {
+  const getOtherAttributes = (primaryAttribute: string): IAttribute[] => {
     switch (primaryAttribute) {
       case "size":
         return OTHER_ATTRIBUTES.filter((attr) => attr.key === "style");
@@ -77,7 +76,7 @@ const Attributes = ({ variationIndex }: IProps) => {
         return OTHER_ATTRIBUTES;
     }
   };
-  const OTHER_ATTRIBUTES: AttributeType[] = [
+  const OTHER_ATTRIBUTES: IAttribute[] = [
     {
       key: "style",
       label: "Kesim",

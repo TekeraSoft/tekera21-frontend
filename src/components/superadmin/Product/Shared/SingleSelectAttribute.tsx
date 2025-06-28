@@ -18,10 +18,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Label } from "@/components/ui/label";
-import { AttributeType } from "./Types";
+import { IAttribute } from "@/types/ProductFormData";
 
 interface SingleSelectAttributeProps {
-  attribute: AttributeType;
+  attribute: IAttribute;
   selectedValue: string;
   onSelectionChange: (attributeKey: string, value: string) => void;
 }
