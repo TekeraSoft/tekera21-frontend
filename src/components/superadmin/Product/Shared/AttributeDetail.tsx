@@ -125,7 +125,7 @@ const AttributeDetail = ({
           </SelectTrigger>
           <SelectContent>
             {sizes.map((size) => (
-              <SelectItem key={size.id} value={size.label}>
+              <SelectItem key={size.id} value={size.label.toUpperCase()}>
                 {size.label}
               </SelectItem>
             ))}

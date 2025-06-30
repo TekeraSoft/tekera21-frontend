@@ -1,7 +1,7 @@
 "use client";
-import { type Control, Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { Label } from "@/components/ui/label";
-import { MultiSelect, OptionType } from "../Update/MultiSelect";
+import { MultiSelect, OptionType } from "./MultiSelect";
 import { TProductFormData } from "@/types/ProductFormData";
 
 interface SubCategoriesSelectProps {
@@ -30,9 +30,7 @@ export function SubCategoriesSelect({
 
   return (
     <div className="space-y-2 relative">
-      <Label htmlFor={name}>
-        Alt kategori {required && "*"}
-      </Label>
+      <Label htmlFor={name}>Alt kategori {required && "*"}</Label>
       <Controller
         control={control}
         name={name}
@@ -56,7 +54,7 @@ export function SubCategoriesSelect({
                 : []
             }
             onChange={field.onChange}
-            placeholder="Alt Kategori seçin"
+            placeholder="Alt Kategori Ara"
             emptyMessage="Alt kategori bulunamadı."
           />
         )}

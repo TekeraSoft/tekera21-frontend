@@ -51,7 +51,6 @@ export default function ProductVariantForm({
   const {
     control,
     watch,
-    getValues,
     setValue,
     formState: { errors },
   } = useFormContext<TProductFormData>();

@@ -1,7 +1,6 @@
 import React from "react";
 import { ICategory } from "@/types/AdminTypes/category";
 import { getCategories } from "@/app/actions";
-import ProductCreateFormNewWithSize from "@/components/superadmin/Product/Create/ProductCreateFormNewWithSizes";
 import ProductCreateForm from "@/components/superadmin/Product/Create/ProductCreateForm";
 
 const CreateProductPage = async () => {

@@ -2,7 +2,24 @@
 
 import axiosInstance from "@/request/axiosServer";
 import { revalidatePath } from "next/cache";
+
 import { cookies } from "next/headers";
+
+
+
+export async function getSingleProductById(id: string) {
+  try {
+    const { data } = await axiosInstance.get(
+      `/super-admin/getCustomerProduct?id=${id}`
+    );
+    console.log("getsingleProductById run", data);
+
+    return { success: true, message: data.message, data: data };
+  } catch (error) {
+    console.log("getsingleProductById error:", error);
+    return { success: false, message: error || "Failed to getsingleProductById" };
+  }
+}
 
 export async function getUser() {
   const cookieStore = await cookies();
@@ -162,6 +179,9 @@ export async function createSubcategory(formData: FormData) {
     const name = formData.get("name") as string;
     const image = formData.get("image") as File;
 
+    console.log("categoryId", categoryId);
+    console.log("name", name);
+
     if (!categoryId || !name || name.trim() === "" || !image) {
       return {
         success: false,
@@ -170,7 +190,7 @@ export async function createSubcategory(formData: FormData) {
     }
 
     const { data } = await axiosInstance.post(
-      `/super-admin/create-sub-category`,
+      `/super-admin/createSubCategory`,
       formData,
       {
         headers: {
@@ -252,17 +272,6 @@ export async function deleteTargetPicture(targetPictureId: string) {
   }
 }
 
-export async function getSingleProductById(id: string) {
-  try {
-    const { data } = await axiosInstance.get(
-      `/super-admin/getCustomerProduct?id=${id}`
-    );
-    return { success: true, message: data.message, data: data };
-  } catch (error) {
-    console.log("getProducts error:", error);
-    return { success: false, message: error || "Failed to get products" };
-  }
-}
 export async function deleteProductById(id: string) {
   try {
     console.log("delete product byId", id);
@@ -294,6 +303,7 @@ export async function updateProduct(formData: FormData) {
       }
     );
     revalidatePath("/");
+
 
     return { success: true, message: data.message, data: data };
   } catch (error) {

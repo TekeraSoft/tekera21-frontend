@@ -33,7 +33,7 @@ export function CreateSubcategoryForm({
   categories,
 }: CreateSubcategoryFormProps) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [selectedImage, setSelectedImage] = React.useState<File | null>(null);
+
   const [imagePreview, setImagePreview] = React.useState<string | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] =
     React.useState<string>("");
@@ -46,7 +46,7 @@ export function CreateSubcategoryForm({
       if (file.size > 5 * 1024 * 1024) {
         toast({
           title: "Error",
-          description: "Image size must be less than 5MB",
+          description: "Resim boyutu 5MB'ı geçemez.",
           variant: "destructive",
         });
         return;
@@ -55,13 +55,12 @@ export function CreateSubcategoryForm({
       if (!file.type.startsWith("image/")) {
         toast({
           title: "Error",
-          description: "File must be an image",
+          description: "Desteklenen resim formatları: JPG, PNG, GIF, WebP.",
           variant: "destructive",
         });
         return;
       }
 
-      setSelectedImage(file);
       const reader = new FileReader();
       reader.onload = (e) => {
         setImagePreview(e.target?.result as string);
@@ -71,7 +70,6 @@ export function CreateSubcategoryForm({
   };
 
   const removeImage = () => {
-    setSelectedImage(null);
     setImagePreview(null);
     if (formRef.current) {
       const fileInput = formRef.current.querySelector(
@@ -85,7 +83,7 @@ export function CreateSubcategoryForm({
     if (!selectedCategoryId) {
       toast({
         title: "Error",
-        description: "Please select a category",
+        description: "Lütfen bir kategori seçin.",
         variant: "destructive",
       });
       return;
@@ -100,23 +98,23 @@ export function CreateSubcategoryForm({
       if (result.success) {
         toast({
           title: "Success",
-          description: result.message || "Subcategory created successfully",
+          description: "Alt Kategori Oluşturuldu.",
         });
         formRef.current?.reset();
-        setSelectedImage(null);
+
         setImagePreview(null);
         setSelectedCategoryId("");
       } else {
         toast({
           title: "Error",
-          description: result.message || "Failed to create subcategory",
+          description: "Alt Kategori Oluşturulamadı!",
           variant: "destructive",
         });
       }
     } catch (error) {
       toast({
         title: "Error",
-        description: "An unexpected error occurred",
+        description: "Beklenmeyen bir hata oluştu!",
         variant: "destructive",
       });
     } finally {
@@ -124,31 +122,35 @@ export function CreateSubcategoryForm({
     }
   };
 
+  // const subCategories = categories.flatMap(
+  //   (category) => category.subCategories || []
+  // );
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <PlusCircle className="h-5 w-5" />
-          Create New Subcategory
+          Alt kategori oluştur.
         </CardTitle>
         <CardDescription>
-          Add a new subcategory to an existing category
+          Mevcut bir kategori altında yeni bir alt kategori oluşturun.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form ref={formRef} action={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="parent-category">Parent Category</Label>
+            <Label htmlFor="parent-category">Ana kategori</Label>
             <Select
               value={selectedCategoryId}
               onValueChange={setSelectedCategoryId}
               disabled={isSubmitting}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select a category" />
+                <SelectValue placeholder="Kategori seçin." />
               </SelectTrigger>
               <SelectContent>
-                {categories?.map((category) => (
+                {categories.map((category) => (
                   <SelectItem key={category.id} value={category.id}>
                     <div className="flex items-center gap-2">
                       {category.image && (
@@ -169,20 +171,18 @@ export function CreateSubcategoryForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="subcategory-name">Subcategory Name</Label>
+            <Label htmlFor="subcategory-name">Alt kategori ismi</Label>
             <Input
               id="subcategory-name"
               name="name"
-              placeholder="Enter subcategory name"
+              placeholder="Alt kategori ismi"
               required
               disabled={isSubmitting}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="subcategory-image">
-              Subcategory Image (Optional)
-            </Label>
+            <Label htmlFor="subcategory-image">Alt kategori resmi</Label>
             <div className="flex items-center gap-4">
               <div className="flex-1">
                 <Input
@@ -197,13 +197,14 @@ export function CreateSubcategoryForm({
               </div>
               {imagePreview && (
                 <div className="relative">
-                  <ImageView
+                  {/* <ImageView
                     className="h-12 w-12 rounded-md object-cover border"
                     imageInfo={{
                       url: imagePreview || "/placeholder.svg",
                       name: "preview",
                     }}
-                  />
+                  /> */}
+                  <img src={imagePreview} className="w-12 h-12 rounded-md object-cover border"/>
                   <Button
                     type="button"
                     variant="destructive"

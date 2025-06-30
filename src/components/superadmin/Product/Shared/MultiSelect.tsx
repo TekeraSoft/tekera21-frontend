@@ -33,6 +33,7 @@ interface MultiSelectProps {
   placeholder?: string;
   emptyMessage?: string;
   className?: string;
+  disabled?: boolean;
 }
 
 export function MultiSelect({
@@ -42,6 +43,7 @@ export function MultiSelect({
   placeholder = "Select items",
   emptyMessage = "No items found.",
   className,
+  disabled = false,
 }: MultiSelectProps) {
   const [open, setOpen] = React.useState(false);
 
@@ -99,7 +101,7 @@ export function MultiSelect({
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
         <Command>
-          <CommandInput placeholder="Alt Kategori ara" />
+          <CommandInput placeholder={placeholder} />
           <CommandList>
             <CommandEmpty>{emptyMessage}</CommandEmpty>
             <CommandGroup className="max-h-64 overflow-auto">
@@ -109,6 +111,7 @@ export function MultiSelect({
                 ).length;
                 return (
                   <CommandItem
+                    disabled={disabled}
                     key={option.value}
                     value={option.value}
                     onSelect={() => handleSelect(option.value)}

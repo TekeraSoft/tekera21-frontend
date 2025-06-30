@@ -78,7 +78,7 @@ export function MultiSelectAttribute({
                 {attribute.options.map((option) => (
                   <CommandItem
                     key={option.id}
-                    value={option.label}
+                    value={option.label.toUpperCase()}
                     onSelect={() => handleValueToggle(option.label)}
                   >
                     <Check

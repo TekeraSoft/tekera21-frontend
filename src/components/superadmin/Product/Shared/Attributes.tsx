@@ -171,6 +171,7 @@ const Attributes = ({
     const newAttributes = generateAttributeCombinations(
       attributesForCombination
     );
+
     setValue(`variants.${variantIndex}.attributes`, newAttributes);
   };
 

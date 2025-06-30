@@ -2,7 +2,6 @@ import { getCategories, getSingleProductById } from "@/app/actions";
 
 import ProductUpdateForm from "@/components/superadmin/Product/Update/ProductUpdateForm";
 import { ICategory } from "@/types/AdminTypes/category";
-
 import { IGetByIdProduct } from "@/types/SingleProduct";
 import React from "react";
 

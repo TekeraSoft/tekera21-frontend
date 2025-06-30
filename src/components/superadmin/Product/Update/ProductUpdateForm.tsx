@@ -33,6 +33,8 @@ import GenderSelect from "../Shared/GenderSelect";
 import GeneralInformation from "../Shared/MainFields/GeneralInformation";
 import CurrencyAndProductType from "../Shared/MainFields/CurrencyAndProductType";
 import Tags from "../Shared/MainFields/Tags";
+import { redirect } from "@/i18n/navigation";
+import { useLocale } from "next-intl";
 
 export default function ProductUpdateForm({
   categories,
@@ -46,6 +48,7 @@ export default function ProductUpdateForm({
   }>({});
   const [deleteImages, setDeleteImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const locale = useLocale();
 
   const { toast } = useToast();
 
@@ -188,6 +191,10 @@ export default function ProductUpdateForm({
       setDeleteImages([]);
       setStockAttributeImages({});
       setLoading(false);
+      redirect({
+        href: `/superadmin/update/product/${product.id}`,
+        locale: locale,
+      });
     } else {
       toast({
         title: "Error",
