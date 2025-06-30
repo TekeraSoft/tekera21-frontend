@@ -51,6 +51,8 @@ export default function ProductCreateForm({
   const [stockAttributeImages, setStockAttributeImages] = useState<{
     [key: string]: File[];
   }>({});
+  const [loading, setLoading] = useState(false);
+
   const { toast } = useToast();
 
   const methods = useForm<TProductFormData>({
@@ -81,6 +83,7 @@ export default function ProductCreateForm({
     formState: { errors },
     setValue,
     watch,
+    reset,
   } = methods;
 
   const {
@@ -94,6 +97,7 @@ export default function ProductCreateForm({
 
   const onSubmit = async (data: TProductFormData) => {
     // Transform data to match the required format
+    setLoading(true);
     const formattedData = {
       name: data.name,
       code: data.code,
@@ -139,6 +143,9 @@ export default function ProductCreateForm({
     });
 
     const checkForm = () => {
+      if (!formattedData.variants.length) {
+        return false;
+      }
       return formattedData.variants.every((variant) =>
         variant.attributes.some((item) => {
           if (!item.price || !item.barcode || !item.stock || !item.sku) {
@@ -166,6 +173,7 @@ export default function ProductCreateForm({
           "Fiyat, barkod, stok adeti veya stok kodu alanları eksik. Lütfen gözden geçirin. ",
         variant: "default",
       });
+      setLoading(false);
       return;
     }
     if (!checkImages()) {
@@ -175,6 +183,7 @@ export default function ProductCreateForm({
           "Varyantlardan en az birinde resimler eksik. Lütfen gözden geçirin. ",
         variant: "default",
       });
+      setLoading(false);
       return;
     }
     const { success } = await createProduct(formData);
@@ -185,12 +194,15 @@ export default function ProductCreateForm({
         variant: "default",
       });
       setStockAttributeImages({});
+      setLoading(false);
+      reset();
     } else {
       toast({
         title: "Error",
         description: "Product cannot be created.",
         variant: "destructive",
       });
+      setLoading(false);
     }
   };
 
@@ -419,8 +431,8 @@ export default function ProductCreateForm({
               />
             </FormProvider>
             <div className="flex gap-4">
-              <Button type="submit" className="flex-1">
-                Submit
+              <Button type="submit" className="flex-1" disabled={loading}>
+                Gönder
               </Button>
             </div>
           </form>

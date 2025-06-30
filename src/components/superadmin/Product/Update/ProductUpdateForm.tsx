@@ -50,8 +50,9 @@ export default function ProductUpdateForm({
   const [stockAttributeImages, setStockAttributeImages] = useState<{
     [key: string]: File[];
   }>({});
-
   const [deleteImages, setDeleteImages] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+
   const { toast } = useToast();
 
   const methods = useForm<TProductFormData>({
@@ -96,6 +97,7 @@ export default function ProductUpdateForm({
 
   const onSubmit = async (data: TProductFormData) => {
     // Transform data to match the required format
+    setLoading(true);
     const formattedData = {
       name: data.name,
       id: product.id,
@@ -147,6 +149,9 @@ export default function ProductUpdateForm({
     }
 
     const checkForm = () => {
+      if (!formattedData.variants.length) {
+        return false;
+      }
       return formattedData.variants.every((variant) =>
         variant.attributes.some((item) => {
           if (!item.price || !item.barcode || !item.stock || !item.sku) {
@@ -157,15 +162,16 @@ export default function ProductUpdateForm({
         })
       );
     };
-    // const checkImages = () => {
-    //   return formattedData.variants.every((_, index) => {
-    //     const key = String(index);
-    //     const hasImage =
-    //       stockAttributeImages[key] && stockAttributeImages[key].length > 0;
+    const checkImages = () => {
+      return formattedData.variants.every((_, index) => {
+        const key = String(index);
+        const hasImage =
+          (stockAttributeImages[key] && stockAttributeImages[key].length > 0) ||
+          data.variants[index].images?.length > 0;
 
-    //     return hasImage;
-    //   });
-    // };
+        return hasImage;
+      });
+    };
 
     if (!checkForm()) {
       toast({
@@ -174,17 +180,19 @@ export default function ProductUpdateForm({
           "Fiyat, barkod, stok adeti veya stok kodu alanları eksik. Lütfen gözden geçirin. ",
         variant: "default",
       });
+      setLoading(false);
       return;
     }
-    // if (!checkImages()) {
-    //   toast({
-    //     title: "Error",
-    //     description:
-    //       "Varyantlardan en az birinde resimler eksik. Lütfen gözden geçirin. ",
-    //     variant: "default",
-    //   });
-    //   return;
-    // }
+    if (!checkImages()) {
+      toast({
+        title: "Error",
+        description:
+          "Varyantlardan en az birinde resimler eksik. Lütfen gözden geçirin. ",
+        variant: "default",
+      });
+      setLoading(false);
+      return;
+    }
 
     const { success } = await updateProduct(formData);
     if (success) {
@@ -195,12 +203,14 @@ export default function ProductUpdateForm({
       });
       setDeleteImages([]);
       setStockAttributeImages({});
+      setLoading(false);
     } else {
       toast({
         title: "Error",
         description: "Product cannot be updated.",
         variant: "destructive",
       });
+      setLoading(false);
     }
   };
 
@@ -418,7 +428,7 @@ export default function ProductUpdateForm({
               />
             </FormProvider>
             <div className="flex gap-4">
-              <Button type="submit" className="flex-1">
+              <Button type="submit" className="flex-1" disabled={loading}>
                 Gönder
               </Button>
             </div>
