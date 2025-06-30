@@ -193,6 +193,8 @@ export default function ProductUpdateForm({
         description: "Product is updated.",
         variant: "default",
       });
+      setDeleteImages([]);
+      setStockAttributeImages({});
     } else {
       toast({
         title: "Error",

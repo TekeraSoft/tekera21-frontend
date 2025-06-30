@@ -184,6 +184,7 @@ export default function ProductCreateForm({
         description: "Product is created.",
         variant: "default",
       });
+      setStockAttributeImages({});
     } else {
       toast({
         title: "Error",
