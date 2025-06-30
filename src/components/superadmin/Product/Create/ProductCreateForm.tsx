@@ -3,13 +3,7 @@
 import type React from "react";
 
 import { useState } from "react";
-import {
-  useForm,
-  useFieldArray,
-  FormProvider,
-  Controller,
-} from "react-hook-form";
-import { Plus, Minus } from "lucide-react";
+import { useForm, FormProvider, Controller } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,15 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { ICategory } from "@/types/AdminTypes/category";
 import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
@@ -40,8 +26,9 @@ import { SubCategoriesSelect } from "../Shared/SubCategoriesSelect";
 import ProductAttributes from "../Shared/ProductAttributes";
 import CategorySelect from "../Shared/CategorySelect";
 import GenderSelect from "../Shared/GenderSelect";
-import { genders } from "../Shared/Data/Genders";
-import { cn } from "@/lib/utils";
+import GeneralInformation from "../Shared/MainFields/GeneralInformation";
+import CurrencyAndProductType from "../Shared/MainFields/CurrencyAndProductType";
+import Tags from "../Shared/MainFields/Tags";
 
 export default function ProductCreateForm({
   categories,
@@ -77,23 +64,12 @@ export default function ProductCreateForm({
   });
 
   const {
-    register,
     control,
     handleSubmit,
     formState: { errors },
-    setValue,
     watch,
     reset,
   } = methods;
-
-  const {
-    fields: tagFields,
-    append: appendTag,
-    remove: removeTag,
-  } = useFieldArray({
-    control,
-    name: "tags",
-  });
 
   const onSubmit = async (data: TProductFormData) => {
     // Transform data to match the required format
@@ -219,74 +195,15 @@ export default function ProductCreateForm({
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             {/* Basic Information */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Basic Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Ürün ismi *</Label>
-                  <Input
-                    id="name"
-                    {...register("name", {
-                      required: "Product name is required",
-                    })}
-                    placeholder="Kalp Nakış İşlemeli Yelek"
-                  />
-                  {errors.name && (
-                    <p className="text-sm text-red-500">
-                      {errors.name.message}
-                    </p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="slug">Company Id *</Label>
-                  <Input
-                    id="companyId"
-                    {...register("companyId", {
-                      required: "Company Id is required",
-                    })}
-                    placeholder="dfc9a257-a4bc-4bc3-89ee-8727a129efd2"
-                  />
-                  {errors.slug && (
-                    <p className="text-sm text-red-500">
-                      {errors.companyId?.message}
-                    </p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="code">Product Code *</Label>
-                  <Input
-                    id="code"
-                    {...register("code", {
-                      required: "Product code is required",
-                    })}
-                    placeholder="A2991"
-                  />
-                  {errors.code && (
-                    <p className="text-sm text-red-500">
-                      {errors.code.message}
-                    </p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="brandName">Brand Name *</Label>
-                  <Input
-                    id="brandName"
-                    {...register("brandName", {
-                      required: "Brand name is required",
-                    })}
-                    placeholder="Nike"
-                  />
-                  {errors.brandName && (
-                    <p className="text-sm text-red-500">
-                      {errors.brandName.message}
-                    </p>
-                  )}
-                </div>
-              </div>
+              <FormProvider {...methods}>
+                <GeneralInformation />
+              </FormProvider>
               <div className="space-y-2">
+                <Label htmlFor="description">Açıklama *</Label>
                 <Controller
                   control={control}
                   name="description"
-                  rules={{ required: "Description is required" }}
+                  rules={{ required: "Ürün açıklaması gereklidir." }}
                   render={({ field }) => (
                     <MarkdownEditor
                       defaultValue={field.value}
@@ -301,51 +218,9 @@ export default function ProductCreateForm({
                   </p>
                 )}
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="currencyType">Currency Type *</Label>
-
-                  <Controller
-                    control={control}
-                    name="currencyType"
-                    rules={{ required: "Currency is required" }}
-                    render={({ field }) => (
-                      <Select onValueChange={field.onChange} defaultValue="TRY">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select currency" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="TRY">TRY</SelectItem>
-                          <SelectItem value="USD">USD</SelectItem>
-                          <SelectItem value="EUR">EUR</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-
-                  {errors.description && (
-                    <p className="text-sm text-red-500">
-                      {errors.description.message}
-                    </p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="productType">Product Type *</Label>
-                  <Select
-                    onValueChange={(value) => setValue("productType", value)}
-                    defaultValue="PHYSICAL"
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select product type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="PHYSICAL">Fiziksel</SelectItem>
-                      <SelectItem value="DIGITAL">Dijital</SelectItem>
-                      <SelectItem value="SERVICE">Hizmet</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+              <FormProvider {...methods}>
+                <CurrencyAndProductType />
+              </FormProvider>
             </div>
 
             <Separator />
@@ -367,41 +242,9 @@ export default function ProductCreateForm({
             <Separator />
 
             {/* Tags */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Tags</h3>
-              {tagFields.map((field, index) => (
-                <div
-                  key={field.id}
-                  className={cn(
-                    "flex gap-2",
-                    genders.includes(field.value) && "hidden"
-                  )}
-                >
-                  <Input
-                    {...register(`tags.${index}.value`)}
-                    placeholder="Enter tag"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    onClick={() => removeTag(index)}
-                    disabled={tagFields.length === 1}
-                  >
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => appendTag({ value: "" })}
-                className="w-full"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Tag
-              </Button>
-            </div>
+            <FormProvider {...methods}>
+              <Tags />
+            </FormProvider>
 
             <Separator />
 
@@ -412,12 +255,10 @@ export default function ProductCreateForm({
             <Separator />
 
             {/* Attributes */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Product Attributes</h3>
-              <FormProvider {...methods}>
-                <ProductAttributes />
-              </FormProvider>
-            </div>
+
+            <FormProvider {...methods}>
+              <ProductAttributes />
+            </FormProvider>
 
             <Separator />
 

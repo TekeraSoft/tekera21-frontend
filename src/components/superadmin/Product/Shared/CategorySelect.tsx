@@ -23,7 +23,7 @@ const CategorySelect = ({ categories }: IProps) => {
   } = useFormContext<TProductFormData>();
   return (
     <div className="space-y-2">
-      <Label htmlFor="categoryId">Category ID *</Label>
+      <Label htmlFor="categoryId">Ana Kategori *</Label>
       <Controller
         control={control}
         rules={{ required: "Kategori seçimi zorunlu" }}

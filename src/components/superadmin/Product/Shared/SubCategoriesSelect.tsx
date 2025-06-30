@@ -29,9 +29,9 @@ export function SubCategoriesSelect({
   }));
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 relative">
       <Label htmlFor={name}>
-        {label} {required && "*"}
+        Alt kategori {required && "*"}
       </Label>
       <Controller
         control={control}

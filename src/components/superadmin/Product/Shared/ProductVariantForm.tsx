@@ -187,7 +187,7 @@ export default function ProductVariantForm({
                       required: "Model adı zorunludur.",
                       valueAsNumber: false,
                     })}
-                    placeholder="Enter model name"
+                    placeholder="Model adını girin"
                   />
                   {errors.variants?.[variantIndex]?.modelName && (
                     <p className="text-sm text-red-500">
@@ -214,7 +214,7 @@ export default function ProductVariantForm({
                               valueAsNumber: false,
                             }
                           )}
-                          placeholder="Enter model code"
+                          placeholder="Model kodunu girin"
                         />
                         {errors.variants?.[variantIndex]?.modelCode && (
                           <p className="text-sm text-red-500">
@@ -254,7 +254,7 @@ export default function ProductVariantForm({
                               onValueChange={(value) => field.onChange(value)}
                             >
                               <SelectTrigger id={`color-${variantIndex}`}>
-                                <SelectValue placeholder="Select Color" />
+                                <SelectValue placeholder="Renk seçin" />
                               </SelectTrigger>
                               <SelectContent>
                                 {colors

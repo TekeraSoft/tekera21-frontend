@@ -25,7 +25,8 @@ const ProductAttributes = () => {
   });
 
   return (
-    <div>
+    <div className="space-y-2">
+      <h3 className="text-lg font-semibold">Ürün Öznitelikleri</h3>
       {attributeFields.map((attrField, index) => (
         <div className="flex gap-2 items-center" key={attrField.id}>
           <Select
@@ -35,7 +36,7 @@ const ProductAttributes = () => {
             }
           >
             <SelectTrigger className="min-w-32">
-              <SelectValue placeholder="Select attribute" />
+              <SelectValue placeholder="Öznitelik ekle" />
             </SelectTrigger>
             <SelectContent>
               {attributeOptions.map((option) => (
@@ -51,7 +52,7 @@ const ProductAttributes = () => {
           </Select>
           <Input
             {...control.register(`attributeDetails.${index}.value`)}
-            placeholder="Attribute value"
+            placeholder="Öznitelik değeri"
           />
         </div>
       ))}
