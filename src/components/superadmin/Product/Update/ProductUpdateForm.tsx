@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
@@ -80,7 +80,32 @@ export default function ProductUpdateForm({
     formState: { errors },
     setValue,
     watch,
+    reset,
   } = methods;
+
+  useEffect(() => {
+    if (product) {
+      reset({
+        name: product.name,
+        code: product.code,
+        brandName: product.brandName,
+        description: product.description,
+        currencyType: product.currencyType,
+        productType: product.productType,
+        tags: product.tags?.map((tag) => ({ value: tag })) || [],
+        companyId: product.company.id,
+        categoryId: product.category.id || "",
+        subCategories: categories
+          .flatMap((cat) => cat.subCategories)
+          .filter((sub) =>
+            product.subCategories?.some((prodSub) => prodSub.id === sub.id)
+          )
+          .map((sub) => ({ value: sub.id, name: sub.name, image: sub.image })),
+        attributeDetails: product.attributeDetails,
+        variants: product.variations,
+      });
+    }
+  }, [product, reset, categories]);
 
   const onSubmit = async (data: TProductFormData) => {
     // Transform data to match the required format
@@ -191,10 +216,6 @@ export default function ProductUpdateForm({
       setDeleteImages([]);
       setStockAttributeImages({});
       setLoading(false);
-      redirect({
-        href: `/superadmin/update/product/${product.id}`,
-        locale: locale,
-      });
     } else {
       toast({
         title: "Error",

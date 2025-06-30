@@ -1,4 +1,5 @@
 import {
+  changeStatusAction,
   getAdminProductCategories,
   getAdminProducts,
   getProductsByCategory,
@@ -55,12 +56,28 @@ interface FetchProductsParams {
   page: number;
   size: number;
 }
+interface ChangeStatusParams {
+  productId: string;
+  status: boolean;
+}
 
 export const fetchProducts = createAsyncThunk<IData, FetchProductsParams>(
   "products/fetchProducts",
   async (params, thunkAPI) => {
     try {
       const data = await getAdminProducts(params.page, params.size); // bu fonksiyon parametreleri almalı
+      return data;
+    } catch (error: any) {
+      console.log("Fetch error:", error);
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+export const changeStatus = createAsyncThunk<any, ChangeStatusParams>(
+  "products/changeStatus",
+  async (params, thunkAPI) => {
+    try {
+      const data = await changeStatusAction(params.productId, params.status);
       return data;
     } catch (error: any) {
       console.log("Fetch error:", error);
@@ -184,6 +201,22 @@ const adminProductSlice = createSlice({
           : state.data;
       })
       .addCase(searchProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = (action.payload as string) || "Bir hata oluştu.";
+      })
+      // CHANGE ProducT STATUS
+      .addCase(changeStatus.pending, (state) => {
+        state.loading = true;
+
+        state.error = null;
+      })
+      .addCase(changeStatus.fulfilled, (state, action) => {
+        console.log("action.payload", action.payload);
+        state.loading = false;
+        state.error = null;
+        state.success = true;
+      })
+      .addCase(changeStatus.rejected, (state, action) => {
         state.loading = false;
         state.error = (action.payload as string) || "Bir hata oluştu.";
       });

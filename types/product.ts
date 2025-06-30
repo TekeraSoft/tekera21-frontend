@@ -15,6 +15,7 @@ export interface ProductAttribute {
 export interface ProductVariation {
   id: string;
   modelName: string;
+  isActive: boolean;
   modelCode: string;
   color: string;
   attributes: ProductAttribute[];
@@ -26,6 +27,7 @@ export interface IProduct {
   name: string;
   slug: string;
   code: string;
+  isActive: boolean;
   brandName: string;
   description: string;
   variations: ProductVariation[];

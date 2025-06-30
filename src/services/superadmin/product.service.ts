@@ -11,6 +11,16 @@ export const getAdminProducts = async (
   return response.data;
 };
 
+export const changeStatusAction = async (
+  productId: string,
+  status: boolean
+) => {
+  const response = await axiosClient.put(
+    `/super-admin/changeProductActiveStatus?productId=${productId}&status=${status}`
+  );
+  return response.data;
+};
+
 export const getAdminProductCategories = async (
   page: number = 10,
   size: number = 10,
@@ -41,20 +51,6 @@ export const searchProducts = async (query: string) => {
   );
   return response.data;
 };
-// export const getAdminProducts = async () => {
-//   const response = await axiosClient.get(
-//     "https://dummyjson.com/http/404/Products Could Not Be Received",
-//     {
-//       withCredentials: false,
-//     }
-//   );
-//   return response.data;
-// };
-
-// export const searchProducts = async (query: string) => {
-//   const response = await axiosClient.get(`/products?${query}`);
-//   return response.data;
-// };
 
 export const filterProducts = async (
   query: string,

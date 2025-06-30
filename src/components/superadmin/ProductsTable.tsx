@@ -17,7 +17,6 @@ import {
   ChevronDown,
   ChevronRight,
   MoreHorizontal,
-  ParenthesesIcon,
   Pencil,
   Target,
   Trash2,
@@ -43,6 +42,7 @@ import {
 } from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import {
+  changeStatus,
   fetchCategories,
   fetchProducts,
   fetchProductsByCategory,
@@ -62,6 +62,7 @@ import { Link } from "@/i18n/navigation";
 import { deleteProductById } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import { IProduct } from "@/types/product";
+import { Checkbox } from "../ui/checkbox";
 
 export function ProductsTable() {
   const { data, error, loading, categories, selectedCategory, success } =
@@ -223,7 +224,7 @@ export function ProductsTable() {
             <TableHead>Price</TableHead>
             <TableHead>Stock</TableHead>
             <TableHead>Status</TableHead>
-            {/* <TableHead className="text-right">Actions</TableHead> */}
+            <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
 
@@ -271,6 +272,35 @@ export function ProductsTable() {
                     >
                       {product.variations[0]?.attributes[0]?.stock}
                     </span>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Button variant="ghost" size="icon" data-dropdown-trigger>
+                      {product.isActive ? (
+                        <Check
+                          onClick={() =>
+                            dispatch(
+                              changeStatus({
+                                productId: product.id,
+                                status: false,
+                              })
+                            )
+                          }
+                          className="h-4 w-4"
+                        />
+                      ) : (
+                        <Check
+                          onClick={() =>
+                            dispatch(
+                              changeStatus({
+                                productId: product.id,
+                                status: true,
+                              })
+                            )
+                          }
+                          className="h-4 w-4 text-red-400"
+                        />
+                      )}
+                    </Button>
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
@@ -362,15 +392,17 @@ export function ProductsTable() {
                               <div className="flex justify-between">
                                 <span>Fiyat:</span>
                                 <span className="font-semibold">
-                                  ${product.variations[0]?.attributes[0]?.price || 0}
+                                  $
+                                  {product.variations[0]?.attributes[0]
+                                    ?.price || 0}
                                 </span>
                               </div>
                               <div className="flex justify-between">
                                 <span>Stok:</span>
                                 <span
                                   className={
-                                    product.variations[0]?.attributes[0]?.stock >
-                                    0
+                                    product.variations[0]?.attributes[0]
+                                      ?.stock > 0
                                       ? "text-green-600"
                                       : "text-red-600"
                                   }
@@ -382,13 +414,14 @@ export function ProductsTable() {
                                 <span>Durum:</span>
                                 <span
                                   className={
-                                    product.variations[0]?.attributes[0]?.stock >
-                                    0
+                                    product.variations[0]?.attributes[0]
+                                      ?.stock > 0
                                       ? "text-green-600"
                                       : "text-red-600"
                                   }
                                 >
-                                  {product.variations[0]?.attributes[0]?.stock > 0
+                                  {product.variations[0]?.attributes[0]?.stock >
+                                  0
                                     ? "Stokta"
                                     : "Tükendi"}
                                 </span>
