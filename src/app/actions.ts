@@ -12,7 +12,6 @@ export async function getSingleProductById(id: string) {
     const { data } = await axiosInstance.get(
       `/super-admin/getCustomerProduct?id=${id}`
     );
-    console.log("getsingleProductById run", data);
 
     return { success: true, message: data.message, data: data };
   } catch (error) {
