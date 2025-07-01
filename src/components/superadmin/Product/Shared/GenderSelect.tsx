@@ -1,4 +1,3 @@
-import ImageView from "@/components/shared/ImageView";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -8,46 +7,64 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { TProductFormData } from "@/types/ProductFormData";
-import React from "react";
-import { Controller, useFieldArray, useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { genders } from "./Data/Genders";
 
 const GenderSelect = () => {
   const {
     control,
+    watch,
     formState: { errors },
   } = useFormContext<TProductFormData>();
-  const { fields: tagFields, append: appendTag } = useFieldArray({
-    control,
-    name: "tags",
-  });
+
   return (
     <div className="space-y-2">
       <Label htmlFor="tags">Cinsiyet *</Label>
+
       <Controller
         control={control}
-        rules={{ required: "Cinsiyet seçimi zorunlu" }}
-        name={"tags"}
-        render={({ field }) => (
-          <Select
-            defaultValue={
-              tagFields.find((field) => genders.includes(field.value))?.value
+        name="tags"
+        rules={{
+          validate: (value) => {
+            if (!value || value.length === 0) {
+              return "Cinsiyet seçimi zorunlu";
             }
-            onValueChange={(value) => appendTag({ value: value })}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Cinsiyet seçin" />
-            </SelectTrigger>
-            <SelectContent>
-              {genders?.map((gender) => (
-                <SelectItem key={gender} value={gender}>
-                  {gender}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
+            return true;
+          },
+        }}
+        render={({ field }) => {
+          const selectedValue =
+            watch("tags").find((field) => genders.includes(field.value))
+              ?.value || "";
+
+          return (
+            <Select
+              value={selectedValue}
+              onValueChange={(value) => {
+                field.onChange([{ value }]);
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue
+                  placeholder="Cinsiyet seçin"
+                  // ✅ Burası önemli: SelectValue kendi value prop'unu almaz, Select parent'ından gelir.
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {genders.map((gender) => (
+                  <SelectItem key={gender} value={gender}>
+                    {gender}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          );
+        }}
       />
+
+      {errors.tags && (
+        <p className="text-sm text-red-500">{errors.tags.message}</p>
+      )}
     </div>
   );
 };

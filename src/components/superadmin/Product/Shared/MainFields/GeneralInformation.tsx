@@ -25,7 +25,7 @@ const GeneralInformation = () => {
             <p className="text-sm text-red-500">{errors.name.message}</p>
           )}
         </div>
-        <div className="space-y-2">
+        <div className="space-y-2 h-full">
           <Label htmlFor="slug">Company Id *</Label>
           <Input
             id="companyId"

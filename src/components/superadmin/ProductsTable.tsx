@@ -572,7 +572,7 @@ export function ProductsTable() {
         </Button>
         <Button
           onClick={() =>
-            dispatch(fetchProducts({ page: data.page.number + 1, size: 100 }))
+            dispatch(fetchProducts({ page: data.page.number + 1, size: 10 }))
           }
           disabled={data.page.number + 1 >= data.page.totalPages}
           variant="outline"

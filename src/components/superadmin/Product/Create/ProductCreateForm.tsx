@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useState } from "react";
-import { useForm, FormProvider, Controller } from "react-hook-form";
+import { useForm, FormProvider, Controller, set } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +29,7 @@ import GenderSelect from "../Shared/GenderSelect";
 import GeneralInformation from "../Shared/MainFields/GeneralInformation";
 import CurrencyAndProductType from "../Shared/MainFields/CurrencyAndProductType";
 import Tags from "../Shared/MainFields/Tags";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function ProductCreateForm({
   categories,
@@ -39,6 +40,7 @@ export default function ProductCreateForm({
     [key: string]: File[];
   }>({});
   const [loading, setLoading] = useState(false);
+  const [step, setStep] = useState(1);
 
   const { toast } = useToast();
 
@@ -46,7 +48,7 @@ export default function ProductCreateForm({
     defaultValues: {
       currencyType: "TRY",
       productType: "PHYSICAL",
-      tags: [{ value: "" }],
+      tags: [],
       categoryId: "",
       companyId: "",
       subCategories: [],
@@ -69,6 +71,7 @@ export default function ProductCreateForm({
     formState: { errors },
     watch,
     reset,
+    trigger,
   } = methods;
 
   const onSubmit = async (data: TProductFormData) => {
@@ -165,116 +168,172 @@ export default function ProductCreateForm({
     const { success } = await createProduct(formData);
     if (success) {
       toast({
-        title: "Success",
-        description: "Product is created.",
+        title: "Başarılı!",
+        description: "Ürün oluşturuldu.",
         variant: "default",
       });
       setStockAttributeImages({});
       setLoading(false);
       reset();
+      setStep(1);
     } else {
       toast({
         title: "Error",
-        description: "Product cannot be created.",
+        description: "Ürün oluşturulamadı. Lütfen tekrar deneyin.",
         variant: "destructive",
       });
       setLoading(false);
     }
   };
 
+  const stepFields: Record<number, (keyof TProductFormData)[]> = {
+    1: [
+      "name",
+      "brandName",
+      "companyId",
+      "categoryId",
+      "subCategories",
+      "code",
+      "tags",
+    ],
+    2: ["description", "currencyType", "productType"],
+    3: ["tags", "attributeDetails"],
+    4: ["variants"],
+  };
+
+  const handleIncreaseStep = async () => {
+    // Validate the current step before proceeding
+    const currentStepFields = stepFields[step];
+
+    const isValid = await trigger(currentStepFields);
+
+    if (!isValid) {
+      console.log("validation failed");
+      toast({
+        title: "Ürün validasyonu başarısız!",
+        description: "Lütfen geçerli bilgileri girin.",
+        variant: "destructive",
+      });
+      return;
+    }
+    if (step < 4) {
+      setStep((prev) => prev + 1);
+    }
+  };
+  const handleDecreaseStep = () => {
+    if (step > 1) {
+      setStep((prev) => prev - 1);
+    }
+  };
+
   return (
-    <div className=" mx-auto p-6">
+    <div className="mx-auto p-6">
       <Card>
-        <CardHeader>
-          <CardTitle>Yeni ürün oluşturun</CardTitle>
-          <CardDescription>
-            Aşağıdaki forma ürün bilgilerinizi giriniz.
-          </CardDescription>
+        <CardHeader className="flex flex-row justify-between">
+          <div className="w-max">
+            <CardTitle>Yeni ürün oluşturun</CardTitle>
+            <CardDescription className="mt-2">
+              Aşağıdaki forma ürün bilgilerinizi giriniz.
+            </CardDescription>
+          </div>
+          <span className="font-bold text-xl">
+            Adım <span className="text-teal-700">{step}</span>/4
+          </span>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             {/* Basic Information */}
-            <div className="space-y-4">
-              <FormProvider {...methods}>
-                <GeneralInformation />
-              </FormProvider>
-              <div className="space-y-2">
-                <Label htmlFor="description">Açıklama *</Label>
-                <Controller
-                  control={control}
-                  name="description"
-                  rules={{ required: "Ürün açıklaması gereklidir." }}
-                  render={({ field }) => (
-                    <MarkdownEditor
-                      defaultValue={field.value}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-
-                {errors.description && (
-                  <p className="text-sm text-red-500">
-                    {errors.description.message}
-                  </p>
-                )}
+            {step === 1 && (
+              <div className="space-y-4">
+                <FormProvider {...methods}>
+                  <GeneralInformation />
+                  <GenderSelect />
+                </FormProvider>
+                <FormProvider {...methods}>
+                  <CategorySelect categories={categories} />
+                  <SubCategoriesSelect
+                    name="subCategories"
+                    label="Subcategories"
+                    subCategories={
+                      categories.find((cat) => cat.id === watch("categoryId"))
+                        ?.subCategories || []
+                    }
+                  />
+                </FormProvider>
               </div>
+            )}
+            {step === 2 && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="description">Açıklama *</Label>
+                  <Controller
+                    control={control}
+                    name="description"
+                    rules={{ required: "Ürün açıklaması gereklidir." }}
+                    render={({ field }) => (
+                      <MarkdownEditor
+                        defaultValue={field.value}
+                        onChange={field.onChange}
+                      />
+                    )}
+                  />
+
+                  {errors.description && (
+                    <p className="text-sm text-red-500">
+                      {errors.description.message}
+                    </p>
+                  )}
+                </div>
+                <FormProvider {...methods}>
+                  <CurrencyAndProductType />
+                </FormProvider>
+              </>
+            )}
+
+            {step === 3 && (
               <FormProvider {...methods}>
-                <CurrencyAndProductType />
+                <Tags />
+                <ProductAttributes />
               </FormProvider>
-            </div>
-
-            <Separator />
-
-            {/* Categories */}
-
-            <FormProvider {...methods}>
-              <CategorySelect categories={categories} />
-              <SubCategoriesSelect
-                name="subCategories"
-                label="Subcategories"
-                subCategories={
-                  categories.find((cat) => cat.id === watch("categoryId"))
-                    ?.subCategories || []
-                }
-              />
-            </FormProvider>
-
-            <Separator />
-
-            {/* Tags */}
-            <FormProvider {...methods}>
-              <Tags />
-            </FormProvider>
-
-            <Separator />
-
-            <FormProvider {...methods}>
-              <GenderSelect />
-            </FormProvider>
-
-            <Separator />
-
-            {/* Attributes */}
-
-            <FormProvider {...methods}>
-              <ProductAttributes />
-            </FormProvider>
-
-            <Separator />
+            )}
 
             {/* Variations */}
 
-            <FormProvider {...methods}>
-              <ProductVariantForm
-                stockAttributeImages={stockAttributeImages}
-                setStockAttributeImages={setStockAttributeImages}
-                handleDeleteImages={undefined}
-              />
-            </FormProvider>
-            <div className="flex gap-4">
-              <Button type="submit" className="flex-1" disabled={loading}>
-                Gönder
-              </Button>
+            {step === 4 && (
+              <>
+                <FormProvider {...methods}>
+                  <ProductVariantForm
+                    stockAttributeImages={stockAttributeImages}
+                    setStockAttributeImages={setStockAttributeImages}
+                    handleDeleteImages={undefined}
+                  />
+                </FormProvider>
+                <div className="flex gap-4">
+                  <Button type="submit" className="flex-1" disabled={loading}>
+                    Gönder
+                  </Button>
+                </div>
+              </>
+            )}
+            <div className="flex gap-3 justify-end">
+              {step !== 1 && (
+                <Button
+                  className="flex gap-1 items-center"
+                  type="button"
+                  onClick={handleDecreaseStep}
+                >
+                  <ChevronLeft /> Bir önceki adıma dön
+                </Button>
+              )}
+              {step < 4 && (
+                <Button
+                  className="flex gap-1 items-center"
+                  type="button"
+                  onClick={handleIncreaseStep}
+                >
+                  Bir Sonraki adıma geç <ChevronRight />
+                </Button>
+              )}
             </div>
           </form>
         </CardContent>
