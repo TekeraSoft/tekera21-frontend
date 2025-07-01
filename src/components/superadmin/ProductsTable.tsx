@@ -151,6 +151,14 @@ export function ProductsTable() {
     e.preventDefault();
     toggleRowExpansion(productId);
   };
+  const handleChangeProductIsActive = (prodId: string, status: boolean) => {
+    dispatch(
+      changeStatus({
+        productId: prodId,
+        status: status,
+      })
+    );
+  };
 
   if (error) {
     return <div>{error}</div>;
@@ -200,31 +208,31 @@ export function ProductsTable() {
         </div>
         <div className="flex items-center space-x-2">
           <p className="text-sm text-muted-foreground">
-            Showing{" "}
+            Toplam <strong>{data.page.totalElements}</strong> üründen{" "}
             <strong>
               {data.page.totalElements < data.page.size
                 ? data.page.totalElements
                 : data.page.size}
-            </strong>{" "}
-            of <strong>{data.page.totalElements}</strong> products
+            </strong>
+            'u gösteriliyor
           </p>
         </div>
       </div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[80px]">Image</TableHead>
+            <TableHead className="w-[80px]">Ürün Resmi</TableHead>
             <TableHead>
               <div className="flex items-center">
-                Product
+                Ürün Adı
                 <ArrowUpDown className="ml-2 h-4 w-4" />
               </div>
             </TableHead>
-            <TableHead>Brand</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Stock</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead>Marka</TableHead>
+            <TableHead>Fiyat</TableHead>
+            <TableHead>Stok Adeti</TableHead>
+            <TableHead className="text-center">Ürün Aktifliği</TableHead>
+            <TableHead className="text-right">Eylemler</TableHead>
           </TableRow>
         </TableHeader>
 
@@ -273,8 +281,19 @@ export function ProductsTable() {
                       {product.variations[0]?.attributes[0]?.stock}
                     </span>
                   </TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" data-dropdown-trigger>
+                  <TableCell className="text-center">
+                    <Checkbox
+                      id="product-status"
+                      className="cursor-pointer w-6 h-6"
+                      checked={product.isActive}
+                      onCheckedChange={() => {
+                        handleChangeProductIsActive(
+                          product.id,
+                          !product.isActive
+                        );
+                      }}
+                    />
+                    {/* <Button variant="ghost" size="icon" data-dropdown-trigger>
                       {product.isActive ? (
                         <Check
                           onClick={() =>
@@ -300,7 +319,7 @@ export function ProductsTable() {
                           className="h-4 w-4 text-red-400"
                         />
                       )}
-                    </Button>
+                    </Button> */}
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
@@ -315,7 +334,7 @@ export function ProductsTable() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="z-[9999]">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuLabel>Eylemler</DropdownMenuLabel>
                         <DropdownMenuItem className="px-0">
                           <Link
                             className="flex items-center w-full px-2"
@@ -329,8 +348,8 @@ export function ProductsTable() {
                             className="flex items-center w-full px-2"
                             href={`/superadmin/create/target/${product.id}`}
                           >
-                            <Target className="mr-2 h-4 w-4" /> Create Target
-                            Picture
+                            <Target className="mr-2 h-4 w-4" /> Ar İçerik
+                            Oluştur
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
@@ -343,7 +362,7 @@ export function ProductsTable() {
                           }}
                         >
                           <Trash2 className="mr-2 h-4 w-4" />
-                          Delete
+                          Sil
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

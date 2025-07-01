@@ -27,6 +27,9 @@ interface ICategory {
 interface ProductState {
   data: IData;
   loading: boolean;
+  loadingCategories?: boolean;
+  loadingSearch?: boolean;
+  loadingChangeStatus?: boolean;
   error: string | null;
   categories: ICategory[];
   selectedCategory: string;
@@ -73,12 +76,16 @@ export const fetchProducts = createAsyncThunk<IData, FetchProductsParams>(
     }
   }
 );
-export const changeStatus = createAsyncThunk<any, ChangeStatusParams>(
+
+export const changeStatus = createAsyncThunk<
+  { productId: string; status: boolean }, // fulfilled dönüş tipi
+  ChangeStatusParams
+>(
   "products/changeStatus",
   async (params, thunkAPI) => {
     try {
-      const data = await changeStatusAction(params.productId, params.status);
-      return data;
+      await changeStatusAction(params.productId, params.status); // backend api çağrısı
+      return { productId: params.productId, status: params.status };  // geri productId ve yeni status dön
     } catch (error: any) {
       console.log("Fetch error:", error);
       return thunkAPI.rejectWithValue(error.message);
@@ -135,6 +142,7 @@ const adminProductSlice = createSlice({
     setSearchTerm: (state, action) => {
       state.searchTerm = action.payload;
     },
+
   },
   extraReducers: (builder) => {
     builder
@@ -206,18 +214,19 @@ const adminProductSlice = createSlice({
       })
       // CHANGE ProducT STATUS
       .addCase(changeStatus.pending, (state) => {
-        state.loading = true;
-
+        state.loadingChangeStatus = true;
         state.error = null;
       })
       .addCase(changeStatus.fulfilled, (state, action) => {
-        console.log("action.payload", action.payload);
-        state.loading = false;
-        state.error = null;
-        state.success = true;
+        const { productId, status } = action.payload;
+
+        const product = state.data.content.find((p) => p.id === productId);
+        if (product) {
+          product.isActive = status;
+        }
       })
       .addCase(changeStatus.rejected, (state, action) => {
-        state.loading = false;
+        state.loadingChangeStatus = false;
         state.error = (action.payload as string) || "Bir hata oluştu.";
       });
   },
