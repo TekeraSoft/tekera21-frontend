@@ -14,6 +14,8 @@ import { Upload } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { IProduct } from "@/types/product";
 import { toast } from "@/hooks/use-toast";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from "react";
 
 interface ITargetPictureFormData {
   productId: string;
@@ -32,7 +34,7 @@ export default function TargetCreate({ product }: { product: IProduct }) {
       productId: product.id,
     },
   });
-
+  const [selectedTab, setSelectedTab] = useState("video");
   const onSubmit = async (data: ITargetPictureFormData) => {
     console.log("onsubmit data:", data);
     // Transform data to match the required format
@@ -71,9 +73,10 @@ export default function TargetCreate({ product }: { product: IProduct }) {
     <div className="max-w-md mx-auto p-6">
       <Card>
         <CardHeader>
-          <CardTitle>Product Media Upload</CardTitle>
+          <CardTitle>Ürün için AR içerik ekle</CardTitle>
           <CardDescription>
-            Select a product and upload associated media files
+            Bu form ile ürününüze AR içerik ekleyebilirsiniz. Lütfen gerekli
+            dosyaları yükleyin.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -84,21 +87,60 @@ export default function TargetCreate({ product }: { product: IProduct }) {
             <FileUploadEnhanced
               name="image"
               accept="image/*"
-              label="Target Image"
+              label="Hedef Resim (Target Image)"
               description="PNG, JPG, GIF up to 10MB"
               icon="image"
               setFile={(file) => setValue("image", file)}
               file={watch("image") as File | null}
             />
-            <FileUploadEnhanced
-              name="defaultContent"
-              accept="video/*"
-              label="Target Video (default content)"
-              description="MP4, MOV, AVI up to 100MB"
-              icon="image"
-              setFile={(file) => setValue("defaultContent", file)}
-              file={watch("defaultContent") as File | null}
-            />
+            <Tabs value={selectedTab} onValueChange={setSelectedTab}>
+              <TabsList className="flex space-x-4 border-b border-gray-300 mb-4 py-5">
+                <TabsTrigger
+                  value="video"
+                  className={`px-4 py-2 ${
+                    selectedTab === "video"
+                      ? "border-b-2 border-blue-600 font-semibold"
+                      : "text-gray-500"
+                  }`}
+                >
+                  Video Yükle
+                </TabsTrigger>
+                <TabsTrigger
+                  value="glb"
+                  className={`px-4 py-2 ${
+                    selectedTab === "glb"
+                      ? "border-b-2 border-blue-600 font-semibold"
+                      : "text-gray-500"
+                  }`}
+                >
+                  3D GLB Dosyası Yükle
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="video">
+                <FileUploadEnhanced
+                  name="defaultContent"
+                  accept="video/*"
+                  label="Hedef video (default content)"
+                  description="MP4, MOV, AVI up to 100MB"
+                  icon="image"
+                  setFile={(file) => setValue("defaultContent", file)}
+                  file={watch("defaultContent") as File | null}
+                />
+              </TabsContent>
+
+              <TabsContent value="glb">
+                <FileUploadEnhanced
+                  name="defaultContent"
+                  accept=".glb"
+                  label="3D Glb Dosyası (default content)"
+                  description="GLB file for 3D content"
+                  icon="image"
+                  setFile={(file) => setValue("defaultContent", file)}
+                  file={watch("defaultContent") as File | null}
+                />
+              </TabsContent>
+            </Tabs>
 
             {/* Video Upload */}
 

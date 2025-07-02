@@ -50,17 +50,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { colors } from "../Shared/Data/Colors";
+import { sizes } from "../Shared/Data/Sizes";
 
 type TColor = { name: string; hex: string };
 
-const sizes = [
-  { id: "xs", label: "XS" },
-  { id: "s", label: "S" },
-  { id: "m", label: "M" },
-  { id: "l", label: "L" },
-  { id: "xl", label: "XL" },
-  { id: "lxl", label: "L/XL" },
-];
 
 type TVariant = {
   id: string;
