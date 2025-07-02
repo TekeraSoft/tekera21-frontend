@@ -148,6 +148,8 @@ export async function createProduct(formData: FormData) {
 
     console.log("images", images);
 
+    console.log("video", formData.get("video"));
+
     if (!dataform || !images) {
       return {
         success: false,
@@ -166,9 +168,9 @@ export async function createProduct(formData: FormData) {
     revalidatePath("/");
     console.log("data");
     return { success: true, message: data.message, product: data.data };
-  } catch (error) {
+  } catch (error: any) {
     console.log("create Product error:", error);
-    return { success: false, message: error || "Failed to create category" };
+    return { success: false, message: typeof error.message === "string" ? error.message : "Failed to create category" };
   }
 }
 

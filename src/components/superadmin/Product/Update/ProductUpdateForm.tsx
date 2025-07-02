@@ -33,8 +33,7 @@ import GenderSelect from "../Shared/GenderSelect";
 import GeneralInformation from "../Shared/MainFields/GeneralInformation";
 import CurrencyAndProductType from "../Shared/MainFields/CurrencyAndProductType";
 import Tags from "../Shared/MainFields/Tags";
-import { redirect } from "@/i18n/navigation";
-import { useLocale } from "next-intl";
+import { FileUploadEnhanced } from "@/components/shared/FileUploadEnhanced";
 
 export default function ProductUpdateForm({
   categories,
@@ -48,7 +47,7 @@ export default function ProductUpdateForm({
   }>({});
   const [deleteImages, setDeleteImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const locale = useLocale();
+  const [productVideo, setProductVideo] = useState<File | null>(null);
 
   const { toast } = useToast();
 
@@ -158,6 +157,12 @@ export default function ProductUpdateForm({
       });
     } else {
       formData.append("images", new File([""], ""), "empty.jpg");
+    }
+
+    if (productVideo) {
+      formData.append("video", productVideo);
+    } else {
+      formData.append("video", new File([""], ""), "empty.mov");
     }
 
     const checkForm = () => {
@@ -293,6 +298,51 @@ export default function ProductUpdateForm({
                 }
               />
             </FormProvider>
+
+            {product.videoUrl &&
+            !deleteImages.includes(
+              process.env.NEXT_PUBLIC_IMAGE_BASE_URL + "/" + product.videoUrl
+            ) ? (
+              <div className="space-y-2">
+                <Label>Ürün Videosu</Label>
+                <div className="flex flex-col mt-2">
+                  Yeni video yüklemek için lütfen silin
+                  <Button
+                    variant={"warning"}
+                    className="w-max mt-1"
+                    onClick={() =>
+                      setDeleteImages((prev) => [
+                        ...prev,
+                        process.env.NEXT_PUBLIC_IMAGE_BASE_URL +
+                          "/" +
+                          product.videoUrl,
+                      ])
+                    }
+                  >
+                    Silmek için tıklayın.
+                  </Button>
+                </div>
+                <video
+                  src={
+                    process.env.NEXT_PUBLIC_IMAGE_BASE_URL +
+                    "/" +
+                    product.videoUrl
+                  }
+                  controls
+                  className="w-full h-auto rounded-lg"
+                />
+              </div>
+            ) : (
+              <FileUploadEnhanced
+                name="video"
+                accept="video/*"
+                label="Ürün video (isteğe bağlı)"
+                description="MP4, AVI up to 300MB"
+                icon="image"
+                setFile={(file) => setProductVideo(file)}
+                file={productVideo}
+              />
+            )}
 
             <Separator />
 

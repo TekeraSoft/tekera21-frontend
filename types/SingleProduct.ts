@@ -14,7 +14,8 @@ export type IGetByIdProduct = {
   productType: "PHYSICAL" | "DIGITAL"; // enum gibi düşünebilirsin
   attributeDetails: Attribute[];
   rate: number;
-  comments: any[]; // Eğer yorumların yapısı belli değilse `any[]` bırakabiliriz
+  comments: any[];
+  videoUrl?: string // Eğer yorumların yapısı belli değilse `any[]` bırakabiliriz
 };
 
 type Category = {

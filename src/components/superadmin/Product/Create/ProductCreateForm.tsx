@@ -14,7 +14,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import { ICategory } from "@/types/AdminTypes/category";
 import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
 
@@ -30,6 +29,7 @@ import GeneralInformation from "../Shared/MainFields/GeneralInformation";
 import CurrencyAndProductType from "../Shared/MainFields/CurrencyAndProductType";
 import Tags from "../Shared/MainFields/Tags";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { FileUploadEnhanced } from "@/components/shared/FileUploadEnhanced";
 
 export default function ProductCreateForm({
   categories,
@@ -39,6 +39,7 @@ export default function ProductCreateForm({
   const [stockAttributeImages, setStockAttributeImages] = useState<{
     [key: string]: File[];
   }>({});
+  const [productVideo, setProductVideo] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
 
@@ -121,6 +122,12 @@ export default function ProductCreateForm({
       });
     });
 
+    if (productVideo) {
+      formData.append("video", productVideo);
+    } else {
+      formData.append("video", new File([""], ""), "empty.mov");
+    }
+
     const checkForm = () => {
       if (!formattedData.variants.length) {
         return false;
@@ -165,7 +172,7 @@ export default function ProductCreateForm({
       setLoading(false);
       return;
     }
-    const { success } = await createProduct(formData);
+    const { success, message } = await createProduct(formData);
     if (success) {
       toast({
         title: "Başarılı!",
@@ -179,7 +186,7 @@ export default function ProductCreateForm({
     } else {
       toast({
         title: "Error",
-        description: "Ürün oluşturulamadı. Lütfen tekrar deneyin.",
+        description: message || "Ürün oluşturulamadı. Lütfen tekrar deneyin.",
         variant: "destructive",
       });
       setLoading(false);
@@ -260,6 +267,15 @@ export default function ProductCreateForm({
                     }
                   />
                 </FormProvider>
+                <FileUploadEnhanced
+                  name="video"
+                  accept="video/*"
+                  label="Ürün video (isteğe bağlı)"
+                  description="MP4, AVI up to 300MB"
+                  icon="image"
+                  setFile={(file) => setProductVideo(file)}
+                  file={productVideo}
+                />
               </div>
             )}
             {step === 2 && (

@@ -3,7 +3,7 @@ import axios from "axios";
 
 const axiosInstance = axios.create({
   baseURL: api_base_url,
-  timeout: 5000,
+  timeout: 25000,
   withCredentials: true,
   xsrfCookieName: "token",
   xsrfHeaderName: "token",
@@ -24,15 +24,23 @@ axiosInstance.interceptors.response.use(
   },
   async (error) => {
     if (error) {
-      console.log("error in axios response interceptor", error.response.data);
-      throw new Error(
-        typeof error?.response?.data === "string"
-          ? error?.response?.data
-          : error.response.data.message
-          ? error.response.data.message
-          : error?.response?.data?.detail ||
-            "An error occurred while processing your request."
-      );
+      console.log("axios error", error);
+      console.log("error in axios response interceptor", error?.response?.data);
+      const errorData = error?.response?.data as any;
+
+      let errorMessage = "An error occurred while processing your request.";
+
+      if (errorData) {
+        if (typeof errorData === "string") {
+          errorMessage = errorData;
+        } else if (errorData.message) {
+          errorMessage = errorData.message;
+        } else if (errorData.detail) {
+          errorMessage = errorData.detail;
+        }
+      }
+
+      throw new Error(errorMessage);
     }
 
     return Promise.reject(error);

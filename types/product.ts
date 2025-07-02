@@ -36,4 +36,5 @@ export interface IProduct {
   productType: "PHYSICAL" | "DIGITAL"; // Diğer değerler varsa genişletilebilir
   attributeDetails: ProductAttributeDetail[];
   rate: number;
+  videoUrl?: string;
 }
