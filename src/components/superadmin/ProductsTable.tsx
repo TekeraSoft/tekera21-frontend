@@ -14,8 +14,10 @@ import {
 import {
   ArrowUpDown,
   Check,
+  CheckCircle,
   ChevronDown,
   ChevronRight,
+  CrossIcon,
   MoreHorizontal,
   Pencil,
   Target,
@@ -372,7 +374,7 @@ export function ProductsTable() {
                 {/* Genişletilmiş içerik satırı */}
                 {isExpanded && (
                   <TableRow>
-                    <TableCell colSpan={6} className="p-0 bg-muted/20">
+                    <TableCell colSpan={8} className="p-0 bg-muted/20">
                       <div className="p-6 space-y-4">
                         <h4 className="font-semibold text-lg">
                           Ürün Detayları
@@ -394,10 +396,6 @@ export function ProductsTable() {
                                 <span>
                                   {product.brandName || "Belirtilmemiş"}
                                 </span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span>Kategori:</span>
-                                <span>{product.code || "Belirtilmemiş"}</span>
                               </div>
                             </div>
                           </div>
@@ -473,6 +471,26 @@ export function ProductsTable() {
                         </div>
 
                         {/* Açıklama */}
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">Kategori:</span>
+                          <div className="flex items-center gap-1 text-sm text-gray-700">
+                            <span>
+                              {product.category?.name || "Belirtilmemiş"}
+                            </span>
+                            {product.subCategories?.length > 0 &&
+                              product.subCategories.map((sub, index) => (
+                                <span
+                                  key={sub.id}
+                                  className="flex items-center"
+                                >
+                                  <span className="mx-1 text-gray-400">
+                                    {">"}
+                                  </span>
+                                  <span>{sub.name}</span>
+                                </span>
+                              ))}
+                          </div>
+                        </div>
                         {product.description && (
                           <div className="space-y-2">
                             <h5 className="font-medium text-sm text-muted-foreground uppercase">
@@ -491,13 +509,134 @@ export function ProductsTable() {
                             Tüm Resimler
                           </h5>
                           <div className="space-y-4">
-                            {product.variations.map(
+                            {product?.variations?.map(
                               (variation, variationIndex) => (
-                                <div key={variationIndex}>
+                                <div
+                                  key={variationIndex}
+                                  className="border-b-2 pb-4"
+                                >
                                   <h3 className="font-semibold">
                                     Varyasyon {variationIndex + 1}
                                   </h3>
 
+                                  <div>
+                                    <span className="font-semibold text-gray-700">
+                                      Renk:
+                                    </span>{" "}
+                                    {variation.color}
+                                  </div>
+                                  <div>
+                                    <span className="font-semibold text-gray-700">
+                                      Model Adı:
+                                    </span>{" "}
+                                    {variation.modelName}
+                                  </div>
+                                  <div>
+                                    <span className="font-semibold text-gray-700">
+                                      Model Kodu:
+                                    </span>{" "}
+                                    {variation.modelCode}
+                                  </div>
+
+                                  <div className="overflow-x-auto rounded-lg border border-gray-200 my-2">
+                                    <table className="min-w-full text-sm text-left text-gray-700">
+                                      <thead className="bg-gray-100">
+                                        <tr>
+                                          <th className="px-4 py-2 font-medium">
+                                            Beden
+                                          </th>
+                                          <th className="px-4 py-2 font-medium">
+                                            Fiyat
+                                          </th>
+                                          <th className="px-4 py-2 font-medium">
+                                            İndirimli Fiyat
+                                          </th>
+                                          <th className="px-4 py-2 font-medium">
+                                            Stok
+                                          </th>
+                                          <th className="px-4 py-2 font-medium">
+                                            Durum
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                      <tbody className="divide-y divide-gray-100">
+                                        {variation?.attributes?.map(
+                                          (attr, index) => {
+                                            const size =
+                                              attr.attributeDetails?.find(
+                                                (atd) =>
+                                                  atd.key.toLowerCase() ===
+                                                  "size"
+                                              )?.value;
+
+                                            const price = attr.price ?? "-";
+                                            const stock = attr.stock ?? "-";
+                                            const isAvailable =
+                                              Number(attr.stock) > 0;
+                                            attr;
+                                            const discountPrice =
+                                              attr.discountPrice ?? "-";
+
+                                            return (
+                                              <tr
+                                                key={index}
+                                                className="hover:bg-gray-50"
+                                              >
+                                                <td className="px-4 py-2">
+                                                  {size || "-"}
+                                                </td>
+                                                <td className="px-4 py-2">
+                                                  {typeof price === "number"
+                                                    ? new Intl.NumberFormat(
+                                                        "tr-TR",
+                                                        {
+                                                          style: "currency",
+                                                          currency:
+                                                            product.currencyType ||
+                                                            "TRY",
+                                                        }
+                                                      ).format(price)
+                                                    : price}
+                                                </td>
+                                                <td className="px-4 py-2">
+                                                  {typeof discountPrice ===
+                                                  "number"
+                                                    ? new Intl.NumberFormat(
+                                                        "tr-TR",
+                                                        {
+                                                          style: "currency",
+                                                          currency:
+                                                            product.currencyType ||
+                                                            "TRY",
+                                                        }
+                                                      ).format(discountPrice)
+                                                    : price}
+                                                </td>
+                                                <td className="px-4 py-2">
+                                                  {stock}
+                                                </td>
+                                                <td className="px-4 py-2">
+                                                  {isAvailable ? (
+                                                    <span className="inline-flex items-center gap-1 text-green-600">
+                                                      <CheckCircle className="w-4 h-4" />
+                                                      Var
+                                                    </span>
+                                                  ) : (
+                                                    <span className="inline-flex items-center gap-1 text-red-600">
+                                                      <CrossIcon className="w-4 h-4" />
+                                                      Yok
+                                                    </span>
+                                                  )}
+                                                </td>
+                                              </tr>
+                                            );
+                                          }
+                                        )}
+                                      </tbody>
+                                    </table>
+                                  </div>
+
+                                  <h4 className="font-bold mt-1">Resimler</h4>
                                   <div className="flex gap-2 flex-wrap">
                                     {variation.images?.length > 0 ? (
                                       variation.images.map(

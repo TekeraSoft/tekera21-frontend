@@ -22,6 +22,13 @@ export interface ProductVariation {
   images: string[];
 }
 
+export interface ICategory {
+  id: string;
+  name: string;
+  slug: string;
+  image: string;
+}
+
 export interface IProduct {
   id: string;
   name: string;
@@ -30,6 +37,8 @@ export interface IProduct {
   isActive: boolean;
   brandName: string;
   description: string;
+  category: ICategory;
+  subCategories: ICategory[];
   variations: ProductVariation[];
   currencyType: string;
   tags: string[];
