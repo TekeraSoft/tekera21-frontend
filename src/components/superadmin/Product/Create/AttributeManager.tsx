@@ -54,7 +54,6 @@ import { sizes } from "../Shared/Data/Sizes";
 
 type TColor = { name: string; hex: string };
 
-
 type TVariant = {
   id: string;
   image: File | null;
@@ -173,15 +172,6 @@ function StockAttributeImageUpload({
   return (
     <div>
       <div className="text-center w-full h-full">
-        {/* <Label
-          onClick={() => setShowMediaLibrary(true)}
-          htmlFor={`stock-images-${variationIndex}-${attributeIndex}`}
-          className="cursor-pointer text-xs font-medium text-primary hover:text-primary/60"
-        >
-          <Camera className="w-8 h-8" />
-        </Label> */}
-
-        {/* Upload Trigger Button */}
         <Dialog open={showMediaLibrary} onOpenChange={setShowMediaLibrary}>
           <DialogTrigger asChild>
             <div className="flex items-center gap-2 cursor-pointer">
@@ -291,33 +281,6 @@ function StockAttributeImageUpload({
           className="hidden"
         />
       </div>
-
-      {/* {images.length > 0 && (
-        <div className="grid grid-cols-3 gap-2">
-          {images.map((file, imageIndex) => (
-            <div key={imageIndex} className="relative group">
-              <img
-                src={URL.createObjectURL(file) || "/placeholder.svg"}
-                alt={`Stock ${attributeIndex + 1} - Image ${imageIndex + 1}`}
-                className="w-full h-16 object-cover rounded border"
-              />
-              <button
-                type="button"
-                onClick={() => removeImage(imageIndex)}
-                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <X className="h-2 w-2" />
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {images.length > 0 && (
-        <p className="text-xs text-gray-600">
-          {images.length} image(s) uploaded
-        </p>
-      )} */}
     </div>
   );
 }

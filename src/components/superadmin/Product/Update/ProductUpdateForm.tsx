@@ -221,6 +221,7 @@ export default function ProductUpdateForm({
       setDeleteImages([]);
       setStockAttributeImages({});
       setLoading(false);
+      setProductVideo(null);
     } else {
       toast({
         title: "Error",
@@ -299,23 +300,19 @@ export default function ProductUpdateForm({
               />
             </FormProvider>
 
-            {product.videoUrl &&
-            !deleteImages.includes(
-              process.env.NEXT_PUBLIC_IMAGE_BASE_URL + "/" + product.videoUrl
-            ) ? (
+            {product.videoUrl && !deleteImages.includes(product.videoUrl) ? (
               <div className="space-y-2">
                 <Label>Ürün Videosu</Label>
                 <div className="flex flex-col mt-2">
                   Yeni video yüklemek için lütfen silin
                   <Button
+                    type="button"
                     variant={"warning"}
                     className="w-max mt-1"
                     onClick={() =>
                       setDeleteImages((prev) => [
                         ...prev,
-                        process.env.NEXT_PUBLIC_IMAGE_BASE_URL +
-                          "/" +
-                          product.videoUrl,
+                        product?.videoUrl || "",
                       ])
                     }
                   >
@@ -329,7 +326,7 @@ export default function ProductUpdateForm({
                     product.videoUrl
                   }
                   controls
-                  className="w-full h-auto rounded-lg"
+                  className="w-full h-96 rounded-lg"
                 />
               </div>
             ) : (

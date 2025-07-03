@@ -7,7 +7,7 @@ import { useRouter } from "@/i18n/navigation";
 
 const axiosClient = axios.create({
   baseURL: api_base_url,
-  timeout: 5000,
+  timeout: 50000,
   withCredentials: true,
   xsrfCookieName: "token",
   xsrfHeaderName: "token",

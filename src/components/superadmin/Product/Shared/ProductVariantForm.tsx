@@ -7,8 +7,6 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
-
-import VariantImageUpload from "./VariantImageUpload";
 import {
   Select,
   SelectContent,
@@ -60,11 +58,7 @@ export default function ProductVariantForm({
     Record<number, Record<string, string | string[]>>
   >({});
 
-  const {
-    append: appendVariation,
-    remove: removeVariation,
-    fields,
-  } = useFieldArray({
+  const { append: appendVariation } = useFieldArray({
     control,
     name: "variants",
   });
@@ -299,29 +293,9 @@ export default function ProductVariantForm({
                 </TooltipProvider>
               </div>
 
-              <Separator />
-
               {watch(`variants.${variantIndex}.color`) &&
                 watch(`variants.${variantIndex}.modelCode`) && (
                   <>
-                    <VariantImageUpload
-                      handleDeleteImages={handleDeleteImages}
-                      watch={watch}
-                      imageName={`${
-                        watch("variants")[variantIndex].modelCode
-                      }_${
-                        watch(`variants.${variantIndex}.color`) || "default"
-                      }.webp`}
-                      variationIndex={variantIndex}
-                      images={stockAttributeImages[`${variantIndex}`] || []}
-                      onImagesChange={(images) =>
-                        setStockAttributeImages((prev) => ({
-                          ...prev,
-                          [`${variantIndex}`]: images,
-                        }))
-                      }
-                    />
-
                     <Separator />
 
                     <Attributes
@@ -329,6 +303,9 @@ export default function ProductVariantForm({
                       key={variantIndex}
                       selectedAttributes={selectedAttributes}
                       setSelectedAttributes={setSelectedAttributes}
+                      handleDeleteImages={handleDeleteImages}
+                      setStockAttributeImages={setStockAttributeImages}
+                      stockAttributeImages={stockAttributeImages}
                     />
                   </>
                 )}

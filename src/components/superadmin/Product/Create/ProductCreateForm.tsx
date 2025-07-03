@@ -54,15 +54,7 @@ export default function ProductCreateForm({
       companyId: "",
       subCategories: [],
       attributeDetails: [{ key: "", value: "" }],
-      variants: [
-        {
-          modelName: "",
-          modelCode: "",
-          images: [],
-          color: "",
-          attributes: [],
-        },
-      ],
+      variants: [],
     },
   });
 
