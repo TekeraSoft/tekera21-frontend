@@ -159,6 +159,55 @@ export default function ProductVariantForm({
         <div className="flex gap-2"></div>
       </div>
 
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div>
+              <Label htmlFor={`color`}>Renk</Label>
+              <div className="flex items-center gap-2">
+                <div className="flex-1 block">
+                  <Controller
+                    control={control}
+                    name={`variants`}
+                    rules={{ required: "Renk seçimi zorunludur." }}
+                    render={({ field }) => (
+                      <MultiSelectColorVariant
+                        options={colors.sort((a, b) =>
+                          a.name.localeCompare(b.name, "tr")
+                        )}
+                        onChange={handleSelectColor}
+                        selected={selectedColors}
+                      />
+                    )}
+                  />
+                </div>
+                <div>
+                  <Button
+                    type="button"
+                    className="ml-auto"
+                    onClick={handleAddColor}
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Renk varyantı ekle
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </TooltipTrigger>
+          {/* {getIsDisabled(variantIndex) && (
+                <TooltipPortal>
+                  <TooltipContent className="TooltipContent" sideOffset={5}>
+                    <Button variant={"info"}>
+                      Bu alan, varyasyon görselleri yüklendiği için
+                      düzenlenemez. Tüm görselleri silip güncelleyebilirsiniz.
+                    </Button>
+                    <TooltipArrow className="TooltipArrow" />
+                  </TooltipContent>
+                </TooltipPortal>
+              )} */}
+        </Tooltip>
+      </TooltipProvider>
+
       <div className="space-y-6">
         <Card className="w-full">
           {/* <CardHeader>
@@ -198,48 +247,6 @@ export default function ProductVariantForm({
           <p className="text-muted-foreground mb-4">
             Henüz hiç varyant eklenmemiş.
           </p>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div>
-                  <Label htmlFor={`color`}>Renk</Label>
-                  <Controller
-                    control={control}
-                    name={`variants`}
-                    rules={{ required: "Renk seçimi zorunludur." }}
-                    render={({ field }) => (
-                      <MultiSelectColorVariant
-                        options={colors.sort((a, b) =>
-                          a.name.localeCompare(b.name, "tr")
-                        )}
-                        onChange={handleSelectColor}
-                        selected={selectedColors}
-                      />
-                    )}
-                  />
-                  <Button
-                    type="button"
-                    className="ml-auto"
-                    onClick={handleAddColor}
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Renk varyantı ekle
-                  </Button>
-                </div>
-              </TooltipTrigger>
-              {/* {getIsDisabled(variantIndex) && (
-                <TooltipPortal>
-                  <TooltipContent className="TooltipContent" sideOffset={5}>
-                    <Button variant={"info"}>
-                      Bu alan, varyasyon görselleri yüklendiği için
-                      düzenlenemez. Tüm görselleri silip güncelleyebilirsiniz.
-                    </Button>
-                    <TooltipArrow className="TooltipArrow" />
-                  </TooltipContent>
-                </TooltipPortal>
-              )} */}
-            </Tooltip>
-          </TooltipProvider>
         </div>
       )}
     </div>
