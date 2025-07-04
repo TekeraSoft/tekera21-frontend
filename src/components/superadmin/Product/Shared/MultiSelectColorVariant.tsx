@@ -18,16 +18,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import ImageView from "@/components/shared/ImageView";
 
-export type OptionType = {
-  value: string;
-  label: string;
-  image?: string;
+export type ColorOptionType = {
+  name: string;
+  hex: string;
 };
 
 interface MultiSelectProps {
-  options: OptionType[];
+  options: ColorOptionType[];
   selected: { value: string }[];
   onChange: (selected: { value: string }[]) => void;
   placeholder?: string;
@@ -36,12 +34,12 @@ interface MultiSelectProps {
   disabled?: boolean;
 }
 
-export function MultiSelect({
+export function MultiSelectColorVariant({
   options,
   selected,
   onChange,
-  placeholder = "Select items",
-  emptyMessage = "No items found.",
+  placeholder = "Renk varyantlarını seçin",
+  emptyMessage = "Renk varyantı bulunamadı.",
   className,
   disabled = false,
 }: MultiSelectProps) {
@@ -60,8 +58,8 @@ export function MultiSelect({
   };
 
   const selectedLabels = selected.map((selected) => {
-    const option = options.find((option) => option.value === selected.value);
-    return option?.label || selected.value;
+    const option = options.find((option) => option.name === selected.value);
+    return option?.name || selected.value;
   });
 
   return (
@@ -78,13 +76,13 @@ export function MultiSelect({
               <span className="text-muted-foreground">{placeholder}</span>
             ) : selected.length > 2 ? (
               <div className="flex items-center gap-1">
-                <Badge variant="secondary" className="rounded-sm">
+                <Badge variant="warning" className="rounded-sm">
                   {selectedLabels[0]}
                 </Badge>
-                <Badge variant="secondary" className="rounded-sm">
+                <Badge variant="warning" className="rounded-sm">
                   {selectedLabels[1]}
                 </Badge>
-                <Badge variant="secondary" className="rounded-sm">
+                <Badge variant="warning" className="rounded-sm">
                   +{selected.length - 2}
                 </Badge>
               </div>
@@ -107,23 +105,23 @@ export function MultiSelect({
             <CommandGroup className="max-h-64 overflow-auto">
               {options.map((option) => {
                 const isSelected = selected.filter(
-                  (item) => item.value === option.value
+                  (item) => item.value === option.name
                 ).length;
                 return (
                   <CommandItem
                     disabled={disabled}
-                    key={option.value}
-                    value={option.value}
-                    onSelect={() => handleSelect(option.value)}
+                    key={option.name}
+                    value={option.name}
+                    onSelect={() => handleSelect(option.name)}
                   >
                     <div className="flex items-center gap-2 w-full">
-                      {option.image && (
-                        <ImageView
-                          imageInfo={{ url: option.image, name: option.label }}
-                          className="h-4 w-4 rounded"
+                      {option.hex && (
+                        <div
+                          className="h-8 w-8"
+                          style={{ backgroundColor: option.hex }}
                         />
                       )}
-                      <span>{option.label}</span>
+                      <span>{option.name}</span>
                       <Check
                         className={cn(
                           "ml-auto h-4 w-4",
@@ -137,52 +135,7 @@ export function MultiSelect({
             </CommandGroup>
           </CommandList>
         </Command>
-        {selected.length > 0 && (
-          <div className="p-2 border-t flex flex-wrap gap-1">
-            {selected.map((selectedItem) => {
-              const option = options.find(
-                (option) => option.value === selectedItem.value
-              );
-              return (
-                <Badge
-                  key={selectedItem.value}
-                  variant="warning"
-                  className="rounded-sm"
-                >
-                  {option?.label || selectedItem.value}
-                  <button
-                    className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        handleUnselect(selectedItem.value);
-                      }
-                    }}
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
-                    onClick={() => handleUnselect(selectedItem.value)}
-                  >
-                    <X className="h-3 w-3" />
-                    <span className="sr-only">
-                      Remove {option?.label || selectedItem.value}
-                    </span>
-                  </button>
-                </Badge>
-              );
-            })}
-            {selected.length > 0 && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-7 px-2"
-                onClick={() => onChange([])}
-              >
-                Clear
-              </Button>
-            )}
-          </div>
-        )}
+      
       </PopoverContent>
     </Popover>
   );

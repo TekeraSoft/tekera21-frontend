@@ -1,7 +1,7 @@
 "use client";
 import { Controller, useFormContext } from "react-hook-form";
 import { Label } from "@/components/ui/label";
-import { MultiSelect, OptionType } from "./MultiSelect";
+import { MultiSelectCategory, OptionType } from "./MultiSelectCategory";
 import { TProductFormData } from "@/types/ProductFormData";
 
 interface SubCategoriesSelectProps {
@@ -36,7 +36,7 @@ export function SubCategoriesSelect({
         name={name}
         rules={{ required: "Alt Kategori seçimi zorunlu" }}
         render={({ field }) => (
-          <MultiSelect
+          <MultiSelectCategory
             options={options}
             selected={
               Array.isArray(field.value)

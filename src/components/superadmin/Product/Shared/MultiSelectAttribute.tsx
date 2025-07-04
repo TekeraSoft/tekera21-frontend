@@ -98,7 +98,7 @@ export function MultiSelectAttribute({
         </PopoverContent>
       </Popover>
 
-      {selectedValues.length > 0 && (
+      {/* {selectedValues.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {selectedValues.map((value) => (
             <Badge key={value} variant="outline" className="px-2 py-1">
@@ -114,7 +114,7 @@ export function MultiSelectAttribute({
             </Badge>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 }

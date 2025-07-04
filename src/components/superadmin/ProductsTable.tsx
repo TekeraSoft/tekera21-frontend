@@ -270,7 +270,13 @@ export function ProductsTable() {
                   <TableCell className="font-medium">{product.name}</TableCell>
                   <TableCell>{product.brandName || ""}</TableCell>
                   <TableCell>
-                    ${product.variations[0]?.attributes[0]?.price || 0}
+                    {typeof product.variations[0]?.attributes[0]?.price ===
+                    "number"
+                      ? new Intl.NumberFormat("tr-TR", {
+                          style: "currency",
+                          currency: product.currencyType || "TRY",
+                        }).format(product.variations[0]?.attributes[0]?.price)
+                      : product.variations[0]?.attributes[0]?.price}
                   </TableCell>
                   <TableCell>
                     <span
@@ -403,17 +409,9 @@ export function ProductsTable() {
                           {/* Fiyat ve Stok Bilgileri */}
                           <div className="space-y-2">
                             <h5 className="font-medium text-sm text-muted-foreground uppercase">
-                              Fiyat & Stok
+                              Stok
                             </h5>
                             <div className="space-y-1 text-sm">
-                              <div className="flex justify-between">
-                                <span>Fiyat:</span>
-                                <span className="font-semibold">
-                                  $
-                                  {product.variations[0]?.attributes[0]
-                                    ?.price || 0}
-                                </span>
-                              </div>
                               <div className="flex justify-between">
                                 <span>Stok:</span>
                                 <span
