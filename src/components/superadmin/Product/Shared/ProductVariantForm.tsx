@@ -163,39 +163,37 @@ export default function ProductVariantForm({
     console.log("deleted", deletedVariants);
 
     // 1. Silinmesi gerekenleri kaldır
-    deletedVariants.length &&
-      deletedVariants.forEach((deleted) => {
-        const index = fields.findIndex(
-          (field) => field.color === deleted.color
-        );
-        if (index !== -1) {
-          if (handleDeleteImages) {
-            deleted.images.forEach((image) => handleDeleteImages(image, index));
-          }
-          console.log("braso");
-          setStockAttributeImages((prev) => {
-            const newImages = { ...prev };
-            delete newImages[index];
-            return reindexStockAttributeImages(newImages, index);
-          });
-          setSelectedAttributes((prev) => {
-            const entries = Object.entries(prev)
-              .filter(([key]) => Number(key) !== index)
-              .sort(([a], [b]) => Number(a) - Number(b));
 
-            const reindexed: Record<
-              number,
-              Record<string, string | string[]>
-            > = {};
-            entries.forEach(([_, value], newIndex) => {
-              reindexed[newIndex] = value;
-            });
-
-            return reindexed;
-          });
-          remove(index);
+    deletedVariants.forEach((deleted) => {
+      const index = fields.findIndex((field) => field.color === deleted.color);
+      if (index !== -1) {
+        if (handleDeleteImages) {
+          deleted.images.forEach((image) => handleDeleteImages(image, index));
         }
-      });
+        console.log("braso");
+        setStockAttributeImages((prev) => {
+          const newImages = { ...prev };
+          delete newImages[index];
+          return reindexStockAttributeImages(newImages, index);
+        });
+        setSelectedAttributes((prev) => {
+          const entries = Object.entries(prev)
+            .filter(([key]) => Number(key) !== index)
+            .sort(([a], [b]) => Number(a) - Number(b));
+
+          const reindexed: Record<
+            number,
+            Record<string, string | string[]>
+          > = {};
+          entries.forEach(([_, value], newIndex) => {
+            reindexed[newIndex] = value;
+          });
+
+          return reindexed;
+        });
+        remove(index);
+      }
+    });
 
     // 2. Yeni eklenmesi gerekenleri ekle
     selectedColors.forEach((color) => {
