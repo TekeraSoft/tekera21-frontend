@@ -52,7 +52,7 @@ export default function ProductVariantForm({
     Record<number, Record<string, string | string[]>>
   >({});
 
-  const { append: appendVariation } = useFieldArray({
+  const { append, fields, remove } = useFieldArray({
     control,
     name: "variants",
   });
@@ -86,46 +86,47 @@ export default function ProductVariantForm({
   //     attributes: [],
   //   });
   // };
-  const removeVariant = (variantIndex: number) => {
-    // Görsel silme işlemleri
-    if (watchedVariants[variantIndex]?.images?.length && handleDeleteImages) {
-      watchedVariants[variantIndex].images.forEach((image) =>
-        handleDeleteImages(image, variantIndex)
-      );
-    }
 
-    // Mevcut variants'ı al ve silinecek olanı çıkar
-    const currentVariants = [...watchedVariants];
-    currentVariants.splice(variantIndex, 1);
+  // const removeVariant = (variantIndex: number) => {
+  //   // Görsel silme işlemleri
+  //   if (watchedVariants[variantIndex]?.images?.length && handleDeleteImages) {
+  //     watchedVariants[variantIndex].images.forEach((image) =>
+  //       handleDeleteImages(image, variantIndex)
+  //     );
+  //   }
 
-    // Form'u güncelle - bu UI'ı da güncelleyecek
-    setValue("variants", currentVariants, {
-      shouldValidate: true,
-      shouldDirty: true,
-      shouldTouch: true,
-    });
+  //   // Mevcut variants'ı al ve silinecek olanı çıkar
+  //   const currentVariants = [...watchedVariants];
+  //   currentVariants.splice(variantIndex, 1);
 
-    // StockAttributeImages'ı reindex et
-    setStockAttributeImages((prev) => {
-      const newImages = { ...prev };
-      delete newImages[variantIndex];
-      return reindexStockAttributeImages(newImages, variantIndex);
-    });
+  //   // Form'u güncelle - bu UI'ı da güncelleyecek
+  //   setValue("variants", currentVariants, {
+  //     shouldValidate: true,
+  //     shouldDirty: true,
+  //     shouldTouch: true,
+  //   });
 
-    // SelectedAttributes'ı reindex et
-    setSelectedAttributes((prev) => {
-      const entries = Object.entries(prev)
-        .filter(([key]) => Number(key) !== variantIndex)
-        .sort(([a], [b]) => Number(a) - Number(b));
+  //   // StockAttributeImages'ı reindex et
+  //   setStockAttributeImages((prev) => {
+  //     const newImages = { ...prev };
+  //     delete newImages[variantIndex];
+  //     return reindexStockAttributeImages(newImages, variantIndex);
+  //   });
 
-      const reindexed: Record<number, Record<string, string | string[]>> = {};
-      entries.forEach(([_, value], newIndex) => {
-        reindexed[newIndex] = value;
-      });
+  //   // SelectedAttributes'ı reindex et
+  //   setSelectedAttributes((prev) => {
+  //     const entries = Object.entries(prev)
+  //       .filter(([key]) => Number(key) !== variantIndex)
+  //       .sort(([a], [b]) => Number(a) - Number(b));
 
-      return reindexed;
-    });
-  };
+  //     const reindexed: Record<number, Record<string, string | string[]>> = {};
+  //     entries.forEach(([_, value], newIndex) => {
+  //       reindexed[newIndex] = value;
+  //     });
+
+  //     return reindexed;
+  //   });
+  // };
 
   // const exportJSON = () => {
   //   const jsonString = JSON.stringify({ variants }, null, 2);
@@ -138,11 +139,11 @@ export default function ProductVariantForm({
   const handleSelectColor = (values: { value: string }[]) => {
     setSelectedColors(values);
   };
-  console.log("selectedColors", selectedColors);
+  // console.log("selectedColors", selectedColors);
 
   const handleAddColor = () => {
     selectedColors.map((color) =>
-      appendVariation({
+      append({
         modelName: color.value + "modeli",
         modelCode: color.value + "kodu",
         images: [],
@@ -150,6 +151,57 @@ export default function ProductVariantForm({
         attributes: [],
       })
     );
+  };
+  const handleUpdateVariants = () => {
+    const deletedVariants = watchedVariants.filter(
+      (variant) =>
+        !selectedColors.some((color) => color.value === variant.color)
+    );
+
+    // 1. Silinmesi gerekenleri kaldır
+    deletedVariants.forEach((deleted) => {
+      const index = fields.findIndex((field) => field.color === deleted.color);
+      if (index !== -1) {
+        if (handleDeleteImages) {
+          deleted.images.forEach((image) => handleDeleteImages(image, index));
+        }
+        setStockAttributeImages((prev) => {
+          const newImages = { ...prev };
+          delete newImages[index];
+          return reindexStockAttributeImages(newImages, index);
+        });
+        setSelectedAttributes((prev) => {
+          const entries = Object.entries(prev)
+            .filter(([key]) => Number(key) !== index)
+            .sort(([a], [b]) => Number(a) - Number(b));
+
+          const reindexed: Record<
+            number,
+            Record<string, string | string[]>
+          > = {};
+          entries.forEach(([_, value], newIndex) => {
+            reindexed[newIndex] = value;
+          });
+
+          return reindexed;
+        });
+        remove(index);
+      }
+    });
+
+    // 2. Yeni eklenmesi gerekenleri ekle
+    selectedColors.forEach((color) => {
+      const exists = fields.some((field) => field.color === color.value);
+      if (!exists) {
+        append({
+          modelName: `${color.value} modeli`,
+          modelCode: `${color.value} kodu`,
+          images: [],
+          color: color.value,
+          attributes: [],
+        });
+      }
+    });
   };
 
   return (
@@ -159,42 +211,47 @@ export default function ProductVariantForm({
         <div className="flex gap-2"></div>
       </div>
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div>
-              <Label htmlFor={`color`}>Renk</Label>
-              <div className="flex items-center gap-2">
-                <div className="flex-1 block">
-                  <Controller
-                    control={control}
-                    name={`variants`}
-                    rules={{ required: "Renk seçimi zorunludur." }}
-                    render={({ field }) => (
-                      <MultiSelectColorVariant
-                        options={colors.sort((a, b) =>
-                          a.name.localeCompare(b.name, "tr")
-                        )}
-                        onChange={handleSelectColor}
-                        selected={selectedColors}
-                      />
-                    )}
-                  />
-                </div>
+      {watchedVariants.length === 0 ? (
+        <div className="text-center py-12">
+          <p className="text-muted-foreground mb-4">
+            Henüz hiç varyant eklenmemiş.
+          </p>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
                 <div>
-                  <Button
-                    type="button"
-                    className="ml-auto"
-                    onClick={handleAddColor}
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Renk varyantı ekle
-                  </Button>
+                  <Label htmlFor={`color`}>Renk</Label>
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 block">
+                      <Controller
+                        control={control}
+                        name={`variants`}
+                        rules={{ required: "Renk seçimi zorunludur." }}
+                        render={({ field }) => (
+                          <MultiSelectColorVariant
+                            options={colors.sort((a, b) =>
+                              a.name.localeCompare(b.name, "tr")
+                            )}
+                            onChange={handleSelectColor}
+                            selected={selectedColors}
+                          />
+                        )}
+                      />
+                    </div>
+                    <div>
+                      <Button
+                        type="button"
+                        className="ml-auto"
+                        onClick={handleAddColor}
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Renk varyantı ekle
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </TooltipTrigger>
-          {/* {getIsDisabled(variantIndex) && (
+              </TooltipTrigger>
+              {/* {getIsDisabled(variantIndex) && (
                 <TooltipPortal>
                   <TooltipContent className="TooltipContent" sideOffset={5}>
                     <Button variant={"info"}>
@@ -205,8 +262,59 @@ export default function ProductVariantForm({
                   </TooltipContent>
                 </TooltipPortal>
               )} */}
-        </Tooltip>
-      </TooltipProvider>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      ) : (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div>
+                <Label htmlFor={`color`}>Renk</Label>
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 block">
+                    <Controller
+                      control={control}
+                      name={`variants`}
+                      rules={{ required: "Renk seçimi zorunludur." }}
+                      render={({ field }) => (
+                        <MultiSelectColorVariant
+                          options={colors.sort((a, b) =>
+                            a.name.localeCompare(b.name, "tr")
+                          )}
+                          onChange={handleSelectColor}
+                          selected={selectedColors}
+                        />
+                      )}
+                    />
+                  </div>
+                  <div>
+                    <Button
+                      type="button"
+                      className="ml-auto"
+                      onClick={handleUpdateVariants}
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      Varyantları güncelle
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </TooltipTrigger>
+            {/* {getIsDisabled(variantIndex) && (
+                <TooltipPortal>
+                  <TooltipContent className="TooltipContent" sideOffset={5}>
+                    <Button variant={"info"}>
+                      Bu alan, varyasyon görselleri yüklendiği için
+                      düzenlenemez. Tüm görselleri silip güncelleyebilirsiniz.
+                    </Button>
+                    <TooltipArrow className="TooltipArrow" />
+                  </TooltipContent>
+                </TooltipPortal>
+              )} */}
+          </Tooltip>
+        </TooltipProvider>
+      )}
 
       <div className="space-y-6">
         <Card className="w-full">
@@ -241,14 +349,6 @@ export default function ProductVariantForm({
         <Plus className="w-4 h-4 mr-2" />
         Renk varyantı ekle
       </Button> */}
-
-      {watchedVariants.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground mb-4">
-            Henüz hiç varyant eklenmemiş.
-          </p>
-        </div>
-      )}
     </div>
   );
 }

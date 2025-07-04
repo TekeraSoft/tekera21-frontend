@@ -28,6 +28,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { TooltipArrow, TooltipPortal } from "@radix-ui/react-tooltip";
+import { ProductAttribute } from "@/types/product";
 
 interface IProps {
   selectedAttributes: Record<number, Record<string, string | string[]>>;
@@ -86,7 +87,7 @@ const Attributes = ({
   };
 
   const [showMediaLibrary, setShowMediaLibrary] = useState(false);
-
+  console.log("selectedAttributes", selectedAttributes);
   const getOtherAttributes = (primaryAttribute: string): IAttribute[] => {
     switch (primaryAttribute) {
       case "size":
@@ -143,17 +144,6 @@ const Attributes = ({
 
   const handlePrimaryAttributeTypeChange = (type: "size" | "weight") => {
     setPrimaryAttributeTypes(type);
-
-    // Clear previous selections when switching
-    // const newSelectedAttributes = { ...selectedAttributes };
-    // if (!newSelectedAttributes[variationIndex]) {
-    //   newSelectedAttributes[variationIndex] = {};
-    // }
-    // delete newSelectedAttributes[variationIndex].size;
-    // delete newSelectedAttributes[variationIndex].weight;
-    // delete newSelectedAttributes[variationIndex].style;
-    // setSelectedAttributes(newSelectedAttributes);
-    // setValue(`variants.${variationIndex}.attributes`, []);
   };
 
   const handleAttributeSelectionChange = (
@@ -226,41 +216,103 @@ const Attributes = ({
     );
   };
 
+  const convertVariants = (data: ProductAttribute[]) => {
+    // Tüm unique size'ları topla
+    const allSizes = Array.from(
+      new Set(
+        data
+          .map(
+            (variant) =>
+              variant.attributeDetails.find((a) => a.key === "size")?.value
+          )
+          .filter((v): v is string => typeof v === "string")
+      )
+    );
+
+    const result: Record<number, Record<string, string | string[]>> = {};
+
+    data.forEach((variant, index) => {
+      const styleValue =
+        variant.attributeDetails.find((a) => a.key === "style")?.value || "";
+
+      result[index] = {
+        size: allSizes,
+        style: styleValue === "Loose" ? "Regular" : styleValue,
+      };
+    });
+
+    return result;
+  };
 
   const handleChangeOtherAttributes = (
     attributeKey: string,
     values: string | string[]
   ) => {
-    watchedVariants.map((_, variationIndex) => {
-      const newSelectedAttributes = {
-        ...selectedAttributes,
-        [variationIndex]: {
-          ...selectedAttributes[variationIndex],
-          [attributeKey]: values,
-        },
-      };
-      setSelectedAttributes(newSelectedAttributes);
+    console.log("attributeKey", attributeKey);
+    console.log("values", values);
+    console.log("selectedAttr", selectedAttributes);
 
-      // Convert single values to arrays for combination generation
-      const attributesForCombination: Record<string, string[]> = {};
-      Object.entries(newSelectedAttributes[variationIndex] || {}).forEach(
-        ([key, value]) => {
-          if (Array.isArray(value)) {
-            attributesForCombination[key] = value;
-          } else if (value) {
-            attributesForCombination[key] = [value];
+    watchedVariants.forEach((variant, variantIndex) => {
+      const updatedAttributes = variant.attributes.map((attr, attrIndex) => {
+        const updatedDetails = attr.attributeDetails.map((detail) => {
+          if (detail.key === attributeKey) {
+            // Ensure value is always a string
+            let newValue: string;
+            if (Array.isArray(values)) {
+              newValue = values[0] ?? "";
+            } else {
+              newValue = values ?? "";
+            }
+            return {
+              ...detail,
+              value: newValue,
+            };
           }
-        }
-      );
+          return detail;
+        });
 
-      // Generate new attribute combinations
-      const newAttributes = generateAttributeCombinations(
-        attributesForCombination
-      );
+        return {
+          ...attr,
+          attributeDetails: updatedDetails,
+        };
+      });
 
-      setValue(`variants.${variationIndex}.attributes`, newAttributes);
+      console.log("updated", updatedAttributes);
+
+      setValue(`variants.${variantIndex}.attributes`, updatedAttributes);
+
+      setSelectedAttributes(convertVariants(updatedAttributes));
     });
   };
+  // watchedVariants.map((_, variationIndex) => {
+  //   const newSelectedAttributes = {
+  //     ...selectedAttributes,
+  //     [variationIndex]: {
+  //       ...selectedAttributes[variationIndex],
+  //       [attributeKey]: values,
+  //     },
+  //   };
+  //   setSelectedAttributes(newSelectedAttributes);
+
+  //   // Convert single values to arrays for combination generation
+  //   const attributesForCombination: Record<string, string[]> = {};
+  //   Object.entries(newSelectedAttributes[variationIndex] || {}).forEach(
+  //     ([key, value]) => {
+  //       if (Array.isArray(value)) {
+  //         attributesForCombination[key] = value;
+  //       } else if (value) {
+  //         attributesForCombination[key] = [value];
+  //       }
+  //     }
+  //   );
+
+  //   // Generate new attribute combinations
+  //   const newAttributes = generateAttributeCombinations(
+  //     attributesForCombination
+  //   );
+
+  //   setValue(`variants.${variationIndex}.attributes`, newAttributes);
+  // });
 
   return (
     <div className="space-y-4">
