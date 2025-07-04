@@ -57,7 +57,7 @@ export function MultiSelectColorVariant({
     }
   };
 
-  const selectedLabels = selected.map((selected) => {
+  const selectedLabels = selected?.map((selected) => {
     const option = options.find((option) => option.name === selected.value);
     return option?.name || selected.value;
   });
