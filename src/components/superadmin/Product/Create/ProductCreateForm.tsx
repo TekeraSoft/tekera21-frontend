@@ -41,7 +41,7 @@ export default function ProductCreateForm({
   }>({});
   const [productVideo, setProductVideo] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(4);
 
   const { toast } = useToast();
 

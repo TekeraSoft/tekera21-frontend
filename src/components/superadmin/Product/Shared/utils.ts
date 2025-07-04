@@ -123,9 +123,9 @@ export function detectPrimaryAttributeType(
   if (!attributes || attributes.length === 0) return "size";
 
   // Check if any attribute has size or weight
-  const hasSize = attributes.some((attr) =>
-    attr.attributeDetails.some((detail) => detail.key === "size")
-  );
+  // const hasSize = attributes.some((attr) =>
+  //   attr.attributeDetails.some((detail) => detail.key === "size")
+  // );
   const hasWeight = attributes.some((attr) =>
     attr.attributeDetails.some((detail) => detail.key === "weight")
   );

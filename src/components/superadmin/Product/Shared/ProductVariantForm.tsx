@@ -7,13 +7,6 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 import Attributes from "./Attributes";
 import { TProductFormData } from "@/types/ProductFormData";
@@ -26,6 +19,7 @@ import {
 import { TooltipArrow, TooltipPortal } from "@radix-ui/react-tooltip";
 import React, { useState } from "react";
 import { colors } from "./Data/Colors";
+import { MultiSelectColorVariant } from "./MultiSelectColorVariant";
 
 interface IProps {
   stockAttributeImages: {
@@ -83,15 +77,15 @@ export default function ProductVariantForm({
     return newImages;
   };
 
-  const addVariant = () => {
-    appendVariation({
-      modelName: "",
-      modelCode: "",
-      images: [],
-      color: "",
-      attributes: [],
-    });
-  };
+  // const addVariant = () => {
+  //   appendVariation({
+  //     modelName: "",
+  //     modelCode: "",
+  //     images: [],
+  //     color: "",
+  //     attributes: [],
+  //   });
+  // };
   const removeVariant = (variantIndex: number) => {
     // Görsel silme işlemleri
     if (watchedVariants[variantIndex]?.images?.length && handleDeleteImages) {
@@ -139,10 +133,22 @@ export default function ProductVariantForm({
   //   alert("JSON copied to clipboard!");
   // };
 
-  const getIsDisabled = (variantIndex: number) => {
-    return (
-      !!stockAttributeImages[variantIndex]?.length ||
-      !!watchedVariants[variantIndex].images.length
+  const [selectedColors, setSelectedColors] = useState<{ value: string }[]>([]);
+
+  const handleSelectColor = (values: { value: string }[]) => {
+    setSelectedColors(values);
+  };
+  console.log("selectedColors", selectedColors);
+
+  const handleAddColor = () => {
+    selectedColors.map((color) =>
+      appendVariation({
+        modelName: color.value + "modeli",
+        modelCode: color.value + "kodu",
+        images: [],
+        color: color.value,
+        attributes: [],
+      })
     );
   };
 
@@ -154,9 +160,8 @@ export default function ProductVariantForm({
       </div>
 
       <div className="space-y-6">
-        {watchedVariants.map((variant, variantIndex) => (
-          <Card key={variantIndex} className="w-full">
-            <CardHeader>
+        <Card className="w-full">
+          {/* <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Renk Varyantı {variantIndex + 1}</CardTitle>
                 <Button
@@ -168,166 +173,73 @@ export default function ProductVariantForm({
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <Label htmlFor={`modelName-${variantIndex}`}>Model Adı</Label>
-                  <Input
-                    id={`modelName-${variantIndex}`}
-                    value={variant.modelName}
-                    {...control.register(`variants.${variantIndex}.modelName`, {
-                      required: "Model adı zorunludur.",
-                      valueAsNumber: false,
-                    })}
-                    placeholder="Model adını girin"
-                  />
-                  {errors.variants?.[variantIndex]?.modelName && (
-                    <p className="text-sm text-red-500">
-                      {errors.variants[variantIndex].modelName.message}
-                    </p>
-                  )}
-                </div>
+            </CardHeader> */}
+          <CardContent className="space-y-4">
+            <Separator />
 
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div>
-                        <Label htmlFor={`modelCode-${variantIndex}`}>
-                          Model Kodu
-                        </Label>
-                        <Input
-                          disabled={getIsDisabled(variantIndex)}
-                          id={`modelCode-${variantIndex}`}
-                          value={variant.modelCode}
-                          {...control.register(
-                            `variants.${variantIndex}.modelCode`,
-                            {
-                              required: "Model kodu zorunludur.",
-                              valueAsNumber: false,
-                            }
-                          )}
-                          placeholder="Model kodunu girin"
-                        />
-                        {errors.variants?.[variantIndex]?.modelCode && (
-                          <p className="text-sm text-red-500">
-                            {errors.variants[variantIndex].modelCode.message}
-                          </p>
-                        )}
-                      </div>
-                    </TooltipTrigger>
-                    {getIsDisabled(variantIndex) && (
-                      <TooltipPortal>
-                        <TooltipContent
-                          className="TooltipContent"
-                          sideOffset={5}
-                        >
-                          <Button variant={"info"}>
-                            Bu alan, varyasyon görselleri yüklendiği için
-                            düzenlenemez. Tüm görselleri silip
-                            güncelleyebilirsiniz.
-                          </Button>
-                          <TooltipArrow className="TooltipArrow" />
-                        </TooltipContent>
-                      </TooltipPortal>
-                    )}
-                  </Tooltip>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div>
-                        <Label htmlFor={`color-${variantIndex}`}>Renk</Label>
-                        <Controller
-                          control={control}
-                          name={`variants.${variantIndex}.color`}
-                          rules={{ required: "Renk seçimi zorunludur." }}
-                          render={({ field }) => (
-                            <Select
-                              disabled={getIsDisabled(variantIndex)}
-                              value={field.value}
-                              onValueChange={(value) => field.onChange(value)}
-                            >
-                              <SelectTrigger id={`color-${variantIndex}`}>
-                                <SelectValue placeholder="Renk seçin" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {colors
-                                  .sort((a, b) =>
-                                    a.name.localeCompare(b.name, "tr")
-                                  )
-                                  .map((color) => (
-                                    <SelectItem
-                                      key={color.name}
-                                      value={color.name}
-                                    >
-                                      {color.name}
-                                    </SelectItem>
-                                  ))}
-                              </SelectContent>
-                            </Select>
-                          )}
-                        />
-
-                        {errors.variants?.[variantIndex]?.color && (
-                          <p className="text-sm text-red-500">
-                            {errors.variants[variantIndex].color.message}
-                          </p>
-                        )}
-                      </div>
-                    </TooltipTrigger>
-                    {getIsDisabled(variantIndex) && (
-                      <TooltipPortal>
-                        <TooltipContent
-                          className="TooltipContent"
-                          sideOffset={5}
-                        >
-                          <Button variant={"info"}>
-                            Bu alan, varyasyon görselleri yüklendiği için
-                            düzenlenemez. Tüm görselleri silip
-                            güncelleyebilirsiniz.
-                          </Button>
-                          <TooltipArrow className="TooltipArrow" />
-                        </TooltipContent>
-                      </TooltipPortal>
-                    )}
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-
-              {watch(`variants.${variantIndex}.color`) &&
-                watch(`variants.${variantIndex}.modelCode`) && (
-                  <>
-                    <Separator />
-
-                    <Attributes
-                      variationIndex={variantIndex}
-                      key={variantIndex}
-                      selectedAttributes={selectedAttributes}
-                      setSelectedAttributes={setSelectedAttributes}
-                      handleDeleteImages={handleDeleteImages}
-                      setStockAttributeImages={setStockAttributeImages}
-                      stockAttributeImages={stockAttributeImages}
-                    />
-                  </>
-                )}
-            </CardContent>
-          </Card>
-        ))}
+            <Attributes
+              selectedAttributes={selectedAttributes}
+              setSelectedAttributes={setSelectedAttributes}
+              handleDeleteImages={handleDeleteImages}
+              setStockAttributeImages={setStockAttributeImages}
+              stockAttributeImages={stockAttributeImages}
+            />
+          </CardContent>
+        </Card>
       </div>
 
-      <Button type="button" className="ml-auto" onClick={addVariant}>
+      {/* <Button type="button" className="ml-auto" onClick={addVariant}>
         <Plus className="w-4 h-4 mr-2" />
         Renk varyantı ekle
-      </Button>
+      </Button> */}
 
       {watchedVariants.length === 0 && (
         <div className="text-center py-12">
           <p className="text-muted-foreground mb-4">
             Henüz hiç varyant eklenmemiş.
           </p>
-          <Button type="button" onClick={addVariant}>
-            <Plus className="w-4 h-4 mr-2" />
-            İlk varyantınızı ekleyin.
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div>
+                  <Label htmlFor={`color`}>Renk</Label>
+                  <Controller
+                    control={control}
+                    name={`variants`}
+                    rules={{ required: "Renk seçimi zorunludur." }}
+                    render={({ field }) => (
+                      <MultiSelectColorVariant
+                        options={colors.sort((a, b) =>
+                          a.name.localeCompare(b.name, "tr")
+                        )}
+                        onChange={handleSelectColor}
+                        selected={selectedColors}
+                      />
+                    )}
+                  />
+                  <Button
+                    type="button"
+                    className="ml-auto"
+                    onClick={handleAddColor}
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Renk varyantı ekle
+                  </Button>
+                </div>
+              </TooltipTrigger>
+              {/* {getIsDisabled(variantIndex) && (
+                <TooltipPortal>
+                  <TooltipContent className="TooltipContent" sideOffset={5}>
+                    <Button variant={"info"}>
+                      Bu alan, varyasyon görselleri yüklendiği için
+                      düzenlenemez. Tüm görselleri silip güncelleyebilirsiniz.
+                    </Button>
+                    <TooltipArrow className="TooltipArrow" />
+                  </TooltipContent>
+                </TooltipPortal>
+              )} */}
+            </Tooltip>
+          </TooltipProvider>
         </div>
       )}
     </div>
