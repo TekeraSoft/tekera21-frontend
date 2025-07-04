@@ -571,7 +571,7 @@ export function ProductsTable() {
                                             const stock = attr.stock ?? "-";
                                             const isAvailable =
                                               Number(attr.stock) > 0;
-                                            attr;
+
                                             const discountPrice =
                                               attr.discountPrice ?? "-";
 
