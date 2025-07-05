@@ -243,7 +243,6 @@ export default function ProductUpdateForm({
     setDeleteImages((prev) => [...prev, url]);
   };
 
-  console.log("product",product)
 
   return (
     <div className=" mx-auto p-6">

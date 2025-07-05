@@ -316,6 +316,20 @@ const Attributes = ({
                                   <Camera className="w-9 h-9" />
                                 </div>
                               </div>
+                            ) : stockAttributeImages[variationIndex]?.length ? (
+                              <div className="relative group">
+                                <img
+                                  src={URL.createObjectURL(
+                                    stockAttributeImages[variationIndex][0]
+                                  )}
+                                  alt={`Stock ${variationIndex} 
+                                  }`}
+                                  className="w-20 h-20 object-cover rounded border"
+                                />
+                                <div className="w-20 h-20 opacity-0 hover:opacity-100 flex justify-center items-center bg-white/50 absolute inset-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity">
+                                  <Camera className="w-9 h-9" />
+                                </div>
+                              </div>
                             ) : (
                               <Camera className="h-20 w-20 hover:text-secondary transition-colors" />
                             )}

@@ -94,54 +94,67 @@ export default function ProductVariantForm({
     );
   };
   const handleUpdateVariants = () => {
-    const deletedVariants = watchedVariants.filter(
-      (variant) =>
+    // 1. Silinmesi gereken indeksleri belirle
+    const deletedIndices = watchedVariants
+      .map((variant, index) =>
         !selectedColors.some((color) => color.value === variant.color)
-    );
+          ? index
+          : -1
+      )
+      .filter((i) => i !== -1)
+      .sort((a, b) => a - b); // 🔁 Artan sırada, çünkü reindex fonksiyonu bu sırayla mantıklı çalışır
 
-    console.log("deleted", deletedVariants);
+    // 2. Görselleri sil
+    if (handleDeleteImages) {
+      deletedIndices.forEach((index) => {
+        const images = watchedVariants[index]?.images || [];
+        images.forEach((image) => handleDeleteImages(image, index));
+      });
+    }
 
-    // 1. Silinmesi gerekenleri kaldır
+    // 3. stockAttributeImages state'ini güncelle
+    setStockAttributeImages((prev) => {
+      let updated = { ...prev };
 
-    deletedVariants.forEach((deleted) => {
-      const index = watchedVariants.findIndex(
-        (field) => field.color === deleted.color
-      );
-      if (index !== -1) {
-        if (handleDeleteImages) {
-          deleted.images.forEach((image) => handleDeleteImages(image, index));
-        }
-        console.log("braso");
-        setStockAttributeImages((prev) => {
-          const newImages = { ...prev };
-          delete newImages[index];
-          return reindexStockAttributeImages(newImages, index);
+      // 🔴 Önce tüm silinecek index'leri temizle
+      deletedIndices.forEach((index) => {
+        delete updated[index];
+      });
+
+      // 🟡 Ardından reindex işlemini sırayla uygula
+      deletedIndices
+        .sort((a, b) => a - b) // artan sırada
+        .forEach((removedIndex) => {
+          updated = reindexStockAttributeImages(updated, removedIndex);
         });
-        setSelectedAttributes((prev) => {
-          const entries = Object.entries(prev)
-            .filter(([key]) => Number(key) !== index)
-            .sort(([a], [b]) => Number(a) - Number(b));
 
-          const reindexed: Record<
-            number,
-            Record<string, string | string[]>
-          > = {};
-          entries.forEach(([_, value], newIndex) => {
-            reindexed[newIndex] = value;
-          });
+      return updated;
+    });
+    // 4. selectedAttributes state'ini güncelle
+    setSelectedAttributes((prev) => {
+      let updatedEntries = Object.entries(prev)
+        .filter(([key]) => !deletedIndices.includes(Number(key)))
+        .sort(([a], [b]) => Number(a) - Number(b));
 
-          return reindexed;
-        });
-        remove(index);
-      }
+      // Artan sırayla index'leri yeniden düzenle
+      const reindexed: Record<number, Record<string, string | string[]>> = {};
+      updatedEntries.forEach(([_, value], newIndex) => {
+        reindexed[newIndex] = value;
+      });
+
+      return reindexed;
     });
 
-    // 2. Yeni eklenmesi gerekenleri ekle
+    // 5. Alanları formdan sil
+    if (deletedIndices.length > 0) {
+      remove(deletedIndices.sort((a, b) => b - a)); // React Hook Form için azalan sırada sil
+    }
+
+    // 6. Yeni renkleri ekle
     selectedColors.forEach((color) => {
       const exists = watchedVariants.some(
         (field) => field.color === color.value
       );
-      console.log("exist", exists);
       if (!exists) {
         append({
           modelName: `${color.value} modeli`,
