@@ -255,7 +255,9 @@ const Attributes = ({
     watchedVariants.forEach((variant, variantIndex) => {
       const updatedAttributes = variant.attributes.map((attr, attrIndex) => {
         const updatedDetails = attr.attributeDetails.map((detail) => {
+          
           if (detail.key === attributeKey) {
+            console.log("detail",detail)
             // Ensure value is always a string
             let newValue: string;
             if (Array.isArray(values)) {
@@ -268,7 +270,17 @@ const Attributes = ({
               value: newValue,
             };
           }
-          return detail;
+          // Ensure all other details also have string value
+          let valueToUse: string;
+          if (Array.isArray(detail.value)) {
+            valueToUse = detail.value[0] ?? "";
+          } else {
+            valueToUse = detail.value ?? "";
+          }
+          return {
+            key: attributeKey,
+            value: valueToUse,
+          };
         });
 
         return {
