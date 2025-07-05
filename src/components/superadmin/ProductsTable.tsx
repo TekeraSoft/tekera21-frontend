@@ -168,6 +168,8 @@ export function ProductsTable() {
 
   return loading ? (
     <ProductTableSkeleton />
+  ) : !data.page ? (
+    <>{"data.page not found"}</>
   ) : (
     <Card>
       <div className="flex items-center justify-between p-4">
@@ -210,11 +212,11 @@ export function ProductsTable() {
         </div>
         <div className="flex items-center space-x-2">
           <p className="text-sm text-muted-foreground">
-            Toplam <strong>{data.page.totalElements}</strong> üründen{" "}
+            Toplam <strong>{data?.page?.totalElements}</strong> üründen{" "}
             <strong>
-              {data.page.totalElements < data.page.size
-                ? data.page.totalElements
-                : data.page.size}
+              {data?.page?.totalElements < data?.page?.size
+                ? data?.page?.totalElements
+                : data?.page.size}
             </strong>
             'u gösteriliyor
           </p>

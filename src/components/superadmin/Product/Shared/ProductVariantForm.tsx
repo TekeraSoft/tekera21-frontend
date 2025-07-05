@@ -17,7 +17,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { TooltipArrow, TooltipPortal } from "@radix-ui/react-tooltip";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { colors } from "./Data/Colors";
 import { MultiSelectColorVariant } from "./MultiSelectColorVariant";
 
@@ -139,6 +139,8 @@ export default function ProductVariantForm({
   const handleSelectColor = (values: { value: string }[]) => {
     setSelectedColors(values);
   };
+
+  const initializedRef = useRef(false);
   // console.log("selectedColors", selectedColors);
 
   const handleAddColor = () => {
@@ -158,13 +160,17 @@ export default function ProductVariantForm({
         !selectedColors.some((color) => color.value === variant.color)
     );
 
+    console.log("deleted", deletedVariants);
+
     // 1. Silinmesi gerekenleri kaldır
+
     deletedVariants.forEach((deleted) => {
       const index = fields.findIndex((field) => field.color === deleted.color);
       if (index !== -1) {
         if (handleDeleteImages) {
           deleted.images.forEach((image) => handleDeleteImages(image, index));
         }
+        console.log("braso");
         setStockAttributeImages((prev) => {
           const newImages = { ...prev };
           delete newImages[index];
@@ -192,6 +198,7 @@ export default function ProductVariantForm({
     // 2. Yeni eklenmesi gerekenleri ekle
     selectedColors.forEach((color) => {
       const exists = fields.some((field) => field.color === color.value);
+      console.log("exist", exists);
       if (!exists) {
         append({
           modelName: `${color.value} modeli`,
@@ -203,6 +210,18 @@ export default function ProductVariantForm({
       }
     });
   };
+
+  useEffect(() => {
+    if (watchedVariants.length && !initializedRef.current) {
+      console.log("runn");
+      watchedVariants.forEach((variant) =>
+        setSelectedColors((prev) => [...prev, { value: variant.color }])
+      );
+      initializedRef.current = true;
+    }
+
+    return () => {};
+  }, [watchedVariants, initializedRef.current]);
 
   return (
     <div className="mx-auto space-y-6 flex flex-col">

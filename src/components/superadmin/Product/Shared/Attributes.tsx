@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/tooltip";
 import { TooltipArrow, TooltipPortal } from "@radix-ui/react-tooltip";
 import { ProductAttribute } from "@/types/product";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
 interface IProps {
   selectedAttributes: Record<number, Record<string, string | string[]>>;
@@ -63,6 +64,9 @@ const Attributes = ({
   } = useFormContext<TProductFormData>();
 
   const watchedVariants = watch("variants");
+  const [currentVariantIndex, setCurrentVariantIndex] = useState<number | null>(
+    null
+  );
   // const watchedAttributes = watch(`variants.${variationIndex}.attributes`);
 
   const [primaryAttributeTypes, setPrimaryAttributeTypes] = useState<
@@ -87,7 +91,7 @@ const Attributes = ({
   };
 
   const [showMediaLibrary, setShowMediaLibrary] = useState(false);
-  console.log("selectedAttributes", selectedAttributes);
+
   const getOtherAttributes = (primaryAttribute: string): IAttribute[] => {
     switch (primaryAttribute) {
       case "size":
@@ -248,10 +252,6 @@ const Attributes = ({
     attributeKey: string,
     values: string | string[]
   ) => {
-    console.log("attributeKey", attributeKey);
-    console.log("values", values);
-    console.log("selectedAttr", selectedAttributes);
-
     watchedVariants.forEach((variant, variantIndex) => {
       const updatedAttributes = variant.attributes.map((attr, attrIndex) => {
         const updatedDetails = attr.attributeDetails.map((detail) => {
@@ -289,8 +289,6 @@ const Attributes = ({
         };
       });
 
-      console.log("updated", updatedAttributes);
-
       setValue(`variants.${variantIndex}.attributes`, updatedAttributes);
 
       setSelectedAttributes(convertVariants(updatedAttributes));
@@ -325,6 +323,17 @@ const Attributes = ({
 
   //   setValue(`variants.${variationIndex}.attributes`, newAttributes);
   // });
+
+  const handleSetImages = (images: File[], variantIndex: number) => {
+    setStockAttributeImages((prev) => {
+      const newState = {
+        ...prev,
+        [`${variantIndex}`]: images,
+      };
+
+      return newState;
+    });
+  };
 
   return (
     <div className="space-y-4">
@@ -396,206 +405,218 @@ const Attributes = ({
           </Button> */}
         </div>
 
-        {watchedVariants.map((_, variationIndex) => (
-          <div key={variationIndex} className="flex">
-            <table className="text-sm text-left text-gray-700 min-w-max">
-              <thead className="bg-gray-100">
-                <tr className="h-14">
-                  <th className="px-4 py-2 font-medium">Görsel</th>
-                  <th className="px-4 py-2 font-medium">Özellikler</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                <tr className="hover:bg-gray-50">
-                  <td className="px-4 py-2">
-                    {watch(`variants.${variationIndex}.color`) &&
-                    watch(`variants.${variationIndex}.modelCode`) ? (
-                      <ImageLibrary
-                        setShowMediaLibrary={setShowMediaLibrary}
-                        showMediaLibrary={showMediaLibrary}
-                        handleDeleteImages={handleDeleteImages}
-                        watch={watch}
-                        imageName={`${
-                          watch("variants")[variationIndex].modelCode
-                        }_${
-                          watch(`variants.${variationIndex}.color`) || "default"
-                        }.webp`}
-                        variationIndex={variationIndex}
-                        images={stockAttributeImages[`${variationIndex}`] || []}
-                        onImagesChange={(images) =>
-                          setStockAttributeImages((prev) => ({
-                            ...prev,
-                            [`${variationIndex}`]: images,
-                          }))
-                        }
-                      />
-                    ) : (
-                      <div>
+        {watchedVariants.map((_, variationIndex) => {
+          return (
+            <div key={variationIndex} className="flex">
+              <table className="text-sm text-left text-gray-700 min-w-max">
+                <thead className="bg-gray-100">
+                  <tr className="h-14">
+                    <th className="px-4 py-2 font-medium">Görsel</th>
+                    <th className="px-4 py-2 font-medium">Özellikler</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-4 py-2">
+                      <div className="text-center w-full h-full">
+                        <Dialog
+                          open={showMediaLibrary}
+                          onOpenChange={setShowMediaLibrary}
+                        >
+                          <DialogTrigger
+                            asChild
+                            onClick={() =>
+                              setCurrentVariantIndex(variationIndex)
+                            }
+                          >
+                            <div className="flex items-center gap-2 cursor-pointer">
+                              <Camera className="h-8 w-8" />
+                            </div>
+                          </DialogTrigger>
+                          {currentVariantIndex === variationIndex && (
+                            <ImageLibrary
+                              setShowMediaLibrary={setShowMediaLibrary}
+                              showMediaLibrary={showMediaLibrary}
+                              handleDeleteImages={handleDeleteImages}
+                              watch={watch}
+                              imageName={`${
+                                watch("variants")[currentVariantIndex].modelCode
+                              }_${
+                                watch(
+                                  `variants.${currentVariantIndex}.color`
+                                ) || "default"
+                              }.webp`}
+                              variationIndex={currentVariantIndex}
+                              images={stockAttributeImages}
+                              onImagesChange={(images) => {
+                                handleSetImages(images, currentVariantIndex);
+                              }}
+                            />
+                          )}
+                        </Dialog>
+                      </div>
+                    </td>
+                    <td className="px-4 py-2">
+                      <div className="flex flex-col gap-2">
+                        Renk: {watchedVariants[variationIndex].color}
+                        <div>
+                          <Label htmlFor={`modelName-${variationIndex}`}>
+                            Model Adı
+                          </Label>
+                          <Input
+                            id={`modelName-${variationIndex}`}
+                            value={watchedVariants[variationIndex].modelName}
+                            {...control.register(
+                              `variants.${variationIndex}.modelName`,
+                              {
+                                required: "Model adı zorunludur.",
+                                valueAsNumber: false,
+                              }
+                            )}
+                            placeholder="Model adını girin"
+                          />
+                          {errors.variants?.[variationIndex]?.modelName && (
+                            <p className="text-sm text-red-500">
+                              {
+                                errors.variants[variationIndex].modelName
+                                  .message
+                              }
+                            </p>
+                          )}
+                        </div>
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <div>
-                                <Camera />
+                                <Label htmlFor={`modelCode-${variationIndex}`}>
+                                  Model Kodu
+                                </Label>
+                                <Input
+                                  disabled={getIsDisabled(variationIndex)}
+                                  id={`modelCode-${variationIndex}`}
+                                  value={
+                                    watchedVariants[variationIndex].modelCode
+                                  }
+                                  {...control.register(
+                                    `variants.${variationIndex}.modelCode`,
+                                    {
+                                      required: "Model kodu zorunludur.",
+                                      valueAsNumber: false,
+                                    }
+                                  )}
+                                  placeholder="Model kodunu girin"
+                                />
+                                {errors.variants?.[variationIndex]
+                                  ?.modelCode && (
+                                  <p className="text-sm text-red-500">
+                                    {
+                                      errors.variants[variationIndex].modelCode
+                                        .message
+                                    }
+                                  </p>
+                                )}
                               </div>
                             </TooltipTrigger>
-
-                            <TooltipPortal>
-                              <TooltipContent
-                                className="TooltipContent"
-                                sideOffset={5}
-                              >
-                                <Button variant={"info"}>
-                                  Bu alan, varyasyon görselleri yüklendiği için
-                                  düzenlenemez. Tüm görselleri silip
-                                  güncelleyebilirsiniz.
-                                </Button>
-                                <TooltipArrow className="TooltipArrow" />
-                              </TooltipContent>
-                            </TooltipPortal>
+                            {getIsDisabled(variationIndex) && (
+                              <TooltipPortal>
+                                <TooltipContent
+                                  className="TooltipContent"
+                                  sideOffset={5}
+                                >
+                                  <Button variant={"info"}>
+                                    Bu alan, varyasyon görselleri yüklendiği
+                                    için düzenlenemez. Tüm görselleri silip
+                                    güncelleyebilirsiniz.
+                                  </Button>
+                                  <TooltipArrow className="TooltipArrow" />
+                                </TooltipContent>
+                              </TooltipPortal>
+                            )}
                           </Tooltip>
                         </TooltipProvider>
-                      </div>
-                    )}
-                  </td>
-                  <td className="px-4 py-2">
-                    <div className="flex flex-col gap-2">
-                      Renk: {watchedVariants[variationIndex].color}
-                      <div>
-                        <Label htmlFor={`modelName-${variationIndex}`}>
-                          Model Adı
-                        </Label>
-                        <Input
-                          id={`modelName-${variationIndex}`}
-                          value={watchedVariants[variationIndex].modelName}
-                          {...control.register(
-                            `variants.${variationIndex}.modelName`,
-                            {
-                              required: "Model adı zorunludur.",
-                              valueAsNumber: false,
+                        <div className="space-y-4">
+                          <Label className="text-base font-semibold">
+                            {currentPrimaryAttributeType === "size"
+                              ? "Beden Seçimi"
+                              : "Ağırlık Seçimi"}
+                          </Label>
+                          <MultiSelectAttribute
+                            attribute={currentPrimaryAttribute}
+                            selectedValues={
+                              (getCurrentSelectedAttributes(variationIndex)[
+                                currentPrimaryAttribute.key
+                              ] as string[]) || []
                             }
-                          )}
-                          placeholder="Model adını girin"
-                        />
-                        {errors.variants?.[variationIndex]?.modelName && (
-                          <p className="text-sm text-red-500">
-                            {errors.variants[variationIndex].modelName.message}
-                          </p>
-                        )}
+                            onSelectionChange={(key, values) =>
+                              handleAttributeSelectionChange(
+                                key,
+                                values,
+                                variationIndex
+                              )
+                            }
+                          />
+                        </div>
                       </div>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <div>
-                              <Label htmlFor={`modelCode-${variationIndex}`}>
-                                Model Kodu
-                              </Label>
-                              <Input
-                                disabled={getIsDisabled(variationIndex)}
-                                id={`modelCode-${variationIndex}`}
-                                value={
-                                  watchedVariants[variationIndex].modelCode
-                                }
-                                {...control.register(
-                                  `variants.${variationIndex}.modelCode`,
-                                  {
-                                    required: "Model kodu zorunludur.",
-                                    valueAsNumber: false,
-                                  }
-                                )}
-                                placeholder="Model kodunu girin"
-                              />
-                              {errors.variants?.[variationIndex]?.modelCode && (
-                                <p className="text-sm text-red-500">
-                                  {
-                                    errors.variants[variationIndex].modelCode
-                                      .message
-                                  }
-                                </p>
-                              )}
-                            </div>
-                          </TooltipTrigger>
-                          {getIsDisabled(variationIndex) && (
-                            <TooltipPortal>
-                              <TooltipContent
-                                className="TooltipContent"
-                                sideOffset={5}
-                              >
-                                <Button variant={"info"}>
-                                  Bu alan, varyasyon görselleri yüklendiği için
-                                  düzenlenemez. Tüm görselleri silip
-                                  güncelleyebilirsiniz.
-                                </Button>
-                                <TooltipArrow className="TooltipArrow" />
-                              </TooltipContent>
-                            </TooltipPortal>
-                          )}
-                        </Tooltip>
-                      </TooltipProvider>
-                      <div className="space-y-4">
-                        <Label className="text-base font-semibold">
-                          {currentPrimaryAttributeType === "size"
-                            ? "Beden Seçimi"
-                            : "Ağırlık Seçimi"}
-                        </Label>
-                        <MultiSelectAttribute
-                          attribute={currentPrimaryAttribute}
-                          selectedValues={
-                            (getCurrentSelectedAttributes(variationIndex)[
-                              currentPrimaryAttribute.key
-                            ] as string[]) || []
-                          }
-                          onSelectionChange={(key, values) =>
-                            handleAttributeSelectionChange(
-                              key,
-                              values,
-                              variationIndex
-                            )
-                          }
-                        />
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
 
-            <table className="text-sm text-left text-gray-700">
-              <thead className="bg-gray-100">
-                <tr className="h-14">
-                  <th className="px-4 py-2 font-medium">
-                    {currentPrimaryAttributeType === "size"
-                      ? "Beden"
-                      : "Ağırlık"}
-                  </th>
+              <table className="text-sm text-left text-gray-700">
+                <thead className="bg-gray-100">
+                  <tr className="h-14">
+                    <th className="px-4 py-2 font-medium">
+                      {currentPrimaryAttributeType === "size"
+                        ? "Beden"
+                        : "Ağırlık"}
+                    </th>
 
-                  <th className="px-4 py-2 font-medium">Stok Adeti</th>
-                  <th className="px-4 py-2 font-medium">Fiyat</th>
-                  <th className="px-4 py-2 font-medium">İndirimli Fiyat</th>
-                  <th className="px-4 py-2 font-medium">Stok Kodu</th>
-                  <th className="px-4 py-2 font-medium">Barkod</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {watchedVariants[variationIndex].attributes?.map(
-                  (field, attrIndex) => {
-                    const attribute =
-                      watchedVariants[variationIndex].attributes?.[attrIndex];
-                    const primaryAttr = attribute?.attributeDetails?.find(
-                      (detail) => detail.key === currentPrimaryAttributeType
-                    );
+                    <th className="px-4 py-2 font-medium">Stok Adeti</th>
+                    <th className="px-4 py-2 font-medium">Fiyat</th>
+                    <th className="px-4 py-2 font-medium">İndirimli Fiyat</th>
+                    <th className="px-4 py-2 font-medium">Stok Kodu</th>
+                    <th className="px-4 py-2 font-medium">Barkod</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {watchedVariants[variationIndex].attributes?.map(
+                    (field, attrIndex) => {
+                      const attribute =
+                        watchedVariants[variationIndex].attributes?.[attrIndex];
+                      const primaryAttr = attribute?.attributeDetails?.find(
+                        (detail) => detail.key === currentPrimaryAttributeType
+                      );
 
-                    return (
-                      <tr key={attrIndex} className="hover:bg-gray-50">
-                        <td className="px-4 py-2">
-                          {primaryAttr?.value || "N/A"}
-                        </td>
+                      return (
+                        <tr key={attrIndex} className="hover:bg-gray-50">
+                          <td className="px-4 py-2">
+                            {primaryAttr?.value || "N/A"}
+                          </td>
 
-                        <td className="px-4 py-2">
-                          <Controller
-                            name={`variants.${variationIndex}.attributes.${attrIndex}.stock`}
-                            control={control}
-                            render={({ field }) => {
-                              return (
+                          <td className="px-4 py-2">
+                            <Controller
+                              name={`variants.${variationIndex}.attributes.${attrIndex}.stock`}
+                              control={control}
+                              render={({ field }) => {
+                                return (
+                                  <Input
+                                    {...field}
+                                    value={field.value ?? ""}
+                                    type="number"
+                                    className="h-8"
+                                    onChange={(e) =>
+                                      field.onChange(Number(e.target.value))
+                                    }
+                                  />
+                                );
+                              }}
+                            />
+                          </td>
+                          <td className="px-4 py-2">
+                            <Controller
+                              name={`variants.${variationIndex}.attributes.${attrIndex}.price`}
+                              control={control}
+                              render={({ field }) => (
                                 <Input
                                   {...field}
                                   value={field.value ?? ""}
@@ -605,78 +626,61 @@ const Attributes = ({
                                     field.onChange(Number(e.target.value))
                                   }
                                 />
-                              );
-                            }}
-                          />
-                        </td>
-                        <td className="px-4 py-2">
-                          <Controller
-                            name={`variants.${variationIndex}.attributes.${attrIndex}.price`}
-                            control={control}
-                            render={({ field }) => (
-                              <Input
-                                {...field}
-                                value={field.value ?? ""}
-                                type="number"
-                                className="h-8"
-                                onChange={(e) =>
-                                  field.onChange(Number(e.target.value))
-                                }
-                              />
-                            )}
-                          />
-                        </td>
-                        <td className="px-4 py-2">
-                          <Controller
-                            name={`variants.${variationIndex}.attributes.${attrIndex}.discountPrice`}
-                            control={control}
-                            render={({ field }) => (
-                              <Input
-                                {...field}
-                                value={field.value ?? ""}
-                                type="number"
-                                className="h-8"
-                                onChange={(e) =>
-                                  field.onChange(Number(e.target.value))
-                                }
-                              />
-                            )}
-                          />
-                        </td>
-                        <td className="px-4 py-2">
-                          <Controller
-                            name={`variants.${variationIndex}.attributes.${attrIndex}.sku`}
-                            control={control}
-                            render={({ field }) => (
-                              <Input
-                                {...field}
-                                value={field.value ?? ""}
-                                className="h-8"
-                              />
-                            )}
-                          />
-                        </td>
-                        <td className="px-4 py-2">
-                          <Controller
-                            name={`variants.${variationIndex}.attributes.${attrIndex}.barcode`}
-                            control={control}
-                            render={({ field }) => (
-                              <Input
-                                {...field}
-                                value={field.value ?? ""}
-                                className="h-8"
-                              />
-                            )}
-                          />
-                        </td>
-                      </tr>
-                    );
-                  }
-                )}
-              </tbody>
-            </table>
-          </div>
-        ))}
+                              )}
+                            />
+                          </td>
+                          <td className="px-4 py-2">
+                            <Controller
+                              name={`variants.${variationIndex}.attributes.${attrIndex}.discountPrice`}
+                              control={control}
+                              render={({ field }) => (
+                                <Input
+                                  {...field}
+                                  value={field.value ?? ""}
+                                  type="number"
+                                  className="h-8"
+                                  onChange={(e) =>
+                                    field.onChange(Number(e.target.value))
+                                  }
+                                />
+                              )}
+                            />
+                          </td>
+                          <td className="px-4 py-2">
+                            <Controller
+                              name={`variants.${variationIndex}.attributes.${attrIndex}.sku`}
+                              control={control}
+                              render={({ field }) => (
+                                <Input
+                                  {...field}
+                                  value={field.value ?? ""}
+                                  className="h-8"
+                                />
+                              )}
+                            />
+                          </td>
+                          <td className="px-4 py-2">
+                            <Controller
+                              name={`variants.${variationIndex}.attributes.${attrIndex}.barcode`}
+                              control={control}
+                              render={({ field }) => (
+                                <Input
+                                  {...field}
+                                  value={field.value ?? ""}
+                                  className="h-8"
+                                />
+                              )}
+                            />
+                          </td>
+                        </tr>
+                      );
+                    }
+                  )}
+                </tbody>
+              </table>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
