@@ -30,6 +30,8 @@ import {
 import { TooltipArrow, TooltipPortal } from "@radix-ui/react-tooltip";
 import { ProductAttribute } from "@/types/product";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { colors } from "./Data/Colors";
+import ImageView from "@/components/shared/ImageView";
 
 interface IProps {
   selectedAttributes: Record<number, Record<string, string | string[]>>;
@@ -220,110 +222,6 @@ const Attributes = ({
     );
   };
 
-  const convertVariants = (data: ProductAttribute[]) => {
-    // Tüm unique size'ları topla
-    const allSizes = Array.from(
-      new Set(
-        data
-          .map(
-            (variant) =>
-              variant.attributeDetails.find((a) => a.key === "size")?.value
-          )
-          .filter((v): v is string => typeof v === "string")
-      )
-    );
-
-    const result: Record<number, Record<string, string | string[]>> = {};
-
-    data.forEach((variant, index) => {
-      const styleValue =
-        variant.attributeDetails.find((a) => a.key === "style")?.value || "";
-
-      result[index] = {
-        size: allSizes,
-        style: styleValue === "Loose" ? "Regular" : styleValue,
-      };
-    });
-
-    return result;
-  };
-
-  const handleChangeOtherAttributes = (
-    attributeKey: string,
-    values: string | string[]
-  ) => {
-    watchedVariants.forEach((variant, variantIndex) => {
-      const updatedAttributes = variant.attributes.map((attr, attrIndex) => {
-        const updatedDetails = attr.attributeDetails.map((detail) => {
-          
-          if (detail.key === attributeKey) {
-            console.log("detail",detail)
-            // Ensure value is always a string
-            let newValue: string;
-            if (Array.isArray(values)) {
-              newValue = values[0] ?? "";
-            } else {
-              newValue = values ?? "";
-            }
-            return {
-              ...detail,
-              value: newValue,
-            };
-          }
-          // Ensure all other details also have string value
-          let valueToUse: string;
-          if (Array.isArray(detail.value)) {
-            valueToUse = detail.value[0] ?? "";
-          } else {
-            valueToUse = detail.value ?? "";
-          }
-          return {
-            key: attributeKey,
-            value: valueToUse,
-          };
-        });
-
-        return {
-          ...attr,
-          attributeDetails: updatedDetails,
-        };
-      });
-
-      setValue(`variants.${variantIndex}.attributes`, updatedAttributes);
-
-      setSelectedAttributes(convertVariants(updatedAttributes));
-    });
-  };
-  // watchedVariants.map((_, variationIndex) => {
-  //   const newSelectedAttributes = {
-  //     ...selectedAttributes,
-  //     [variationIndex]: {
-  //       ...selectedAttributes[variationIndex],
-  //       [attributeKey]: values,
-  //     },
-  //   };
-  //   setSelectedAttributes(newSelectedAttributes);
-
-  //   // Convert single values to arrays for combination generation
-  //   const attributesForCombination: Record<string, string[]> = {};
-  //   Object.entries(newSelectedAttributes[variationIndex] || {}).forEach(
-  //     ([key, value]) => {
-  //       if (Array.isArray(value)) {
-  //         attributesForCombination[key] = value;
-  //       } else if (value) {
-  //         attributesForCombination[key] = [value];
-  //       }
-  //     }
-  //   );
-
-  //   // Generate new attribute combinations
-  //   const newAttributes = generateAttributeCombinations(
-  //     attributesForCombination
-  //   );
-
-  //   setValue(`variants.${variationIndex}.attributes`, newAttributes);
-  // });
-
   const handleSetImages = (images: File[], variantIndex: number) => {
     setStockAttributeImages((prev) => {
       const newState = {
@@ -346,30 +244,6 @@ const Attributes = ({
           selectedType={currentPrimaryAttributeType}
           onTypeChange={(type) => handlePrimaryAttributeTypeChange(type)}
         />
-      )}
-
-      {!!getOtherAttributes(currentPrimaryAttribute.key).length && (
-        <div className="space-y-4">
-          <Label className="text-base font-semibold">Diğer Özellikler</Label>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {getOtherAttributes(currentPrimaryAttribute.key).map(
-              (attributeType) => (
-                <SingleSelectAttribute
-                  key={attributeType.key}
-                  attribute={attributeType}
-                  selectedValue={
-                    (getCurrentSelectedAttributes(0)[
-                      attributeType.key
-                    ] as string) || ""
-                  }
-                  onSelectionChange={(key, value) =>
-                    handleChangeOtherAttributes(key, value)
-                  }
-                />
-              )
-            )}
-          </div>
-        </div>
       )}
 
       <div className="space-y-4">
@@ -408,7 +282,7 @@ const Attributes = ({
         {watchedVariants.map((_, variationIndex) => {
           return (
             <div key={variationIndex} className="flex">
-              <table className="text-sm text-left text-gray-700 min-w-max">
+              <table className="text-sm text-left text-gray-700 max-w-36">
                 <thead className="bg-gray-100">
                   <tr className="h-14">
                     <th className="px-4 py-2 font-medium">Görsel</th>
@@ -417,48 +291,90 @@ const Attributes = ({
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   <tr className="hover:bg-gray-50">
-                    <td className="px-4 py-2">
-                      <div className="text-center w-full h-full">
-                        <Dialog
-                          open={showMediaLibrary}
-                          onOpenChange={setShowMediaLibrary}
+                    <td className="py-2">
+                      <Dialog
+                        open={showMediaLibrary}
+                        onOpenChange={setShowMediaLibrary}
+                      >
+                        <DialogTrigger
+                          asChild
+                          onClick={() => setCurrentVariantIndex(variationIndex)}
                         >
-                          <DialogTrigger
-                            asChild
-                            onClick={() =>
-                              setCurrentVariantIndex(variationIndex)
-                            }
-                          >
-                            <div className="flex items-center gap-2 cursor-pointer">
-                              <Camera className="h-8 w-8" />
-                            </div>
-                          </DialogTrigger>
-                          {currentVariantIndex === variationIndex && (
-                            <ImageLibrary
-                              setShowMediaLibrary={setShowMediaLibrary}
-                              showMediaLibrary={showMediaLibrary}
-                              handleDeleteImages={handleDeleteImages}
-                              watch={watch}
-                              imageName={`${
-                                watch("variants")[currentVariantIndex].modelCode
-                              }_${
-                                watch(
-                                  `variants.${currentVariantIndex}.color`
-                                ) || "default"
-                              }.webp`}
-                              variationIndex={currentVariantIndex}
-                              images={stockAttributeImages}
-                              onImagesChange={(images) => {
-                                handleSetImages(images, currentVariantIndex);
-                              }}
-                            />
-                          )}
-                        </Dialog>
-                      </div>
+                          <div className="flex items-center justify-center gap-2 cursor-pointer">
+                            {watchedVariants[variationIndex].images.length ? (
+                              <div className="relative">
+                                <ImageView
+                                  imageInfo={{
+                                    name: watchedVariants[variationIndex]
+                                      .modelCode,
+                                    url: watchedVariants[variationIndex]
+                                      .images[0],
+                                  }}
+                                  className="w-20 h-20 border rounded-md"
+                                />
+                                <div className="w-20 h-20 opacity-0 hover:opacity-100 flex justify-center items-center bg-white/50 absolute inset-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity">
+                                  <Camera className="w-9 h-9" />
+                                </div>
+                              </div>
+                            ) : (
+                              <Camera className="h-20 w-20 hover:text-secondary transition-colors" />
+                            )}
+                          </div>
+                        </DialogTrigger>
+                        {currentVariantIndex === variationIndex && (
+                          <ImageLibrary
+                            setShowMediaLibrary={setShowMediaLibrary}
+                            showMediaLibrary={showMediaLibrary}
+                            handleDeleteImages={handleDeleteImages}
+                            watch={watch}
+                            imageName={`${
+                              watch("variants")[currentVariantIndex].modelCode
+                            }_${
+                              watch(`variants.${currentVariantIndex}.color`) ||
+                              "default"
+                            }.webp`}
+                            variationIndex={currentVariantIndex}
+                            images={stockAttributeImages}
+                            onImagesChange={(images) => {
+                              handleSetImages(images, currentVariantIndex);
+                            }}
+                          />
+                        )}
+                      </Dialog>
                     </td>
-                    <td className="px-4 py-2">
+                    <td className="py-2 px-2">
                       <div className="flex flex-col gap-2">
-                        Renk: {watchedVariants[variationIndex].color}
+                        <div className="flex items-center">
+                          <Label
+                            className="mr-1"
+                            htmlFor={`variantColor-${variationIndex}`}
+                          >
+                            Renk:
+                          </Label>
+
+                          {(() => {
+                            const colorObj = colors.find(
+                              (color) =>
+                                color.name ===
+                                watchedVariants[variationIndex].color
+                            );
+                            return colorObj ? (
+                              <span
+                                style={{
+                                  display: "inline-block",
+                                  width: 16,
+                                  height: 16,
+                                  backgroundColor: colorObj.hex,
+                                  borderRadius: "50%",
+                                  marginLeft: 4,
+                                  verticalAlign: "middle",
+                                  border: "1px solid #ccc",
+                                }}
+                                title={colorObj.name}
+                              ></span>
+                            ) : null;
+                          })()}
+                        </div>
                         <div>
                           <Label htmlFor={`modelName-${variationIndex}`}>
                             Model Adı
@@ -535,11 +451,6 @@ const Attributes = ({
                           </Tooltip>
                         </TooltipProvider>
                         <div className="space-y-4">
-                          <Label className="text-base font-semibold">
-                            {currentPrimaryAttributeType === "size"
-                              ? "Beden Seçimi"
-                              : "Ağırlık Seçimi"}
-                          </Label>
                           <MultiSelectAttribute
                             attribute={currentPrimaryAttribute}
                             selectedValues={
@@ -556,6 +467,31 @@ const Attributes = ({
                             }
                           />
                         </div>
+                        {!!getOtherAttributes(currentPrimaryAttribute.key)
+                          .length && (
+                          <div className="space-y-4">
+                            {getOtherAttributes(
+                              currentPrimaryAttribute.key
+                            ).map((attributeType) => (
+                              <SingleSelectAttribute
+                                key={attributeType.key}
+                                attribute={attributeType}
+                                selectedValue={
+                                  (getCurrentSelectedAttributes(variationIndex)[
+                                    attributeType.key
+                                  ] as string) || ""
+                                }
+                                onSelectionChange={(key, value) =>
+                                  handleAttributeSelectionChange(
+                                    key,
+                                    value,
+                                    variationIndex
+                                  )
+                                }
+                              />
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </td>
                   </tr>

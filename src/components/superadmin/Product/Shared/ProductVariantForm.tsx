@@ -2,9 +2,8 @@
 
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 
@@ -16,7 +15,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { TooltipArrow, TooltipPortal } from "@radix-ui/react-tooltip";
 import React, { useEffect, useRef, useState } from "react";
 import { colors } from "./Data/Colors";
 import { MultiSelectColorVariant } from "./MultiSelectColorVariant";
@@ -43,7 +41,6 @@ export default function ProductVariantForm({
   const {
     control,
     watch,
-    setValue,
     formState: { errors },
   } = useFormContext<TProductFormData>();
   const watchedVariants = watch("variants");
@@ -52,7 +49,7 @@ export default function ProductVariantForm({
     Record<number, Record<string, string | string[]>>
   >({});
 
-  const { append, fields, remove } = useFieldArray({
+  const { append, remove } = useFieldArray({
     control,
     name: "variants",
   });
@@ -77,63 +74,6 @@ export default function ProductVariantForm({
     return newImages;
   };
 
-  // const addVariant = () => {
-  //   appendVariation({
-  //     modelName: "",
-  //     modelCode: "",
-  //     images: [],
-  //     color: "",
-  //     attributes: [],
-  //   });
-  // };
-
-  // const removeVariant = (variantIndex: number) => {
-  //   // Görsel silme işlemleri
-  //   if (watchedVariants[variantIndex]?.images?.length && handleDeleteImages) {
-  //     watchedVariants[variantIndex].images.forEach((image) =>
-  //       handleDeleteImages(image, variantIndex)
-  //     );
-  //   }
-
-  //   // Mevcut variants'ı al ve silinecek olanı çıkar
-  //   const currentVariants = [...watchedVariants];
-  //   currentVariants.splice(variantIndex, 1);
-
-  //   // Form'u güncelle - bu UI'ı da güncelleyecek
-  //   setValue("variants", currentVariants, {
-  //     shouldValidate: true,
-  //     shouldDirty: true,
-  //     shouldTouch: true,
-  //   });
-
-  //   // StockAttributeImages'ı reindex et
-  //   setStockAttributeImages((prev) => {
-  //     const newImages = { ...prev };
-  //     delete newImages[variantIndex];
-  //     return reindexStockAttributeImages(newImages, variantIndex);
-  //   });
-
-  //   // SelectedAttributes'ı reindex et
-  //   setSelectedAttributes((prev) => {
-  //     const entries = Object.entries(prev)
-  //       .filter(([key]) => Number(key) !== variantIndex)
-  //       .sort(([a], [b]) => Number(a) - Number(b));
-
-  //     const reindexed: Record<number, Record<string, string | string[]>> = {};
-  //     entries.forEach(([_, value], newIndex) => {
-  //       reindexed[newIndex] = value;
-  //     });
-
-  //     return reindexed;
-  //   });
-  // };
-
-  // const exportJSON = () => {
-  //   const jsonString = JSON.stringify({ variants }, null, 2);
-  //   navigator.clipboard.writeText(jsonString);
-  //   alert("JSON copied to clipboard!");
-  // };
-
   const [selectedColors, setSelectedColors] = useState<{ value: string }[]>([]);
 
   const handleSelectColor = (values: { value: string }[]) => {
@@ -141,7 +81,6 @@ export default function ProductVariantForm({
   };
 
   const initializedRef = useRef(false);
-  // console.log("selectedColors", selectedColors);
 
   const handleAddColor = () => {
     selectedColors.map((color) =>
@@ -165,7 +104,9 @@ export default function ProductVariantForm({
     // 1. Silinmesi gerekenleri kaldır
 
     deletedVariants.forEach((deleted) => {
-      const index = fields.findIndex((field) => field.color === deleted.color);
+      const index = watchedVariants.findIndex(
+        (field) => field.color === deleted.color
+      );
       if (index !== -1) {
         if (handleDeleteImages) {
           deleted.images.forEach((image) => handleDeleteImages(image, index));
@@ -197,7 +138,9 @@ export default function ProductVariantForm({
 
     // 2. Yeni eklenmesi gerekenleri ekle
     selectedColors.forEach((color) => {
-      const exists = fields.some((field) => field.color === color.value);
+      const exists = watchedVariants.some(
+        (field) => field.color === color.value
+      );
       console.log("exist", exists);
       if (!exists) {
         append({
@@ -270,17 +213,6 @@ export default function ProductVariantForm({
                   </div>
                 </div>
               </TooltipTrigger>
-              {/* {getIsDisabled(variantIndex) && (
-                <TooltipPortal>
-                  <TooltipContent className="TooltipContent" sideOffset={5}>
-                    <Button variant={"info"}>
-                      Bu alan, varyasyon görselleri yüklendiği için
-                      düzenlenemez. Tüm görselleri silip güncelleyebilirsiniz.
-                    </Button>
-                    <TooltipArrow className="TooltipArrow" />
-                  </TooltipContent>
-                </TooltipPortal>
-              )} */}
             </Tooltip>
           </TooltipProvider>
         </div>
@@ -320,17 +252,6 @@ export default function ProductVariantForm({
                 </div>
               </div>
             </TooltipTrigger>
-            {/* {getIsDisabled(variantIndex) && (
-                <TooltipPortal>
-                  <TooltipContent className="TooltipContent" sideOffset={5}>
-                    <Button variant={"info"}>
-                      Bu alan, varyasyon görselleri yüklendiği için
-                      düzenlenemez. Tüm görselleri silip güncelleyebilirsiniz.
-                    </Button>
-                    <TooltipArrow className="TooltipArrow" />
-                  </TooltipContent>
-                </TooltipPortal>
-              )} */}
           </Tooltip>
         </TooltipProvider>
       )}

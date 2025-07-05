@@ -142,7 +142,7 @@ export default function ProductUpdateForm({
       deleteImages: deleteImages,
     };
     console.log("formatted", formattedData);
-    console.log("watched", watch())
+    console.log("watched", watch());
     console.log("stockImages", stockAttributeImages);
     const formData = new FormData();
     formData.append(
@@ -212,25 +212,25 @@ export default function ProductUpdateForm({
       return;
     }
 
-    // const { success } = await updateProduct(formData);
-    // if (success) {
-    //   toast({
-    //     title: "Success",
-    //     description: "Product is updated.",
-    //     variant: "default",
-    //   });
-    //   setDeleteImages([]);
-    //   setStockAttributeImages({});
-    //   setLoading(false);
-    //   setProductVideo(null);
-    // } else {
-    //   toast({
-    //     title: "Error",
-    //     description: "Product cannot be updated.",
-    //     variant: "destructive",
-    //   });
-    //   setLoading(false);
-    // }
+    const { success } = await updateProduct(formData);
+    if (success) {
+      toast({
+        title: "Success",
+        description: "Product is updated.",
+        variant: "default",
+      });
+      setDeleteImages([]);
+      setStockAttributeImages({});
+      setLoading(false);
+      setProductVideo(null);
+    } else {
+      toast({
+        title: "Error",
+        description: "Product cannot be updated.",
+        variant: "destructive",
+      });
+      setLoading(false);
+    }
   };
 
   const handleDeleteImages = (url: string, variationIndex: number) => {
@@ -242,6 +242,8 @@ export default function ProductUpdateForm({
     setValue(`variants.${variationIndex}.images`, updatedImages);
     setDeleteImages((prev) => [...prev, url]);
   };
+
+  console.log("product",product)
 
   return (
     <div className=" mx-auto p-6">
@@ -374,7 +376,7 @@ export default function ProductUpdateForm({
               />
             </FormProvider>
             <div className="flex gap-4">
-              <Button type="submit" className="flex-1" >
+              <Button disabled={loading} type="submit" className="flex-1">
                 Gönder
               </Button>
             </div>
