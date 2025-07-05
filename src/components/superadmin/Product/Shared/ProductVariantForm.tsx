@@ -132,7 +132,7 @@ export default function ProductVariantForm({
     });
     // 4. selectedAttributes state'ini güncelle
     setSelectedAttributes((prev) => {
-      let updatedEntries = Object.entries(prev)
+      const updatedEntries = Object.entries(prev)
         .filter(([key]) => !deletedIndices.includes(Number(key)))
         .sort(([a], [b]) => Number(a) - Number(b));
 
