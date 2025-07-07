@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,73 +16,69 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Search, Plus, X, Upload, ImageIcon } from "lucide-react";
-import Image from "next/image";
-
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  category: string;
-}
+import { Search, Plus, X, Upload, ImageIcon, Minus } from "lucide-react";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { IProduct } from "@/types/product";
+import {
+  fetchProducts,
+  setError,
+} from "@/store/superadminSlices/product/productSlice";
+import ImageView from "@/components/shared/ImageView";
+import { createCollection } from "@/app/actions";
 
 interface Collection {
-  name: string;
+  collectionName: string;
   description: string;
   image: string;
-  products: Product[];
+  products: IProduct[];
 }
 
 // Mock products data
-const mockProducts: Product[] = [
-  {
-    id: "1",
-    name: "Wireless Headphones",
-    price: 99.99,
-    image: "/placeholder.svg?height=100&width=100",
-    category: "Electronics",
-  },
-  {
-    id: "2",
-    name: "Smart Watch",
-    price: 199.99,
-    image: "/placeholder.svg?height=100&width=100",
-    category: "Electronics",
-  },
-  {
-    id: "3",
-    name: "Coffee Mug",
-    price: 15.99,
-    image: "/placeholder.svg?height=100&width=100",
-    category: "Home",
-  },
-  {
-    id: "4",
-    name: "Notebook",
-    price: 12.99,
-    image: "/placeholder.svg?height=100&width=100",
-    category: "Stationery",
-  },
-  {
-    id: "5",
-    name: "Bluetooth Speaker",
-    price: 79.99,
-    image: "/placeholder.svg?height=100&width=100",
-    category: "Electronics",
-  },
-  {
-    id: "6",
-    name: "Water Bottle",
-    price: 24.99,
-    image: "/placeholder.svg?height=100&width=100",
-    category: "Sports",
-  },
-];
 
 export default function CreateCollectionPage() {
+  const { data, error, loading, success } = useAppSelector(
+    (state) => state.adminProducts
+  );
+  const pageCount = data.page.number;
+
+  const [displayedProducts, setDisplayedProducts] = useState<IProduct[]>([]);
+  const [collectionImage, setCollectionImage] = useState<File | null>(null);
+
+  const hasMore = data.page.totalPages > data.page.number;
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!success && !error && pageCount === 0) {
+      dispatch(fetchProducts({ page: 0, size: 3 }));
+    }
+
+    return () => {
+      if (error) {
+        dispatch(setError(null));
+      }
+    };
+  }, [success, error, pageCount]);
+
+  useEffect(() => {
+    if (pageCount === 0 && data.content.length > 0 && !loading) {
+      setDisplayedProducts(data.content);
+    }
+    if (pageCount > 0 && !loading && data.page.number === pageCount) {
+      if (data.content.length !== 0) {
+        setDisplayedProducts((prev) => [...prev, ...data.content]);
+      }
+    }
+
+    return () => {};
+  }, [pageCount, data, loading]);
+
+  const loadMoreProducts = () => {
+    if (loading || !hasMore) return;
+    dispatch(fetchProducts({ page: pageCount + 1, size: 3 }));
+  };
+
   const [collection, setCollection] = useState<Collection>({
-    name: "",
+    collectionName: "",
     description: "",
     image: "",
     products: [],
@@ -91,12 +87,6 @@ export default function CreateCollectionPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isProductDialogOpen, setIsProductDialogOpen] = useState(false);
 
-  const filteredProducts = mockProducts.filter(
-    (product) =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      !collection.products.some((p) => p.id === product.id)
-  );
-
   const handleInputChange = (field: keyof Collection, value: string) => {
     setCollection((prev) => ({
       ...prev,
@@ -104,7 +94,7 @@ export default function CreateCollectionPage() {
     }));
   };
 
-  const addProduct = (product: Product) => {
+  const addProduct = (product: IProduct) => {
     setCollection((prev) => ({
       ...prev,
       products: [...prev.products, product],
@@ -123,16 +113,45 @@ export default function CreateCollectionPage() {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setCollectionImage(file);
       const imageUrl = URL.createObjectURL(file);
       handleInputChange("image", imageUrl);
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append(`collectionName`, collection.collectionName);
+    formData.append(`description`, collection.description);
+
+    if (collectionImage) {
+      formData.append(`image`, collectionImage);
+    }
+
+    collection.products.map((product) =>
+      formData.append(`products`, product.id)
+    );
     console.log("Collection created:", collection);
-    // Here you would typically send the data to your API
-    alert("Collection created successfully!");
+
+    const {
+      data,
+      success: successCreateCollection,
+      message,
+    } = await createCollection(formData);
+    if (successCreateCollection) {
+      alert("success");
+    } else {
+      console.log("error", message);
+    }
+  };
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+
+    if (scrollHeight - scrollTop <= clientHeight + 100 && hasMore && !loading) {
+      loadMoreProducts();
+    }
   };
 
   return (
@@ -159,8 +178,10 @@ export default function CreateCollectionPage() {
                 <Input
                   id="collection-name"
                   placeholder="Koleksiyonun ismini girin"
-                  value={collection.name}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  value={collection.collectionName}
+                  onChange={(e) =>
+                    handleInputChange("collectionName", e.target.value)
+                  }
                   required
                 />
               </div>
@@ -183,12 +204,12 @@ export default function CreateCollectionPage() {
                 <div className="flex items-center space-x-4">
                   {collection.image ? (
                     <div className="relative">
-                      <Image
-                        src={collection.image || "/placeholder.svg"}
-                        alt="Collection preview"
-                        width={120}
-                        height={120}
-                        className="rounded-lg object-cover border"
+                      <ImageView
+                        imageInfo={{
+                          name: "collection preview",
+                          url: collection.image || "/placeholder.svg",
+                        }}
+                        className="w-20 h-20 rounded object-cover"
                       />
                       <Button
                         type="button"
@@ -229,9 +250,7 @@ export default function CreateCollectionPage() {
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle>
-                  Bu koleksiyondaki ürünler ({collection.products.length})
-                </CardTitle>
+                <CardTitle>Ürünler ({collection.products.length})</CardTitle>
                 <Dialog
                   open={isProductDialogOpen}
                   onOpenChange={setIsProductDialogOpen}
@@ -244,51 +263,82 @@ export default function CreateCollectionPage() {
                   </DialogTrigger>
                   <DialogContent className="max-w-2xl">
                     <DialogHeader>
-                      <DialogTitle>
-                        Ürünleri koleksiyonunuza ekleyin
-                      </DialogTitle>
+                      <DialogTitle>Koleksiyona Ürün Ekle</DialogTitle>
                     </DialogHeader>
                     <div className="space-y-4">
-                      <div className="relative">
+                      {/* <div className="relative">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                         <Input
-                          placeholder="Ürünleri ara.."
+                          placeholder="Ürün ara..."
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
                           className="pl-10"
                         />
-                      </div>
-                      <div className="max-h-96 overflow-y-auto space-y-2">
-                        {filteredProducts.map((product) => (
+                      </div> */}
+                      <div
+                        className="max-h-96 overflow-y-auto space-y-2"
+                        onScroll={handleScroll}
+                      >
+                        {displayedProducts.map((product) => (
                           <div
                             key={product.id}
                             className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer"
-                            onClick={() => addProduct(product)}
+                            onClick={() =>
+                              collection.products.some(
+                                (col) => col.id === product.id
+                              )
+                                ? removeProduct(product.id)
+                                : addProduct(product)
+                            }
                           >
-                            <Image
-                              src={product.image || "/placeholder.svg"}
-                              alt={product.name}
-                              width={50}
-                              height={50}
-                              className="rounded object-cover"
+                            <ImageView
+                              imageInfo={{
+                                name: product.name,
+                                url:
+                                  product.variations[0].images[0] ||
+                                  "/placeholder.svg",
+                              }}
+                              className="w-40 h-40 rounded object-cover"
                             />
                             <div className="flex-1">
                               <h4 className="font-medium">{product.name}</h4>
                               <div className="flex items-center space-x-2">
                                 <span className="text-lg font-semibold">
-                                  ${product.price}
+                                  ₺{product.variations[0].attributes[0].price}
                                 </span>
                                 <Badge variant="square">
-                                  {product.category}
+                                  {product.subCategories.length &&
+                                    product.subCategories[
+                                      product.subCategories.length - 1
+                                    ].name}
                                 </Badge>
                               </div>
                             </div>
-                            <Plus className="h-4 w-4 text-gray-400" />
+                            {collection.products.some(
+                              (col) => col.id === product.id
+                            ) ? (
+                              <Minus className="h-8 w-8 text-gray-400 hover:text-primary" />
+                            ) : (
+                              <Plus className="h-8 w-8 text-gray-400 hover:text-primary" />
+                            )}
                           </div>
                         ))}
-                        {filteredProducts.length === 0 && (
+                        {/* {loading && (
+                          <div className="text-center py-4">
+                            <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
+                            <p className="mt-2 text-sm text-gray-500">
+                              Ürünler yükleniyor...
+                            </p>
+                          </div>
+                        )} */}
+                        {displayedProducts.length === 0 && !loading && (
                           <p className="text-center text-gray-500 py-8">
-                            Ürün bulunamadı.
+                            Ürün bulunamadı
+                          </p>
+                        )}
+                        {!hasMore && displayedProducts.length > 0 && (
+                          <p className="text-center text-gray-500 py-4 text-sm">
+                            Tüm ürünler gösterildi
                           </p>
                         )}
                       </div>
@@ -305,10 +355,10 @@ export default function CreateCollectionPage() {
                       <Plus className="h-6 w-6 text-gray-400" />
                     </div>
                     <h3 className="text-lg font-medium text-gray-900">
-                      Hiç ürün eklenmedi.
+                      Ürün eklenmedi
                     </h3>
                     <p className="text-gray-500">
-                      Ürünleri koleksiyona ekleyerek koleksiyonunuzu tamamlayın.
+                      Başlamak için koleksiyonunuza ürün ekleyin
                     </p>
                   </div>
                 </div>
@@ -328,19 +378,27 @@ export default function CreateCollectionPage() {
                       >
                         <X className="h-3 w-3" />
                       </Button>
-                      <Image
-                        src={product.image || "/placeholder.svg"}
-                        alt={product.name}
-                        width={100}
-                        height={100}
-                        className="w-full h-32 object-cover rounded mb-3"
+                      <ImageView
+                        imageInfo={{
+                          name: product.name,
+                          url:
+                            product.variations[0].images[0] ||
+                            "/placeholder.svg",
+                        }}
+                        className="w-20 h-20 rounded object-cover"
                       />
                       <h4 className="font-medium mb-1">{product.name}</h4>
                       <div className="flex items-center justify-between">
                         <span className="text-lg font-semibold">
-                          ${product.price}
+                          ₺{product.variations[0].attributes[0].price}
                         </span>
-                        <Badge variant="secondary">{product.category}</Badge>
+                        <Badge variant="secondary">
+                          {" "}
+                          {product.subCategories.length &&
+                            product.subCategories[
+                              product.subCategories.length - 1
+                            ].name}
+                        </Badge>
                       </div>
                     </div>
                   ))}
@@ -355,7 +413,8 @@ export default function CreateCollectionPage() {
               type="submit"
               variant={"secondary"}
               disabled={
-                !collection.name.trim() || collection.products.length === 0
+                !collection.collectionName.trim() ||
+                collection.products.length === 0
               }
             >
               Oluştur

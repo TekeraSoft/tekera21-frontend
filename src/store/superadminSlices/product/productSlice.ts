@@ -67,8 +67,10 @@ interface ChangeStatusParams {
 export const fetchProducts = createAsyncThunk<IData, FetchProductsParams>(
   "products/fetchProducts",
   async (params, thunkAPI) => {
+    console.log("fetch çalıştı")
     try {
       const data = await getAdminProducts(params.page, params.size); // bu fonksiyon parametreleri almalı
+      console.log("data", data)
       return data;
     } catch (error: any) {
       console.log("Fetch error:", error);

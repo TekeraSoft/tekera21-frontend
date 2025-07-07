@@ -330,10 +330,17 @@ export async function createCollection(formData: FormData) {
   const products = formData.get("products") as string;
 
 
+
   try {
-    const { data } = await axiosInstance.get(
-      `/super-admin/createFashionCollection`
+    const { data } = await axiosInstance.post(
+      `/super-admin/createFashionCollection`, formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
+    revalidatePath("/");
     return { success: true, message: data.message, data: data };
   } catch (error) {
     console.log("createFashionCollection error:", error);
