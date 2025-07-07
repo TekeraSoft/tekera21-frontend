@@ -320,6 +320,23 @@ export async function getTargetPictureByProductById(prodId: string) {
     return { success: true, message: data.message, data: data };
   } catch (error) {
     console.log("getProducts error:", error);
-    return { success: false, message: error || "Failed to get products" };
+    return { success: false, message: error || "Failed to get target" };
+  }
+}
+export async function createCollection(formData: FormData) {
+  const collectionName = formData.get("collectionName") as string;
+  const image = formData.get("image") as File;
+  const description = formData.get("description") as string;
+  const products = formData.get("products") as string;
+
+
+  try {
+    const { data } = await axiosInstance.get(
+      `/super-admin/createFashionCollection`
+    );
+    return { success: true, message: data.message, data: data };
+  } catch (error) {
+    console.log("createFashionCollection error:", error);
+    return { success: false, message: error || "Failed to createFashionCollection" };
   }
 }

@@ -11,6 +11,7 @@ import {
   BarChart3,
   LucidePercentDiamond,
   LucideChartNoAxesColumnDecreasing,
+  LucideAirVent,
 } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useSidebar } from "@/context/SideBarContext";
@@ -54,6 +55,11 @@ export function SideBar() {
       name: "Create Category",
       path: "/superadmin/create/category",
       icon: LucideChartNoAxesColumnDecreasing,
+    },
+    user?.role.includes("products") && {
+      name: "Fashion Collection Oluştur",
+      path: "/superadmin/create/collection",
+      icon: LucideAirVent,
     },
     // user?.role.includes("products") && {
     //   name: "Create Target Image",
