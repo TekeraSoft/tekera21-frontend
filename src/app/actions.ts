@@ -356,7 +356,7 @@ export async function updateCollection(formData: FormData) {
   const description = formData.get("description") as string;
   const products = formData.getAll("products") as string[];
 
-  console.log("collectionName", collectionName, "id", id, "descr", description, "products", products)
+
 
   if (!collectionName || !description || !products.length || !id) {
     return { success: false, message: "Tüm alanlar zorunludur." }
@@ -395,21 +395,6 @@ export async function getAllCollection(page: string = "0", size: string = "8"): 
     return { success: false, message: error.message || "Failed to get all collection" };
   }
 }
-
-export async function deleteCollectionById(id: string) {
-  try {
-
-    const { data } = await axiosInstance.delete(
-      `/super-admin/deleteFashionCollection?id=${id}`
-    );
-    revalidatePath("/");
-    return { success: true, message: data.message, data: data };
-  } catch (error: any) {
-    console.log("deleteFashionCollection error:", error);
-    return { success: false, message: error.message || "Failed to delete deleteFashionCollection" };
-  }
-}
-
 export async function getCollectionById(id: string): Promise<{
   success: true;
   message: null;
@@ -429,6 +414,22 @@ export async function getCollectionById(id: string): Promise<{
     return { success: false, message: error.message || "Failed to getFashoinCollection" };
   }
 }
+
+export async function deleteCollectionById(id: string) {
+  try {
+
+    const { data } = await axiosInstance.delete(
+      `/super-admin/deleteFashionCollection?id=${id}`
+    );
+    revalidatePath("/");
+    return { success: true, message: data.message, data: data };
+  } catch (error: any) {
+    console.log("deleteFashionCollection error:", error);
+    return { success: false, message: error.message || "Failed to delete deleteFashionCollection" };
+  }
+}
+
+
 
 export async function getAllTheme() {
   try {
