@@ -34,6 +34,7 @@ import GeneralInformation from "../Shared/MainFields/GeneralInformation";
 import CurrencyAndProductType from "../Shared/MainFields/CurrencyAndProductType";
 import Tags from "../Shared/MainFields/Tags";
 import { FileUploadEnhanced } from "@/components/shared/FileUploadEnhanced";
+import ThemeSelect from "../Shared/MainFields/ThemeSelect";
 
 export default function ProductUpdateForm({
   categories,
@@ -243,7 +244,6 @@ export default function ProductUpdateForm({
     setDeleteImages((prev) => [...prev, url]);
   };
 
-
   return (
     <div className=" mx-auto p-6">
       <Card>
@@ -347,7 +347,7 @@ export default function ProductUpdateForm({
 
             {/* Tags */}
             <FormProvider {...methods}>
-              <Tags />
+              <ThemeSelect />
             </FormProvider>
 
             <Separator />

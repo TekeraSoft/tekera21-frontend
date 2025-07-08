@@ -25,6 +25,10 @@ import {
 } from "@/store/superadminSlices/product/productSlice";
 import ImageView from "@/components/shared/ImageView";
 import { createCollection } from "@/app/actions";
+import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
+import { FileUploadEnhanced } from "@/components/shared/FileUploadEnhanced";
+import { useToast } from "@/hooks/use-toast";
+import TopBar from "@/components/superadmin/TopBar";
 
 interface Collection {
   collectionName: string;
@@ -43,9 +47,12 @@ export default function CreateCollectionPage() {
 
   const [displayedProducts, setDisplayedProducts] = useState<IProduct[]>([]);
   const [collectionImage, setCollectionImage] = useState<File | null>(null);
+  const [loadingCreateCollection, setLoadingCreateCollection] = useState(false);
 
   const hasMore = data.page.totalPages > data.page.number;
   const dispatch = useAppDispatch();
+
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!success && !error && pageCount === 0) {
@@ -110,16 +117,8 @@ export default function CreateCollectionPage() {
     }));
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setCollectionImage(file);
-      const imageUrl = URL.createObjectURL(file);
-      handleInputChange("image", imageUrl);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
+    setLoadingCreateCollection(true);
     e.preventDefault();
     const formData = new FormData();
     formData.append(`collectionName`, collection.collectionName);
@@ -132,7 +131,6 @@ export default function CreateCollectionPage() {
     collection.products.map((product) =>
       formData.append(`products`, product.id)
     );
-    console.log("Collection created:", collection);
 
     const {
       data,
@@ -140,9 +138,19 @@ export default function CreateCollectionPage() {
       message,
     } = await createCollection(formData);
     if (successCreateCollection) {
-      alert("success");
+      setLoadingCreateCollection(false);
+      toast({
+        title: "Başarılı!",
+        description: "Ürün oluşturuldu.",
+        variant: "default",
+      });
     } else {
-      console.log("error", message);
+      setLoadingCreateCollection(false);
+      toast({
+        title: "Error",
+        description: message || "Ürün oluşturulamadı. Lütfen tekrar deneyin.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -155,8 +163,11 @@ export default function CreateCollectionPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50">
+      <TopBar>
+        <></>
+      </TopBar>
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 mt-4">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
             Yeni Koleksiyon Oluştur
@@ -188,59 +199,29 @@ export default function CreateCollectionPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="collection-description">Açıklama</Label>
-                <Textarea
-                  id="collection-description"
-                  placeholder="Koleksiyonunuzun detayını girin."
-                  rows={4}
-                  value={collection.description}
-                  onChange={(e) =>
-                    handleInputChange("description", e.target.value)
-                  }
+                <MarkdownEditor
+                  defaultValue={collection.description}
+                  onChange={(value) => handleInputChange("description", value)}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label>Koleksiyon fotoğrafı</Label>
                 <div className="flex items-center space-x-4">
-                  {collection.image ? (
-                    <div className="relative">
-                      <ImageView
-                        imageInfo={{
-                          name: "collection preview",
-                          url: collection.image || "/placeholder.svg",
-                        }}
-                        className="w-20 h-20 rounded object-cover"
-                      />
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        size="sm"
-                        className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0"
-                        onClick={() => handleInputChange("image", "")}
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
-                      <ImageIcon className="h-8 w-8 text-gray-400" />
-                    </div>
-                  )}
-                  <div>
-                    <Label htmlFor="image-upload" className="cursor-pointer">
-                      <div className="flex items-center space-x-2 bg-white border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-50">
-                        <Upload className="h-4 w-4" />
-                        <span>Fotoğraf yükle</span>
-                      </div>
-                    </Label>
-                    <Input
-                      id="image-upload"
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={handleImageUpload}
-                    />
-                  </div>
+                  <FileUploadEnhanced
+                    name="image"
+                    accept="image/*"
+                    label="Koleksiyon fotoğrafı"
+                    description="PNG, JPG, GIF up to 10MB"
+                    icon="image"
+                    setFile={(file: File | null) => {
+                      setCollectionImage(file);
+                      handleInputChange(
+                        "image",
+                        file ? URL.createObjectURL(file) : ""
+                      );
+                    }}
+                    file={collectionImage}
+                  />
                 </div>
               </div>
             </CardContent>

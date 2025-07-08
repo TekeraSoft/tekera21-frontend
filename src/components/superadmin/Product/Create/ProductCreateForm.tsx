@@ -27,9 +27,9 @@ import CategorySelect from "../Shared/CategorySelect";
 import GenderSelect from "../Shared/GenderSelect";
 import GeneralInformation from "../Shared/MainFields/GeneralInformation";
 import CurrencyAndProductType from "../Shared/MainFields/CurrencyAndProductType";
-import Tags from "../Shared/MainFields/Tags";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { FileUploadEnhanced } from "@/components/shared/FileUploadEnhanced";
+import ThemeSelect from "../Shared/MainFields/ThemeSelect";
 
 export default function ProductCreateForm({
   categories,
@@ -300,7 +300,7 @@ export default function ProductCreateForm({
 
             {step === 3 && (
               <FormProvider {...methods}>
-                <Tags />
+                <ThemeSelect />
                 <ProductAttributes />
               </FormProvider>
             )}

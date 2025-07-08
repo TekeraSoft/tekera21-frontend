@@ -1,6 +1,7 @@
 "use server";
 
 import axiosInstance from "@/request/axiosServer";
+import { IFashionCollection, IFashionCollectionData } from "@/types/Collection";
 import { revalidatePath } from "next/cache";
 
 import { cookies } from "next/headers";
@@ -329,8 +330,9 @@ export async function createCollection(formData: FormData) {
   const description = formData.get("description") as string;
   const products = formData.get("products") as string;
 
-
-
+  if (!collectionName || !image || !description || !products) {
+    return { success: false, message: "Tüm alanlar zorunludur." }
+  }
   try {
     const { data } = await axiosInstance.post(
       `/super-admin/createFashionCollection`, formData,
@@ -345,5 +347,61 @@ export async function createCollection(formData: FormData) {
   } catch (error) {
     console.log("createFashionCollection error:", error);
     return { success: false, message: error || "Failed to createFashionCollection" };
+  }
+}
+
+
+export async function getAllCollection(page: string = "0", size: string = "8"): Promise<{
+  success: true;
+  message: null;
+  data: IFashionCollectionData;
+} | {
+  success: false;
+  message: any; // veya string dersen daha net olur
+}> {
+  try {
+    const { data } = await axiosInstance.get(`/super-admin/getAllFashionCollection?page=${page}&size=${size}`)
+    return { success: true, message: null, data: data as IFashionCollectionData };
+
+  } catch (error) {
+    return { success: false, message: error || "Failed to get all collection" };
+  }
+}
+
+export async function deleteCollectionById(id: string) {
+  try {
+
+    const { data } = await axiosInstance.delete(
+      `/super-admin/deleteFashionCollection?id=${id}`
+    );
+    revalidatePath("/");
+    return { success: true, message: data.message, data: data };
+  } catch (error) {
+    console.log("deleteFashionCollection error:", error);
+    return { success: false, message: error || "Failed to delete deleteFashionCollection" };
+  }
+}
+
+export async function getCollectionById(id: string) {
+  try {
+
+    const { data } = await axiosInstance.get(
+      `/super-admin/getFashionCollection?id=${id}`
+    );
+    return { success: true, message: data.message, data: data };
+  } catch (error) {
+    console.log("deleteFashionCollection error:", error);
+    return { success: false, message: error || "Failed to getFashoinCollection" };
+  }
+}
+
+export async function getAllTheme() {
+  try {
+    const { data } = await axiosInstance.get(
+      `/theme/getAllTheme`
+    );
+    return { success: true, message: data.message, data: data };
+  } catch (error) {
+    return { success: false, message: error || "Temalar getirilemedi." };
   }
 }

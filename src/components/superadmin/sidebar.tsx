@@ -47,6 +47,11 @@ export function SideBar() {
       icon: BarChart3,
     },
     user?.role.includes("products") && {
+      name: "Fashion Collections",
+      path: "/superadmin/collections",
+      icon: LucideAirVent,
+    },
+    user?.role.includes("products") && {
       name: "Create Product",
       path: "/superadmin/create/product",
       icon: LucidePercentDiamond,
@@ -61,11 +66,6 @@ export function SideBar() {
       path: "/superadmin/create/collection",
       icon: LucideAirVent,
     },
-    // user?.role.includes("products") && {
-    //   name: "Create Target Image",
-    //   path: "/superadmin/create/target",
-    //   icon: LucideChartNoAxesColumnDecreasing,
-    // },
   ].filter(Boolean) as { name: string; path: string; icon: any }[]; // Filter out any undefined values
 
   const { isMobile, openMobile, setOpenMobile, toggleSidebar, isOpen } =
@@ -152,38 +152,8 @@ export function SideBar() {
               })}
             </ul>
           </nav>
-
-          {/* Collapsible sections - only shown when sidebar is expanded */}
-          {(isOpen || isMobile) && (
-            <div className="mt-8">
-              <div className="text-xs font-medium text-gray-500 mb-2 px-2">
-                PROJECTS
-              </div>
-
-              {/* Collapsible section example */}
-              <div className="mb-2">
-                <button className="flex items-center justify-between w-full p-2 rounded-md hover:bg-gray-200 text-gray-600">
-                  <div className="flex items-center gap-2">
-                    <ChevronRight className="h-4 w-4" />
-                    <span>Team Projects</span>
-                  </div>
-                </button>
-              </div>
-
-              <div className="mb-2">
-                <button className="flex items-center justify-between w-full p-2 rounded-md hover:bg-gray-200 text-gray-600">
-                  <div className="flex items-center gap-2">
-                    <ChevronRight className="h-4 w-4" />
-                    <span>Personal Projects</span>
-                  </div>
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       </div>
-
-      {/* Main Content - Takes full width on mobile, or remaining space on desktop */}
     </>
   );
 }
