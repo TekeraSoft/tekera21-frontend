@@ -86,7 +86,7 @@ export function FileUploadEnhanced({
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onClick={() => document.getElementById(name)?.click()}
-          className={`flex items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${
+          className={`flex items-center justify-center w-full  border-2 border-dashed rounded-lg cursor-pointer transition-colors min-h-40 px-2 ${
             dragOver
               ? "border-primary bg-primary/5"
               : file
@@ -97,7 +97,11 @@ export function FileUploadEnhanced({
           <div className="text-center">
             {file ? (
               <div className="flex items-center gap-2">
-                <IconComponent className="h-6 w-6 text-green-600" />
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt="image"
+                  className="w-52 h-full pr-3"
+                />
                 <div>
                   <p className="text-sm font-medium text-green-700">
                     {file.name}

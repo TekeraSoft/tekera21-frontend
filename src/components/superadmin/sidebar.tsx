@@ -52,6 +52,11 @@ export function SideBar() {
       icon: LucideAirVent,
     },
     user?.role.includes("products") && {
+      name: "Fashion Collection Oluştur",
+      path: "/superadmin/create/collection",
+      icon: LucideAirVent,
+    },
+    user?.role.includes("products") && {
       name: "Create Product",
       path: "/superadmin/create/product",
       icon: LucidePercentDiamond,
@@ -60,11 +65,6 @@ export function SideBar() {
       name: "Create Category",
       path: "/superadmin/create/category",
       icon: LucideChartNoAxesColumnDecreasing,
-    },
-    user?.role.includes("products") && {
-      name: "Fashion Collection Oluştur",
-      path: "/superadmin/create/collection",
-      icon: LucideAirVent,
     },
   ].filter(Boolean) as { name: string; path: string; icon: any }[]; // Filter out any undefined values
 

@@ -15,9 +15,9 @@ export async function getSingleProductById(id: string) {
     );
 
     return { success: true, message: data.message, data: data };
-  } catch (error) {
+  } catch (error: any) {
     console.log("getsingleProductById error:", error);
-    return { success: false, message: error || "Failed to getsingleProductById" };
+    return { success: false, message: error.message || "Failed to getsingleProductById" };
   }
 }
 
@@ -33,7 +33,7 @@ export async function getUser() {
       return null;
     }
     return parsedUser;
-  } catch (error) {
+  } catch (error: any) {
     console.error("getUser fetch error:", error);
     return null;
   }
@@ -44,7 +44,7 @@ export async function logOut() {
   try {
     cookieStore.delete("user");
     cookieStore.delete("token");
-  } catch (error) {
+  } catch (error: any) {
     console.error("logOut error:", error);
   }
 }
@@ -53,8 +53,8 @@ export async function getCategories() {
     const { data } = await axiosInstance.get(`/super-admin/getAllCategory`);
 
     return { success: true, message: data.message, data: data };
-  } catch (error) {
-    return { success: false, message: error || "Failed to get categories" };
+  } catch (error: any) {
+    return { success: false, message: error.message || "Failed to get categories" };
   }
 }
 
@@ -65,9 +65,9 @@ export async function getProducts(page: string = "0", size: string = "20") {
     );
 
     return { success: true, message: data.message, data: data };
-  } catch (error) {
+  } catch (error: any) {
     console.log("getProducts error:", error);
-    return { success: false, message: error || "Failed to get products" };
+    return { success: false, message: error.message || "Failed to get products" };
   }
 }
 export async function getSuperAdminProducts(
@@ -80,9 +80,9 @@ export async function getSuperAdminProducts(
     );
 
     return { success: true, message: data.message, data: data };
-  } catch (error) {
+  } catch (error: any) {
     console.log("getProducts error:", error);
-    return { success: false, message: error || "Failed to get products" };
+    return { success: false, message: error.message || "Failed to get products" };
   }
 }
 
@@ -99,11 +99,11 @@ export async function getFilteredProducts(
     );
 
     return { success: true, message: data.message, data: data };
-  } catch (error) {
+  } catch (error: any) {
     console.log("get filteredProducts error:", error);
     return {
       success: false,
-      message: error || "Failed to get filtered products",
+      message: error.message || "Failed to get filtered products",
     };
   }
 }
@@ -117,9 +117,9 @@ export async function getCompanyProducts(
     );
 
     return { success: true, message: data.message, data: data };
-  } catch (error) {
+  } catch (error: any) {
     console.log("getCompanyProducts error:", error);
-    return { success: false, message: error || "Failed to get products" };
+    return { success: false, message: error.message || "Failed to get products" };
   }
 }
 export async function createCategory(formData: FormData) {
@@ -135,9 +135,9 @@ export async function createCategory(formData: FormData) {
     );
     revalidatePath("/");
     return { success: true, message: data.message, data: data.data };
-  } catch (error) {
+  } catch (error: any) {
     console.log("getproducts:", error);
-    return { success: false, message: error || "Failed to create category" };
+    return { success: false, message: error.message || "Failed to create category" };
   }
 }
 export async function createProduct(formData: FormData) {
@@ -203,9 +203,9 @@ export async function createSubcategory(formData: FormData) {
 
     revalidatePath("/");
     return { success: true, message: data.message, category: data };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating subcategory:", error);
-    return { success: false, message: error || "Failed to create subcategory" };
+    return { success: false, message: error.message || "Failed to create subcategory" };
   }
 }
 
@@ -282,9 +282,9 @@ export async function deleteProductById(id: string) {
     );
     revalidatePath("/");
     return { success: true, message: data.message, data: data };
-  } catch (error) {
+  } catch (error: any) {
     console.log("deleteProductById error:", error);
-    return { success: false, message: error || "Failed to get deleteProduct" };
+    return { success: false, message: error.message || "Failed to get deleteProduct" };
   }
 }
 export async function updateProduct(formData: FormData) {
@@ -308,9 +308,9 @@ export async function updateProduct(formData: FormData) {
 
 
     return { success: true, message: data.message, data: data };
-  } catch (error) {
+  } catch (error: any) {
     console.log("update Product error:", error);
-    return { success: false, message: error || "Failed to get deleteProduct" };
+    return { success: false, message: error.message || "Failed to get deleteProduct" };
   }
 }
 export async function getTargetPictureByProductById(prodId: string) {
@@ -319,9 +319,9 @@ export async function getTargetPictureByProductById(prodId: string) {
       `/digital-fashion/getTargetImageByProductId?productId=${prodId}`
     );
     return { success: true, message: data.message, data: data };
-  } catch (error) {
+  } catch (error: any) {
     console.log("getProducts error:", error);
-    return { success: false, message: error || "Failed to get target" };
+    return { success: false, message: error.message || "Failed to get target" };
   }
 }
 export async function createCollection(formData: FormData) {
@@ -344,9 +344,37 @@ export async function createCollection(formData: FormData) {
     );
     revalidatePath("/");
     return { success: true, message: data.message, data: data };
-  } catch (error) {
+  } catch (error: any) {
     console.log("createFashionCollection error:", error);
-    return { success: false, message: error || "Failed to createFashionCollection" };
+    return { success: false, message: error.message || "Failed to createFashionCollection" };
+  }
+}
+export async function updateCollection(formData: FormData) {
+  const collectionName = formData.get("collectionName") as string;
+  const id = formData.get("id") as string;
+
+  const description = formData.get("description") as string;
+  const products = formData.getAll("products") as string[];
+
+  console.log("collectionName", collectionName, "id", id, "descr", description, "products", products)
+
+  if (!collectionName || !description || !products.length || !id) {
+    return { success: false, message: "Tüm alanlar zorunludur." }
+  }
+  try {
+    const { data } = await axiosInstance.put(
+      `/super-admin/updateFashionCollection`, formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    revalidatePath("/");
+    return { success: true, message: data.message, data: data };
+  } catch (error: any) {
+    console.log("createFashionCollection error:", error.message);
+    return { success: false, message: error.message || "Failed to Update Collection" };
   }
 }
 
@@ -357,14 +385,14 @@ export async function getAllCollection(page: string = "0", size: string = "8"): 
   data: IFashionCollectionData;
 } | {
   success: false;
-  message: any; // veya string dersen daha net olur
+  message: any;
 }> {
   try {
     const { data } = await axiosInstance.get(`/super-admin/getAllFashionCollection?page=${page}&size=${size}`)
     return { success: true, message: null, data: data as IFashionCollectionData };
 
-  } catch (error) {
-    return { success: false, message: error || "Failed to get all collection" };
+  } catch (error: any) {
+    return { success: false, message: error.message || "Failed to get all collection" };
   }
 }
 
@@ -376,22 +404,29 @@ export async function deleteCollectionById(id: string) {
     );
     revalidatePath("/");
     return { success: true, message: data.message, data: data };
-  } catch (error) {
+  } catch (error: any) {
     console.log("deleteFashionCollection error:", error);
-    return { success: false, message: error || "Failed to delete deleteFashionCollection" };
+    return { success: false, message: error.message || "Failed to delete deleteFashionCollection" };
   }
 }
 
-export async function getCollectionById(id: string) {
+export async function getCollectionById(id: string): Promise<{
+  success: true;
+  message: null;
+  data: IFashionCollection;
+} | {
+  success: false;
+  message: any;
+}> {
   try {
 
     const { data } = await axiosInstance.get(
       `/super-admin/getFashionCollection?id=${id}`
     );
     return { success: true, message: data.message, data: data };
-  } catch (error) {
+  } catch (error: any) {
     console.log("deleteFashionCollection error:", error);
-    return { success: false, message: error || "Failed to getFashoinCollection" };
+    return { success: false, message: error.message || "Failed to getFashoinCollection" };
   }
 }
 
@@ -400,8 +435,8 @@ export async function getAllTheme() {
     const { data } = await axiosInstance.get(
       `/theme/getAllTheme`
     );
-    return { success: true, message: data.message, data: data };
-  } catch (error) {
-    return { success: false, message: error || "Temalar getirilemedi." };
+    return { success: true, message: null, data: data };
+  } catch (error: any) {
+    return { success: false, message: error.message || "Temalar getirilemedi." };
   }
 }

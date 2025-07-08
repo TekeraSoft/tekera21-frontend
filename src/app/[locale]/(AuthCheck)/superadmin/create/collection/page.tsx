@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -16,7 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Search, Plus, X, Upload, ImageIcon, Minus } from "lucide-react";
+import { Plus, X, Minus } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { IProduct } from "@/types/product";
 import {
@@ -29,13 +28,7 @@ import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
 import { FileUploadEnhanced } from "@/components/shared/FileUploadEnhanced";
 import { useToast } from "@/hooks/use-toast";
 import TopBar from "@/components/superadmin/TopBar";
-
-interface Collection {
-  collectionName: string;
-  description: string;
-  image: string;
-  products: IProduct[];
-}
+import { IFashionCollection } from "@/types/Collection";
 
 // Mock products data
 
@@ -84,17 +77,22 @@ export default function CreateCollectionPage() {
     dispatch(fetchProducts({ page: pageCount + 1, size: 3 }));
   };
 
-  const [collection, setCollection] = useState<Collection>({
+  const [collection, setCollection] = useState<IFashionCollection>({
+    id: "",
     collectionName: "",
     description: "",
     image: "",
     products: [],
+    isActive: true,
   });
 
   const [searchTerm, setSearchTerm] = useState("");
   const [isProductDialogOpen, setIsProductDialogOpen] = useState(false);
 
-  const handleInputChange = (field: keyof Collection, value: string) => {
+  const handleInputChange = (
+    field: keyof IFashionCollection,
+    value: string
+  ) => {
     setCollection((prev) => ({
       ...prev,
       [field]: value,
@@ -132,23 +130,21 @@ export default function CreateCollectionPage() {
       formData.append(`products`, product.id)
     );
 
-    const {
-      data,
-      success: successCreateCollection,
-      message,
-    } = await createCollection(formData);
+    const { success: successCreateCollection, message } =
+      await createCollection(formData);
     if (successCreateCollection) {
       setLoadingCreateCollection(false);
       toast({
         title: "Başarılı!",
-        description: "Ürün oluşturuldu.",
+        description: "Koleksiyon oluşturuldu.",
         variant: "default",
       });
     } else {
       setLoadingCreateCollection(false);
       toast({
         title: "Error",
-        description: message || "Ürün oluşturulamadı. Lütfen tekrar deneyin.",
+        description:
+          message || "Koleksiyon oluşturulamadı. Lütfen tekrar deneyin.",
         variant: "destructive",
       });
     }
@@ -200,6 +196,7 @@ export default function CreateCollectionPage() {
               <div className="space-y-2">
                 <Label htmlFor="collection-description">Açıklama</Label>
                 <MarkdownEditor
+                  id="collection-description"
                   defaultValue={collection.description}
                   onChange={(value) => handleInputChange("description", value)}
                 />
@@ -373,7 +370,7 @@ export default function CreateCollectionPage() {
                         <span className="text-lg font-semibold">
                           ₺{product.variations[0].attributes[0].price}
                         </span>
-                        <Badge variant="secondary">
+                        <Badge variant="square">
                           {" "}
                           {product.subCategories.length &&
                             product.subCategories[
@@ -395,7 +392,8 @@ export default function CreateCollectionPage() {
               variant={"secondary"}
               disabled={
                 !collection.collectionName.trim() ||
-                collection.products.length === 0
+                collection.products.length === 0 ||
+                loadingCreateCollection
               }
             >
               Oluştur

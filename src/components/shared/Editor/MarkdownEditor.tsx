@@ -12,9 +12,11 @@ import TextEditorToolBar from "./Toolbar";
 const MarkdownEditor = ({
   defaultValue,
   onChange,
+  id,
 }: {
   defaultValue?: string;
   onChange: (value: string) => void;
+  id?: string;
 }) => {
   const extensions = [
     StarterKit.configure({
@@ -60,11 +62,11 @@ const MarkdownEditor = ({
       onChange(editor.storage.markdown.getMarkdown());
     },
   });
-
+                                                               
   return (
     <div className="border border-gray-200 rounded-md editor-wrapper">
       <TextEditorToolBar editor={editor} />
-      <EditorContent editor={editor} className="cursor-text" />
+      <EditorContent id={id} editor={editor} className="cursor-text" />
     </div>
   );
 };
