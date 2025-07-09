@@ -20,7 +20,7 @@ export const colors = [
   { name: "Açık Yeşil", hex: "#90EE90", slug: "acik-yesil" },
   { name: "Nane Yeşili", hex: "#004925", slug: "nane-yesili" },
   { name: "Haki", hex: "#A29F79", slug: "haki" },
-  { name: "Fıstık Yeşili", hex: "#9DC183", slug: "fistik-yesili" },
+  { name: "Fıstık Yeşili", hex: "#96db3b", slug: "fistik-yesili" },
   { name: "Sarı", hex: "#FFFF00", slug: "sari" },
   { name: "Hardal", hex: "#FFDB58", slug: "hardal" },
   { name: "Altın Sarısı", hex: "#FFD700", slug: "altin-sarisi" },
@@ -57,7 +57,7 @@ export const colors = [
   { name: "Koyu Mor", hex: "#260d25", slug: "koyu-mor" },
   { name: "Su Yeşili", hex: "#9fc9ca", slug: "su-yesili" },
   { name: "Çimen Yeşili", hex: "#9fc9ca", slug: "cimen-yesili" },
-  { name: "Haki Yeşili", hex: "#9fc9ca", slug: "haki-yesili" },
-  { name: "Çağla Yeşili", hex: "#9fc9ca", slug: "cagla-yesili" },
-  { name: "Saks Mavisi", hex: "#9fc9ca", slug: "saks-mavisi" }
+  { name: "Haki Yeşili", hex: "#303922", slug: "haki-yesili" },
+  { name: "Çağla Yeşili", hex: "#618174", slug: "cagla-yesili" },
+  { name: "Saks Mavisi", hex: "#0f4496", slug: "saks-mavisi" }
 ];
