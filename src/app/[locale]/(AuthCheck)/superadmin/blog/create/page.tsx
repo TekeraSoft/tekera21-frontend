@@ -1,5 +1,6 @@
 "use client";
 
+import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
 import TopBar from "@/components/superadmin/TopBar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,7 +22,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
 const CreateBlogPage = () => {
@@ -116,7 +117,7 @@ const CreateBlogPage = () => {
       <TopBar>
         <></>
       </TopBar>
-      <Card className="max-w-4xl mx-auto">
+      <Card className="mx-auto">
         <CardHeader>
           <CardTitle className="text-2xl">Yeni Blog Yazısı Oluştur</CardTitle>
         </CardHeader>
@@ -177,27 +178,26 @@ const CreateBlogPage = () => {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="content"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>İçerik *</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Blog yazısının içeriğini girin (Markdown desteklenir)"
-                        rows={15}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Markdown formatını kullanabilirsiniz (# başlık, **kalın**,
-                      *italik*, vb.)
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
+              <div className="space-y-2">
+                <Label htmlFor="description">İçerik *</Label>
+                <Controller
+                  control={form.control}
+                  name="excerpt"
+                  rules={{ required: "Ürün açıklaması gereklidir." }}
+                  render={({ field }) => (
+                    <MarkdownEditor
+                      defaultValue={field.value}
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
+
+                {form.formState.errors.excerpt && (
+                  <p className="text-sm text-red-500">
+                    {form.formState.errors.excerpt.message}
+                  </p>
                 )}
-              />
+              </div>
 
               <div className="space-y-2">
                 <Label>Etiketler</Label>
