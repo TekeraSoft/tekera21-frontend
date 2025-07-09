@@ -56,4 +56,8 @@ export const colors = [
   { name: "Ten Rengi", hex: "#F5CBA7" },
   { name: "Koyu Mor", hex: "#260d25" },
   { name: "Su Yeşili", hex: "#9fc9ca" },
+  { name: "Çimen Yeşili", hex: "#9fc9ca" },
+  { name: "Haki Yeşili", hex: "#9fc9ca" },
+  { name: "Çağla Yeşili", hex: "#9fc9ca" },
+  { name: "Saks Mavisi", hex: "#9fc9ca" },
 ];
