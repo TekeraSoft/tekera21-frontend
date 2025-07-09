@@ -11,7 +11,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  Form
+  Form,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -113,7 +113,9 @@ const CreateBlogPage = () => {
   };
   return (
     <>
-      <TopBar children={null} />
+      <TopBar>
+        <></>
+      </TopBar>
       <Card className="max-w-4xl mx-auto">
         <CardHeader>
           <CardTitle className="text-2xl">Yeni Blog Yazısı Oluştur</CardTitle>
