@@ -164,8 +164,8 @@ export default function CreateCollectionPage() {
       </TopBar>
       {loading ? (
         <LoadingBigCircle />
-      ) : !data.content.length ? (
-        <div>Ürünler yüklenemedi</div>
+      ) : !data || !data.content.length ? (
+        <div>Ürün bulunamadı.</div>
       ) : (
         <div className="mx-auto px-4 sm:px-6 lg:px-8 mt-4">
           <div className="mb-8">
