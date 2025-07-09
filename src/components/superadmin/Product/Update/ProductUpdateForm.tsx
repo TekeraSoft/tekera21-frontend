@@ -32,7 +32,6 @@ import CategorySelect from "../Shared/CategorySelect";
 import GenderSelect from "../Shared/GenderSelect";
 import GeneralInformation from "../Shared/MainFields/GeneralInformation";
 import CurrencyAndProductType from "../Shared/MainFields/CurrencyAndProductType";
-import Tags from "../Shared/MainFields/Tags";
 import { FileUploadEnhanced } from "@/components/shared/FileUploadEnhanced";
 import ThemeSelect from "../Shared/MainFields/ThemeSelect";
 
@@ -74,7 +73,7 @@ export default function ProductUpdateForm({
     },
   });
 
-  console.log("product",product)
+  console.log("product", product);
 
   const {
     control,
@@ -338,7 +337,7 @@ export default function ProductUpdateForm({
             ) : (
               <FileUploadEnhanced
                 name="video"
-                accept="video/*"
+                accept=".mp4,video/mp4"
                 label="Ürün video (isteğe bağlı)"
                 description="MP4, AVI up to 300MB"
                 icon="image"

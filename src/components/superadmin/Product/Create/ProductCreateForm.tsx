@@ -261,9 +261,9 @@ export default function ProductCreateForm({
                 </FormProvider>
                 <FileUploadEnhanced
                   name="video"
-                  accept="video/*"
+                  accept=".mp4,video/mp4"
                   label="Ürün video (isteğe bağlı)"
-                  description="MP4, AVI up to 300MB"
+                  description="MP4 (300MB)"
                   icon="image"
                   setFile={(file) => setProductVideo(file)}
                   file={productVideo}

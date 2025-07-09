@@ -30,7 +30,19 @@ export function FileUploadEnhanced({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
+      const file = e.target.files[0];
+      if (accept === ".mp4,video/mp4") {
+        if (file.type !== "video/mp4") {
+          alert("Sadece .mp4 video dosyası yükleyebilirsin!");
+          return;
+        }
+
+        if (!file.name.endsWith(".mp4")) {
+          alert("Lütfen .mp4 uzantılı bir dosya seç!");
+          return;
+        }
+      }
+      setFile(file);
     }
   };
 
