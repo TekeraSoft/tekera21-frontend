@@ -13,13 +13,13 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((request) => {
-  console.log("axiosserver request");
+
   return request;
 });
 
 axiosInstance.interceptors.response.use(
   (response) => {
-    console.log("axiosserver response");
+
     return response;
   },
   async (error) => {

@@ -74,6 +74,8 @@ export default function ProductUpdateForm({
     },
   });
 
+  console.log("product",product)
+
   const {
     control,
     handleSubmit,
@@ -117,6 +119,7 @@ export default function ProductUpdateForm({
       brandName: data.brandName,
       description: data.description,
       categoryId: data.categoryId,
+      videoUrl: !productVideo ? product.videoUrl : null,
       subCategories: data.subCategories?.map((item) => item.value),
       variants: data.variants.map((variation) => ({
         ...(variation.id ? { id: variation.id } : {}),
@@ -143,8 +146,9 @@ export default function ProductUpdateForm({
       deleteImages: deleteImages,
     };
     console.log("formatted", formattedData);
-    console.log("watched", watch());
+
     console.log("stockImages", stockAttributeImages);
+    console.log("deleteImages", deleteImages);
     const formData = new FormData();
     formData.append(
       "data",

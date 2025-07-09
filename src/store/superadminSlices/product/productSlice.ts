@@ -67,13 +67,11 @@ interface ChangeStatusParams {
 export const fetchProducts = createAsyncThunk<IData, FetchProductsParams>(
   "products/fetchProducts",
   async (params, thunkAPI) => {
-    console.log("fetch çalıştı")
+
     try {
       const data = await getAdminProducts(params.page, params.size); // bu fonksiyon parametreleri almalı
-      console.log("data", data)
       return data;
     } catch (error: any) {
-      console.log("Fetch error:", error);
       return thunkAPI.rejectWithValue(error.message);
     }
   }
@@ -89,7 +87,6 @@ export const changeStatus = createAsyncThunk<
       await changeStatusAction(params.productId, params.status); // backend api çağrısı
       return { productId: params.productId, status: params.status };  // geri productId ve yeni status dön
     } catch (error: any) {
-      console.log("Fetch error:", error);
       return thunkAPI.rejectWithValue(error.message);
     }
   }
@@ -103,7 +100,6 @@ export const fetchCategories = createAsyncThunk<
     const data = await getAdminProductCategories(params.page, params.size); // bu fonksiyon parametreleri almalı
     return data;
   } catch (error: any) {
-    console.log("Fetch error:", error);
     return thunkAPI.rejectWithValue(error.message);
   }
 });
@@ -116,7 +112,7 @@ export const fetchProductsByCategory = createAsyncThunk<
     const data = await getProductsByCategory(params.catSlug); // bu fonksiyon parametreleri almalı
     return data; // Assuming the API returns an array and we need the first item
   } catch (error: any) {
-    console.log("Fetch error:", error);
+
     return thunkAPI.rejectWithValue(error.message);
   }
 });
@@ -128,7 +124,7 @@ export const searchProduct = createAsyncThunk<IData, { query: string }>(
       const data = await searchProducts(params.query); // bu fonksiyon parametreleri almalı
       return data; // Assuming the API returns an array and we need the first item
     } catch (error: any) {
-      console.log("Fetch error:", error);
+
       return thunkAPI.rejectWithValue(error.message);
     }
   }

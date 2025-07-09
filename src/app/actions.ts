@@ -16,7 +16,6 @@ export async function getSingleProductById(id: string) {
 
     return { success: true, message: data.message, data: data };
   } catch (error: any) {
-    console.log("getsingleProductById error:", error);
     return { success: false, message: error.message || "Failed to getsingleProductById" };
   }
 }
@@ -34,7 +33,7 @@ export async function getUser() {
     }
     return parsedUser;
   } catch (error: any) {
-    console.error("getUser fetch error:", error);
+
     return null;
   }
 }
@@ -66,7 +65,6 @@ export async function getProducts(page: string = "0", size: string = "20") {
 
     return { success: true, message: data.message, data: data };
   } catch (error: any) {
-    console.log("getProducts error:", error);
     return { success: false, message: error.message || "Failed to get products" };
   }
 }
@@ -81,7 +79,7 @@ export async function getSuperAdminProducts(
 
     return { success: true, message: data.message, data: data };
   } catch (error: any) {
-    console.log("getProducts error:", error);
+
     return { success: false, message: error.message || "Failed to get products" };
   }
 }
@@ -100,7 +98,7 @@ export async function getFilteredProducts(
 
     return { success: true, message: data.message, data: data };
   } catch (error: any) {
-    console.log("get filteredProducts error:", error);
+
     return {
       success: false,
       message: error.message || "Failed to get filtered products",
@@ -118,7 +116,7 @@ export async function getCompanyProducts(
 
     return { success: true, message: data.message, data: data };
   } catch (error: any) {
-    console.log("getCompanyProducts error:", error);
+
     return { success: false, message: error.message || "Failed to get products" };
   }
 }
@@ -136,7 +134,7 @@ export async function createCategory(formData: FormData) {
     revalidatePath("/");
     return { success: true, message: data.message, data: data.data };
   } catch (error: any) {
-    console.log("getproducts:", error);
+
     return { success: false, message: error.message || "Failed to create category" };
   }
 }
@@ -144,12 +142,6 @@ export async function createProduct(formData: FormData) {
   try {
     const dataform = formData.get("data");
     const images = formData.getAll("images");
-
-    console.log("data", dataform);
-
-    console.log("images", images);
-
-    console.log("video", formData.get("video"));
 
     if (!dataform || !images) {
       return {
@@ -167,10 +159,10 @@ export async function createProduct(formData: FormData) {
       }
     );
     revalidatePath("/");
-    console.log("data");
+
     return { success: true, message: data.message, product: data.data };
   } catch (error: any) {
-    console.log("create Product error:", error);
+
     return { success: false, message: typeof error.message === "string" ? error.message : "Failed to create category" };
   }
 }
@@ -181,8 +173,6 @@ export async function createSubcategory(formData: FormData) {
     const name = formData.get("name") as string;
     const image = formData.get("image") as File;
 
-    console.log("categoryId", categoryId);
-    console.log("name", name);
 
     if (!categoryId || !name || name.trim() === "" || !image) {
       return {
@@ -204,7 +194,7 @@ export async function createSubcategory(formData: FormData) {
     revalidatePath("/");
     return { success: true, message: data.message, category: data };
   } catch (error: any) {
-    console.error("Error creating subcategory:", error);
+
     return { success: false, message: error.message || "Failed to create subcategory" };
   }
 }
@@ -276,24 +266,18 @@ export async function deleteTargetPicture(targetPictureId: string) {
 
 export async function deleteProductById(id: string) {
   try {
-    console.log("delete product byId", id);
+
     const { data } = await axiosInstance.delete(
       `/super-admin/deleteProduct?productId=${id}`
     );
     revalidatePath("/");
     return { success: true, message: data.message, data: data };
   } catch (error: any) {
-    console.log("deleteProductById error:", error);
+
     return { success: false, message: error.message || "Failed to get deleteProduct" };
   }
 }
 export async function updateProduct(formData: FormData) {
-  const updates = formData.get("data");
-  const images = formData.getAll("images");
-
-  console.log("data", updates);
-
-  console.log("images", images);
   try {
     const { data } = await axiosInstance.put(
       `/company/updateProduct`,
@@ -309,8 +293,8 @@ export async function updateProduct(formData: FormData) {
 
     return { success: true, message: data.message, data: data };
   } catch (error: any) {
-    console.log("update Product error:", error);
-    return { success: false, message: error.message || "Failed to get deleteProduct" };
+
+    return { success: false, message: error.message || "Failed to update Product" };
   }
 }
 export async function getTargetPictureByProductById(prodId: string) {
@@ -320,7 +304,7 @@ export async function getTargetPictureByProductById(prodId: string) {
     );
     return { success: true, message: data.message, data: data };
   } catch (error: any) {
-    console.log("getProducts error:", error);
+
     return { success: false, message: error.message || "Failed to get target" };
   }
 }
@@ -345,7 +329,7 @@ export async function createCollection(formData: FormData) {
     revalidatePath("/");
     return { success: true, message: data.message, data: data };
   } catch (error: any) {
-    console.log("createFashionCollection error:", error);
+
     return { success: false, message: error.message || "Failed to createFashionCollection" };
   }
 }
@@ -373,7 +357,7 @@ export async function updateCollection(formData: FormData) {
     revalidatePath("/");
     return { success: true, message: data.message, data: data };
   } catch (error: any) {
-    console.log("createFashionCollection error:", error.message);
+
     return { success: false, message: error.message || "Failed to Update Collection" };
   }
 }
@@ -410,7 +394,7 @@ export async function getCollectionById(id: string): Promise<{
     );
     return { success: true, message: data.message, data: data };
   } catch (error: any) {
-    console.log("deleteFashionCollection error:", error);
+
     return { success: false, message: error.message || "Failed to getFashoinCollection" };
   }
 }
@@ -424,7 +408,7 @@ export async function deleteCollectionById(id: string) {
     revalidatePath("/");
     return { success: true, message: data.message, data: data };
   } catch (error: any) {
-    console.log("deleteFashionCollection error:", error);
+
     return { success: false, message: error.message || "Failed to delete deleteFashionCollection" };
   }
 }

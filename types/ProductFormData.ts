@@ -11,6 +11,7 @@ export type TProductFormData = {
   productType: string;
   tags: { value: string }[];
   attributeDetails: { key: string; value: string }[];
+  videoUrl?: string;
   variants: {
     id?: string;
     modelName: string;
