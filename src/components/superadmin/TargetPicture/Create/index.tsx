@@ -35,9 +35,12 @@ export default function TargetCreate({ product }: { product: IProduct }) {
     },
   });
   const [selectedTab, setSelectedTab] = useState("video");
+  const [loading, setLoading] = useState(false);
+
   const onSubmit = async (data: ITargetPictureFormData) => {
     console.log("onsubmit data:", data);
     // Transform data to match the required format
+    setLoading(true);
     const formData = new FormData();
     formData.append("productId", product.id);
     if (data.image) {
@@ -50,6 +53,7 @@ export default function TargetCreate({ product }: { product: IProduct }) {
     const { success, message } = await createTargetPicture(formData);
 
     if (success) {
+      setLoading(false);
       toast({
         title: "Success",
         description:
@@ -59,6 +63,7 @@ export default function TargetCreate({ product }: { product: IProduct }) {
         variant: "default",
       });
     } else {
+      setLoading(false);
       toast({
         title: "Error",
         description:
@@ -145,7 +150,7 @@ export default function TargetCreate({ product }: { product: IProduct }) {
             {/* Video Upload */}
 
             {/* Submit Button */}
-            <Button type="submit" className="w-full">
+            <Button disabled={loading} type="submit" className="w-full">
               <Upload className="w-4 h-4 mr-2" />
               Upload Media
             </Button>
