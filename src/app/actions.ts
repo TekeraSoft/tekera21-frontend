@@ -414,7 +414,6 @@ export async function deleteCollectionById(id: string) {
 }
 
 
-
 export async function getAllTheme() {
   try {
     const { data } = await axiosInstance.get(
@@ -423,5 +422,21 @@ export async function getAllTheme() {
     return { success: true, message: null, data: data };
   } catch (error: any) {
     return { success: false, message: error.message || "Temalar getirilemedi." };
+  }
+}
+
+export async function createNewTheme(formData: FormData) {
+  try {
+    const { data } = await axiosInstance.post(
+      `/super-admin/createTheme`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+    );
+    revalidatePath("/");
+    return { success: true, message: null, data: data };
+  } catch (error: any) {
+    return { success: false, message: error.message || "Tema eklenemedi." };
   }
 }
