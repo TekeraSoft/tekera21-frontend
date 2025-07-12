@@ -24,6 +24,10 @@ const nextConfig: NextConfig = {
         hostname: "192.168.1.105",
       },
       {
+        protocol: "http",
+        hostname: "192.168.1.106",
+      },
+      {
         protocol: "https",
         hostname: "api.tekera21.com",
       },

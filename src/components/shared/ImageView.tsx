@@ -9,7 +9,9 @@ const ImageView = ({
   className: string;
 }) => {
   const { url, name } = imageInfo;
-  const imageUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL + (url.startsWith("/") ? url : `/${url}`);
+  const imageUrl =
+    process.env.NEXT_PUBLIC_IMAGE_BASE_URL +
+    (url.startsWith("/") ? url : `/${url}`);
 
   return (
     <Image
@@ -18,6 +20,7 @@ const ImageView = ({
       className={className}
       src={imageUrl}
       alt={name}
+      loading="lazy"
     />
   );
 };

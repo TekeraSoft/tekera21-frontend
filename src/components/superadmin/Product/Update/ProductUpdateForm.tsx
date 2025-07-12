@@ -34,6 +34,9 @@ import GeneralInformation from "../Shared/MainFields/GeneralInformation";
 import CurrencyAndProductType from "../Shared/MainFields/CurrencyAndProductType";
 import { FileUploadEnhanced } from "@/components/shared/FileUploadEnhanced";
 import ThemeSelect from "../Shared/MainFields/ThemeSelect";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Camera } from "lucide-react";
+import MediaGallery from "@/components/shared/MediaGallery";
 
 export default function ProductUpdateForm({
   categories,
@@ -48,6 +51,7 @@ export default function ProductUpdateForm({
   const [deleteImages, setDeleteImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [productVideo, setProductVideo] = useState<File | null>(null);
+  const [showMediaLibrary, setShowMediaLibrary] = useState(false);
 
   const { toast } = useToast();
 
@@ -72,8 +76,6 @@ export default function ProductUpdateForm({
       variants: product.variations,
     },
   });
-
-  console.log("product", product);
 
   const {
     control,
@@ -304,6 +306,27 @@ export default function ProductUpdateForm({
                 }
               />
             </FormProvider>
+
+            {!!watch("companyId").length && (
+              <Dialog
+                open={showMediaLibrary}
+                onOpenChange={setShowMediaLibrary}
+              >
+                <DialogTrigger asChild>
+                  <div>
+                    <Label htmlFor="mediagallery">Medya Galeri</Label>
+                    <div className="flex items-center justify-center gap-2 cursor-pointer border-2 border-dashed py-5">
+                      <Camera className="h-20 w-20 hover:text-secondary transition-colors" />
+                    </div>
+                  </div>
+                </DialogTrigger>
+
+                <MediaGallery
+                  showMediaLibrary={showMediaLibrary}
+                  sellerId={watch("companyId")}
+                />
+              </Dialog>
+            )}
 
             {product.videoUrl && !deleteImages.includes(product.videoUrl) ? (
               <div className="space-y-2">

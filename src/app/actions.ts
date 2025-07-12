@@ -440,3 +440,15 @@ export async function createNewTheme(formData: FormData) {
     return { success: false, message: error.message || "Tema eklenemedi." };
   }
 }
+
+export async function getAllMediaBySellerId(sellerId: string, page: number = 0, size: number = 50) {
+  console.log("sellerId", sellerId)
+  try {
+    const { data } = await axiosInstance.get(
+      `/company/seller-gallery?companyId=${sellerId}&page=${page}&size=${size}`,
+    );
+    return { success: true, message: null, data: data };
+  } catch (error: any) {
+    return { success: false, message: error.message || "Medya dosyaları getirilemedi." };
+  }
+}
