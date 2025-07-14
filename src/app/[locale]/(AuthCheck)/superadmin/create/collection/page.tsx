@@ -162,11 +162,7 @@ export default function CreateCollectionPage() {
       <TopBar>
         <></>
       </TopBar>
-      {loading ? (
-        <LoadingBigCircle />
-      ) : !data || !data.content.length ? (
-        <div>Ürün bulunamadı.</div>
-      ) : (
+      {
         <div className="mx-auto px-4 sm:px-6 lg:px-8 mt-4">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900">
@@ -407,7 +403,7 @@ export default function CreateCollectionPage() {
             </div>
           </form>
         </div>
-      )}
+      }
     </div>
   );
 }
