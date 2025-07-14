@@ -27,11 +27,8 @@ import CategorySelect from "../Shared/CategorySelect";
 import GenderSelect from "../Shared/GenderSelect";
 import GeneralInformation from "../Shared/MainFields/GeneralInformation";
 import CurrencyAndProductType from "../Shared/MainFields/CurrencyAndProductType";
-import { Camera, ChevronLeft, ChevronRight } from "lucide-react";
-import { FileUploadEnhanced } from "@/components/shared/FileUploadEnhanced";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import ThemeSelect from "../Shared/MainFields/ThemeSelect";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import MediaGallery from "@/components/shared/MediaGallery";
 
 export default function ProductCreateForm({
   categories,
@@ -262,27 +259,8 @@ export default function ProductCreateForm({
                     }
                   />
                 </FormProvider>
-                {!!watch("companyId").length && (
-                  <Dialog
-                    open={showMediaLibrary}
-                    onOpenChange={setShowMediaLibrary}
-                  >
-                    <DialogTrigger asChild>
-                      <div>
-                        <Label htmlFor="mediagallery">Medya Galeri</Label>
-                        <div className="flex items-center justify-center gap-2 cursor-pointer border-2 border-dashed py-5">
-                          <Camera className="h-20 w-20 hover:text-secondary transition-colors" />
-                        </div>
-                      </div>
-                    </DialogTrigger>
 
-                    <MediaGallery
-                      showMediaLibrary={showMediaLibrary}
-                      sellerId={watch("companyId")}
-                    />
-                  </Dialog>
-                )}
-                <FileUploadEnhanced
+                {/* <FileUploadEnhanced
                   name="video"
                   accept=".mp4,video/mp4"
                   label="Ürün video (isteğe bağlı)"
@@ -290,7 +268,7 @@ export default function ProductCreateForm({
                   icon="image"
                   setFile={(file) => setProductVideo(file)}
                   file={productVideo}
-                />
+                /> */}
               </div>
             )}
             {step === 2 && (
