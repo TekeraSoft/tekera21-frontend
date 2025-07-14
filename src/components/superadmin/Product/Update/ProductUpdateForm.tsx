@@ -32,9 +32,6 @@ import GeneralInformation from "../Shared/MainFields/GeneralInformation";
 import CurrencyAndProductType from "../Shared/MainFields/CurrencyAndProductType";
 import ThemeSelect from "../Shared/MainFields/ThemeSelect";
 import axios from "axios";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { Camera } from "lucide-react";
-import MediaGallery from "@/components/shared/MediaGallery";
 
 export default function ProductUpdateForm({
   categories,
@@ -363,28 +360,6 @@ export default function ProductUpdateForm({
                 }
               />
             </FormProvider>
-
-            {!!watch("companyId").length && (
-              <Dialog
-                open={showMediaLibrary}
-                onOpenChange={setShowMediaLibrary}
-              >
-                <DialogTrigger asChild>
-                  <div>
-                    <Label htmlFor="mediagallery">Medya Galeri</Label>
-                    <div className="flex items-center justify-center gap-2 cursor-pointer border-2 border-dashed py-5">
-                      <Camera className="h-20 w-20 hover:text-secondary transition-colors" />
-                    </div>
-                  </div>
-                </DialogTrigger>
-
-                {/* <MediaGallery
-                  showMediaLibrary={showMediaLibrary}
-                  sellerId={watch("companyId")}
-                  variationIndex={-1}
-                /> */}
-              </Dialog>
-            )}
 
             {videoUrlState && !deleteImages.includes(videoUrlState) ? (
               <div className="space-y-2">
