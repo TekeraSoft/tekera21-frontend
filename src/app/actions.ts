@@ -447,7 +447,7 @@ export async function getAllMediaBySellerId(sellerId: string, page: number = 0, 
     const { data } = await axiosInstance.get(
       `/company/sellerGallery?companyId=${sellerId}&page=${page}&size=${size}`,
     );
-    console.log("data media", data)
+
     return { success: true, message: null, data: data };
   } catch (error: any) {
     return { success: false, message: error.message || "Medya dosyaları getirilemedi." };

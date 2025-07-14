@@ -28,7 +28,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { TooltipArrow, TooltipPortal } from "@radix-ui/react-tooltip";
-import { ProductAttribute } from "@/types/product";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { colors } from "./Data/Colors";
 import ImageView from "@/components/shared/ImageView";
@@ -337,8 +336,6 @@ const Attributes = ({
                         </DialogTrigger>
                         {currentVariantIndex === variationIndex && (
                           <ImageLibrary
-                            setShowMediaLibrary={setShowMediaLibrary}
-                            showMediaLibrary={showMediaLibrary}
                             handleDeleteImages={handleDeleteImages}
                             watch={watch}
                             imageName={`${

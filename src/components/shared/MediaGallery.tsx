@@ -14,7 +14,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Play, Download, Eye, Trash2, Upload } from "lucide-react";
+import {
+  Play,
+  Download,
+  Eye,
+  Trash2,
+  Upload,
+  PlusCircle,
+  Minus,
+  Plus,
+} from "lucide-react";
 import { deleteFileByUrl, getAllMediaBySellerId } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import ImageView from "./ImageView";
@@ -28,6 +37,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../ui/alert-dialog";
+import { Link } from "@/i18n/navigation";
+import { TProductFormData } from "@/types/ProductFormData";
+import { useFormContext } from "react-hook-form";
+import { SelectIcon } from "@radix-ui/react-select";
 
 interface IData {
   content: string[];
@@ -42,9 +55,11 @@ interface IData {
 export default function MediaGallery({
   sellerId,
   showMediaLibrary,
+  variationIndex,
 }: {
   sellerId: string;
   showMediaLibrary: boolean;
+  variationIndex: number;
 }) {
   const [data, setData] = useState<IData>();
   const [loading, setLoading] = useState(false);
@@ -52,6 +67,13 @@ export default function MediaGallery({
   const [size, setSize] = useState(50);
   const { toast } = useToast();
   const [deletedFileUrl, setDeletedFileUrl] = useState<string | null>(null);
+
+  const {
+    setValue,
+    getValues,
+    watch,
+    formState: { errors },
+  } = useFormContext<TProductFormData>();
 
   const hasMore = data ? data?.page?.totalPages > data?.page?.number : false;
 
@@ -61,6 +83,9 @@ export default function MediaGallery({
       const { success, message } = await deleteFileByUrl(deletedFileUrl);
       {
         if (success) {
+          setMediaFiles((prev) =>
+            prev.filter((file) => file !== deletedFileUrl)
+          );
           toast({
             title: "Success",
             description: "Dosya silindi.",
@@ -77,6 +102,17 @@ export default function MediaGallery({
     } else {
       alert("url yok");
     }
+  };
+
+  const handleAddImageUrlToVariant = (newUrl: string) => {
+    const currentImages = getValues(`imageUrls.${variationIndex}`) || [];
+    setValue(`imageUrls.${variationIndex}`, [...currentImages, newUrl]);
+  };
+
+  const handleRemoveImageUrlFromVariant = (removedUrl: string) => {
+    const currentImages = getValues(`imageUrls.${variationIndex}`) || [];
+    const updatedImages = currentImages.filter((url) => url !== removedUrl);
+    setValue(`imageUrls.${variationIndex}`, updatedImages);
   };
 
   const loadMore = () => {
@@ -148,8 +184,6 @@ export default function MediaGallery({
     }
   }, [sellerId, showMediaLibrary]);
 
-  const handleDownload = (url: string) => console.log("İndiriliyor:", url);
-
   const MediaCard = ({
     file,
     type,
@@ -159,7 +193,7 @@ export default function MediaGallery({
   }) => (
     <Card className="group relative overflow-hidden hover:shadow-lg">
       <CardContent className="p-0">
-        <div className="relative h-20 w-20">
+        <div className="relative h-36 w-36">
           {type === "image" ? (
             <Dialog>
               <DialogTrigger asChild>
@@ -169,7 +203,17 @@ export default function MediaGallery({
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 flex items-center justify-center">
-                    <Eye className="w-8 h-8 text-white opacity-0 group-hover:opacity-100" />
+                    {watch(`imageUrls.${variationIndex}`)?.includes(file) ? (
+                      <Minus
+                        onClick={() => handleRemoveImageUrlFromVariant(file)}
+                        className="w-8 h-8 text-white opacity-0 group-hover:opacity-100"
+                      />
+                    ) : (
+                      <Plus
+                        onClick={() => handleAddImageUrlToVariant(file)}
+                        className="w-8 h-8 text-white opacity-0 group-hover:opacity-100"
+                      />
+                    )}
                   </div>
                 </div>
               </DialogTrigger>
@@ -193,14 +237,17 @@ export default function MediaGallery({
             <p className="text-sm truncate">{file}</p>
           </div>
           <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100">
-            <Button
-              size="sm"
-              variant="secondary"
-              className="h-8 w-8 p-0"
-              onClick={() => handleDownload(file)}
+            <Link
+              href={`/api/download?url=${encodeURIComponent(
+                `${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${file}`
+              )}`}
+              download={true}
             >
-              <Download className="w-4 h-4" />
-            </Button>
+              <Button size="sm" variant="secondary" className="h-8 w-8 p-0">
+                <Download className="w-4 h-4" />
+              </Button>
+            </Link>
+
             <Button
               size="sm"
               variant="destructive"
@@ -218,7 +265,7 @@ export default function MediaGallery({
   const renderGrid = useCallback(
     (type: "image" | "video") => {
       const data = type === "image" ? groupedMedia.images : groupedMedia.videos;
-      const columnCount = 7;
+      const columnCount = 5;
       const rowCount = Math.ceil(data?.length / columnCount);
 
       return (
@@ -227,10 +274,10 @@ export default function MediaGallery({
             {({ height, width }) => (
               <Grid
                 columnCount={columnCount}
-                columnWidth={100}
+                columnWidth={144}
                 height={height}
                 rowCount={rowCount}
-                rowHeight={100}
+                rowHeight={144}
                 width={width}
                 onItemsRendered={({
                   visibleRowStartIndex,
@@ -257,8 +304,6 @@ export default function MediaGallery({
     },
     [groupedMedia]
   );
-
-  console.log("media files", mediaFiles)
 
   return (
     <>

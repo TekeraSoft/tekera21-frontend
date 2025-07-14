@@ -60,6 +60,7 @@ export default function ProductUpdateForm({
   const methods = useForm<TProductFormData>({
     defaultValues: {
       name: product.name,
+      imageUrls: {},
       code: product.code,
       brandName: product.brandName,
       description: product.description,
@@ -113,10 +114,12 @@ export default function ProductUpdateForm({
       });
     }
   }, [product, reset, categories]);
-  console.log(videoUrlState);
+
   const onSubmit = async (data: TProductFormData) => {
     // Transform data to match the required format
     setLoading(true);
+    console.log("watch", watch("imageUrls"));
+
     const formattedData = {
       name: data.name,
       id: product.id,
@@ -131,7 +134,9 @@ export default function ProductUpdateForm({
         modelName: variation.modelName,
         modelCode: variation.modelCode,
         color: variation.color,
-
+        imageUrls: Object.values(watch("imageUrls") ?? {}).flatMap(
+          (urls) => urls
+        ),
         attributes: variation.attributes.map((attr, attrIndex) => ({
           attributeDetails: attr.attributeDetails?.filter(
             (sa) => sa.key && sa.value
@@ -152,6 +157,7 @@ export default function ProductUpdateForm({
       deleteImages: deleteImages,
     };
 
+    console.log("formatted", formattedData);
     const formData = new FormData();
     formData.append(
       "data",
@@ -300,8 +306,6 @@ export default function ProductUpdateForm({
     setVideoUrlState(null);
   };
 
-  console.log("watch taghs", watch("tags"))
-
   return (
     <div className=" mx-auto p-6">
       <Card>
@@ -374,10 +378,11 @@ export default function ProductUpdateForm({
                   </div>
                 </DialogTrigger>
 
-                <MediaGallery
+                {/* <MediaGallery
                   showMediaLibrary={showMediaLibrary}
                   sellerId={watch("companyId")}
-                />
+                  variationIndex={-1}
+                /> */}
               </Dialog>
             )}
 

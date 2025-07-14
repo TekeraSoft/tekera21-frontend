@@ -2,6 +2,9 @@ export type TProductFormData = {
   name: string;
   slug: string;
   code: string;
+  imageUrls?: {
+    [key: string]: string[];
+  }
   brandName: string;
   companyId: string;
   description: string;

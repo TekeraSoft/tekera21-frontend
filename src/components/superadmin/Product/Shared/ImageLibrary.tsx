@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,14 +10,13 @@ import { Input } from "@/components/ui/input";
 import { UseFormWatch } from "react-hook-form";
 import { TProductFormData } from "@/types/ProductFormData";
 
-import { Camera, ImageIcon, Upload, X } from "lucide-react";
+import { ImageIcon, Upload, X } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { resizeImage } from "@/lib/utils";
+import MediaGallery from "@/components/shared/MediaGallery";
 
 interface IProps {
-  showMediaLibrary: boolean;
-  setShowMediaLibrary: React.Dispatch<React.SetStateAction<boolean>>;
   variationIndex: number;
   images: {
     [key: string]: File[];
@@ -31,8 +30,6 @@ interface IProps {
 }
 
 const ImageLibrary = ({
-  setShowMediaLibrary,
-  showMediaLibrary,
   variationIndex,
   images,
   onImagesChange,
@@ -40,6 +37,7 @@ const ImageLibrary = ({
   watch,
   handleDeleteImages,
 }: IProps) => {
+  const [showMediaLibrary, setShowMediaLibrary] = useState(false);
   const variantImages = images[variationIndex] || [];
 
   const handleImageUpload = async (
@@ -83,32 +81,67 @@ const ImageLibrary = ({
 
       <div className="flex flex-col h-full">
         {/* Upload Area */}
-        <Card className="mb-4">
-          <CardContent className="p-4">
-            <div className="border-2 border-dashed border-gray-200 rounded-lg p-3">
-              <div className="text-center">
-                <Upload className="mx-auto h-6 w-6 text-gray-400 mb-1" />
-                <Label
-                  htmlFor={`stock-images-${variationIndex}`}
-                  className="cursor-pointer text-xs font-medium text-blue-600 hover:text-blue-500"
-                >
-                  Upload images
-                </Label>
-                <Input
-                  id={`stock-images-${variationIndex}`}
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  PNG, JPG, GIF up to 10MB each
-                </p>
+        <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 w-full mb-4">
+          <Card>
+            <CardContent className="p-4">
+              <div className="border-2 border-dashed border-gray-200 rounded-lg p-3">
+                <div className="text-center">
+                  <Upload className="mx-auto h-6 w-6 text-gray-400 mb-1" />
+                  <Label
+                    htmlFor={`stock-images-${variationIndex}`}
+                    className="cursor-pointer text-xs font-medium text-blue-600 hover:text-blue-500"
+                  >
+                    Fotoğraf Yükle
+                  </Label>
+                  <Input
+                    id={`stock-images-${variationIndex}`}
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    PNG, JPG, GIF up to 10MB each
+                  </p>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <div className="border-2 border-dashed border-gray-200 rounded-lg p-3">
+                <div className="text-center">
+                  {!!watch("companyId").length && (
+                    <Dialog
+                      open={showMediaLibrary}
+                      onOpenChange={setShowMediaLibrary}
+                    >
+                      <DialogTrigger asChild>
+                        <div>
+                          <Upload className="mx-auto h-6 w-6 text-gray-400 mb-1" />
+                          <Label className="cursor-pointer text-xs font-medium text-blue-600 hover:text-blue-500">
+                            Galeriden seç
+                          </Label>
+                        </div>
+                      </DialogTrigger>
+
+                      <MediaGallery
+                        showMediaLibrary={showMediaLibrary}
+                        sellerId={watch("companyId")}
+                        variationIndex={variationIndex}
+                      />
+                    </Dialog>
+                  )}
+
+                  <p className="text-xs text-gray-500 mt-1">
+                    PNG, JPG, GIF up to 10MB each
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Images Grid */}
         <div className="flex-1 overflow-y-auto">
@@ -154,7 +187,26 @@ const ImageLibrary = ({
                 {watch(`variants.${variationIndex}.images`).map((url) => (
                   <div key={url} className="relative group">
                     <img
-                      src={process.env.NEXT_PUBLIC_IMAGE_BASE_URL + url}
+                      src={
+                        process.env.NEXT_PUBLIC_IMAGE_BASE_URL +
+                        (url.startsWith("/") ? url : `/${url}`)
+                      }
+                      alt={url}
+                      className="w-full h-24 object-cover rounded border"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteImages?.(url, variationIndex)}
+                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
+                {watch(`imageUrls.${variationIndex}`)?.map((url) => (
+                  <div key={url} className="relative group">
+                    <img
+                      src={process.env.NEXT_PUBLIC_IMAGE_BASE_URL + "/" + url}
                       alt={url}
                       className="w-full h-24 object-cover rounded border"
                     />
