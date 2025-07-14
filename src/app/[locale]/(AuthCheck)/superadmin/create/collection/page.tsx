@@ -151,14 +151,6 @@ export default function CreateCollectionPage() {
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
-    console.log(
-      "scrollTop",
-      scrollTop,
-      "scrollHeight",
-      scrollHeight,
-      "clientHeight",
-      clientHeight
-    );
 
     if (scrollHeight - scrollTop <= clientHeight + 200 && hasMore && !loading) {
       loadMoreProducts();

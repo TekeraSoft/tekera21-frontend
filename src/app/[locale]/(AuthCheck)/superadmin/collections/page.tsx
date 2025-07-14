@@ -23,8 +23,6 @@ const FashionCollectionsPage = async ({ searchParams }: IProps) => {
   }
   const { data } = result;
 
-  console.log("data", data);
-
   return (
     <div>
       <TopBar>

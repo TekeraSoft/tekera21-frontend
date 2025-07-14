@@ -19,7 +19,6 @@ import { updateCollection } from "@/app/actions";
 import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
 import { FileUploadEnhanced } from "@/components/shared/FileUploadEnhanced";
 import { useToast } from "@/hooks/use-toast";
-import TopBar from "@/components/superadmin/TopBar";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { useEffect, useState } from "react";
 import { IProduct } from "@/types/product";
@@ -146,7 +145,6 @@ const CollectionForm = ({
 
     fetchImage();
   }, [defaultData]);
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     setLoadingUpdateCollection(true);
