@@ -15,10 +15,19 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Play, Download, Eye, Trash2, Upload } from "lucide-react";
-import { getAllMediaBySellerId } from "@/app/actions";
+import { deleteFileByUrl, getAllMediaBySellerId } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import ImageView from "./ImageView";
-import useInfiniteScroll from "@/hooks/use-infinite-scroll";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
 
 interface IData {
   content: string[];
@@ -42,8 +51,33 @@ export default function MediaGallery({
   const [mediaFiles, setMediaFiles] = useState<string[]>([]);
   const [size, setSize] = useState(50);
   const { toast } = useToast();
+  const [deletedFileUrl, setDeletedFileUrl] = useState<string | null>(null);
 
   const hasMore = data ? data?.page?.totalPages > data?.page?.number : false;
+
+  const handleDeleteFromGallery = async () => {
+    console.log("url", deletedFileUrl);
+    if (deletedFileUrl) {
+      const { success, message } = await deleteFileByUrl(deletedFileUrl);
+      {
+        if (success) {
+          toast({
+            title: "Success",
+            description: "Dosya silindi.",
+            variant: "default",
+          });
+        } else {
+          toast({
+            title: "Error",
+            description: message || "Dosya silinemedi",
+            variant: "destructive",
+          });
+        }
+      }
+    } else {
+      alert("url yok");
+    }
+  };
 
   const loadMore = () => {
     if (loading || !hasMore) return;
@@ -61,6 +95,7 @@ export default function MediaGallery({
       loadMore();
     }
   };
+
   const getFiles = async (pageCount: number = 0) => {
     setLoading(true);
     const { data, success, message } = await getAllMediaBySellerId(
@@ -113,9 +148,6 @@ export default function MediaGallery({
     }
   }, [sellerId, showMediaLibrary]);
 
-  const loaderRef = useInfiniteScroll(loadMore);
-
-  const handleDelete = (id: string) => console.log("Siliniyor:", id);
   const handleDownload = (url: string) => console.log("İndiriliyor:", url);
 
   const MediaCard = ({
@@ -173,7 +205,7 @@ export default function MediaGallery({
               size="sm"
               variant="destructive"
               className="h-8 w-8 p-0"
-              onClick={() => handleDelete(file)}
+              onClick={() => setDeletedFileUrl(file)}
             >
               <Trash2 className="w-4 h-4" />
             </Button>
@@ -187,7 +219,7 @@ export default function MediaGallery({
     (type: "image" | "video") => {
       const data = type === "image" ? groupedMedia.images : groupedMedia.videos;
       const columnCount = 7;
-      const rowCount = Math.ceil(data.length / columnCount);
+      const rowCount = Math.ceil(data?.length / columnCount);
 
       return (
         <div className="h-[400px]">
@@ -226,47 +258,74 @@ export default function MediaGallery({
     [groupedMedia]
   );
 
+  console.log("media files", mediaFiles)
+
   return (
-    <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden">
-      <DialogHeader>
-        <DialogTitle>Medya Galeri</DialogTitle>
-      </DialogHeader>
+    <>
+      <AlertDialog
+        open={!!deletedFileUrl?.length}
+        onOpenChange={() => setDeletedFileUrl(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Emin misiniz?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Bu işlem geri alınamaz. Bu dosya kalıcı olarak silinecek
+              bağlantılı tüm ürünlerden de bu dosya kaldırılacak.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>İptal</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteFromGallery}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Sil
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden">
+        <DialogHeader>
+          <DialogTitle>Medya Galeri</DialogTitle>
+        </DialogHeader>
 
-      <div className="w-full mx-auto p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-3xl font-bold">Medya Galerisi</h1>
-            <p className="text-muted-foreground">
-              {data?.page.totalElements} dosyadan {mediaFiles.length} yüklendi
-            </p>
+        <div className="w-full mx-auto p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-3xl font-bold">Medya Galerisi</h1>
+              <p className="text-muted-foreground">
+                {data?.page.totalElements} dosyadan {mediaFiles.length} yüklendi
+              </p>
+            </div>
+            <Button className="flex items-center gap-2">
+              <Upload className="w-4 h-4" />
+              Yeni Dosya Yükle
+            </Button>
           </div>
-          <Button className="flex items-center gap-2">
-            <Upload className="w-4 h-4" />
-            Yeni Dosya Yükle
-          </Button>
+
+          <Tabs defaultValue="images" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="images" className="flex items-center gap-2">
+                Resimler
+                <Badge variant="square">{groupedMedia.images.length}</Badge>
+              </TabsTrigger>
+              <TabsTrigger value="videos" className="flex items-center gap-2">
+                Videolar
+                <Badge variant="square">{groupedMedia.videos.length}</Badge>
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="images" className="mt-6">
+              {renderGrid("image")}
+            </TabsContent>
+
+            <TabsContent value="videos" className="mt-6">
+              {renderGrid("video")}
+            </TabsContent>
+          </Tabs>
         </div>
-
-        <Tabs defaultValue="images" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="images" className="flex items-center gap-2">
-              Resimler
-              <Badge variant="square">{groupedMedia.images.length}</Badge>
-            </TabsTrigger>
-            <TabsTrigger value="videos" className="flex items-center gap-2">
-              Videolar
-              <Badge variant="square">{groupedMedia.videos.length}</Badge>
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="images" className="mt-6">
-            {renderGrid("image")}
-          </TabsContent>
-
-          <TabsContent value="videos" className="mt-6">
-            {renderGrid("video")}
-          </TabsContent>
-        </Tabs>
-      </div>
-    </DialogContent>
+      </DialogContent>
+    </>
   );
 }

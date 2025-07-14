@@ -445,7 +445,19 @@ export async function getAllMediaBySellerId(sellerId: string, page: number = 0, 
   console.log("sellerId", sellerId)
   try {
     const { data } = await axiosInstance.get(
-      `/company/seller-gallery?companyId=${sellerId}&page=${page}&size=${size}`,
+      `/company/sellerGallery?companyId=${sellerId}&page=${page}&size=${size}`,
+    );
+    console.log("data media", data)
+    return { success: true, message: null, data: data };
+  } catch (error: any) {
+    return { success: false, message: error.message || "Medya dosyaları getirilemedi." };
+  }
+}
+export async function deleteFileByUrl(url: string) {
+  console.log("url", url)
+  try {
+    const { data } = await axiosInstance.delete(
+      `/company/deleteImageFromVariation?path=/${url}`,
     );
     return { success: true, message: null, data: data };
   } catch (error: any) {

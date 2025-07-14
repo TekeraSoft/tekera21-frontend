@@ -1,6 +1,6 @@
 "use client";
 
-import type React from "react";
+import React, { useRef } from "react";
 
 import { useEffect, useState } from "react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/card";
 
 import { Label } from "@/components/ui/label";
-
 import { Separator } from "@/components/ui/separator";
 import { ICategory } from "@/types/AdminTypes/category";
 import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
@@ -23,7 +22,6 @@ import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
 import { updateProduct } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import ProductVariantForm from "../Shared/ProductVariantForm";
-
 import { IGetByIdProduct } from "@/types/SingleProduct";
 import { SubCategoriesSelect } from "../Shared/SubCategoriesSelect";
 import { TProductFormData } from "@/types/ProductFormData";
@@ -32,8 +30,8 @@ import CategorySelect from "../Shared/CategorySelect";
 import GenderSelect from "../Shared/GenderSelect";
 import GeneralInformation from "../Shared/MainFields/GeneralInformation";
 import CurrencyAndProductType from "../Shared/MainFields/CurrencyAndProductType";
-import { FileUploadEnhanced } from "@/components/shared/FileUploadEnhanced";
 import ThemeSelect from "../Shared/MainFields/ThemeSelect";
+import axios from "axios";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Camera } from "lucide-react";
 import MediaGallery from "@/components/shared/MediaGallery";
@@ -50,7 +48,11 @@ export default function ProductUpdateForm({
   }>({});
   const [deleteImages, setDeleteImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const [productVideo, setProductVideo] = useState<File | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [videoUrlState, setVideoUrlState] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
   const [showMediaLibrary, setShowMediaLibrary] = useState(false);
 
   const { toast } = useToast();
@@ -88,16 +90,18 @@ export default function ProductUpdateForm({
 
   useEffect(() => {
     if (product) {
+      setVideoUrlState(product.videoUrl || null);
       reset({
         name: product.name,
         code: product.code,
         brandName: product.brandName,
         description: product.description,
         currencyType: product.currencyType,
+        videoUrl: product.videoUrl,
         productType: product.productType,
-        tags: product.tags?.map((tag) => ({ value: tag })) || [],
         companyId: product.company.id,
         categoryId: product.category.id || "",
+        tags: product.tags?.map((tag) => ({ value: tag })) || [],
         subCategories: categories
           .flatMap((cat) => cat.subCategories)
           .filter((sub) =>
@@ -109,7 +113,7 @@ export default function ProductUpdateForm({
       });
     }
   }, [product, reset, categories]);
-
+  console.log(videoUrlState);
   const onSubmit = async (data: TProductFormData) => {
     // Transform data to match the required format
     setLoading(true);
@@ -120,13 +124,14 @@ export default function ProductUpdateForm({
       brandName: data.brandName,
       description: data.description,
       categoryId: data.categoryId,
-      videoUrl: !productVideo ? product.videoUrl : null,
+      videoUrl: videoUrlState,
       subCategories: data.subCategories?.map((item) => item.value),
       variants: data.variants.map((variation) => ({
         ...(variation.id ? { id: variation.id } : {}),
         modelName: variation.modelName,
         modelCode: variation.modelCode,
         color: variation.color,
+
         attributes: variation.attributes.map((attr, attrIndex) => ({
           attributeDetails: attr.attributeDetails?.filter(
             (sa) => sa.key && sa.value
@@ -146,10 +151,7 @@ export default function ProductUpdateForm({
       ),
       deleteImages: deleteImages,
     };
-    console.log("formatted", formattedData);
 
-    console.log("stockImages", stockAttributeImages);
-    console.log("deleteImages", deleteImages);
     const formData = new FormData();
     formData.append(
       "data",
@@ -164,12 +166,6 @@ export default function ProductUpdateForm({
       });
     } else {
       formData.append("images", new File([""], ""), "empty.jpg");
-    }
-
-    if (productVideo) {
-      formData.append("video", productVideo);
-    } else {
-      formData.append("video", new File([""], ""), "empty.mov");
     }
 
     const checkForm = () => {
@@ -228,7 +224,7 @@ export default function ProductUpdateForm({
       setDeleteImages([]);
       setStockAttributeImages({});
       setLoading(false);
-      setProductVideo(null);
+      setVideoUrlState(null);
     } else {
       toast({
         title: "Error",
@@ -247,7 +243,64 @@ export default function ProductUpdateForm({
 
     setValue(`variants.${variationIndex}.images`, updatedImages);
     setDeleteImages((prev) => [...prev, url]);
+    setVideoUrlState(null);
   };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    setUploadProgress(0);
+
+    try {
+      // Backend'den presigned URL al (örnek endpoint)
+      const { data: presignedUrl } = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/company/getPresignedUrl`,
+        {
+          params: {
+            objectName: crypto.randomUUID() + "." + file.name.split(".").pop(),
+          },
+        }
+      );
+
+      //PUT isteği ile videoyu direkt MinIO’ya yükle
+      await axios.put(presignedUrl, file, {
+        headers: {
+          "Content-Type": file.type,
+        },
+        onUploadProgress: (progressEvent) => {
+          const percent = Math.round(
+            (progressEvent.loaded * 100) / (progressEvent.total || 1)
+          );
+          setUploadProgress(percent);
+        },
+      });
+
+      // MinIO'daki URL'yi kullanıcıya göstermek için
+      const urlWithoutQueryParams = new URL(presignedUrl).pathname.replace(
+        /^\/[^/]+\//,
+        ""
+      );
+      setVideoUrlState(urlWithoutQueryParams);
+    } catch (error) {
+      console.error("Yükleme hatası:", error);
+      alert("Yükleme sırasında hata oluştu.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleDeleteVideo = () => {
+    setDeleteImages((prev) => [...prev, videoUrlState || ""]);
+    setVideoUrlState(null);
+  };
+
+  console.log("watch taghs", watch("tags"))
 
   return (
     <div className=" mx-auto p-6">
@@ -328,7 +381,7 @@ export default function ProductUpdateForm({
               </Dialog>
             )}
 
-            {product.videoUrl && !deleteImages.includes(product.videoUrl) ? (
+            {videoUrlState && !deleteImages.includes(videoUrlState) ? (
               <div className="space-y-2">
                 <Label>Ürün Videosu</Label>
                 <div className="flex flex-col mt-2">
@@ -337,36 +390,73 @@ export default function ProductUpdateForm({
                     type="button"
                     variant={"warning"}
                     className="w-max mt-1"
-                    onClick={() =>
-                      setDeleteImages((prev) => [
-                        ...prev,
-                        product?.videoUrl || "",
-                      ])
-                    }
+                    onClick={handleDeleteVideo}
                   >
                     Silmek için tıklayın.
                   </Button>
                 </div>
                 <video
                   src={
-                    process.env.NEXT_PUBLIC_IMAGE_BASE_URL +
-                    "/" +
-                    product.videoUrl
+                    process.env.NEXT_PUBLIC_IMAGE_BASE_URL + "/" + videoUrlState
                   }
                   controls
                   className="w-full h-96 rounded-lg"
                 />
               </div>
             ) : (
-              <FileUploadEnhanced
-                name="video"
-                accept=".mp4,video/mp4"
-                label="Ürün video (isteğe bağlı)"
-                description="MP4, AVI up to 300MB"
-                icon="image"
-                setFile={(file) => setProductVideo(file)}
-                file={productVideo}
-              />
+              <>
+                <div className="p-4 space-y-4">
+                  <button
+                    onClick={handleUploadClick}
+                    type="button"
+                    className="bg-blue-600 text-white px-4 py-2 rounded"
+                    disabled={uploading}
+                  >
+                    {uploading
+                      ? "Yükleniyor..."
+                      : "Video Yükle (Presigned URL)"}
+                  </button>
+
+                  <input
+                    type="file"
+                    accept=".mp4, .mov"
+                    style={{ display: "none" }}
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                  />
+
+                  {uploading && (
+                    <div className="w-full bg-gray-200 h-4 rounded">
+                      <div
+                        className="bg-blue-500 h-3 rounded"
+                        style={{ width: `${uploadProgress}%` }}
+                      ></div>
+                    </div>
+                  )}
+
+                  {videoUrlState && (
+                    <video controls className="mt-4 max-w-full">
+                      <source
+                        src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${videoUrlState}`}
+                        type="video/mp4"
+                      />
+                      Tarayıcınız video etiketini desteklemiyor.
+                    </video>
+                  )}
+                </div>
+
+                {/*
+                  <FileUploadEnhanced
+                      name="video"
+                      accept=".mp4,video/mp4"
+                      label="Ürün video (isteğe bağlı)"
+                      description="MP4, AVI up to 300MB"
+                      icon="image"
+                      setFile={(file) => setProductVideo(file)}
+                      file={productVideo}
+                  />
+                  */}
+              </>
             )}
 
             <Separator />
