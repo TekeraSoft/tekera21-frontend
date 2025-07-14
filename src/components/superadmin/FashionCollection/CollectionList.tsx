@@ -152,8 +152,8 @@ export default function CollectionList({
       {/* Results Count */}
       <div className="mb-6">
         <p className="text-sm text-muted-foreground">
-          Toplam {collectionsData.content.length} adet koleksiyondan{" "}
-          {filteredCollections.length} adeti gösteriliyor
+          Toplam {collectionsData.content?.length} adet koleksiyondan{" "}
+          {filteredCollections?.length} adeti gösteriliyor
         </p>
       </div>
 
@@ -209,18 +209,18 @@ export default function CollectionList({
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">Ürün adeti</span>
                       <Badge variant="outline">
-                        {collection.products.length} ürün
+                        {collection.products?.length} ürün
                       </Badge>
                     </div>
 
                     {/* Product Preview */}
-                    {collection.products.length > 0 && (
+                    {collection.products?.length > 0 && (
                       <div className="space-y-2">
                         <h4 className="text-sm font-medium">
                           Koleksiyon ürünleri:
                         </h4>
                         <div className="space-y-1">
-                          {collection.products.slice(0, 3).map((product) => (
+                          {collection.products?.slice(0, 3).map((product) => (
                             <div
                               key={product.id}
                               className="flex items-center justify-between text-xs"
@@ -236,9 +236,9 @@ export default function CollectionList({
                               </div>
                             </div>
                           ))}
-                          {collection.products.length > 3 && (
+                          {collection.products?.length > 3 && (
                             <p className="text-xs text-muted-foreground">
-                              +{collection.products.length - 3} more products
+                              +{collection.products?.length - 3} more products
                             </p>
                           )}
                         </div>
@@ -272,7 +272,7 @@ export default function CollectionList({
       </div>
 
       {/* Empty State */}
-      {filteredCollections.length === 0 && (
+      {filteredCollections?.length === 0 && (
         <div className="text-center py-12">
           <div className="mx-auto w-24 h-24 bg-muted rounded-full flex items-center justify-center mb-4">
             <Search className="h-8 w-8 text-muted-foreground" />

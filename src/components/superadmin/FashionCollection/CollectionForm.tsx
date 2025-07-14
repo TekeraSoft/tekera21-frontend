@@ -39,6 +39,7 @@ const CollectionForm = ({
     (state) => state.adminProducts
   );
   const pageCount = data.page.number;
+  const size = 8;
 
   const [displayedProducts, setDisplayedProducts] = useState<IProduct[]>(
     defaultData.products
@@ -57,7 +58,7 @@ const CollectionForm = ({
 
   useEffect(() => {
     if (!success && !error && pageCount === 0) {
-      dispatch(fetchProducts({ page: 0, size: 3 }));
+      dispatch(fetchProducts({ page: 0, size: size }));
     }
 
     return () => {
@@ -68,11 +69,11 @@ const CollectionForm = ({
   }, [success, error, pageCount]);
 
   useEffect(() => {
-    if (pageCount === 0 && data.content.length > 0 && !loading) {
+    if (pageCount === 0 && data.content?.length > 0 && !loading) {
       setDisplayedProducts(data.content);
     }
     if (pageCount > 0 && !loading && data.page.number === pageCount) {
-      if (data.content.length !== 0) {
+      if (data.content?.length !== 0) {
         setDisplayedProducts((prev) => [...prev, ...data.content]);
       }
     }
@@ -82,7 +83,7 @@ const CollectionForm = ({
 
   const loadMoreProducts = () => {
     if (loading || !hasMore) return;
-    dispatch(fetchProducts({ page: pageCount + 1, size: 3 }));
+    dispatch(fetchProducts({ page: pageCount + 1, size: size }));
   };
 
   const handleInputChange = (
@@ -146,12 +147,12 @@ const CollectionForm = ({
     fetchImage();
   }, [defaultData]);
 
-  console.log("default data", defaultData);
+
   const handleSubmit = async (e: React.FormEvent) => {
     setLoadingUpdateCollection(true);
     e.preventDefault();
     const formData = new FormData();
-    console.log("collection state", collection);
+    // console.log("collection state", collection);
     formData.append(`collectionName`, collection.collectionName);
     formData.append(`id`, defaultData.id);
     formData.append(`description`, collection.description);
@@ -162,7 +163,7 @@ const CollectionForm = ({
       formData.append("image", new File([""], ""), "empty.jpg");
     }
 
-    collection.products.map((product) =>
+    collection.products?.map((product) =>
       formData.append(`products`, product.id)
     );
 
@@ -269,7 +270,7 @@ const CollectionForm = ({
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle>Ürünler ({collection.products.length})</CardTitle>
+              <CardTitle>Ürünler ({collection.products?.length})</CardTitle>
               <Dialog
                 open={isProductDialogOpen}
                 onOpenChange={setIsProductDialogOpen}
@@ -295,13 +296,13 @@ const CollectionForm = ({
                         />
                       </div> */}
                     <div
-                      className="max-h-96 overflow-y-auto space-y-2"
+                      className="max-h-96 overflow-y-auto grid grid-cols-2 gap-2 space-y-2"
                       onScroll={handleScroll}
                     >
                       {displayedProducts.map((product) => (
                         <div
                           key={product.id}
-                          className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer"
+                          className="flex hover:bg-primary/20 items-center space-x-3 p-3 border rounded-lg cursor-pointer"
                           onClick={() =>
                             collection.products.some(
                               (col) => col.id === product.id
@@ -317,15 +318,17 @@ const CollectionForm = ({
                                 product.variations[0].images[0] ||
                                 "/placeholder.svg",
                             }}
-                            className="w-40 h-40 rounded object-cover"
+                            className="w-20 h-20 rounded object-cover"
                           />
                           <div className="flex-1">
-                            <h4 className="font-medium">{product.name}</h4>
+                            <h4 className="font-medium text-xs">
+                              {product.name}
+                            </h4>
                             <div className="flex items-center space-x-2">
-                              <span className="text-lg font-semibold">
+                              <span className="text-xs font-semibold">
                                 ₺{product.variations[0].attributes[0].price}
                               </span>
-                              <Badge variant="square">
+                              <Badge variant="square" className="text-[8px]">
                                 {product.subCategories.length &&
                                   product.subCategories[
                                     product.subCategories.length - 1
@@ -367,7 +370,7 @@ const CollectionForm = ({
             </div>
           </CardHeader>
           <CardContent>
-            {collection.products.length === 0 ? (
+            {collection.products?.length === 0 ? (
               <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
                 <div className="space-y-2">
                   <div className="mx-auto w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
@@ -383,7 +386,7 @@ const CollectionForm = ({
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {collection.products.map((product) => (
+                {collection.products?.map((product) => (
                   <div
                     key={product.id}
                     className="relative border rounded-lg p-4 bg-white"
@@ -411,9 +414,9 @@ const CollectionForm = ({
                         ₺{product.variations[0].attributes[0].price}
                       </span>
                       <Badge variant="square">
-                        {product.subCategories.length &&
+                        {product.subCategories?.length &&
                           product.subCategories[
-                            product.subCategories.length - 1
+                            product.subCategories?.length - 1
                           ].name}
                       </Badge>
                     </div>
@@ -432,7 +435,7 @@ const CollectionForm = ({
             className="text-xl"
             disabled={
               !collection.collectionName.trim() ||
-              collection.products.length === 0 ||
+              collection.products?.length === 0 ||
               loadingUpdateCollection
             }
           >

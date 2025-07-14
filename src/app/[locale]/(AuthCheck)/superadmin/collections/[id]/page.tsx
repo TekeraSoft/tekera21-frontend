@@ -17,6 +17,7 @@ const CollectionEditPage = async ({ params }: IProps) => {
 
   const { data } = result;
 
+
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       <TopBar>

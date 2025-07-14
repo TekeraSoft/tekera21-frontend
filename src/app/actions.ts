@@ -390,8 +390,9 @@ export async function getCollectionById(id: string): Promise<{
   try {
 
     const { data } = await axiosInstance.get(
-      `/super-admin/getFashionCollection?id=${id}`
+      `/fashion-collection/getFashionCollection?id=${id}`
     );
+
     return { success: true, message: data.message, data: data };
   } catch (error: any) {
 

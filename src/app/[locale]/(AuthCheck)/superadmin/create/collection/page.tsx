@@ -15,7 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, X, Minus } from "lucide-react";
+import { Plus, X, Minus, Search } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { IProduct } from "@/types/product";
 import {
@@ -29,13 +29,13 @@ import { FileUploadEnhanced } from "@/components/shared/FileUploadEnhanced";
 import { useToast } from "@/hooks/use-toast";
 import TopBar from "@/components/superadmin/TopBar";
 import { IFashionCollection } from "@/types/Collection";
-import LoadingBigCircle from "@/components/shared/Loading/LoadingBigCircle";
 
 export default function CreateCollectionPage() {
   const { data, error, loading, success } = useAppSelector(
     (state) => state.adminProducts
   );
   const pageCount = data?.page?.number || 0;
+  const size = 8;
 
   const [displayedProducts, setDisplayedProducts] = useState<IProduct[]>([]);
   const [collectionImage, setCollectionImage] = useState<File | null>(null);
@@ -48,7 +48,7 @@ export default function CreateCollectionPage() {
 
   useEffect(() => {
     if (!success && !error && pageCount === 0) {
-      dispatch(fetchProducts({ page: 0, size: 3 }));
+      dispatch(fetchProducts({ page: 0, size: size }));
     }
 
     return () => {
@@ -73,7 +73,7 @@ export default function CreateCollectionPage() {
 
   const loadMoreProducts = () => {
     if (loading || !hasMore) return;
-    dispatch(fetchProducts({ page: pageCount + 1, size: 3 }));
+    dispatch(fetchProducts({ page: pageCount + 1, size: size }));
   };
 
   const [collection, setCollection] = useState<IFashionCollection>({
@@ -151,8 +151,16 @@ export default function CreateCollectionPage() {
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+    console.log(
+      "scrollTop",
+      scrollTop,
+      "scrollHeight",
+      scrollHeight,
+      "clientHeight",
+      clientHeight
+    );
 
-    if (scrollHeight - scrollTop <= clientHeight + 100 && hasMore && !loading) {
+    if (scrollHeight - scrollTop <= clientHeight + 200 && hasMore && !loading) {
       loadMoreProducts();
     }
   };
@@ -246,23 +254,23 @@ export default function CreateCollectionPage() {
                         <DialogTitle>Koleksiyona Ürün Ekle</DialogTitle>
                       </DialogHeader>
                       <div className="space-y-4">
-                        {/* <div className="relative">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                        <Input
-                          placeholder="Ürün ara..."
-                          value={searchTerm}
-                          onChange={(e) => setSearchTerm(e.target.value)}
-                          className="pl-10"
-                        />
-                      </div> */}
+                        <div className="relative">
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                          <Input
+                            placeholder="Ürün ara..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="pl-10"
+                          />
+                        </div>
                         <div
-                          className="max-h-96 overflow-y-auto space-y-2"
+                          className="max-h-96 overflow-y-auto grid grid-cols-2 gap-2 space-y-2"
                           onScroll={handleScroll}
                         >
                           {displayedProducts.map((product) => (
                             <div
                               key={product.id}
-                              className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer"
+                              className="flex hover:bg-primary/20 items-center space-x-3 p-3 border rounded-lg cursor-pointer"
                               onClick={() =>
                                 collection.products.some(
                                   (col) => col.id === product.id
@@ -278,15 +286,20 @@ export default function CreateCollectionPage() {
                                     product.variations[0].images[0] ||
                                     "/placeholder.svg",
                                 }}
-                                className="w-40 h-40 rounded object-cover"
+                                className="w-20 h-20 rounded object-cover"
                               />
                               <div className="flex-1">
-                                <h4 className="font-medium">{product.name}</h4>
+                                <h4 className="font-medium text-xs">
+                                  {product.name}
+                                </h4>
                                 <div className="flex items-center space-x-2">
-                                  <span className="text-lg font-semibold">
+                                  <span className="text-xs font-semibold">
                                     ₺{product.variations[0].attributes[0].price}
                                   </span>
-                                  <Badge variant="square">
+                                  <Badge
+                                    variant="square"
+                                    className="text-[8px]"
+                                  >
                                     {product.subCategories.length &&
                                       product.subCategories[
                                         product.subCategories.length - 1
