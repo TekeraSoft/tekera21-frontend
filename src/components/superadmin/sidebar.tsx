@@ -27,47 +27,47 @@ export function SideBar() {
       path: "/superadmin/dashboard",
       icon: Home,
     },
-    user?.role.includes("products") && {
+    user?.roles.includes("SUPER_ADMIN") && {
       name: "Products",
       path: "/superadmin/products",
       icon: Package,
     },
-    user?.role.includes("orders") && {
+    user?.roles.includes("SUPER_ADMIN") && {
       name: "Orders",
       path: "/superadmin/orders",
       icon: ShoppingCart,
     },
-    user?.role.includes("customers") && {
+    user?.roles.includes("SUPER_ADMIN") && {
       name: "Customers",
       path: "/superadmin/customers",
       icon: Users,
     },
-    user?.role.includes("analytics") && {
+    user?.roles.includes("SUPER_ADMIN") && {
       name: "Analytics",
       path: "/superadmin/analytics",
       icon: BarChart3,
     },
-    user?.role.includes("products") && {
+    user?.roles.includes("SUPER_ADMIN") && {
       name: "Fashion Collections",
       path: "/superadmin/collections",
       icon: LucideAirVent,
     },
-    user?.role.includes("products") && {
+    user?.roles.includes("SUPER_ADMIN") && {
       name: "Fashion Collection Oluştur",
       path: "/superadmin/create/collection",
       icon: LucideAirVent,
     },
-    user?.role.includes("products") && {
+    user?.roles.includes("SUPER_ADMIN") && {
       name: "Create Product",
       path: "/superadmin/create/product",
       icon: LucidePercentDiamond,
     },
-    user?.role.includes("products") && {
+    user?.roles.includes("SUPER_ADMIN") && {
       name: "Create Category",
       path: "/superadmin/create/category",
       icon: LucideChartNoAxesColumnDecreasing,
     },
-    user?.role.includes("products") && {
+    user?.roles.includes("SUPER_ADMIN") && {
       name: "Tema Oluştur",
       path: "/superadmin/create/theme",
       icon: ThermometerSunIcon,

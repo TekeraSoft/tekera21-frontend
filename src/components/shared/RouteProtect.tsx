@@ -1,9 +1,6 @@
 "use client";
 
-import { useAuthContext } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
-import LoadingBigCircle from "./Loading/LoadingBigCircle";
+import React from "react";
 
 const RouteProtect = ({
   children,
@@ -12,26 +9,6 @@ const RouteProtect = ({
   children: React.ReactNode;
   allowedRoles?: string[];
 }) => {
-  const { userInfo } = useAuthContext();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!userInfo) {
-      router.replace("/login");
-    } else if (
-      !userInfo.role?.some((role: string) => allowedRoles.includes(role))
-    ) {
-      router.replace("/unauthorized");
-    }
-  }, [userInfo, allowedRoles, router]);
-
-  if (
-    !userInfo ||
-    !userInfo.role?.some((role: string) => allowedRoles.includes(role))
-  ) {
-    return <LoadingBigCircle />;
-  }
-
   return <>{children}</>;
 };
 

@@ -1,9 +1,10 @@
 "use client";
 
+import { IUserPayload } from "@/types/AuthTypes";
 import { createContext, useContext } from "react";
 
 interface IAuthContext {
-  userInfo: any;
+  userInfo: IUserPayload | null;
 }
 
 export const AuthContext = createContext<IAuthContext>({

@@ -3,10 +3,9 @@
 import axiosInstance from "@/request/axiosServer";
 import { IFashionCollection, IFashionCollectionData } from "@/types/Collection";
 import { revalidatePath } from "next/cache";
-
 import { cookies } from "next/headers";
-
-
+import jwt from "jsonwebtoken";
+import { IUserPayload } from "@/types/AuthTypes";
 
 export async function getSingleProductById(id: string) {
   try {
@@ -20,14 +19,16 @@ export async function getSingleProductById(id: string) {
   }
 }
 
-export async function getUser() {
+export async function getUser(): Promise<IUserPayload | null> {
   const cookieStore = await cookies();
   try {
-    const user = cookieStore.get("user")?.value;
-    if (!user) {
+    const token = cookieStore.get("session-token")?.value;
+
+    if (!token) {
       return null;
     }
-    const parsedUser = JSON.parse(user);
+    const parsedUser = jwt.decode(token) as IUserPayload;
+  
     if (!parsedUser) {
       return null;
     }
