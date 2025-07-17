@@ -7,7 +7,14 @@ import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import { IUserPayload } from "@/types/AuthTypes";
 
+export async function getSessionToken() {
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get('session-token');
+  return sessionToken?.value || null;
+}
+
 export async function getSingleProductById(id: string) {
+
   try {
     const { data } = await axiosInstance.get(
       `/super-admin/getCustomerProduct?id=${id}`
@@ -28,7 +35,7 @@ export async function getUser(): Promise<IUserPayload | null> {
       return null;
     }
     const parsedUser = jwt.decode(token) as IUserPayload;
-  
+
     if (!parsedUser) {
       return null;
     }
@@ -49,8 +56,14 @@ export async function logOut() {
   }
 }
 export async function getCategories() {
+  const cookieStore = await cookies()
+  const token = cookieStore.get("session-token")?.value
   try {
-    const { data } = await axiosInstance.get(`/super-admin/getAllCategory`);
+    const { data } = await axiosInstance.get(`/super-admin/getAllCategory`, {
+      headers: {
+        Cookie: `session-token=${token}`
+      }
+    });
 
     return { success: true, message: data.message, data: data };
   } catch (error: any) {
@@ -59,6 +72,7 @@ export async function getCategories() {
 }
 
 export async function getProducts(page: string = "0", size: string = "20") {
+
   try {
     const { data } = await axiosInstance.get(
       `/product/getAllProduct?page=${page}&size=${size}`
@@ -69,58 +83,66 @@ export async function getProducts(page: string = "0", size: string = "20") {
     return { success: false, message: error.message || "Failed to get products" };
   }
 }
-export async function getSuperAdminProducts(
-  page: string = "0",
-  size: string = "20"
-) {
-  try {
-    const { data } = await axiosInstance.get(
-      `/super-admin/getAllAdminProduct?page=${page}&size=${size}`
-    );
+// export async function getSuperAdminProducts(
+//   page: string = "0",
+//   size: string = "20"
+// ) {
+//   const cookieStore = await cookies()
+//   const token = cookieStore.get("session-token")?.value
 
-    return { success: true, message: data.message, data: data };
-  } catch (error: any) {
+//   console.log("token in get superadmin", token)
+//   try {
+//     const { data } = await axiosInstance.get(
+//       `/super-admin/getAllAdminProduct?page=${page}&size=${size}`, {
+//       headers: {
+//         Cookie: `session-token=${token}`
+//       }
+//     }
+//     );
 
-    return { success: false, message: error.message || "Failed to get products" };
-  }
-}
+//     return { success: true, message: data.message, data: data };
+//   } catch (error: any) {
 
-export async function getFilteredProducts(
-  page: string = "0",
-  size: string = "20",
-  color: string = "",
-  clothSize: string = "",
-  gender: string = ""
-) {
-  try {
-    const { data } = await axiosInstance.get(
-      `/product/filterProduct?page=${page}&size=${size}&color=${color}&clothSize=${clothSize}&gender=${gender}`
-    );
+//     return { success: false, message: error.message || "Failed to get products" };
+//   }
+// }
 
-    return { success: true, message: data.message, data: data };
-  } catch (error: any) {
+// export async function getFilteredProducts(
+//   page: string = "0",
+//   size: string = "20",
+//   color: string = "",
+//   clothSize: string = "",
+//   gender: string = ""
+// ) {
+//   try {
+//     const { data } = await axiosInstance.get(
+//       `/product/filterProduct?page=${page}&size=${size}&color=${color}&clothSize=${clothSize}&gender=${gender}`
+//     );
 
-    return {
-      success: false,
-      message: error.message || "Failed to get filtered products",
-    };
-  }
-}
+//     return { success: true, message: data.message, data: data };
+//   } catch (error: any) {
 
-export async function getCompanyProducts(
-  companyId: string = "f8406fa3-d9d0-4644-b797-7d51cb926bfc"
-) {
-  try {
-    const { data } = await axiosInstance.get(
-      `/company/findCompanyReturnProducts/${companyId}`
-    );
+//     return {
+//       success: false,
+//       message: error.message || "Failed to get filtered products",
+//     };
+//   }
+// }
 
-    return { success: true, message: data.message, data: data };
-  } catch (error: any) {
+// export async function getCompanyProducts(
+//   companyId: string = "f8406fa3-d9d0-4644-b797-7d51cb926bfc"
+// ) {
+//   try {
+//     const { data } = await axiosInstance.get(
+//       `/company/findCompanyReturnProducts/${companyId}`
+//     );
 
-    return { success: false, message: error.message || "Failed to get products" };
-  }
-}
+//     return { success: true, message: data.message, data: data };
+//   } catch (error: any) {
+
+//     return { success: false, message: error.message || "Failed to get products" };
+//   }
+// }
 export async function createCategory(formData: FormData) {
   try {
     const { data } = await axiosInstance.post(

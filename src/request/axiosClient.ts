@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { logOut } from "../app/actions";
+import { getSessionToken, logOut } from "../app/actions";
 import axios from "axios";
 import { api_base_url } from "@/constants/apiUrls";
 import { useRouter } from "@/i18n/navigation";
@@ -9,8 +9,8 @@ const axiosClient = axios.create({
   baseURL: api_base_url,
   timeout: 50000,
   withCredentials: true,
-  xsrfCookieName: "token",
-  xsrfHeaderName: "token",
+  xsrfCookieName: "session-token",
+  xsrfHeaderName: "session-token",
   headers: {
     "Content-Type": "application/json",
   },
@@ -25,7 +25,11 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
     // Response interceptor
 
     const responseInterceptor = axiosClient.interceptors.response.use(
-      (response) => response, // Başarılı cevapları direkt döndür
+      async (response) => {
+
+
+        return response
+      }, // Başarılı cevapları direkt döndür
       async (error) => {
         if (error.response) {
           // 401 Unauthorized durumunda logout yap
@@ -44,11 +48,16 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
 
     // Request interceptor
     const requestInterceptor = axiosClient.interceptors.request.use(
-      (config) => {
-        // console.log("request config", config);
+      async (config) => {
+        const sessionToken = await getSessionToken();
+        console.log("session tojen", sessionToken)
+        if (sessionToken) {
+          config.headers['Authorization'] = `Bearer ${sessionToken}`;
+        }
         if (config.data instanceof FormData) {
           config.headers["Content-Type"] = "multipart/form-data";
         }
+
         return config;
       }
     );

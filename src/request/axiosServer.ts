@@ -1,3 +1,4 @@
+import { getSessionToken } from "@/app/actions";
 import { api_base_url } from "@/constants/apiUrls";
 import axios from "axios";
 
@@ -12,8 +13,11 @@ const axiosInstance = axios.create({
   },
 });
 
-axiosInstance.interceptors.request.use((request) => {
-
+axiosInstance.interceptors.request.use(async (request) => {
+  const sessionToken = await getSessionToken();
+  if (sessionToken) {
+    request.headers.Authorization = `Bearer ${sessionToken}`
+  }
   return request;
 });
 
