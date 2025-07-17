@@ -18,7 +18,7 @@ export default function SignUpPage() {
               Already have an account?{" "}
             </span>
             <Link
-              href="/login"
+              href="/giris"
               className="font-medium text-primary underline-offset-4 hover:underline"
             >
               Login

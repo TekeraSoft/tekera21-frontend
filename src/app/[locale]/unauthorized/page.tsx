@@ -34,7 +34,7 @@ export default function Unauthorized() {
         </CardContent>
         <CardFooter className="flex flex-col gap-2">
           <Button className="w-full" asChild>
-            <Link href="/login">Sign In</Link>
+            <Link href="/giris">Sign In</Link>
           </Button>
           <Button variant="outline" className="w-full" asChild>
             <Link href="/">Return Home</Link>

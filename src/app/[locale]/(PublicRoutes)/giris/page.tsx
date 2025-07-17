@@ -27,8 +27,6 @@ export default function SigUpPage() {
   return (
     <div className="min-h-screen justify-center lg:items-center bg-gradient-to-br from-slate-50 to-slate-100 flex p-2">
       <div className="w-full max-w-md">
-        {/* Logo/Brand */}
-
         <Card className="shadow-xl border-0">
           <CardHeader className="space-y-1 pb-6">
             <CardTitle className="text-2xl font-bold text-center">
@@ -139,9 +137,8 @@ export default function SigUpPage() {
             </div>
           </CardContent>
         </Card>
-
         <div className="text-center mt-6 text-xs text-slate-500">
-          © 2025 Tekera. Tüm hakları saklıdır.
+          © 2025 Tekera
         </div>
       </div>
     </div>

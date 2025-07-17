@@ -13,11 +13,11 @@ export default async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
-  const publicRoutes = ["/login", "/forgot-password", "/reset-password", "/signup", "/digital-fashion", "/verify"];
+  const publicRoutes = ["/giris", "/forgot-password", "/reset-password", "/kayit", "/digital-fashion", "/verify"];
   const protectedRoutes = ["/seller", "/superadmin", "/register"];
 
   if (protectedRoutes.some((route) => pathname.includes(route)) && !user) {
-    const loginUrl = new URL(`/login`, request.url);
+    const loginUrl = new URL(`/giris`, request.url);
     return NextResponse.redirect(loginUrl);
   }
   if (publicRoutes.some((route) => pathname.includes(route)) && user) {

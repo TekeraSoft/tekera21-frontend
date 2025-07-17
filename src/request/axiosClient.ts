@@ -36,7 +36,7 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
 
           if (error.response.status === 401) {
             await logOut();
-            router.replace("/login")
+            router.replace("/giris")
           }
 
           return Promise.reject(error.response.data);

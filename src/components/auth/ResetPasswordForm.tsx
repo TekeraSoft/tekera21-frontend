@@ -66,7 +66,7 @@ export function ResetPasswordForm() {
           type="button"
           className="w-full"
           onClick={() => {
-            router.push("/login")
+            router.push("/giris")
           }}
         >
           Go to login

@@ -38,7 +38,7 @@ function DigitalFashionBuyerLoginRegisterPopover() {
           <Link href="/register">Üye Ol</Link>
         </Button>
         <Button size={"sm"} className="w-full text-[11px] mt-2">
-          <Link href="/login">Giriş Yap</Link>
+          <Link href="/giris">Giriş Yap</Link>
         </Button>
       </PopoverContent>
     </Popover>

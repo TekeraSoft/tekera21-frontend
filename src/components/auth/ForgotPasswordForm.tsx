@@ -50,7 +50,7 @@ export function ForgotPasswordForm() {
           type="button"
           className="w-full"
           onClick={() => {
-            router.push("/login")
+            router.push("/giris")
           }}
         >
           Back to login

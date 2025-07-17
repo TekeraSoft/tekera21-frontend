@@ -19,7 +19,7 @@ export default function ForgotPasswordPage() {
               Remember your password?{" "}
             </span>
             <Link
-              href="/login"
+              href="/giris"
               className="font-medium text-primary underline-offset-4 hover:underline"
             >
               Back to login
