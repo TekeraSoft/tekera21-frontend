@@ -1,6 +1,4 @@
 "use client";
-
-import { SellerRouteProtectContainer } from "@/components/seller-components/containers/SellerRouteProtectContainer";
 import SellerFooter from "@/components/seller-components/layout/footer/SellerFooter";
 import SellerHeader from "@/components/seller-components/layout/Header/SellerHeader";
 import SellerLiveSupport from "@/components/seller-components/live-support/SellerLiveSupport";
@@ -19,10 +17,10 @@ export default function SellerLayout({ children }: SellerLayoutProps) {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (user?.companyId) {
+    if (user?.email) {
       // companyId'ye göre eşleşen şirketi bul
       const company = Object.values(companies).find(
-        (c) => c.id === user.companyId
+        (c) => c.email === user.email
       );
 
       // Eğer şirket varsa Redux'a aktar
@@ -33,15 +31,13 @@ export default function SellerLayout({ children }: SellerLayoutProps) {
   }, [user]);
 
   return (
-    <SellerRouteProtectContainer allowedRoles={["seller"]}>
-      <div className="flex flex-col">
-        <div className="relative min-h-screen flex flex-col">
-          <SellerHeader />
-          <div className="flex-1">{children}</div>
-          <SellerLiveSupport />
-          <SellerFooter />
-        </div>
+    <div className="flex flex-col">
+      <div className="relative min-h-screen flex flex-col">
+        <SellerHeader />
+        <div className="flex-1">{children}</div>
+        <SellerLiveSupport />
+        <SellerFooter />
       </div>
-    </SellerRouteProtectContainer>
+    </div>
   );
 }

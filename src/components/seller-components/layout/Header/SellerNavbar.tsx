@@ -33,6 +33,7 @@ import { useState } from "react";
 import { SellerMenuItem } from "../../../../../types/SellerTypes/SellerNavbarTypes";
 import SellerNavbarMobile from "./SellerNavbarMobile";
 import RestrictedAccessDialog from "./RestrictedAccessDialog";
+import { TUserTypes } from "@/types/AuthTypes";
 
 // Define the menu structure
 
@@ -263,9 +264,9 @@ function SellerNavbar() {
   const { logoUrl } = useAppSelector((state) => state.globalSettings);
 
   // Check if the user has the required role
-  const hasRole = (role: string): boolean => {
+  const hasRole = (role: TUserTypes): boolean => {
     if (!userInfo) return false;
-    return userInfo.role.includes(role);
+    return userInfo.roles.includes(role);
   };
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -301,7 +302,7 @@ function SellerNavbar() {
           </Button>
 
           {menuItems.map((item) => {
-            const isAccessible = hasRole(item.requiredRole);
+            const isAccessible = hasRole(item.requiredRole as TUserTypes);
             return (
               <MenubarMenu key={item.key}>
                 {isAccessible ? (
@@ -322,7 +323,9 @@ function SellerNavbar() {
                 {isAccessible && (
                   <MenubarContent>
                     {item.subItems?.map((subItem) => {
-                      const isSubAccessible = hasRole(subItem.requiredRole);
+                      const isSubAccessible = hasRole(
+                        subItem.requiredRole as TUserTypes
+                      );
 
                       return subItem.flyout ? (
                         <MenubarSub key={subItem.key}>
@@ -343,7 +346,7 @@ function SellerNavbar() {
                             <MenubarSubContent>
                               {subItem.flyout.map((flyoutItem) => {
                                 const isFlyoutAccessible = hasRole(
-                                  flyoutItem.requiredRole
+                                  flyoutItem.requiredRole as TUserTypes
                                 );
                                 return isFlyoutAccessible ? (
                                   <MenubarItem

@@ -19,6 +19,7 @@ import { Store } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAppSelector } from "@/store/store";
+import { logOut } from "@/app/actions";
 
 interface PopoverLink {
   text: string;
@@ -37,6 +38,11 @@ export default function SellerCompanyPopover() {
     { text: "Ticari Şartlar", href: "/sartlar" },
     { text: "Platform Kuralları", href: "/kurallar" },
   ];
+
+  const handleLogout = async () => {
+    await logOut();
+    setOpenDialog(false);
+  };
 
   return (
     <Popover>
@@ -110,13 +116,7 @@ export default function SellerCompanyPopover() {
                 <Button variant="outline" onClick={() => setOpenDialog(false)}>
                   Hayır
                 </Button>
-                <Button
-                  variant="destructive"
-                  onClick={() => {
-                    setOpenDialog(false);
-                    // logout işlemi buraya yazılabilir
-                  }}
-                >
+                <Button variant="destructive" onClick={handleLogout}>
                   Evet
                 </Button>
               </DialogFooter>

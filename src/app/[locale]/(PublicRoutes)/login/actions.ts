@@ -1,8 +1,9 @@
 "use server"
 
+import { sellerRoles } from "@/constants/roles";
 import { redirect } from "@/i18n/navigation";
 import axiosInstance from "@/request/axiosServer";
-import { ILogin, ISignUpForm } from "@/types/AuthTypes";
+import { ILogin, ISignUpForm, IUserPayload } from "@/types/AuthTypes";
 import jwt from "jsonwebtoken";
 import { getLocale } from "next-intl/server";
 import { cookies } from "next/headers";
@@ -112,8 +113,14 @@ export async function loginUser(prevState: ActionStateType, formData: FormData):
       maxAge: 60 * 60 * 24 * 7, // 7 gün
     });
 
-    const payload = jwt.decode(data.accessToken);
+    const payload = jwt.decode(data.accessToken) as IUserPayload;
     console.log("jwt", payload)
+    if (sellerRoles.some(role => payload.roles.includes(role))) {
+      return redirect({ href: "/seller", locale: locale })
+    }
+    if (payload.roles.includes("SUPER_ADMIN")) {
+      return redirect({ href: "/superadmin", locale: locale })
+    }
     return redirect({ href: "/", locale: locale })
 
   } catch (error: any) {

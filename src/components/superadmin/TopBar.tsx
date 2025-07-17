@@ -6,15 +6,18 @@ import {
   Bell,
   CheckCircle,
   Info,
+  LogOutIcon,
   PersonStanding,
   Settings,
   TableConfig,
+  User,
   XCircle,
 } from "lucide-react";
 import ToggleSidebarButton from "./ToggleSidebarButton";
 import { Link } from "@/i18n/navigation";
 import { useAuthContext } from "@/context/AuthContext";
-import axiosClient from "@/request/axiosClient";
+import { Button } from "../ui/button";
+import { logOut } from "@/app/actions";
 
 type AlertItem = {
   id: string;
@@ -75,6 +78,10 @@ const TopBar = ({ children }: { children: React.ReactNode }) => {
   };
 
   const { userInfo } = useAuthContext();
+
+  const handleLogout = async () => {
+    await logOut();
+  };
 
   return (
     <div className="w-full bg-white h-[52px] flex items-center justify-between px-4 shadow-sm border-b">
@@ -138,6 +145,24 @@ const TopBar = ({ children }: { children: React.ReactNode }) => {
                 );
               })
             )}
+          </PopoverContent>
+        </Popover>
+        <Popover>
+          <PopoverTrigger asChild>
+            <div className="flex items-center gap-1 cursor-pointer text-gray-600">
+              <User size={16} />
+              {userInfo?.nameSurname}
+            </div>
+          </PopoverTrigger>
+          <PopoverContent className="text-sm p-2">
+            <Button
+              onClick={handleLogout}
+              variant={"ghost"}
+              className="flex m-0 items-center gap-1 cursor-pointer text-gray-600"
+            >
+              <LogOutIcon size={15} className="text-gray-600" />
+              Çıkış yap
+            </Button>
           </PopoverContent>
         </Popover>
       </div>

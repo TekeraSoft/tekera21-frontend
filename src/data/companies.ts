@@ -2,7 +2,7 @@ export const companies = {
   Arzuamber: {
     id: 1110123,
     name: "ARZUAMBER MODA", // Mağaza adı
-    email: "arzuamber@gmail.com", // Genel iletişim e-postası
+    email: "ramazanertan2@gmail.com", // Genel iletişim e-postası
     logo: "https://arzuamber.com/_next/image?url=%2Fimages%2Flogo%2Ffooterlogo.png&w=256&q=75",
     gsmNumber: "+90 532 532 3232", // Cep telefonu
     alternativePhoneNumber: "+90 212 652 5322", // Alternatif telefon

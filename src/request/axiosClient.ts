@@ -50,7 +50,6 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
     const requestInterceptor = axiosClient.interceptors.request.use(
       async (config) => {
         const sessionToken = await getSessionToken();
-        console.log("session tojen", sessionToken)
         if (sessionToken) {
           config.headers['Authorization'] = `Bearer ${sessionToken}`;
         }

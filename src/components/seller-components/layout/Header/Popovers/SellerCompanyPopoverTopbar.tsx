@@ -1,5 +1,6 @@
 "use client";
 
+import { logOut } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -37,6 +38,11 @@ export default function SellerCompanyPopoverTopbar() {
   ];
 
   const [openDialog, setOpenDialog] = useState(false);
+
+  const handleLogout = async () => {
+    await logOut();
+    setOpenDialog(false);
+  };
 
   return (
     <Popover>
@@ -91,13 +97,7 @@ export default function SellerCompanyPopoverTopbar() {
                 <Button variant="outline" onClick={() => setOpenDialog(false)}>
                   Hayır
                 </Button>
-                <Button
-                  variant="destructive"
-                  onClick={() => {
-                    setOpenDialog(false);
-                    // logout işlemi yapılabilir
-                  }}
-                >
+                <Button variant="destructive" onClick={handleLogout}>
                   Evet
                 </Button>
               </DialogFooter>

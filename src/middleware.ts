@@ -2,7 +2,7 @@ import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 import { NextRequest, NextResponse } from "next/server";
 import { getUser } from "./app/actions";
-import { TUserTypes } from "@/types/AuthTypes";
+import { sellerRoles } from "./constants/roles";
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -26,11 +26,12 @@ export default async function middleware(request: NextRequest) {
   }
 
   if (user) {
+    // console.log("user in middleware", user)
     if (user.roles.includes("SUPER_ADMIN") && !pathname.includes("superadmin")) {
       const redirectUrl = new URL(`/superadmin`, request.url);
       return NextResponse.redirect(redirectUrl);
     }
-    const sellerRoles: TUserTypes[] = ["COMPANY_ADMIN", "COMPANY_EMPLOYEE"];
+
     if (user.roles.some((role) => sellerRoles.includes(role)) && !pathname.includes("/seller")) {
       const redirectUrl = new URL(`/seller`, request.url);
       return NextResponse.redirect(redirectUrl);
