@@ -51,6 +51,7 @@ export default function ProductUpdateForm({
   const [videoUrlState, setVideoUrlState] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [showMediaLibrary, setShowMediaLibrary] = useState(false);
+  const [productVideo, setProductVideo] = useState<File | null>(null);
 
   const { toast } = useToast();
 
@@ -169,6 +170,12 @@ export default function ProductUpdateForm({
       });
     } else {
       formData.append("images", new File([""], ""), "empty.jpg");
+    }
+
+    if (productVideo) {
+      formData.append("video", productVideo);
+    } else {
+      formData.append("video", new File([""], ""), "empty.mov");
     }
 
     const checkForm = () => {

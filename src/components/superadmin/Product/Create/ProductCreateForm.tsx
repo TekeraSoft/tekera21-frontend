@@ -100,7 +100,7 @@ export default function ProductCreateForm({
         (attr) => attr.key && attr.value
       ),
     };
-    console.log("formatted", formattedData);
+    console.log("formatted in create", formattedData);
     // console.log("stockImages", stockAttributeImages);
     const formData = new FormData();
     formData.append(

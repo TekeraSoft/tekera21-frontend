@@ -278,6 +278,7 @@ export async function deleteProductById(id: string) {
   }
 }
 export async function updateProduct(formData: FormData) {
+  console.log("render update product")
   try {
     const { data } = await axiosInstance.put(
       `/company/updateProduct`,
