@@ -48,20 +48,16 @@ const subjects = [
 const formSchema = z.object({
   talepNo: z.string().optional(),
   siparisNo: z.string().optional(),
-  konu: z.string().min(1, {
-    message: "Lütfen bir konu seçin",
-  }),
-  aciklama: z.string().min(10, {
-    message: "Açıklama en az 10 karakter olmalıdır",
-  }),
+  konu: z.string().min(1, { message: "Lütfen bir konu seçin" }),
+  aciklama: z
+    .string()
+    .min(10, { message: "Açıklama en az 10 karakter olmalıdır" }),
   olusturmaTarihi: z.preprocess(
     (val) =>
       typeof val === "string" || val instanceof Date ? new Date(val) : val,
-    z.date({
-      message: "Lütfen bir tarih seçin",
-    })
+    z.date({ message: "Lütfen bir tarih seçin" })
   ),
-} as const);
+} as any);
 
 type FormValues = z.infer<typeof formSchema>;
 
@@ -71,9 +67,11 @@ export default function SupportTicketForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Form tanımı
-  const form = useForm({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      talepNo: "",
+      siparisNo: "",
       konu: "",
       aciklama: "",
       olusturmaTarihi: new Date(),
