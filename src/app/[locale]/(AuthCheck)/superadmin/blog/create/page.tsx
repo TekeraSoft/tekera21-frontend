@@ -62,7 +62,7 @@ const CreateBlogPage = () => {
 
 
 const form = useForm<BlogFormData>({
-  resolver: zodResolver(blogFormSchema) as Resolver<BlogFormData>,
+  resolver: zodResolver(blogFormSchema) as unknown as Resolver<BlogFormData>,
   defaultValues: {
     title: "",
     content: "",
