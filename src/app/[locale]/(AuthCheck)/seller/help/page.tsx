@@ -50,13 +50,13 @@ const formSchema = z.object({
   talepNo: z.string().optional(),
   siparisNo: z.string().optional(),
   konu: z.string({
-    required_error: "Lütfen bir konu seçin",
+    message: "Lütfen bir konu seçin",
   }),
   aciklama: z.string().min(10, {
     message: "Açıklama en az 10 karakter olmalıdır",
   }),
   olusturmaTarihi: z.date({
-    required_error: "Lütfen bir tarih seçin",
+    message: "Lütfen bir tarih seçin",
   }),
 });
 

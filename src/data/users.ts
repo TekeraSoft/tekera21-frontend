@@ -580,13 +580,13 @@ export const formSchema = z.object({
     message: "Postal code must be at least 5 characters.",
   }),
   country: z.string({
-    required_error: "Please select a country.",
+    message: "Please select a country.",
   }),
   dateOfBirth: z.date({
-    required_error: "Please select a date of birth.",
+    message: "Please select a date of birth.",
   }),
   customerRole: z.string({
-    required_error: "Please select a customer type.",
+    message: "Please select a customer type.",
   }),
   notes: z.string().optional(),
   documents: z.array(documentSchema),
