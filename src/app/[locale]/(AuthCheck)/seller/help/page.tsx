@@ -33,7 +33,7 @@ import { useAppSelector } from "@/store/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Resolver, useForm } from "react-hook-form";
 import * as z from "zod";
 
 // Konu seçenekleri
@@ -52,12 +52,12 @@ const formSchema = z.object({
   aciklama: z
     .string()
     .min(10, { message: "Açıklama en az 10 karakter olmalıdır" }),
-  olusturmaTarihi: z.preprocess(
-    (val) =>
-      typeof val === "string" || val instanceof Date ? new Date(val) : val,
-    z.date({ message: "Lütfen bir tarih seçin" })
-  ),
-} as any);
+  olusturmaTarihi: z.preprocess((val) => {
+    if (val instanceof Date) return val;
+    if (typeof val === "string" && val) return new Date(val);
+    return undefined; // boş ya da geçersizse undefined olarak dön
+  }, z.date({ required_error: "Lütfen bir tarih seçin" })),
+});
 
 type FormValues = z.infer<typeof formSchema>;
 
@@ -68,7 +68,7 @@ export default function SupportTicketForm() {
 
   // Form tanımı
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema) as unknown as Resolver<FormValues>,
     defaultValues: {
       talepNo: "",
       siparisNo: "",
