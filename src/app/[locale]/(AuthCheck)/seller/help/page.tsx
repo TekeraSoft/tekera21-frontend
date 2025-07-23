@@ -58,7 +58,7 @@ const formSchema = z.object({
     (val) =>
       typeof val === "string" || val instanceof Date ? new Date(val) : val,
     z.date({
-      required_error: "Lütfen bir tarih seçin",
+      message: "Lütfen bir tarih seçin",
     })
   ),
 } as const);
