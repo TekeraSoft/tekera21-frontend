@@ -22,7 +22,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
+import {
+  Controller,
+  Resolver,
+  useFieldArray,
+  useForm,
+} from "react-hook-form";
 import { z } from "zod";
 
 const CreateBlogPage = () => {
@@ -54,16 +59,18 @@ const CreateBlogPage = () => {
   type BlogFormData = z.infer<typeof blogFormSchema>;
   const router = useRouter();
   const { toast } = useToast();
-  const form = useForm<BlogFormData>({
-    resolver: zodResolver(blogFormSchema),
-    defaultValues: {
-      title: "",
-      content: "",
-      excerpt: "",
-      author: "",
-      tags: [],
-    },
-  });
+
+
+const form = useForm<BlogFormData>({
+  resolver: zodResolver(blogFormSchema) as Resolver<BlogFormData>,
+  defaultValues: {
+    title: "",
+    content: "",
+    excerpt: "",
+    author: "",
+    tags: [],
+  },
+});
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
