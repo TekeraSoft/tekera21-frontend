@@ -74,8 +74,6 @@ export default function SupportTicketForm() {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      talepNo: "",
-      siparisNo: "",
       konu: "",
       aciklama: "",
       olusturmaTarihi: new Date(),
