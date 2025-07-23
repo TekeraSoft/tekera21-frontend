@@ -52,11 +52,18 @@ const formSchema = z.object({
   aciklama: z
     .string()
     .min(10, { message: "Açıklama en az 10 karakter olmalıdır" }),
-  olusturmaTarihi: z.preprocess((val) => {
-    if (val instanceof Date) return val;
-    if (typeof val === "string" && val) return new Date(val);
-    return undefined; // boş ya da geçersizse undefined olarak dön
-  }, z.date({ required_error: "Lütfen bir tarih seçin" })),
+  olusturmaTarihi: z.preprocess(
+    (val) => {
+      if (val instanceof Date) return val;
+      if (typeof val === "string" && val.trim() !== "") return new Date(val);
+      return undefined;
+    },
+    z
+      .date({ message: "Geçerli bir tarih girin" })
+      .refine((date) => date instanceof Date && !isNaN(date.getTime()), {
+        message: "Lütfen bir tarih seçin",
+      })
+  ),
 });
 
 type FormValues = z.infer<typeof formSchema>;
