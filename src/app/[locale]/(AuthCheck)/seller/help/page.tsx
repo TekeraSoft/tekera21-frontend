@@ -71,8 +71,8 @@ export default function SupportTicketForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Form tanımı
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema) as Resolver<FormValues>,
+  const form = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       talepNo: "",
       siparisNo: "",
@@ -81,7 +81,6 @@ export default function SupportTicketForm() {
       olusturmaTarihi: new Date(),
     },
   });
-
   // Form gönderimi
   async function onSubmit(data: FormValues) {
     setIsSubmitting(true);
