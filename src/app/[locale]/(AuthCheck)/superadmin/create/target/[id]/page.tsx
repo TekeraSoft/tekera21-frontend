@@ -7,6 +7,7 @@ import React from "react";
 import { IProduct } from "@/types/product";
 import TargetCreate from "@/components/superadmin/TargetPicture/Create";
 import TargetDelete from "@/components/superadmin/TargetPicture/Delete";
+import QrCodeViewer from "@/components/superadmin/TargetPicture/QrCodeViewer";
 
 const CreateTargetPage = async ({
   params,
@@ -40,6 +41,7 @@ const CreateTargetPage = async ({
           Lütfen önce ürünün target picture alanını temizleyin.
         </p>
         <TargetDelete id={targetData.id} />
+        <QrCodeViewer targetId={targetData.id || ""} />
       </div>
     );
   }
