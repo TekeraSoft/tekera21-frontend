@@ -40,9 +40,7 @@ const CollectionForm = ({
   const pageCount = data.page.number;
   const size = 8;
 
-  const [displayedProducts, setDisplayedProducts] = useState<IProduct[]>(
-    defaultData.products
-  );
+  const [displayedProducts, setDisplayedProducts] = useState<IProduct[]>([]);
   const [collectionImage, setCollectionImage] = useState<File | null>(null);
   const [defaultImage, setDefaultImage] = useState<File | null>(null);
   const [loadingUpdateCollection, setLoadingUpdateCollection] = useState(false);
@@ -184,6 +182,18 @@ const CollectionForm = ({
       });
     }
   };
+
+  console.log(
+    "dis",
+    displayedProducts.length &&
+      displayedProducts.map((item) => {
+        if (item.variations[0]?.attributes) {
+          return `attr- ${item.variations[0].attributes[0].price}`;
+        } else {
+          return item.variations[0];
+        }
+      })
+  );
   return (
     <div className="mx-auto px-4 sm:px-6 lg:px-8 mt-4">
       <div className="mb-8">
@@ -297,52 +307,62 @@ const CollectionForm = ({
                       className="max-h-96 overflow-y-auto grid grid-cols-2 gap-2 space-y-2"
                       onScroll={handleScroll}
                     >
-                      {displayedProducts.map((product) => (
-                        <div
-                          key={product.id}
-                          className="flex hover:bg-primary/20 items-center space-x-3 p-3 border rounded-lg cursor-pointer"
-                          onClick={() =>
-                            collection.products.some(
-                              (col) => col.id === product.id
-                            )
-                              ? removeProduct(product.id)
-                              : addProduct(product)
-                          }
-                        >
-                          <ImageView
-                            imageInfo={{
-                              name: product.name,
-                              url:
-                                product.variations[0].images[0] ||
-                                "/placeholder.svg",
-                            }}
-                            className="w-20 h-20 rounded object-cover"
-                          />
-                          <div className="flex-1">
-                            <h4 className="font-medium text-xs">
-                              {product.name}
-                            </h4>
-                            <div className="flex items-center space-x-2">
-                              <span className="text-xs font-semibold">
-                                ₺{product.variations[0].attributes[0].price}
-                              </span>
-                              <Badge variant="square" className="text-[8px]">
-                                {product.subCategories.length &&
-                                  product.subCategories[
-                                    product.subCategories.length - 1
-                                  ].name}
-                              </Badge>
+                      {displayedProducts.length &&
+                        displayedProducts.map((product) => (
+                          <div
+                            key={product.id}
+                            className="flex hover:bg-primary/20 items-center space-x-3 p-3 border rounded-lg cursor-pointer"
+                            onClick={() =>
+                              collection.products.some(
+                                (col) => col.id === product.id
+                              )
+                                ? removeProduct(product.id)
+                                : addProduct(product)
+                            }
+                          >
+                            <ImageView
+                              imageInfo={{
+                                name: product.name,
+                                url:
+                                  product.variations[0].images[0] ||
+                                  "/placeholder.svg",
+                              }}
+                              className="w-20 h-20 rounded object-cover"
+                            />
+                            <div className="flex-1">
+                              <h4 className="font-medium text-xs">
+                                {product.name}
+                              </h4>
+                              <div className="flex items-center space-x-2">
+                                <span className="text-xs font-semibold">
+                                  {product?.variations[0].attributes &&
+                                    product?.variations[0].attributes[0]?.price.toLocaleString(
+                                      product.currencyType === "TRY"
+                                        ? "tr-TR"
+                                        : "en-US",
+                                      {
+                                        style: "currency",
+                                        currency: product.currencyType,
+                                      }
+                                    )}
+                                </span>
+                                <Badge variant="square" className="text-[7px]">
+                                  {product.subCategories.length &&
+                                    product.subCategories[
+                                      product.subCategories.length - 1
+                                    ].name}
+                                </Badge>
+                              </div>
                             </div>
+                            {collection.products.some(
+                              (col) => col.id === product.id
+                            ) ? (
+                              <Minus className="h-8 w-8 text-gray-400 hover:text-primary" />
+                            ) : (
+                              <Plus className="h-8 w-8 text-gray-400 hover:text-primary" />
+                            )}
                           </div>
-                          {collection.products.some(
-                            (col) => col.id === product.id
-                          ) ? (
-                            <Minus className="h-8 w-8 text-gray-400 hover:text-primary" />
-                          ) : (
-                            <Plus className="h-8 w-8 text-gray-400 hover:text-primary" />
-                          )}
-                        </div>
-                      ))}
+                        ))}
                       {/* {loading && (
                           <div className="text-center py-4">
                             <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
@@ -408,9 +428,9 @@ const CollectionForm = ({
                     />
                     <h4 className="font-medium mb-1">{product.name}</h4>
                     <div className="flex items-center justify-between">
-                      <span className="text-lg font-semibold">
-                        ₺{product.variations[0].attributes[0].price}
-                      </span>
+                      {/* <span className="text-lg font-semibold">
+                        ₺{product.variations[0]?.attributes[0]?.price}
+                      </span> */}
                       <Badge variant="square">
                         {product.subCategories?.length &&
                           product.subCategories[

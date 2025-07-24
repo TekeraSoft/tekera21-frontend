@@ -1,16 +1,9 @@
 import { User, Mail, Store, Hash } from "lucide-react";
 import { SellerCompanyProps } from "../../../../types/CompanyTypes/CompanySliceTypes";
-
-interface UserInfoProps {
-  name?: string;
-  email?: string;
-  store?: string;
-  id?: string;
-  companyId?: string;
-}
+import { IUserPayload } from "@/types/AuthTypes";
 
 interface Props {
-  user: UserInfoProps;
+  user: IUserPayload | null;
   SellerCompanyInfo: SellerCompanyProps;
 }
 
@@ -28,7 +21,7 @@ export function SellerHeLCreateTicketSenderInfoCard({
         <InfoRow
           icon={<User className="w-5 h-5 text-secondary" />}
           label="Ad Soyad"
-          value={user?.name || "Kullanıcı Adı"}
+          value={user?.nameSurname || "Kullanıcı Adı"}
         />
         <InfoRow
           icon={<Mail className="w-5 h-5 text-secondary" />}
@@ -38,7 +31,7 @@ export function SellerHeLCreateTicketSenderInfoCard({
         <InfoRow
           icon={<Store className="w-5 h-5 text-secondary" />}
           label="Mağaza"
-          value={user?.store || "Mağaza Adı"}
+          value={user?.email || "Mağaza Adı"}
         />
 
         <InfoRow
