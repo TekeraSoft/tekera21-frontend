@@ -12,7 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, X, Minus, SwitchCamera } from "lucide-react";
+import { Plus, X, Minus } from "lucide-react";
 
 import ImageView from "@/components/shared/ImageView";
 import { updateCollection } from "@/app/actions";
@@ -183,17 +183,6 @@ const CollectionForm = ({
     }
   };
 
-  console.log(
-    "dis",
-    displayedProducts.length &&
-      displayedProducts.map((item) => {
-        if (item.variations[0]?.attributes) {
-          return `attr- ${item.variations[0].attributes[0].price}`;
-        } else {
-          return item.variations[0];
-        }
-      })
-  );
   return (
     <div className="mx-auto px-4 sm:px-6 lg:px-8 mt-4">
       <div className="mb-8">
