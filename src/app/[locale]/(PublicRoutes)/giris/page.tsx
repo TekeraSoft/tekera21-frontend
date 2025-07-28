@@ -17,6 +17,7 @@ import { ActionStateType, loginUser } from "./actions";
 import { AdvancedPasswordInput } from "@/components/auth/PasswordInput";
 
 const initialState: ActionStateType = {
+  error: null,
   message: "",
   errors: {},
 };
