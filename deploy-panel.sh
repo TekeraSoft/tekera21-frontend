@@ -14,6 +14,14 @@ git checkout auth
 echo "[+] Pulling latest changes from auth..."
 git pull origin auth
 
+if [ $? -ne 0 ]; then
+    echo "[✗] Failed to pull latest changes. Exiting."
+    exit 1
+fi
+
+rm -rf .next
+rm -rf .node_modules
+
 echo "[+] Installing dependencies..."
 npm install
 

@@ -10,6 +10,7 @@ import { cookies } from "next/headers";
 import { z } from "zod"
 
 export type ActionStateType = {
+  error: any;
   message?: string;
   errors?: {
     firstName?: string[];
@@ -58,6 +59,7 @@ export async function registerUser(prevState: ActionStateType, formData: FormDat
 
   if (!validatedFields.success) {
     return {
+      error: null,
       errors: validatedFields.error.flatten().fieldErrors,
     }
   }
@@ -78,6 +80,7 @@ export async function registerUser(prevState: ActionStateType, formData: FormDat
       throw error;
     }
     return {
+      error: null,
       message: error.message || "Registration failed. Please try again.",
     }
   }
@@ -94,6 +97,7 @@ export async function loginUser(prevState: ActionStateType, formData: FormData):
 
   if (!validatedFields.success) {
     return {
+      error: null,
       errors: validatedFields.error.flatten().fieldErrors,
     }
   }
@@ -129,6 +133,7 @@ export async function loginUser(prevState: ActionStateType, formData: FormData):
       throw error;
     }
     return {
+      error: error,
       message: error.message || "login failed. Please try again.",
     }
   }
