@@ -12,7 +12,7 @@ const CollectionEditPage = async ({ params }: IProps) => {
   const result = await getCollectionById(id);
 
   if (!result.success) {
-    return <div>Koleksiyon bulunmaadı.</div>;
+    return <div>Koleksiyon bulunmaadı..</div>;
   }
 
   const { data } = result;
