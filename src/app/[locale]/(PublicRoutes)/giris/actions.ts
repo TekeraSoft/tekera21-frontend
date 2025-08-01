@@ -109,7 +109,7 @@ export async function loginUser(prevState: ActionStateType, formData: FormData):
     const { data } = await axiosInstance.post("/auth/authenticate", signInData);
 
     const cookieStore = await cookies();
-    cookieStore.set("session-token", data.accessToken, {
+    cookieStore.set("token", data.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",

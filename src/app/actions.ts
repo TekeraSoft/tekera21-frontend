@@ -11,7 +11,7 @@ import { getLocale } from "next-intl/server";
 
 export async function getSessionToken() {
   const cookieStore = await cookies();
-  const sessionToken = cookieStore.get('session-token');
+  const sessionToken = cookieStore.get('token');
   return sessionToken?.value || null;
 }
 
@@ -31,7 +31,7 @@ export async function getSingleProductById(id: string) {
 export async function getUser(): Promise<IUserPayload | null> {
   const cookieStore = await cookies();
   try {
-    const token = cookieStore.get("session-token")?.value;
+    const token = cookieStore.get("token")?.value;
 
     if (!token) {
       return null;
@@ -52,7 +52,7 @@ export async function logOut() {
   const cookieStore = await cookies();
   try {
     const locale = await getLocale()
-    cookieStore.delete("session-token");
+    cookieStore.delete("token");
     return redirect({ href: "/", locale: locale })
   } catch (error: any) {
     if (error instanceof Error && error.message === "NEXT_REDIRECT") {
@@ -63,13 +63,9 @@ export async function logOut() {
 }
 export async function getCategories() {
   const cookieStore = await cookies()
-  const token = cookieStore.get("session-token")?.value
+  const token = cookieStore.get("token")?.value
   try {
-    const { data } = await axiosInstance.get(`/super-admin/getAllCategory`, {
-      headers: {
-        Cookie: `session-token=${token}`
-      }
-    });
+    const { data } = await axiosInstance.get(`/super-admin/getAllCategory`);
 
     return { success: true, message: data.message, data: data };
   } catch (error: any) {

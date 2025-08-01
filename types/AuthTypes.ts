@@ -21,7 +21,7 @@ export type TUserTypes = "SUPER_ADMIN" |
     "FINANCE_MANAGER" |
     "MARKETING_MANAGER" |
     "AUDITOR" |
-    "COMPANY_ADMIN" |
+    "SELLER" |
     "COMPANY_EMPLOYEE" |
     "CUSTOMER" |
     "COURIER"

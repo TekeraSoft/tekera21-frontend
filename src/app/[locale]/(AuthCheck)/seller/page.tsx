@@ -1,9 +1,7 @@
-import React from 'react'
+import { redirect } from "next/navigation";
 
-const SellerIndex = () => {
-  return (
-    <div>Coming Soon.</div>
-  )
-}
+const SellerPage = async () => {
+  redirect("/seller/dashboard");
+};
 
-export default SellerIndex
+export default SellerPage;

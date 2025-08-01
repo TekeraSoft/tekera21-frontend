@@ -9,8 +9,6 @@ const axiosClient = axios.create({
   baseURL: api_base_url,
   timeout: 50000,
   withCredentials: true,
-  xsrfCookieName: "session-token",
-  xsrfHeaderName: "session-token",
   headers: {
     "Content-Type": "application/json",
   },
