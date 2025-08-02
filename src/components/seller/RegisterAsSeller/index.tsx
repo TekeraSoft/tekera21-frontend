@@ -13,6 +13,7 @@ import BankManager from "@/components/seller/RegisterAsSeller/BankManager";
 import CompanyManager from "@/components/seller/RegisterAsSeller/CompanyManager";
 import TaxManager from "@/components/seller/RegisterAsSeller/TaxManager";
 import AddressManager from "@/components/seller/RegisterAsSeller/AddressManager";
+import { ICategoryResponse } from "@/types/SellerTypes/CategoryTypes";
 
 interface Document {
   id: string;
@@ -44,7 +45,7 @@ export interface ISellerFormData {
     doorNumber: string;
     detailAddress: string;
     country: string;
-  };
+  }[];
   bankAccount: {
     iban: string;
     accountName: string;
@@ -54,7 +55,11 @@ export interface ISellerFormData {
   documents: Document[];
 }
 
-export default function SellerRegistrationForm() {
+export default function SellerRegistrationForm({
+  categories,
+}: {
+  categories: ICategoryResponse;
+}) {
   const [activeTab, setActiveTab] = useState("company");
 
   const methods = useForm<ISellerFormData>({
@@ -71,15 +76,17 @@ export default function SellerRegistrationForm() {
       registrationDate: undefined,
       contactPersonNumber: "",
       contactPersonTitle: "",
-      address: {
-        city: "",
-        street: "",
-        postalCode: "",
-        buildNo: "",
-        doorNumber: "",
-        detailAddress: "",
-        country: "Turkey",
-      },
+      address: [
+        {
+          city: "",
+          street: "",
+          postalCode: "",
+          buildNo: "",
+          doorNumber: "",
+          detailAddress: "",
+          country: "Turkey",
+        },
+      ],
       bankAccount: [
         {
           iban: "",
@@ -131,13 +138,13 @@ export default function SellerRegistrationForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <div className="container mx-auto">
+    <div className="min-h-screen bg-gray-50 lg:p-4">
+      <div className="lg:container mx-auto">
         <Card>
           <CardHeader>
             <CardTitle>Bilgileri Düzenle</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0 lg:p-6">
             <FormProvider {...methods}>
               <form onSubmit={methods.handleSubmit(onSubmit)}>
                 <Tabs
@@ -145,7 +152,7 @@ export default function SellerRegistrationForm() {
                   onValueChange={setActiveTab}
                   className="w-full"
                 >
-                  <TabsList className="grid w-full grid-cols-5">
+                  <TabsList className="grid w-full lg:grid-cols-5 grid-cols-2 h-full">
                     <TabsTrigger value="company">Firma Bilgileri</TabsTrigger>
                     <TabsTrigger value="tax">Vergi Bilgileri</TabsTrigger>
                     <TabsTrigger value="address">Adres Bilgileri</TabsTrigger>
@@ -155,7 +162,7 @@ export default function SellerRegistrationForm() {
 
                   {/* Company Information Tab */}
                   <TabsContent value="company" className="space-y-6 mt-6">
-                    <CompanyManager />
+                    <CompanyManager categories={categories} />
                   </TabsContent>
 
                   {/* Tax Information Tab */}

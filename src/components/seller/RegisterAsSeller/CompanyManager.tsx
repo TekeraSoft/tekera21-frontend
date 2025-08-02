@@ -10,9 +10,28 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { MultiSelectCategory } from "@/components/superadmin/Product/Shared/MultiSelectCategory";
 import { ISellerFormData } from ".";
+import { ICategoryResponse } from "@/types/SellerTypes/CategoryTypes";
 
-const CompanyManager = () => {
-  const { register, watch, control } = useFormContext<ISellerFormData>();
+const CompanyManager = ({ categories }: { categories: ICategoryResponse }) => {
+  const { register, control } = useFormContext<ISellerFormData>();
+
+  function flattenCategories() {
+    const flatList: { id: string; name: string; image: string }[] = [];
+
+    for (const category of categories.content) {
+      for (const sub of category.subCategories) {
+        flatList.push({
+          id: sub.id,
+          name: `${category.name}/${sub.name}`,
+          image: sub.image,
+        });
+      }
+    }
+
+    return flatList;
+  }
+
+  console.log("flattenCategories", flattenCategories());
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -93,18 +112,22 @@ const CompanyManager = () => {
           placeholder="5XX XXX XX XX"
         />
       </div>
-      {/* <div className="space-y-2 relative">
+      <div className="space-y-2 relative">
         <Label htmlFor={"categoryId"}>Kategori</Label>
         <Controller
           control={control}
           name={"categoryId"}
-          rules={{ required: "Alt Kategori seçimi zorunlu" }}
+          rules={{ required: "Kategori seçimi zorunlu" }}
           render={({ field }) => (
             <MultiSelectCategory
-              options={options}
+              options={flattenCategories().map((category) => ({
+                label: category.name,
+                value: category.id,
+                image: category.image,
+              }))}
               selected={
                 Array.isArray(field.value)
-                  ? field.value.map((item) =>
+                  ? field.value.map((item: any) =>
                       typeof item === "string"
                         ? { value: item }
                         : "value" in item
@@ -118,12 +141,12 @@ const CompanyManager = () => {
                   : []
               }
               onChange={field.onChange}
-              placeholder="Alt Kategori Ara"
-              emptyMessage="Alt kategori bulunamadı."
+              placeholder="Kategori Ara"
+              emptyMessage="Kategori bulunamadı."
             />
           )}
         />
-      </div> */}
+      </div>
     </div>
   );
 };

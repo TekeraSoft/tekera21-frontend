@@ -16,14 +16,21 @@ import { Textarea } from "@/components/ui/textarea";
 import { ISellerFormData } from ".";
 
 const AddressManager = () => {
-  const { register, control } = useFormContext<ISellerFormData>();
+  const { register, watch, control } = useFormContext<ISellerFormData>();
 
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  const watchedData = watch();
+
+  const { append } = useFieldArray({
+    control, // control props comes from useForm (optional: if you are using FormProvider)
+    name: "address", // unique name for your Field Array
+  });
+
+  return watchedData.address.map((address, index) => (
+    <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="space-y-2">
         <Label htmlFor="country">Ülke</Label>
         <Controller
-          name="address.country"
+          name={`address.${index}.country`}
           control={control}
           render={({ field }) => (
             <Select value={field.value} onValueChange={field.onChange}>
@@ -44,7 +51,7 @@ const AddressManager = () => {
         <Label htmlFor="city">Şehir</Label>
         <Input
           id="city"
-          {...register("address.city")}
+          {...register(`address.${index}.city`)}
           placeholder="Şehir giriniz"
         />
       </div>
@@ -53,7 +60,7 @@ const AddressManager = () => {
         <Label htmlFor="street">Mahalle/Sokak</Label>
         <Input
           id="street"
-          {...register("address.street")}
+          {...register(`address.${index}.street`)}
           placeholder="Mahalle/Sokak giriniz"
         />
       </div>
@@ -62,7 +69,7 @@ const AddressManager = () => {
         <Label htmlFor="postalCode">Posta Kodu</Label>
         <Input
           id="postalCode"
-          {...register("address.postalCode")}
+          {...register(`address.${index}.postalCode`)}
           placeholder="Posta kodu giriniz"
         />
       </div>
@@ -71,7 +78,7 @@ const AddressManager = () => {
         <Label htmlFor="buildNo">Bina No</Label>
         <Input
           id="buildNo"
-          {...register("address.buildNo")}
+          {...register(`address.${index}.buildNo`)}
           placeholder="Bina numarası"
         />
       </div>
@@ -80,7 +87,7 @@ const AddressManager = () => {
         <Label htmlFor="doorNumber">Kapı No</Label>
         <Input
           id="doorNumber"
-          {...register("address.doorNumber")}
+          {...register(`address.${index}.doorNumber`)}
           placeholder="Kapı numarası"
         />
       </div>
@@ -89,13 +96,13 @@ const AddressManager = () => {
         <Label htmlFor="detailAddress">Detaylı Adres</Label>
         <Textarea
           id="detailAddress"
-          {...register("address.detailAddress")}
+          {...register(`address.${index}.detailAddress`)}
           placeholder="Detaylı adres bilgilerini giriniz"
           rows={3}
         />
       </div>
     </div>
-  );
+  ));
 };
 
 export default AddressManager;

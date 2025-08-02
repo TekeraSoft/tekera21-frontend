@@ -64,6 +64,13 @@ export function MultiSelectCategory({
     return option?.label || selected.value;
   });
 
+  const getSelectedLabel = (index: number) => {
+    return (
+      options.find((option) => option.value === selected[index].value)?.label ||
+      ""
+    );
+  };
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -78,13 +85,13 @@ export function MultiSelectCategory({
               <span className="text-muted-foreground">{placeholder}</span>
             ) : selected.length > 2 ? (
               <div className="flex items-center gap-1">
-                <Badge variant="secondary" className="rounded-sm">
+                <Badge variant="outline" className="rounded-sm">
                   {selectedLabels[0]}
                 </Badge>
-                <Badge variant="secondary" className="rounded-sm">
+                <Badge variant="outline" className="rounded-sm">
                   {selectedLabels[1]}
                 </Badge>
-                <Badge variant="secondary" className="rounded-sm">
+                <Badge variant="outline" className="rounded-sm">
                   +{selected.length - 2}
                 </Badge>
               </div>
@@ -139,7 +146,55 @@ export function MultiSelectCategory({
         </Command>
         {selected.length > 0 && (
           <div className="p-2 border-t flex flex-wrap gap-1">
-            {selected.map((selectedItem) => {
+            <Badge variant="warning" className="rounded-sm">
+              {getSelectedLabel(0)}
+              <button
+                className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleUnselect(selected[0].value);
+                  }
+                }}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                onClick={() => handleUnselect(selected[0].value)}
+              >
+                <X className="h-3 w-3" />
+                <span className="sr-only">Remove</span>
+              </button>
+            </Badge>
+            {selected.length > 1 && (
+              <>
+                <Badge variant="warning" className="rounded-sm">
+                  {getSelectedLabel(1)}
+                  <button
+                    className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleUnselect(selected[1].value);
+                      }
+                    }}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    onClick={() => handleUnselect(selected[1].value)}
+                  >
+                    <X className="h-3 w-3" />
+                    {/* <span className="sr-only">Remove {selected[1].value}</span> */}
+                  </button>
+                </Badge>
+                {selected.length > 2 && (
+                  <Badge variant="warning" className="rounded-sm">
+                    +{selected.length - 2}
+                  </Badge>
+                )}
+              </>
+            )}
+
+            {/* {selected.map((selectedItem) => {
               const option = options.find(
                 (option) => option.value === selectedItem.value
               );
@@ -170,7 +225,7 @@ export function MultiSelectCategory({
                   </button>
                 </Badge>
               );
-            })}
+            })} */}
             {selected.length > 0 && (
               <Button
                 variant="ghost"
@@ -178,7 +233,7 @@ export function MultiSelectCategory({
                 className="h-7 px-2"
                 onClick={() => onChange([])}
               >
-                Clear
+                Tümünü Kaldır
               </Button>
             )}
           </div>

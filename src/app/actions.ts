@@ -8,6 +8,7 @@ import jwt from "jsonwebtoken";
 import { IUserPayload } from "@/types/AuthTypes";
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
+import { ICategoryResponse } from "@/types/SellerTypes/CategoryTypes";
 
 export async function getSessionToken() {
   const cookieStore = await cookies();
@@ -53,7 +54,7 @@ export async function logOut() {
   try {
     const locale = await getLocale()
     cookieStore.delete("token");
-    return redirect({ href: "/", locale: locale })
+    return redirect({ href: "/giris", locale: locale })
   } catch (error: any) {
     if (error instanceof Error && error.message === "NEXT_REDIRECT") {
       throw error;
@@ -79,7 +80,7 @@ export async function getCategoriesForSeller(page: string = "0", size: string = 
       `/category/get-all-category?page=${page}&size=${size}`
     );
 
-    return { success: true, message: data.message, data: data };
+    return { success: true, message: data.message, data: data as ICategoryResponse };
   } catch (error: any) {
     return { success: false, message: error.message || "Failed to get categories" };
   }
