@@ -137,6 +137,10 @@ export default function SellerRegistrationForm({
     // Here you would typically send the data to your API
   };
 
+  const [legalDocuments, setLegalDocuments] = useState<{
+    [key: string]: File[];
+  }>({});
+
   return (
     <div className="min-h-screen bg-gray-50 lg:p-4">
       <div className="lg:container mx-auto">
@@ -181,7 +185,10 @@ export default function SellerRegistrationForm({
                   </TabsContent>
 
                   <TabsContent value="documents" className="mt-0">
-                    <DocumentManager />
+                    <DocumentManager
+                      legalDocuments={legalDocuments}
+                      setLegalDocuments={setLegalDocuments}
+                    />
                   </TabsContent>
                 </Tabs>
 

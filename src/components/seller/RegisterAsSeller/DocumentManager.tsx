@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { Dispatch, SetStateAction, useRef } from "react";
 import {
   Card,
   CardContent,
@@ -16,7 +16,19 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { ISellerFormData } from ".";
 
-const DocumentManager = () => {
+const DocumentManager = ({
+  legalDocuments,
+  setLegalDocuments,
+}: {
+  legalDocuments: {
+    [key: string]: File[];
+  };
+  setLegalDocuments: Dispatch<
+    SetStateAction<{
+      [key: string]: File[];
+    }>
+  >;
+}) => {
   const { register, watch } = useFormContext<ISellerFormData>();
   const watchedData = watch();
   const documentFileRef = useRef<HTMLInputElement>(null);
