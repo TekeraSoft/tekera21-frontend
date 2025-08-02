@@ -11,31 +11,49 @@ export default async function middleware(request: NextRequest) {
 
   const user = await getUser()
 
-  const { pathname } = request.nextUrl;
+  const { pathname, } = request.nextUrl;
+
 
   const publicRoutes = ["/giris", "/forgot-password", "/reset-password", "/kayit", "/digital-fashion", "/verify"];
   const protectedRoutes = ["/seller", "/superadmin", "/register"];
+  const sellerRoutes = ["/seller", "/register", "/register/edit"]
+  const customerRole = "CUSTOMER"
+
+  const isSellerRoute = sellerRoutes.some((route) => pathname.includes(route))
 
   if (protectedRoutes.some((route) => pathname.includes(route)) && !user) {
     const loginUrl = new URL(`/giris`, request.url);
     return NextResponse.redirect(loginUrl);
   }
-  if (publicRoutes.some((route) => pathname.includes(route)) && user) {
-    const redirectUrl = new URL(`/`, request.url);
-    return NextResponse.redirect(redirectUrl);
-  }
+
 
   if (user) {
-    // console.log("user in middleware", user)
-    if (user.roles.includes("SUPER_ADMIN") && !pathname.includes("superadmin")) {
+    const isSeller = user.roles.some((role) => sellerRoles.includes(role));
+    const isSuperAdmin = user.roles.includes("SUPER_ADMIN");
+    const isCustomer = user.roles.includes(customerRole);
+    console.log("isSeller:", isSeller, "isSuperAdmin:", isSuperAdmin, "isCustomer:", isCustomer)
+
+    if (publicRoutes.some((route) => pathname.includes(route))) {
+      const redirectUrl = new URL(isSeller ? `/seller` : isSuperAdmin ? `/superadmin` : `/register`, request.url);
+      return NextResponse.redirect(redirectUrl);
+    }
+
+    if (isSuperAdmin && !pathname.includes("superadmin")) {
       const redirectUrl = new URL(`/superadmin`, request.url);
       return NextResponse.redirect(redirectUrl);
     }
 
-    if (user.roles.some((role) => sellerRoles.includes(role)) && !pathname.includes("/seller")) {
+
+    if (isCustomer && !isSeller && !pathname.includes("/register")) {
+      const redirectUrl = new URL(`/register`, request.url);
+      return NextResponse.redirect(redirectUrl);
+    }
+
+    if (isSeller && !isSellerRoute) {
       const redirectUrl = new URL(`/seller`, request.url);
       return NextResponse.redirect(redirectUrl);
     }
+
 
   }
 

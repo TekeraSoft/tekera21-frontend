@@ -73,6 +73,19 @@ export async function getCategories() {
   }
 }
 
+export async function getCategoriesForSeller(page: string = "0", size: string = "20") {
+  try {
+    const { data } = await axiosInstance.get(
+      `/category/get-all-category?page=${page}&size=${size}`
+    );
+
+    return { success: true, message: data.message, data: data };
+  } catch (error: any) {
+    return { success: false, message: error.message || "Failed to get categories" };
+  }
+
+}
+
 export async function getProducts(page: string = "0", size: string = "20") {
 
   try {
@@ -116,7 +129,7 @@ export async function createProduct(formData: FormData) {
       };
     }
     const { data } = await axiosInstance.post(
-      `/company/createProduct`,
+      `/seller/createProduct`,
       formData,
       {
         headers: {
@@ -246,7 +259,7 @@ export async function deleteProductById(id: string) {
 export async function updateProduct(formData: FormData) {
   try {
     const { data } = await axiosInstance.put(
-      `/company/updateProduct`,
+      `/seller/updateProduct`,
       formData,
       {
         headers: {
@@ -412,7 +425,7 @@ export async function getAllMediaBySellerId(sellerId: string, page: number = 0, 
   console.log("sellerId", sellerId)
   try {
     const { data } = await axiosInstance.get(
-      `/company/sellerGallery?companyId=${sellerId}&page=${page}&size=${size}`,
+      `/seller/sellerGallery?companyId=${sellerId}&page=${page}&size=${size}`,
     );
 
     return { success: true, message: null, data: data };
@@ -424,7 +437,7 @@ export async function deleteFileByUrl(url: string) {
   console.log("url", url)
   try {
     const { data } = await axiosInstance.delete(
-      `/company/deleteImageFromVariation?path=/${url}`,
+      `/seller/deleteImageFromVariation?path=/${url}`,
     );
     return { success: true, message: null, data: data };
   } catch (error: any) {

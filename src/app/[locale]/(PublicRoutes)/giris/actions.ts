@@ -119,12 +119,12 @@ export async function loginUser(prevState: ActionStateType, formData: FormData):
 
     const payload = jwt.decode(data.accessToken) as IUserPayload;
     console.log("jwt", payload)
-    if (sellerRoles.some(role => payload.roles.includes(role))) {
-      return redirect({ href: "/seller", locale: locale })
-    }
-    if (payload.roles.includes("SUPER_ADMIN")) {
-      return redirect({ href: "/superadmin", locale: locale })
-    }
+    // if (sellerRoles.some(role => payload.roles.includes(role))) {
+    //   return redirect({ href: "/seller", locale: locale })
+    // }
+    // if (payload.roles.includes("SUPER_ADMIN")) {
+    //   return redirect({ href: "/superadmin", locale: locale })
+    // }
     return redirect({ href: "/", locale: locale })
 
   } catch (error: any) {
