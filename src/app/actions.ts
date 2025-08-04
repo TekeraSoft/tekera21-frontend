@@ -9,6 +9,8 @@ import { IUserPayload } from "@/types/AuthTypes";
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
 import { ICategoryResponse } from "@/types/SellerTypes/CategoryTypes";
+import { ISellerInfo } from "@/types/SellerTypes/SellerInfo";
+import { IShippingCompany } from "@/types/SellerTypes/ShippingCompanies";
 
 export async function getSessionToken() {
   const cookieStore = await cookies();
@@ -99,6 +101,30 @@ export async function getProducts(page: string = "0", size: string = "20") {
     return { success: false, message: error.message || "Failed to get products" };
   }
 }
+export async function getSellerByUserId() {
+
+  try {
+    const { data } = await axiosInstance.get(
+      `/seller/getSellerByUserId`
+    );
+    console.log("data from getSellerIdAction", data)
+    return { success: true, message: data.message, data: data as ISellerInfo };
+  } catch (error: any) {
+    return { success: false, message: error.message || "Failed to get products" };
+  }
+}
+export async function getShippingCompanies() {
+
+  try {
+    const { data } = await axiosInstance.get(
+      `/account/getAllShippingCompany`
+    );
+    console.log("data from getAllShippingCompany", data)
+    return { success: true, message: data.message, data: data as IShippingCompany[] };
+  } catch (error: any) {
+    return { success: false, message: error.message || "Failed to get products" };
+  }
+}
 
 export async function createCategory(formData: FormData) {
   try {
@@ -116,6 +142,36 @@ export async function createCategory(formData: FormData) {
   } catch (error: any) {
 
     return { success: false, message: error.message || "Failed to create category" };
+  }
+}
+
+export async function registerAsSeller(formData: FormData) {
+  try {
+    const dataform = formData.get("data");
+    const files = formData.getAll("files");
+    const logo = formData.get("logo");
+
+    if (!dataform || !files || !logo) {
+      return {
+        success: false,
+        message: "Data,logo and legal documents are required",
+      };
+    }
+    const { data } = await axiosInstance.post(
+      `/account/createSeller`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    revalidatePath("/");
+
+    return { success: true, message: data.message, product: data.data };
+  } catch (error: any) {
+
+    return { success: false, message: typeof error.message === "string" ? error.message : "Failed to create category" };
   }
 }
 export async function createProduct(formData: FormData) {

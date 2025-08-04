@@ -1,7 +1,7 @@
-import React from "react";
+import { redirect } from "next/navigation";
 
 function MainHomePage() {
-  return <div>MainHomePage</div>;
+  redirect("/giris");
 }
 
 export default MainHomePage;

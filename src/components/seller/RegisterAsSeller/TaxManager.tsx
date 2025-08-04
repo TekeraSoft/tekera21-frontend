@@ -1,12 +1,12 @@
 import React from "react";
 
-import { useFieldArray, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ISellerFormData } from ".";
 
 const TaxManager = () => {
-  const { register, control } = useFormContext<ISellerFormData>();
+  const { register } = useFormContext<ISellerFormData>();
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -29,11 +29,11 @@ const TaxManager = () => {
       </div>
 
       <div className="md:col-span-2 space-y-2">
-        <Label htmlFor="merisNumber">MERIS Numarası</Label>
+        <Label htmlFor="merisNumber">MERSİS Numarası</Label>
         <Input
           id="merisNumber"
           {...register("merisNumber")}
-          placeholder="MERIS numarasını giriniz"
+          placeholder="MERSIS numarasını giriniz"
         />
       </div>
     </div>

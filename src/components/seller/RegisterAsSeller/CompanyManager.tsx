@@ -7,18 +7,40 @@ import { Controller, useFormContext } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { MultiSelectCategory } from "@/components/superadmin/Product/Shared/MultiSelectCategory";
 import { ISellerFormData } from ".";
 import { ICategoryResponse } from "@/types/SellerTypes/CategoryTypes";
+import { useAuthContext } from "@/context/AuthContext";
+import ImageView from "@/components/shared/ImageView";
+import { IShippingCompany } from "@/types/SellerTypes/ShippingCompanies";
 
-const CompanyManager = ({ categories }: { categories: ICategoryResponse }) => {
-  const { register, control } = useFormContext<ISellerFormData>();
+const CompanyManager = ({
+  categories,
+  logo,
+  handleSetLogo,
+  shippingCompanies,
+}: {
+  categories: ICategoryResponse;
+  logo: File | undefined;
+  handleSetLogo: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  shippingCompanies: IShippingCompany[] | undefined;
+}) => {
+  const { userInfo } = useAuthContext();
+  const { register, control, formState, watch } =
+    useFormContext<ISellerFormData>();
 
   function flattenCategories() {
     const flatList: { id: string; name: string; image: string }[] = [];
 
     for (const category of categories.content) {
+      // Ana kategoriyi ekle
+      flatList.push({
+        id: category.id,
+        name: category.name,
+        image: category.image,
+      });
+
+      // Alt kategorileri ekle
       for (const sub of category.subCategories) {
         flatList.push({
           id: sub.id,
@@ -31,20 +53,39 @@ const CompanyManager = ({ categories }: { categories: ICategoryResponse }) => {
     return flatList;
   }
 
-  console.log("flattenCategories", flattenCategories());
+  const logoSeller = watch("logo");
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="md:col-span-2">
         <div className="flex items-center gap-6">
           <div className="w-24 h-24 bg-pink-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-            AM
+            {logo ? (
+              <img src={URL.createObjectURL(logo)} alt="logo"></img>
+            ) : logoSeller ? (
+              <ImageView
+                imageInfo={{ url: logoSeller, name: "logo" }}
+                className="w-full h-full rounded-full"
+              />
+            ) : (
+              userInfo?.nameSurname.slice(0, 2).toUpperCase()
+            )}
           </div>
           <div className="flex-1">
-            <Button variant="outline" size="sm" type="button">
-              <Upload className="w-4 h-4 mr-2" />
-              Logo Değiştir
-            </Button>
+            <Label
+              htmlFor="logo"
+              className="flex outline w-max p-2 rounded-md outline-gray-300 cursor-pointer hover:bg-accent"
+            >
+              <Upload className="w-4 h-4 mr-2" /> Logo Değiştir
+            </Label>
+            <Input
+              id={"logo"}
+              name="logo"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => handleSetLogo(e)}
+            />
           </div>
         </div>
       </div>
@@ -147,6 +188,43 @@ const CompanyManager = ({ categories }: { categories: ICategoryResponse }) => {
           )}
         />
       </div>
+      {shippingCompanies && (
+        <div className="space-y-2 relative">
+          <Label htmlFor={"categoryId"}>Kargo Firması Seçimi</Label>
+          <Controller
+            control={control}
+            name={"shippingCompanyId"}
+            rules={{ required: "Kargo Firması seçimi zorunludur." }}
+            render={({ field }) => (
+              <MultiSelectCategory
+                options={shippingCompanies.map((shippingCompany) => ({
+                  label: shippingCompany.name,
+                  value: shippingCompany.id,
+                  image: "",
+                }))}
+                selected={
+                  Array.isArray(field.value)
+                    ? field.value.map((item: any) =>
+                        typeof item === "string"
+                          ? { value: item }
+                          : "value" in item
+                          ? item
+                          : "id" in item && item.id
+                          ? { value: item.id }
+                          : { value: "" }
+                      )
+                    : typeof field.value === "string"
+                    ? [{ value: field.value }]
+                    : []
+                }
+                onChange={field.onChange}
+                placeholder="Kargo Firması Ara"
+                emptyMessage="Kargo Firması bulunamadı."
+              />
+            )}
+          />
+        </div>
+      )}
     </div>
   );
 };

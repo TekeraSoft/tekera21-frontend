@@ -7,7 +7,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Save, Trash2, Upload, UploadIcon } from "lucide-react";
+import {
+  CheckSquare,
+  Download,
+  Trash2,
+  Upload,
+  UploadIcon,
+} from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
 import { useFormContext } from "react-hook-form";
 import Image from "next/image";
@@ -29,9 +35,58 @@ const DocumentManager = ({
     }>
   >;
 }) => {
-  const { register, watch } = useFormContext<ISellerFormData>();
+  const { watch } = useFormContext<ISellerFormData>();
   const watchedData = watch();
-  const documentFileRef = useRef<HTMLInputElement>(null);
+
+  const onFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    docId: string
+  ) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const originalFile = files[0];
+
+    console.log("docid", docId);
+    const reNamedFile = new File([originalFile], docId);
+
+    setLegalDocuments((prev) => ({
+      ...prev,
+      [docId]: [reNamedFile],
+    }));
+  };
+
+  const downloadFile = async (documentUrl: string, documentName: string) => {
+    const fileUrl =
+      process.env.NEXT_PUBLIC_IMAGE_BASE_URL +
+      (documentUrl.startsWith("/") ? documentUrl : `/${documentUrl}`);
+
+    try {
+      const response = await fetch(fileUrl, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/pdf",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Dosya indirilemedi.");
+      }
+
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = `${documentName}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      console.error("İndirme hatası:", err);
+    }
+  };
   return (
     <Card>
       <CardHeader>
@@ -51,68 +106,110 @@ const DocumentManager = ({
           <div>
             <h3 className="font-medium mb-3">Belgeler</h3>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {watchedData.documents?.map((doc) => (
-                <Card key={doc.id} className="overflow-hidden relative">
-                  <div className="relative h-40 w-full">
-                    <Image
-                      src={doc.fileUrl || "/placeholder.svg"}
-                      alt={doc.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="absolute flex justify-center items-center top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full">
-                    <div className="w-16 h-16 space-y-2 relative hover:bg-gray-100 ">
-                      <Label htmlFor="documentFile">
-                        <UploadIcon className="w-16 h-16 cursor-pointer p-2" />
-                      </Label>
-                      <Input
-                        id="documentFile"
-                        type="file"
-                        className="hidden"
-                        ref={documentFileRef}
-                      />
+              {watchedData.documents?.map((doc) => {
+                const inputId = `documentFile-${doc.documentTitle}`;
+                return (
+                  <Card
+                    key={doc.documentTitle}
+                    className="overflow-hidden relative"
+                  >
+                    <div className="relative h-40 w-full">
+                      {legalDocuments[doc.documentTitle] ? (
+                        <div className="w-full h-full flex justify-center items-center gap-2">
+                          Yeni Belge eklendi.
+                          <CheckSquare className="text-green-600" />
+                        </div>
+                      ) : doc.documentPath ? (
+                        <Image
+                          onClick={() =>
+                            downloadFile(doc.documentPath, doc.documentTitle)
+                          }
+                          src={"/assets/fileType/pdf.png"}
+                          alt={doc.documentTitle}
+                          fill
+                          className="object-contain p-2"
+                        />
+                      ) : (
+                        <div className="flex w-full justify-center pt-3 font-semibold text-secondary">
+                          Belge Ekleyin
+                        </div>
+                      )}
                     </div>
-                  </div>
-                  <CardContent className="p-4">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="font-medium">{doc.name}</h3>
-                        <p className="text-xs text-muted-foreground">
-                          Yükleme: {doc.uploadDate}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          Durum: {doc.status}
-                        </p>
+                    <div className="absolute flex justify-center items-center top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full">
+                      {legalDocuments[
+                        doc.documentTitle
+                      ] ? null : doc.documentPath ? (
+                        <Download
+                          onClick={() =>
+                            downloadFile(doc.documentPath, doc.documentTitle)
+                          }
+                          className="w-16 h-16 cursor-pointer p-2"
+                        />
+                      ) : (
+                        <div className="w-16 h-16 space-y-2 relative hover:bg-gray-100 ">
+                          <Label htmlFor={inputId}>
+                            <UploadIcon className="w-16 h-16 cursor-pointer p-2" />
+                          </Label>
+                          <Input
+                            id={inputId}
+                            type="file"
+                            className="hidden"
+                            onChange={(e) => onFileChange(e, doc.documentTitle)}
+                            accept=".pdf"
+                          />
+                        </div>
+                      )}
+                    </div>
+                    <CardContent className="p-4">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="font-medium">{doc.documentTitle}</h3>
+                          {/* <p className="text-xs text-muted-foreground">
+                            Yükleme: {doc.uploadDate}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            Durum: {doc.status}
+                          </p> */}
+                          <p className="text-xs text-muted-foreground">
+                            Durum: {doc.verificationStatus}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                  <CardFooter className="flex justify-between p-4 pt-0">
-                    <Button variant="outline" size="sm" type="button">
-                      Değiştir
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="sm"
-                      className="flex items-center gap-1"
-                    >
-                      <Trash2 className="h-3 w-3" />
-                      Sil
-                    </Button>
-                  </CardFooter>
-                </Card>
-              ))}
+                    </CardContent>
+
+                    {doc.documentPath && (
+                      <CardFooter className="flex justify-between p-4 pt-0">
+                        <Label htmlFor={inputId}>
+                          <div className="outline outline-gray-400/50 hover:bg-accent cursor-pointer rounded-md px-3 py-3">
+                            Değiştir
+                          </div>
+                        </Label>
+                        <Input
+                          id={inputId}
+                          type="file"
+                          className="hidden"
+                          onChange={(e) => onFileChange(e, doc.documentTitle)}
+                          accept=".pdf"
+                        />
+
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          className="flex items-center gap-1 ml-auto"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                          Sil
+                        </Button>
+                      </CardFooter>
+                    )}
+                  </Card>
+                );
+              })}
             </div>
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-end">
-        <Button type="submit" className="flex items-center gap-2">
-          <Save className="h-4 w-4" />
-          Tüm Değişiklikleri Kaydet
-        </Button>
-      </CardFooter>
     </Card>
   );
 };

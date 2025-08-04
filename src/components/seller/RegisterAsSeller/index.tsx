@@ -14,27 +14,24 @@ import CompanyManager from "@/components/seller/RegisterAsSeller/CompanyManager"
 import TaxManager from "@/components/seller/RegisterAsSeller/TaxManager";
 import AddressManager from "@/components/seller/RegisterAsSeller/AddressManager";
 import { ICategoryResponse } from "@/types/SellerTypes/CategoryTypes";
-
-interface Document {
-  id: string;
-  name: string;
-  type: string;
-  uploadDate: string;
-  status: "verified" | "pending" | "deleted" | "rejected" | "inceleniyor";
-  fileUrl: string;
-}
+import { registerAsSeller } from "@/app/actions";
+import { useToast } from "@/hooks/use-toast";
+import { IdentityDocument, ISellerInfo } from "@/types/SellerTypes/SellerInfo";
+import { IShippingCompany } from "@/types/SellerTypes/ShippingCompanies";
 
 export interface ISellerFormData {
   name: string;
-  categoryId: string[];
+  categoryId: { value: string }[];
   email: string;
   gsmNumber: string;
   alternativePhoneNumber: string;
+  shippingCompanyId: { value: string }[];
   supportPhoneNumber: string;
+  logo?: string;
   taxNumber: string;
   taxOffice: string;
   merisNumber: string;
-  registrationDate: Date | undefined;
+  registrationDate: string | undefined;
   contactPersonNumber: string;
   contactPersonTitle: string;
   address: {
@@ -52,31 +49,104 @@ export interface ISellerFormData {
     bankName: string;
     isActive: boolean;
   }[];
-  documents: Document[];
+  documents: IdentityDocument[];
 }
 
 export default function SellerRegistrationForm({
   categories,
+  sellerInfo,
+  shippingCompanies,
 }: {
   categories: ICategoryResponse;
+  sellerInfo: ISellerInfo | undefined;
+  shippingCompanies: IShippingCompany[];
 }) {
+  const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("company");
+  const [legalDocuments, setLegalDocuments] = useState<{
+    [key: string]: File[];
+  }>({});
+  const [logo, setLogo] = useState<File>();
+
+  const requiredDocuments: IdentityDocument[] = [
+    {
+      documentTitle: "IDENTITY_NUMBER",
+      documentPath: "",
+      verificationStatus: "NONE",
+    },
+    {
+      documentTitle: "TAX_CERTIFICATE",
+      documentPath: "",
+      verificationStatus: "NONE",
+    },
+    {
+      documentTitle: "SIGNATURE_CIRCULAR",
+      documentPath: "",
+      verificationStatus: "NONE",
+    },
+    {
+      documentTitle: "COMMERCIAL_REGISTER_GAZETTE",
+      documentPath: "",
+      verificationStatus: "NONE",
+    },
+    {
+      documentTitle: "PTS",
+      documentPath: "",
+      verificationStatus: "NONE",
+    },
+    {
+      documentTitle: "MINISTRY_OF_AGRICULTURE_PERMITS",
+      documentPath: "",
+      verificationStatus: "NONE",
+    },
+    {
+      documentTitle: "CE_CERTIFICATE",
+      documentPath: "",
+      verificationStatus: "NONE",
+    },
+    {
+      documentTitle: "GUARANTEE_DOCUMENT",
+      documentPath: "",
+      verificationStatus: "NONE",
+    },
+  ];
+
+  const mergeDocuments = (
+    uploadedDocuments: IdentityDocument[]
+  ): IdentityDocument[] => {
+    return requiredDocuments.map((doc) => {
+      const uploaded = uploadedDocuments.find(
+        (u) => u.documentTitle === doc.documentTitle
+      );
+      return uploaded ?? doc;
+    });
+  };
 
   const methods = useForm<ISellerFormData>({
     defaultValues: {
-      name: "",
-      categoryId: [],
-      email: "",
-      gsmNumber: "",
-      alternativePhoneNumber: "",
-      supportPhoneNumber: "",
-      taxNumber: "",
-      taxOffice: "",
-      merisNumber: "",
-      registrationDate: undefined,
-      contactPersonNumber: "",
-      contactPersonTitle: "",
-      address: [
+      name: sellerInfo?.name || "",
+      categoryId: sellerInfo?.categories.map((category) => {
+        const item = { value: category.id };
+        return item;
+      }),
+      email: sellerInfo?.email || "",
+      gsmNumber: sellerInfo?.gsmNumber || "",
+      logo: sellerInfo?.logo || undefined,
+      alternativePhoneNumber: sellerInfo?.alternativePhoneNumber || "",
+      supportPhoneNumber: sellerInfo?.supportPhoneNumber || "",
+      taxNumber: sellerInfo?.taxNumber || "",
+      taxOffice: sellerInfo?.taxOffice || "",
+      merisNumber: sellerInfo?.merisNumber || "",
+      registrationDate: sellerInfo?.registrationDate || undefined,
+      contactPersonNumber: sellerInfo?.contactPersonNumber || "",
+      contactPersonTitle: sellerInfo?.contactPersonTitle || "",
+      shippingCompanyId: sellerInfo?.shippingCompanyId?.map(
+        (shippingCompany) => {
+          const item = { value: shippingCompany.id };
+          return item;
+        }
+      ),
+      address: sellerInfo?.address || [
         {
           city: "",
           street: "",
@@ -87,7 +157,7 @@ export default function SellerRegistrationForm({
           country: "Turkey",
         },
       ],
-      bankAccount: [
+      bankAccount: sellerInfo?.bankAccounts || [
         {
           iban: "",
           accountName: "",
@@ -95,51 +165,80 @@ export default function SellerRegistrationForm({
           isActive: true,
         },
       ],
-      documents: [
-        {
-          id: "doc-1",
-          name: "Kimlik Belgesi",
-          type: "identity",
-          uploadDate: "05.04.2023",
-          status: "verified",
-          fileUrl: "/placeholder.svg?height=300&width=400",
-        },
-        {
-          id: "doc-2",
-          name: "Vergi Levhası",
-          type: "tax",
-          uploadDate: "06.04.2023",
-          status: "verified",
-          fileUrl: "/placeholder.svg?height=300&width=400",
-        },
-        {
-          id: "doc-3",
-          name: "İmza Sirküleri",
-          type: "signature",
-          uploadDate: "07.04.2023",
-          status: "pending",
-          fileUrl: "/placeholder.svg?height=300&width=400",
-        },
-        {
-          id: "doc-4",
-          name: "Ticaret Sicil Gazetesi",
-          type: "commercial",
-          uploadDate: "08.04.2023",
-          status: "verified",
-          fileUrl: "/placeholder.svg?height=300&width=400",
-        },
-      ],
+      documents: sellerInfo?.identityDocumentPaths
+        ? mergeDocuments(sellerInfo.identityDocumentPaths)
+        : requiredDocuments,
     },
   });
 
-  const onSubmit = (data: ISellerFormData) => {
-    console.log("Seller Data:", data);
+  const { toast } = useToast();
+
+  const onSubmit = async (data: ISellerFormData) => {
+    const formData = new FormData();
+
+    const formattedData: ISellerRegister = {
+      address: data.address,
+      alternativePhoneNumber: data.alternativePhoneNumber,
+      bankAccount: data.bankAccount,
+      categoryId: data.categoryId.map((cat) => cat.value),
+      contactPersonNumber: data.contactPersonNumber,
+      name: data.name,
+      email: data.email,
+      shippingCompanyId: data.shippingCompanyId.map(
+        (shippnCompany) => shippnCompany.value
+      ),
+      gsmNumber: data.gsmNumber,
+      supportPhoneNumber: data.supportPhoneNumber,
+      taxNumber: data.taxNumber,
+      taxOffice: data.taxOffice,
+      merisNumber: data.merisNumber,
+      registrationDate: data.registrationDate
+        ? new Date(data.registrationDate).toISOString()
+        : new Date().toISOString(),
+      contactPersonTitle: data.contactPersonTitle,
+    };
+    console.log("formattedData", formattedData);
+    formData.append(
+      "data",
+      new Blob([JSON.stringify(formattedData)], { type: "application/json" })
+    );
+
+    Object.values(legalDocuments).forEach((fileArray) => {
+      fileArray.forEach((file) => {
+        formData.append(`files`, file);
+      });
+    });
+    if (logo) {
+      formData.append(`logo`, logo);
+    }
+
+    const { success, message } = await registerAsSeller(formData);
+    if (success) {
+      toast({
+        title: "Başarılı!",
+        description:
+          "İsteğiniz başarılı. Gerekli incelemeler yapıldıktan sonra hesabınız kullanıma açılacaktır.",
+        variant: "default",
+      });
+      setLegalDocuments({});
+      setLoading(false);
+    } else {
+      toast({
+        title: "Error",
+        description: message || "Kaydınız oluşturulamadı.",
+        variant: "destructive",
+      });
+      setLoading(false);
+    }
+
     // Here you would typically send the data to your API
   };
 
-  const [legalDocuments, setLegalDocuments] = useState<{
-    [key: string]: File[];
-  }>({});
+  const handleSetLogo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setLogo(e.target.files[0]);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 lg:p-4">
@@ -166,7 +265,12 @@ export default function SellerRegistrationForm({
 
                   {/* Company Information Tab */}
                   <TabsContent value="company" className="space-y-6 mt-6">
-                    <CompanyManager categories={categories} />
+                    <CompanyManager
+                      categories={categories}
+                      logo={logo}
+                      handleSetLogo={handleSetLogo}
+                      shippingCompanies={shippingCompanies}
+                    />
                   </TabsContent>
 
                   {/* Tax Information Tab */}
