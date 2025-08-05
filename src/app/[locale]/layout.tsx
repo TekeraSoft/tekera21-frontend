@@ -9,6 +9,8 @@ import AuthProvider from "@/context/AuthContext";
 import { AxiosInterceptor } from "@/request/axiosClient";
 import DialogProvider from "@/context/DialogContext";
 import { Toaster } from "@/components/ui/toaster";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
+import { ReactQueryProvider } from "@/providers/ReactQuery";
 
 export const metadata: Metadata = {
   title: "Tekera21 Yönetim Paneli",
@@ -33,7 +35,9 @@ export default async function RootLayout({
     notFound();
   }
 
+  const queryClient = new QueryClient();
   const user = await getUser();
+  const dehydratedState = dehydrate(queryClient);
 
   return (
     <html lang={locale} suppressHydrationWarning>
@@ -42,8 +46,10 @@ export default async function RootLayout({
           <AuthProvider user={user}>
             <NextIntlClientProvider>
               <AxiosInterceptor>
-                <Toaster />
-                <DialogProvider>{children}</DialogProvider>
+                <ReactQueryProvider dehydratedState={dehydratedState}>
+                  <Toaster />
+                  <DialogProvider>{children}</DialogProvider>
+                </ReactQueryProvider>
               </AxiosInterceptor>
             </NextIntlClientProvider>
           </AuthProvider>

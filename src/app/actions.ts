@@ -11,6 +11,7 @@ import { getLocale } from "next-intl/server";
 import { ICategoryResponse } from "@/types/SellerTypes/CategoryTypes";
 import { ICompany, ISellerInfo } from "@/types/SellerTypes/SellerInfo";
 import { IShippingCompany, IShippingCompanyCreate } from "@/types/SellerTypes/ShippingCompanies";
+import { IOrderData, IOrderResponse } from "@/types/OrderTypes";
 
 export async function getSessionToken() {
   const cookieStore = await cookies();
@@ -107,7 +108,7 @@ export async function getSellerByUserId() {
     const { data } = await axiosInstance.get(
       `/seller/getSellerByUserId`
     );
-    console.log("data from getSellerIdAction", data)
+ 
     return { success: true, message: data.message, data: data as ISellerInfo };
   } catch (error: any) {
     return { success: false, message: error.message || "Failed to get products" };
@@ -125,13 +126,35 @@ export async function getAllCompany(page: string = "0", size: string = "20") {
     return { success: false, message: error.message || "Failed to get products", data: undefined };
   }
 }
+export async function getAllOrders(page: string = "0", size: string = "20"): Promise<IOrderResponse> {
+
+  try {
+    const { data } = await axiosInstance.get(
+      `/super-admin/getAllOrder?page=${page}&size=${size}`
+    );
+    return { success: true, message: data.message, data: data as IOrderData };
+  } catch (error: any) {
+    return { success: false, message: error.message || "Failed to get products", data: undefined };
+  }
+}
+export async function getOrdersByUserId(page: string = "0", size: string = "20"): Promise<IOrderResponse> {
+
+  try {
+    const { data } = await axiosInstance.get(
+      `/user/getOrdersByUserId?page=${page}&size=${size}`
+    );
+    return { success: true, message: data.message, data: data as IOrderData };
+  } catch (error: any) {
+    return { success: false, message: error.message || "Failed to get orders", data: undefined };
+  }
+}
 export async function getShippingCompanies() {
 
   try {
     const { data } = await axiosInstance.get(
       `/account/getAllShippingCompany`
     );
-    console.log("data from getAllShippingCompany", data)
+
     return { success: true, message: data.message, data: data as IShippingCompany[] };
   } catch (error: any) {
     return { success: false, message: error.message || "Failed to get products", data: undefined };

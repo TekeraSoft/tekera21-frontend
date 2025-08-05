@@ -67,10 +67,9 @@ export async function registerUser(prevState: ActionStateType, formData: FormDat
   const signUpData: ISignUpForm = validatedFields.data
 
   try {
-    console.log("form", signUpData)
+
     const { data } = await axiosInstance.post("/auth/register", signUpData);
 
-    console.log("User registration return:", data)
 
     return redirect({ href: "/giris", locale: locale })
 

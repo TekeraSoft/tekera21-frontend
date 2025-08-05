@@ -17,7 +17,6 @@ import { sellerRoles } from "@/constants/roles";
 
 export function SellerSidebar() {
   const { userInfo: user } = useAuthContext();
-  console.log("user", user);
 
   const routes = [
     {

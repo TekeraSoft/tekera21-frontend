@@ -55,10 +55,6 @@ const CompanyManager = ({
 
   const logoSeller = watch("logo");
 
-  const shippingSeller = watch("shippingCompanies");
-
-  console.log("shippingSeller", shippingSeller);
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="md:col-span-2">

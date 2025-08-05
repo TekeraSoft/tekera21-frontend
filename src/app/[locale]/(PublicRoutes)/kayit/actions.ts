@@ -62,10 +62,10 @@ export async function registerUser(prevState: ActionStateType, formData: FormDat
     const signUpData: ISignUpForm = validatedFields.data
 
     try {
-        console.log("form", signUpData)
+
         const { data } = await axiosInstance.post("/auth/register", signUpData);
 
-        console.log("User registration return:", data)
+
 
         return redirect({ href: "/giris", locale: locale })
 
@@ -102,7 +102,7 @@ export async function loginUser(prevState: ActionStateType, formData: FormData):
         console.log("signInData", signInData)
         const { data } = await axiosInstance.post("/auth/authenticate", signInData);
 
-        console.log("User login return:", data)
+
 
         const cookieStore = await cookies();
         cookieStore.set("token", data.accessToken, {
