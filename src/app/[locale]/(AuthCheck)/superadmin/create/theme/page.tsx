@@ -16,6 +16,7 @@ import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import TopBar from "@/components/superadmin/TopBar";
 
 interface ITargetPictureFormData {
   name: string;
@@ -72,53 +73,58 @@ export default function CreateThemePage() {
     }
   };
   return (
-    <div className="max-w-md mx-auto p-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Tema ekle</CardTitle>
-          <CardDescription>
-            Bu form ile ürünler için tema ekleyebilirsiniz.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {/* Product Selection */}
+    <>
+      <TopBar>
+        <></>
+      </TopBar>
+      <div className="max-w-md mx-auto p-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Tema ekle</CardTitle>
+            <CardDescription>
+              Bu form ile ürünler için tema ekleyebilirsiniz.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* Product Selection */}
 
-            <div className="space-y-2">
-              <Label htmlFor="name">Tema ismi *</Label>
-              <Input
-                id="name"
-                {...register("name", {
-                  required: "Tema ismi zorunludur",
-                })}
-                placeholder="örn. fantastik"
+              <div className="space-y-2">
+                <Label htmlFor="name">Tema ismi *</Label>
+                <Input
+                  id="name"
+                  {...register("name", {
+                    required: "Tema ismi zorunludur",
+                  })}
+                  placeholder="örn. fantastik"
+                />
+                {errors.name && (
+                  <p className="text-sm text-red-500">{errors.name.message}</p>
+                )}
+              </div>
+
+              {/* Image Upload */}
+              <FileUploadEnhanced
+                name="image"
+                accept="image/*"
+                label="Tema Fotoğrafı"
+                description="PNG, JPG, GIF up to 10MB"
+                icon="image"
+                setFile={(file) => setValue("image", file)}
+                file={watch("image") as File | null}
               />
-              {errors.name && (
-                <p className="text-sm text-red-500">{errors.name.message}</p>
-              )}
-            </div>
 
-            {/* Image Upload */}
-            <FileUploadEnhanced
-              name="image"
-              accept="image/*"
-              label="Tema Fotoğrafı"
-              description="PNG, JPG, GIF up to 10MB"
-              icon="image"
-              setFile={(file) => setValue("image", file)}
-              file={watch("image") as File | null}
-            />
+              {/* Video Upload */}
 
-            {/* Video Upload */}
-
-            {/* Submit Button */}
-            <Button disabled={loading} type="submit" className="w-full">
-              <Upload className="w-4 h-4 mr-2" />
-              Tema ekle
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+              {/* Submit Button */}
+              <Button disabled={loading} type="submit" className="w-full">
+                <Upload className="w-4 h-4 mr-2" />
+                Tema ekle
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    </>
   );
 }

@@ -5,7 +5,6 @@ import {
   X,
   Home,
   Users,
-  ChevronRight,
   Package,
   ShoppingCart,
   BarChart3,
@@ -13,6 +12,7 @@ import {
   LucideChartNoAxesColumnDecreasing,
   LucideAirVent,
   ThermometerSunIcon,
+  Users2,
 } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useSidebar } from "@/context/SideBarContext";
@@ -46,6 +46,11 @@ export function SideBar() {
       name: "Kargo Firmaları",
       path: "/superadmin/shipping",
       icon: ShoppingCart,
+    },
+    user?.roles.includes("SUPER_ADMIN") && {
+      name: "Şirket Belge Doğrulama",
+      path: "/superadmin/companies",
+      icon: Users2,
     },
     user?.roles.includes("SUPER_ADMIN") && {
       name: "Kullanıcılar",

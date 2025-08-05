@@ -26,6 +26,29 @@ export interface ISellerInfo {
     rate: number;
 }
 
+export interface ICompany {
+    id: string
+    name: string
+    email: string
+    logo: string;
+    categories: Category[];
+    gsmNumber: string
+    taxNumber: string
+    taxOffice: string
+    merisNumber: string;
+    registrationDate: string
+    contactPersonTitle: string
+    shippingCompanies: IShippingCompany[]
+    bankAccounts: BankAccount[];
+    address: Address[];
+    verificationStatus: TVerification
+    identityDocumentPaths: {
+        documentTitle: string
+        documentPath: string
+        verificationStatus: TVerification
+    }[]
+}
+
 export interface Category {
     id: string;
     name: string;

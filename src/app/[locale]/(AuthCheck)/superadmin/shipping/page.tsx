@@ -1,5 +1,6 @@
 import { getShippingCompanies } from "@/app/actions";
 import ShippingManagement from "@/components/superadmin/ShippingManagement";
+import TopBar from "@/components/superadmin/TopBar";
 import React from "react";
 
 const ShippingCompanies = async () => {
@@ -12,7 +13,14 @@ const ShippingCompanies = async () => {
       </div>
     );
   }
-  return <ShippingManagement shippingCompanies={shippingCompaniesRes.data} />;
+  return (
+    <>
+      <TopBar>
+        <></>
+      </TopBar>
+      <ShippingManagement shippingCompanies={shippingCompaniesRes.data} />
+    </>
+  );
 };
 
 export default ShippingCompanies;

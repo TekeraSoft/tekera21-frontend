@@ -21,6 +21,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { ISellerFormData } from ".";
+import { useToast } from "@/hooks/use-toast";
+import { downloadFile } from "@/lib/downloadFiles";
 
 const DocumentManager = ({
   legalDocuments,
@@ -56,37 +58,20 @@ const DocumentManager = ({
     }));
   };
 
-  const downloadFile = async (documentUrl: string, documentName: string) => {
-    const fileUrl =
-      process.env.NEXT_PUBLIC_IMAGE_BASE_URL +
-      (documentUrl.startsWith("/") ? documentUrl : `/${documentUrl}`);
+  const { toast } = useToast();
 
+  const handleDownloadFile = async (url: string, name: string) => {
     try {
-      const response = await fetch(fileUrl, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/pdf",
-        },
+      await downloadFile(url, name);
+    } catch (error) {
+      toast({
+        title: "Hata",
+        description: "Dosya indirilemedi.",
+        variant: "destructive",
       });
-
-      if (!response.ok) {
-        throw new Error("Dosya indirilemedi.");
-      }
-
-      const blob = await response.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
-
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = `${documentName}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(blobUrl);
-    } catch (err) {
-      console.error("İndirme hatası:", err);
     }
   };
+
   return (
     <Card>
       <CardHeader>
@@ -122,7 +107,10 @@ const DocumentManager = ({
                       ) : doc.documentPath ? (
                         <Image
                           onClick={() =>
-                            downloadFile(doc.documentPath, doc.documentTitle)
+                            handleDownloadFile(
+                              doc.documentPath,
+                              doc.documentTitle
+                            )
                           }
                           src={"/assets/fileType/pdf.png"}
                           alt={doc.documentTitle}
@@ -141,7 +129,10 @@ const DocumentManager = ({
                       ] ? null : doc.documentPath ? (
                         <Download
                           onClick={() =>
-                            downloadFile(doc.documentPath, doc.documentTitle)
+                            handleDownloadFile(
+                              doc.documentPath,
+                              doc.documentTitle
+                            )
                           }
                           className="w-16 h-16 cursor-pointer p-2"
                         />

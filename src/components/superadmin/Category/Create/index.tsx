@@ -23,11 +23,10 @@ export default async function CreateCategory() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-8">
           <h1 className="text-3xl font-bold tracking-tight">
-            Category Management
+           Kategori Yönetimi
           </h1>
           <p className="text-muted-foreground mt-2">
-            Create and manage categories with images using server-side actions
-            and FormData.
+           Ana kategori veya alt kategori oluşturun.
           </p>
         </div>
 
@@ -36,9 +35,9 @@ export default async function CreateCategory() {
           <div className="lg:col-span-1">
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Categories</CardTitle>
+                <CardTitle className="text-lg">Kategoriler</CardTitle>
                 <CardDescription>
-                  Browse through your categories and subcategories
+                  Tüm kategorilerin listesi
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -51,9 +50,9 @@ export default async function CreateCategory() {
           <div className="lg:col-span-2">
             <Tabs defaultValue="category" className="space-y-6">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="category">Create Category</TabsTrigger>
+                <TabsTrigger value="category">Ana Kategori Oluştur</TabsTrigger>
                 <TabsTrigger value="subcategory">
-                  Create Subcategory
+                 Alt Kategori Oluştur
                 </TabsTrigger>
               </TabsList>
 
@@ -66,61 +65,7 @@ export default async function CreateCategory() {
               </TabsContent>
             </Tabs>
 
-            {/* Categories Overview */}
-            <Card className="mt-6">
-              <CardHeader>
-                <CardTitle className="text-lg">Categories Overview</CardTitle>
-                <CardDescription>
-                  Current categories and their subcategories
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {categories?.map((category) => (
-                    <div key={category.id} className="border rounded-lg p-4">
-                      <div className="flex items-center gap-3 mb-2">
-                        {category.image && (
-                          <ImageView
-                            imageInfo={{
-                              url: category.image || "/placeholder.svg",
-                              name: category.name,
-                            }}
-                            className="h-8 w-8 rounded object-cover"
-                          />
-                        )}
-                        <div>
-                          <h3 className="font-semibold">{category.name}</h3>
-                          <p className="text-sm text-muted-foreground">
-                            {category.subCategories?.length} subcategories
-                          </p>
-                        </div>
-                      </div>
-                      {category.subCategories?.length > 0 && (
-                        <div className="ml-11 space-y-1">
-                          {category?.subCategories?.map((sub) => (
-                            <div
-                              key={sub.id}
-                              className="flex items-center gap-2 text-sm text-muted-foreground"
-                            >
-                              {sub.image && (
-                                <ImageView
-                                  imageInfo={{
-                                    url: sub.image,
-                                    name: sub.name,
-                                  }}
-                                  className="h-4 w-4 rounded object-cover"
-                                />
-                              )}
-                              <span>{sub.name}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+   
           </div>
         </div>
       </div>

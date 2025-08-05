@@ -1,7 +1,7 @@
 "use server";
 
 import axiosInstance from "@/request/axiosServer";
-import { IFashionCollection, IFashionCollectionData } from "@/types/Collection";
+import { IFashionCollection, IFashionCollectionData, IPage } from "@/types/Collection";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
@@ -9,7 +9,7 @@ import { IUserPayload } from "@/types/AuthTypes";
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
 import { ICategoryResponse } from "@/types/SellerTypes/CategoryTypes";
-import { ISellerInfo } from "@/types/SellerTypes/SellerInfo";
+import { ICompany, ISellerInfo } from "@/types/SellerTypes/SellerInfo";
 import { IShippingCompany, IShippingCompanyCreate } from "@/types/SellerTypes/ShippingCompanies";
 
 export async function getSessionToken() {
@@ -111,6 +111,18 @@ export async function getSellerByUserId() {
     return { success: true, message: data.message, data: data as ISellerInfo };
   } catch (error: any) {
     return { success: false, message: error.message || "Failed to get products" };
+  }
+}
+export async function getAllCompany(page: string = "0", size: string = "20") {
+
+  try {
+    const { data } = await axiosInstance.get(
+      `/super-admin/getAllCompany?page=${page}&size=${size}`
+    );
+    console.log("data from getAllSellers", data)
+    return { success: true, message: data.message, data: data as { content: ICompany[], page: IPage } };
+  } catch (error: any) {
+    return { success: false, message: error.message || "Failed to get products", data: undefined };
   }
 }
 export async function getShippingCompanies() {

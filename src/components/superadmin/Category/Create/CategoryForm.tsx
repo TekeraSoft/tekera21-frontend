@@ -108,27 +108,27 @@ export function CreateCategoryForm() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <PlusCircle className="h-5 w-5" />
-          Create New Category
+          Yeni bir ana kategori oluştur
         </CardTitle>
         <CardDescription>
-          Add a new category with an optional image
+          
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form ref={formRef} action={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="category-name">Category Name</Label>
+            <Label htmlFor="category-name">Kategori İsmi</Label>
             <Input
               id="category-name"
               name="name"
-              placeholder="Enter category name"
+              placeholder="Bir kategori ismi girin"
               required
               disabled={isSubmitting}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="category-image">Category Image</Label>
+            <Label htmlFor="category-image">Kategori Fotoğrafı</Label>
             <div className="flex items-center gap-4">
               <div className="flex-1">
                 <Input
