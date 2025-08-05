@@ -23,22 +23,32 @@ export function SideBar() {
 
   const routes = [
     {
-      name: "Dashboard",
+      name: "Genel Bakış",
       path: "/superadmin/dashboard",
       icon: Home,
     },
     user?.roles.includes("SUPER_ADMIN") && {
-      name: "Products",
+      name: "Ürünler",
       path: "/superadmin/products",
       icon: Package,
     },
     user?.roles.includes("SUPER_ADMIN") && {
-      name: "Orders",
+      name: "Ürün Oluştur",
+      path: "/superadmin/create/product",
+      icon: LucidePercentDiamond,
+    },
+    user?.roles.includes("SUPER_ADMIN") && {
+      name: "Siparişler",
       path: "/superadmin/orders",
       icon: ShoppingCart,
     },
     user?.roles.includes("SUPER_ADMIN") && {
-      name: "Customers",
+      name: "Kargo Firmaları",
+      path: "/superadmin/shipping",
+      icon: ShoppingCart,
+    },
+    user?.roles.includes("SUPER_ADMIN") && {
+      name: "Kullanıcılar",
       path: "/superadmin/customers",
       icon: Users,
     },
@@ -48,22 +58,18 @@ export function SideBar() {
       icon: BarChart3,
     },
     user?.roles.includes("SUPER_ADMIN") && {
-      name: "Fashion Collections",
+      name: "Koleksiyonlar",
       path: "/superadmin/collections",
       icon: LucideAirVent,
     },
     user?.roles.includes("SUPER_ADMIN") && {
-      name: "Fashion Collection Oluştur",
+      name: "Koleksiyon Oluştur",
       path: "/superadmin/create/collection",
       icon: LucideAirVent,
     },
+
     user?.roles.includes("SUPER_ADMIN") && {
-      name: "Create Product",
-      path: "/superadmin/create/product",
-      icon: LucidePercentDiamond,
-    },
-    user?.roles.includes("SUPER_ADMIN") && {
-      name: "Create Category",
+      name: "Kategori Oluştur",
       path: "/superadmin/create/category",
       icon: LucideChartNoAxesColumnDecreasing,
     },
