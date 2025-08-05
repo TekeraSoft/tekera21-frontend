@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import SellerCompanyReducer from "./sellerSlices/SellerCompanySlice";
 import globalSettingsReducer from "./generalSlices/globalSettingsSlice";
 import formControlReducer from "./generalSlices/formControlSlice";
-import adminProductsReducer from "./superadminSlices/product/productSlice";
+import adminProductsReducer from "./manageSlices/product/productSlice";
 import buyerProductReducer from "./buyerSlices/product/productSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import SellerRequestsReducer from "./sellerSlices/SellerRequestsSlice";

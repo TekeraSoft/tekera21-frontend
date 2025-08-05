@@ -122,7 +122,7 @@ export async function loginUser(prevState: ActionStateType, formData: FormData):
     //   return redirect({ href: "/seller", locale: locale })
     // }
     // if (payload.roles.includes("SUPER_ADMIN")) {
-    //   return redirect({ href: "/superadmin", locale: locale })
+    //   return redirect({ href: "/manage", locale: locale })
     // }
     return redirect({ href: "/", locale: locale })
 

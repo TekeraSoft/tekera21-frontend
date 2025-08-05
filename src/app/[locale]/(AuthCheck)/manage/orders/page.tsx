@@ -1,5 +1,5 @@
 "use client";
-import { getOrdersByUserId } from "@/app/actions";
+import { getAllOrders } from "@/app/actions";
 import OrderTable from "@/components/shared/Orders/OrderTable";
 import AdminInnerLayout from "@/components/manage/AdminInnerLayout";
 import TopBar from "@/components/manage/TopBar";
@@ -10,9 +10,10 @@ export default function OrdersPage() {
   const orders = useQuery({
     queryKey: ["cartItems"],
     queryFn: async (): Promise<IOrderResponse> => {
-      return await getOrdersByUserId();
+      return await getAllOrders();
     },
   });
+
   return (
     <>
       <TopBar>

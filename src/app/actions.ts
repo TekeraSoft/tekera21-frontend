@@ -106,7 +106,7 @@ export async function getSellerByUserId() {
 
   try {
     const { data } = await axiosInstance.get(
-      `/seller/getSellerByUserId`
+      `/user/getSellerInformation`
     );
  
     return { success: true, message: data.message, data: data as ISellerInfo };
@@ -120,7 +120,7 @@ export async function getAllCompany(page: string = "0", size: string = "20") {
     const { data } = await axiosInstance.get(
       `/super-admin/getAllCompany?page=${page}&size=${size}`
     );
-    console.log("data from getAllSellers", data)
+    console.log("data from getAllCompany", data)
     return { success: true, message: data.message, data: data as { content: ICompany[], page: IPage } };
   } catch (error: any) {
     return { success: false, message: error.message || "Failed to get products", data: undefined };

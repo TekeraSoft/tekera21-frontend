@@ -15,16 +15,21 @@ export interface ILogin {
 
 export type TUserTypes = "SUPER_ADMIN" |
     "ADMIN" |
-    "MODERATOR" |
-    "DEVELOPER" |
-    "SUPPORT_AGENT" |
+    "AUDITOR" |
     "FINANCE_MANAGER" |
     "MARKETING_MANAGER" |
-    "AUDITOR" |
+    "MODERATOR" |
+    "DEVELOPER" |
+    "SELLER_SUPPORT" |
+
     "SELLER" |
-    "COMPANY_EMPLOYEE" |
+    "SELLER_EMPLOYEE" |
+    "SELLER_MARKETING_MANAGER" |
+    "SELLER_FINANCE_MANAGER" |
     "CUSTOMER" |
     "COURIER"
+
+
 export interface IUserPayload {
     phoneNumber: string;
     roles: TUserTypes[];

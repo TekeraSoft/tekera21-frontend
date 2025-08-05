@@ -15,7 +15,7 @@ export default async function middleware(request: NextRequest) {
 
 
   const publicRoutes = ["/giris", "/forgot-password", "/reset-password", "/kayit", "/digital-fashion", "/verify"];
-  const protectedRoutes = ["/seller", "/superadmin", "/register"];
+  const protectedRoutes = ["/seller", "/manage", "/register"];
   const sellerRoutes = ["/seller", "/register", "/register/edit"]
   const customerRole = "CUSTOMER"
 
@@ -31,15 +31,14 @@ export default async function middleware(request: NextRequest) {
     const isSeller = user.roles.some((role) => sellerRoles.includes(role));
     const isSuperAdmin = user.roles.includes("SUPER_ADMIN");
     const isCustomer = user.roles.includes(customerRole);
-    console.log("isSeller:", isSeller, "isSuperAdmin:", isSuperAdmin, "isCustomer:", isCustomer)
 
     if (publicRoutes.some((route) => pathname.includes(route))) {
-      const redirectUrl = new URL(isSeller ? `/seller` : isSuperAdmin ? `/superadmin` : `/register`, request.url);
+      const redirectUrl = new URL(isSeller ? `/seller` : isSuperAdmin ? `/manage` : `/register`, request.url);
       return NextResponse.redirect(redirectUrl);
     }
 
-    if (isSuperAdmin && !pathname.includes("superadmin")) {
-      const redirectUrl = new URL(`/superadmin`, request.url);
+    if (isSuperAdmin && !pathname.includes("manage")) {
+      const redirectUrl = new URL(`/manage`, request.url);
       return NextResponse.redirect(redirectUrl);
     }
 
