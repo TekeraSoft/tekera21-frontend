@@ -122,7 +122,23 @@ export async function getShippingCompanies() {
     console.log("data from getAllShippingCompany", data)
     return { success: true, message: data.message, data: data as IShippingCompany[] };
   } catch (error: any) {
-    return { success: false, message: error.message || "Failed to get products" };
+    return { success: false, message: error.message || "Failed to get products", data: undefined };
+  }
+}
+
+export async function createShippingCompany(shippingCompany: IShippingCompany) {
+  console.log("createShippingCompany", shippingCompany)
+  try {
+    const { data } = await axiosInstance.post(
+      `/super-admin/createShippingCompany`,
+      shippingCompany,
+
+    );
+    revalidatePath("/");
+    return { success: true, message: data.message, data: data.data };
+  } catch (error: any) {
+
+    return { success: false, message: error.message || "Failed to createShippingCompany" };
   }
 }
 

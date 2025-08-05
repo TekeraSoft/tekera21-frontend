@@ -32,50 +32,25 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { IShippingCompany } from "@/types/SellerTypes/ShippingCompanies";
+import { createShippingCompany } from "@/app/actions";
 
-export interface IShippingCompany {
-  id?: number;
-  name: string;
-  price: number;
-  maxDeliveryDay: number;
-  minDeliveryDay: number;
-}
-
-export default function ShippingManagement() {
-  const [shippingCompanies, setShippingCompanies] = useState<
-    IShippingCompany[]
-  >([
-    {
-      id: 1,
-      name: "MNG",
-      price: 25.99,
-      maxDeliveryDay: 3,
-      minDeliveryDay: 1,
-    },
-    {
-      id: 2,
-      name: "FedEx Standard",
-      price: 18.5,
-      maxDeliveryDay: 5,
-      minDeliveryDay: 3,
-    },
-    {
-      id: 3,
-      name: "UPS Ground",
-      price: 12.75,
-      maxDeliveryDay: 7,
-      minDeliveryDay: 5,
-    },
-  ]);
-
+export default function ShippingManagement({
+  shippingCompanies,
+}: {
+  shippingCompanies: IShippingCompany[] | undefined;
+}) {
   const [formData, setFormData] = useState<IShippingCompany>({
+    id: "",
     name: "",
     price: 0,
+    gsmNumber: "",
+    email: "",
     maxDeliveryDay: 0,
     minDeliveryDay: 0,
   });
 
-  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleInputChange = (
@@ -88,36 +63,26 @@ export default function ShippingManagement() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.name.trim()) return;
 
-    if (editingId) {
-      // Update existing company
-      setShippingCompanies((prev) =>
-        prev.map((company) =>
-          company.id === editingId ? { ...formData, id: editingId } : company
-        )
-      );
-      setEditingId(null);
-    } else {
-      // Add new company
-      const newCompany: IShippingCompany = {
-        ...formData,
-        id: Date.now(), // Simple ID generation
-      };
-      setShippingCompanies((prev) => [...prev, newCompany]);
-    }
+    const { success, message } = await createShippingCompany(formData);
 
-    // Reset form
-    setFormData({
-      name: "",
-      price: 0,
-      maxDeliveryDay: 0,
-      minDeliveryDay: 0,
-    });
-    setIsDialogOpen(false);
+    if (success) {
+      setFormData({
+        name: "",
+        price: 0,
+        maxDeliveryDay: 0,
+        gsmNumber: "",
+        email: "",
+        minDeliveryDay: 0,
+      });
+      setIsDialogOpen(false);
+    } else {
+      console.log("message", message);
+    }
   };
 
   const handleEdit = (company: IShippingCompany) => {
@@ -126,14 +91,14 @@ export default function ShippingManagement() {
     setIsDialogOpen(true);
   };
 
-  const handleDelete = (id: number) => {
-    setShippingCompanies((prev) => prev.filter((company) => company.id !== id));
-  };
+  const handleDelete = (id: string) => {};
 
   const resetForm = () => {
     setFormData({
       name: "",
       price: 0,
+      gsmNumber: "",
+      email: "",
       maxDeliveryDay: 0,
       minDeliveryDay: 0,
     });
@@ -144,48 +109,67 @@ export default function ShippingManagement() {
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Shipping Companies
-          </h1>
-          <p className="text-muted-foreground">
-            Manage your shipping company options and pricing
-          </p>
+          <h1 className="text-3xl font-bold tracking-tight">Kargo Firmaları</h1>
         </div>
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button onClick={resetForm}>
               <Plus className="mr-2 h-4 w-4" />
-              Add Company
+              Firma Ekle
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>
                 {editingId
-                  ? "Edit Shipping Company"
-                  : "Add New Shipping Company"}
+                  ? "Kargo Firmasını Düzenle"
+                  : "Yeni Kargo Firması Ekle"}
               </DialogTitle>
               <DialogDescription>
                 {editingId
-                  ? "Update the shipping company details below."
-                  : "Enter the details for the new shipping company."}
+                  ? "Aşağıdaki kargo şirketi bilgilerini güncelleyin."
+                  : "Yeni kargo şirketinin bilgilerini girin."}
               </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit}>
               <div className="grid gap-4 py-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="name">Company Name</Label>
+                  <Label htmlFor="name">Firma Adı</Label>
                   <Input
                     id="name"
                     value={formData.name}
                     onChange={(e) => handleInputChange("name", e.target.value)}
-                    placeholder="Enter company name"
+                    placeholder="Firma Adı girin"
                     required
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="price">Price ($)</Label>
+                  <Label htmlFor="name">İletişim Numarası</Label>
+                  <Input
+                    id="gsmNumber"
+                    value={formData.gsmNumber}
+                    onChange={(e) =>
+                      handleInputChange("gsmNumber", e.target.value)
+                    }
+                    placeholder="İletişim numarası"
+                    required
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="name">E Posta Adresi</Label>
+                  <Input
+                    id="email"
+                    value={formData.email}
+                    onChange={(e) =>
+                      handleInputChange("email", e.target.value)
+                    }
+                    placeholder="E Posta adresi"
+                    required
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="price">Fiyat</Label>
                   <Input
                     id="price"
                     type="number"
@@ -204,7 +188,7 @@ export default function ShippingManagement() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
-                    <Label htmlFor="minDelivery">Min Delivery (days)</Label>
+                    <Label htmlFor="minDelivery">Minimum gönderi günü</Label>
                     <Input
                       id="minDelivery"
                       type="number"
@@ -221,7 +205,7 @@ export default function ShippingManagement() {
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="maxDelivery">Max Delivery (days)</Label>
+                    <Label htmlFor="maxDelivery">Maksimum gönderi günü</Label>
                     <Input
                       id="maxDelivery"
                       type="number"
@@ -245,11 +229,9 @@ export default function ShippingManagement() {
                   variant="outline"
                   onClick={() => setIsDialogOpen(false)}
                 >
-                  Cancel
+                  İptal
                 </Button>
-                <Button type="submit">
-                  {editingId ? "Update Company" : "Add Company"}
-                </Button>
+                <Button type="submit">{editingId ? "Güncelle" : "Ekle"}</Button>
               </DialogFooter>
             </form>
           </DialogContent>
@@ -260,54 +242,50 @@ export default function ShippingManagement() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Package className="h-5 w-5" />
-            Shipping Companies List
+            Kargo Firmaları listesi
           </CardTitle>
-          <CardDescription>
-            {shippingCompanies.length} shipping{" "}
-            {shippingCompanies.length === 1 ? "company" : "companies"}{" "}
-            configured
-          </CardDescription>
+          <CardDescription></CardDescription>
         </CardHeader>
         <CardContent>
-          {shippingCompanies.length === 0 ? (
+          {shippingCompanies?.length === 0 ? (
             <div className="text-center py-8">
               <Package className="mx-auto h-12 w-12 text-muted-foreground" />
               <h3 className="mt-4 text-lg font-semibold">
-                No shipping companies
+                Şu an hiçbir kargo firması yok.
               </h3>
               <p className="text-muted-foreground">
-                Get started by adding your first shipping company.
+                Yeni kargo firmasını ekleyin.
               </p>
             </div>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Company Name</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Delivery Time</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>Firma Adı</TableHead>
+                  <TableHead>Kargo Ücreti</TableHead>
+                  <TableHead>Teslim Süresi</TableHead>
+                  <TableHead className="text-right">Düzenle/Sil</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {shippingCompanies.map((company) => (
-                  <TableRow key={company.id}>
+                {shippingCompanies?.map((company) => (
+                  <TableRow key={company.name}>
                     <TableCell className="font-medium">
                       {company.name}
                     </TableCell>
                     <TableCell>
                       <Badge variant="secondary">
-                        ${company.price.toFixed(2)}
+                        {company.price.toFixed(2)}
                       </Badge>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1">
                         <span className="text-sm text-muted-foreground">
                           {company.minDeliveryDay === company.maxDeliveryDay
-                            ? `${company.minDeliveryDay} day${
+                            ? `${company.minDeliveryDay} gün${
                                 company.minDeliveryDay > 1 ? "s" : ""
                               }`
-                            : `${company.minDeliveryDay}-${company.maxDeliveryDay} days`}
+                            : `${company.minDeliveryDay}-${company.maxDeliveryDay} gün`}
                         </span>
                       </div>
                     </TableCell>
