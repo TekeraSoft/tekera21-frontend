@@ -32,7 +32,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { IShippingCompany } from "@/types/SellerTypes/ShippingCompanies";
+import {
+  IShippingCompany,
+  IShippingCompanyCreate,
+} from "@/types/SellerTypes/ShippingCompanies";
 import { createShippingCompany } from "@/app/actions";
 
 export default function ShippingManagement({
@@ -40,8 +43,7 @@ export default function ShippingManagement({
 }: {
   shippingCompanies: IShippingCompany[] | undefined;
 }) {
-  const [formData, setFormData] = useState<IShippingCompany>({
-    id: "",
+  const [formData, setFormData] = useState<IShippingCompanyCreate>({
     name: "",
     price: 0,
     gsmNumber: "",
@@ -54,7 +56,7 @@ export default function ShippingManagement({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleInputChange = (
-    field: keyof IShippingCompany,
+    field: keyof IShippingCompanyCreate,
     value: string | number
   ) => {
     setFormData((prev) => ({
@@ -161,9 +163,7 @@ export default function ShippingManagement({
                   <Input
                     id="email"
                     value={formData.email}
-                    onChange={(e) =>
-                      handleInputChange("email", e.target.value)
-                    }
+                    onChange={(e) => handleInputChange("email", e.target.value)}
                     placeholder="E Posta adresi"
                     required
                   />

@@ -1,5 +1,5 @@
 export interface IShippingCompany {
-    id?: string;
+    id: string;
     name: string;
     price: number;
     gsmNumber: string;
@@ -7,3 +7,5 @@ export interface IShippingCompany {
     maxDeliveryDay: number;
     minDeliveryDay: number;
 }
+
+export type IShippingCompanyCreate = Omit<IShippingCompany, "id">;

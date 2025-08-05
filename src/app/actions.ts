@@ -10,7 +10,7 @@ import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
 import { ICategoryResponse } from "@/types/SellerTypes/CategoryTypes";
 import { ISellerInfo } from "@/types/SellerTypes/SellerInfo";
-import { IShippingCompany } from "@/types/SellerTypes/ShippingCompanies";
+import { IShippingCompany, IShippingCompanyCreate } from "@/types/SellerTypes/ShippingCompanies";
 
 export async function getSessionToken() {
   const cookieStore = await cookies();
@@ -126,7 +126,7 @@ export async function getShippingCompanies() {
   }
 }
 
-export async function createShippingCompany(shippingCompany: IShippingCompany) {
+export async function createShippingCompany(shippingCompany: IShippingCompanyCreate) {
   console.log("createShippingCompany", shippingCompany)
   try {
     const { data } = await axiosInstance.post(

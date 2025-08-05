@@ -199,7 +199,7 @@ const CompanyManager = ({
               <MultiSelectCategory
                 options={shippingCompanies.map((shippingCompany) => ({
                   label: shippingCompany.name,
-                  value: shippingCompany.id || "",
+                  value: shippingCompany.id,
                   image: "",
                 }))}
                 selected={
