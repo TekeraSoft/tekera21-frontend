@@ -5,7 +5,7 @@ interface ISellerRegister {
   gsmNumber: string;
   alternativePhoneNumber: string;
   supportPhoneNumber: string;
-  shippingCompanyId: string[];
+  shippingCompanies: string[];
   taxNumber: string;
   logo?: string;
   taxOffice: string;

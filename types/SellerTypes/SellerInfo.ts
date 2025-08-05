@@ -12,7 +12,7 @@ export interface ISellerInfo {
     email: string;
     gsmNumber: string;
     alternativePhoneNumber: string;
-    shippingCompanyId: IShippingCompany[]
+    shippingCompanies: IShippingCompany[]
     supportPhoneNumber: string;
     taxNumber: string;
     taxOffice: string;

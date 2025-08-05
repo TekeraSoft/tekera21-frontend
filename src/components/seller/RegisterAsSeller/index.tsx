@@ -25,7 +25,7 @@ export interface ISellerFormData {
   email: string;
   gsmNumber: string;
   alternativePhoneNumber: string;
-  shippingCompanyId: { value: string }[];
+  shippingCompanies: { value: string }[];
   supportPhoneNumber: string;
   logo?: string;
   taxNumber: string;
@@ -140,7 +140,7 @@ export default function SellerRegistrationForm({
       registrationDate: sellerInfo?.registrationDate || undefined,
       contactPersonNumber: sellerInfo?.contactPersonNumber || "",
       contactPersonTitle: sellerInfo?.contactPersonTitle || "",
-      shippingCompanyId: sellerInfo?.shippingCompanyId?.map(
+      shippingCompanies: sellerInfo?.shippingCompanies?.map(
         (shippingCompany) => {
           const item = { value: shippingCompany.id };
           return item;
@@ -184,7 +184,7 @@ export default function SellerRegistrationForm({
       contactPersonNumber: data.contactPersonNumber,
       name: data.name,
       email: data.email,
-      shippingCompanyId: data.shippingCompanyId.map(
+      shippingCompanies: data.shippingCompanies.map(
         (shippnCompany) => shippnCompany.value
       ),
       gsmNumber: data.gsmNumber,

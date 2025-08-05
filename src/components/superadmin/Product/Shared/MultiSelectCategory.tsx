@@ -47,6 +47,8 @@ export function MultiSelectCategory({
 }: MultiSelectProps) {
   const [open, setOpen] = React.useState(false);
 
+
+
   const handleUnselect = (item: string) => {
     onChange(selected.filter((i) => i.value !== item));
   };
@@ -61,6 +63,7 @@ export function MultiSelectCategory({
 
   const selectedLabels = selected.map((selected) => {
     const option = options.find((option) => option.value === selected.value);
+
     return option?.label || selected.value;
   });
 

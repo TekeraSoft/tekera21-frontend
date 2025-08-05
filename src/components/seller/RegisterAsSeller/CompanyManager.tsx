@@ -55,6 +55,10 @@ const CompanyManager = ({
 
   const logoSeller = watch("logo");
 
+  const shippingSeller = watch("shippingCompanies");
+
+  console.log("shippingSeller", shippingSeller);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="md:col-span-2">
@@ -190,10 +194,10 @@ const CompanyManager = ({
       </div>
       {shippingCompanies && (
         <div className="space-y-2 relative">
-          <Label htmlFor={"categoryId"}>Kargo Firması Seçimi</Label>
+          <Label htmlFor={"shippingCompanyId"}>Kargo Firması Seçimi</Label>
           <Controller
             control={control}
-            name={"shippingCompanyId"}
+            name={"shippingCompanies"}
             rules={{ required: "Kargo Firması seçimi zorunludur." }}
             render={({ field }) => (
               <MultiSelectCategory
