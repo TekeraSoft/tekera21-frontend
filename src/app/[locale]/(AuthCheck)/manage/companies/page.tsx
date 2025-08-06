@@ -1,10 +1,10 @@
-import { getAllCompany } from "@/app/actions/server/general.actions";
+import { getNewSellers } from "@/app/actions/server/seller.actions";
 import VerificationPanel from "@/components/manage/Companies/CheckCompanies";
 import TopBar from "@/components/manage/TopBar";
 import React from "react";
 
 const CompaniesCheckPage = async () => {
-  const { data, success, message } = await getAllCompany();
+  const { data, success, message } = await getNewSellers();
 
   if (!success || !data) {
     return (

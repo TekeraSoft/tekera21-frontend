@@ -1,4 +1,5 @@
 interface ISellerRegister {
+  id?:string;
   name: string;
   categoryId: string[];
   email: string;

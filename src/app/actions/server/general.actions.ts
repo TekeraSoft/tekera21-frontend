@@ -3,23 +3,10 @@
 import axiosInstance from "@/request/axiosServer";
 import { IPage } from "@/types/Collection";
 import { revalidatePath } from "next/cache";
-import { ICompany, ISellerInfo } from "@/types/SellerTypes/SellerInfo";
+import { ICompany } from "@/types/SellerTypes/SellerInfo";
 import { IShippingCompany, IShippingCompanyCreate } from "@/types/SellerTypes/ShippingCompanies";
 
 
-
-export async function getSellerByUserId() {
-
-  try {
-    const { data } = await axiosInstance.get(
-      `/user/getSellerInformation`
-    );
-
-    return { success: true, message: data.message, data: data as ISellerInfo };
-  } catch (error: any) {
-    return { success: false, message: error.message || "Failed to get products" };
-  }
-}
 export async function getAllCompany(page: string = "0", size: string = "20") {
 
   try {
@@ -38,12 +25,12 @@ export async function getShippingCompanies() {
 
   try {
     const { data } = await axiosInstance.get(
-      `/account/getAllShippingCompany`
+      `/verification/getAllShippingCompany`
     );
 
     return { success: true, message: data.message, data: data as IShippingCompany[] };
   } catch (error: any) {
-    return { success: false, message: error.message || "Failed to get products", data: undefined };
+    return { success: false, message: error.message || "Failed to get getAllShippingCompany", data: undefined };
   }
 }
 export async function createShippingCompany(shippingCompany: IShippingCompanyCreate) {
@@ -62,35 +49,7 @@ export async function createShippingCompany(shippingCompany: IShippingCompanyCre
   }
 }
 
-export async function registerAsSeller(formData: FormData) {
-  try {
-    const dataform = formData.get("data");
-    const files = formData.getAll("files");
-    const logo = formData.get("logo");
 
-    if (!dataform || !files || !logo) {
-      return {
-        success: false,
-        message: "Data,logo and legal documents are required",
-      };
-    }
-    const { data } = await axiosInstance.post(
-      `/account/createSeller`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-    revalidatePath("/");
-
-    return { success: true, message: data.message, product: data.data };
-  } catch (error: any) {
-
-    return { success: false, message: typeof error.message === "string" ? error.message : "Failed to create category" };
-  }
-}
 
 export async function getAllTheme() {
   try {

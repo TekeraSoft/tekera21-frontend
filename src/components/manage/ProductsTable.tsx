@@ -70,12 +70,17 @@ import { deleteProductById } from "@/app/actions/server/product.actions";
 export function ProductsTable() {
   const { data, error, loading, categories, selectedCategory, success } =
     useAppSelector((state) => state.adminProducts);
+
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
 
   const dispatch = useAppDispatch();
   const { toast } = useToast();
+
+  const handleDispatchProducts = (page: number, pageSize: number = 10) => {
+    dispatch(fetchProducts({ page: page, size: pageSize }));
+  };
 
   useEffect(() => {
     if (!success && !error) {
@@ -210,6 +215,44 @@ export function ProductsTable() {
               <SelectItem value="out-of-stock">Out of Stock</SelectItem>
             </SelectContent>
           </Select>
+          <Select
+            value={data.page.number.toString()}
+            onValueChange={(value) => {
+              handleDispatchProducts(Number(value));
+            }}
+          >
+            <SelectTrigger className="h-8 w-28">
+              Sayfa:
+              <SelectValue placeholder={(data.page.number + 1).toString()} />
+            </SelectTrigger>
+            <SelectContent className="w-20">
+              {Array.from({ length: data.page.totalPages }, (_, i) => i).map(
+                (page) => (
+                  <SelectItem key={page} value={page.toString()}>
+                    {(page + 1).toString()}
+                  </SelectItem>
+                )
+              )}
+            </SelectContent>
+          </Select>
+          <Select
+            value={data.page.size.toString()}
+            onValueChange={(value) => {
+              handleDispatchProducts(data.page.number, Number(value));
+            }}
+          >
+            <SelectTrigger className="h-8 w-28">
+              Adet:
+              <SelectValue placeholder={"Adet: " + data.page.size.toString()} />
+            </SelectTrigger>
+            <SelectContent className="w-20">
+              <SelectItem value={"10"}>10</SelectItem>
+              <SelectItem value={"20"}>20</SelectItem>
+              <SelectItem value={"30"}>30</SelectItem>
+              <SelectItem value={"40"}>40</SelectItem>
+              <SelectItem value={"50"}>50</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <div className="flex items-center space-x-2">
           <p className="text-sm text-muted-foreground">
@@ -304,33 +347,6 @@ export function ProductsTable() {
                         );
                       }}
                     />
-                    {/* <Button variant="ghost" size="icon" data-dropdown-trigger>
-                      {product.isActive ? (
-                        <Check
-                          onClick={() =>
-                            dispatch(
-                              changeStatus({
-                                productId: product.id,
-                                status: false,
-                              })
-                            )
-                          }
-                          className="h-4 w-4"
-                        />
-                      ) : (
-                        <Check
-                          onClick={() =>
-                            dispatch(
-                              changeStatus({
-                                productId: product.id,
-                                status: true,
-                              })
-                            )
-                          }
-                          className="h-4 w-4 text-red-400"
-                        />
-                      )}
-                    </Button> */}
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
@@ -701,7 +717,12 @@ export function ProductsTable() {
       <div className="flex items-center justify-end space-x-2 p-4">
         <Button
           onClick={() =>
-            dispatch(fetchProducts({ page: data.page.number - 1, size: 10 }))
+            dispatch(
+              fetchProducts({
+                page: data.page.number - 1,
+                size: data.page.size,
+              })
+            )
           }
           disabled={data.page.number === 0}
           variant="outline"
@@ -711,7 +732,12 @@ export function ProductsTable() {
         </Button>
         <Button
           onClick={() =>
-            dispatch(fetchProducts({ page: data.page.number + 1, size: 10 }))
+            dispatch(
+              fetchProducts({
+                page: data.page.number + 1,
+                size: data.page.size,
+              })
+            )
           }
           disabled={data.page.number + 1 >= data.page.totalPages}
           variant="outline"

@@ -7,7 +7,7 @@ export interface ISellerInfo {
     id: string;
     name: string;
     slug: string;
-    categories: Category[];
+    categories: ICategory[];
     logo: string;
     email: string;
     gsmNumber: string;
@@ -22,41 +22,41 @@ export interface ISellerInfo {
     contactPersonTitle: string;
     address: Address[];
     bankAccounts: BankAccount[];
-    identityDocumentPaths: IdentityDocument[];
+    identityDocumentPaths: IIdentityDocument[];
     rate: number;
 }
 
 export interface ICompany {
-    id: string
-    name: string
-    email: string
+    id: string;
+    name: string;
+    slug: string;
+    categories: ICategory[];
     logo: string;
-    categories: Category[];
-    gsmNumber: string
-    taxNumber: string
-    taxOffice: string
+    email: string;
+    gsmNumber: string;
+    alternativePhoneNumber: string;
+    supportPhoneNumber: string;
+    taxNumber: string;
+    taxOffice: string;
     merisNumber: string;
-    registrationDate: string
-    contactPersonTitle: string
-    shippingCompanies: IShippingCompany[]
-    bankAccounts: BankAccount[];
-    address: Address[];
-    verificationStatus: TVerification
-    identityDocumentPaths: {
-        documentTitle: string
-        documentPath: string
-        verificationStatus: TVerification
-    }[]
+    registrationDate: string;
+    contactPersonNumber: string;
+    contactPersonTitle: string;
+    address: IAddress[];
+    shippingCompanies: IShippingCompany[];
+    bankAccounts: IBankAccount[];
+    identityDocumentPaths: IIdentityDocument[];
+    rate: number;
+    verificationStatus: TVerification; // Enum
 }
 
-export interface Category {
+export interface ICategory {
     id: string;
     name: string;
     image: string;
 }
 
-export interface Address {
-    id: string;
+export interface IAddress {
     city: string;
     street: string;
     postalCode: string;
@@ -64,19 +64,37 @@ export interface Address {
     doorNumber: string;
     detailAddress: string;
     country: string;
+    id: string;
     createdAt: string;
     updatedAt: string;
 }
 
-export interface BankAccount {
+export interface IBankAccount {
     iban: string;
     accountName: string;
     bankName: string;
     isActive: boolean;
 }
 
-export interface IdentityDocument {
-    documentTitle: "IDENTITY_NUMBER"
+export interface ISellerUser {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    gender: "MALE" | "FEMALE"; // Enum olarak genişletilebilir
+    birthDate: string; // ISO tarih stringi
+}
+
+export interface ISellerContent {
+    sellerUser: ISellerUser;
+    seller: ICompany;
+    sellerDocuments: IIdentityDocument[];
+    sellerExtraDocument: any[]; // Henüz içerik yok, tanımlandığında detaylandırılabilir
+    esignature: boolean;
+}
+
+export interface IIdentityDocument {
+    documentTitle: "IDENTITY_DOCUMENT_COPY"
     | "TAX_CERTIFICATE"
     | "SIGNATURE_CIRCULAR"
     | "COMMERCIAL_REGISTER_GAZETTE"

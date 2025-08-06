@@ -1,8 +1,6 @@
 import { getCategoriesForSeller } from "@/app/actions/server/category.actions";
-import {
-  getSellerByUserId,
-  getShippingCompanies,
-} from "@/app/actions/server/general.actions";
+import { getShippingCompanies } from "@/app/actions/server/general.actions";
+import { getSellerByUserId } from "@/app/actions/server/seller.actions";
 import SellerRegistrationForm from "@/components/seller/RegisterAsSeller";
 
 export default async function SellerRegistrationPage() {
@@ -33,6 +31,8 @@ export default async function SellerRegistrationPage() {
       </div>
     );
   }
+
+  console.log("selleruın", sellerInfo)
 
   return (
     <SellerRegistrationForm

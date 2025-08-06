@@ -14,10 +14,13 @@ import CompanyManager from "@/components/seller/RegisterAsSeller/CompanyManager"
 import TaxManager from "@/components/seller/RegisterAsSeller/TaxManager";
 import AddressManager from "@/components/seller/RegisterAsSeller/AddressManager";
 import { ICategoryResponse } from "@/types/SellerTypes/CategoryTypes";
-import { registerAsSeller } from "@/app/actions/server/general.actions";
 import { useToast } from "@/hooks/use-toast";
-import { IdentityDocument, ISellerInfo } from "@/types/SellerTypes/SellerInfo";
+import { IIdentityDocument, ISellerInfo } from "@/types/SellerTypes/SellerInfo";
 import { IShippingCompany } from "@/types/SellerTypes/ShippingCompanies";
+import {
+  sellerRegister,
+  updateSeller,
+} from "@/app/actions/server/seller.actions";
 
 export interface ISellerFormData {
   name: string;
@@ -49,7 +52,7 @@ export interface ISellerFormData {
     bankName: string;
     isActive: boolean;
   }[];
-  documents: IdentityDocument[];
+  documents: IIdentityDocument[];
 }
 
 export default function SellerRegistrationForm({
@@ -68,9 +71,9 @@ export default function SellerRegistrationForm({
   }>({});
   const [logo, setLogo] = useState<File>();
 
-  const requiredDocuments: IdentityDocument[] = [
+  const requiredDocuments: IIdentityDocument[] = [
     {
-      documentTitle: "IDENTITY_NUMBER",
+      documentTitle: "IDENTITY_DOCUMENT_COPY",
       documentPath: "",
       verificationStatus: "NONE",
     },
@@ -112,8 +115,8 @@ export default function SellerRegistrationForm({
   ];
 
   const mergeDocuments = (
-    uploadedDocuments: IdentityDocument[]
-  ): IdentityDocument[] => {
+    uploadedDocuments: IIdentityDocument[]
+  ): IIdentityDocument[] => {
     return requiredDocuments.map((doc) => {
       const uploaded = uploadedDocuments.find(
         (u) => u.documentTitle === doc.documentTitle
@@ -177,6 +180,10 @@ export default function SellerRegistrationForm({
     const formData = new FormData();
 
     const formattedData: ISellerRegister = {
+      ...(sellerInfo?.id && { id: sellerInfo.id }),
+      ...(sellerInfo?.identityDocumentPaths && {
+        identityDocumentPaths: sellerInfo.identityDocumentPaths,
+      }),
       address: data.address,
       alternativePhoneNumber: data.alternativePhoneNumber,
       bankAccount: data.bankAccount,
@@ -197,38 +204,67 @@ export default function SellerRegistrationForm({
         : new Date().toISOString(),
       contactPersonTitle: data.contactPersonTitle,
     };
-    console.log("formattedData", formattedData);
+
     formData.append(
       "data",
       new Blob([JSON.stringify(formattedData)], { type: "application/json" })
     );
 
-    Object.values(legalDocuments).forEach((fileArray) => {
-      fileArray.forEach((file) => {
-        formData.append(`files`, file);
+    if (Object.values(legalDocuments).length) {
+      Object.values(legalDocuments).forEach((fileArray) => {
+        fileArray.forEach((file) => {
+          formData.append(`files`, file);
+        });
       });
-    });
-    if (logo) {
-      formData.append(`logo`, logo);
+    } else {
+      formData.append("files", new File([""], ""), "empty.pdf");
     }
 
-    const { success, message } = await registerAsSeller(formData);
-    if (success) {
-      toast({
-        title: "Başarılı!",
-        description:
-          "İsteğiniz başarılı. Gerekli incelemeler yapıldıktan sonra hesabınız kullanıma açılacaktır.",
-        variant: "default",
-      });
-      setLegalDocuments({});
-      setLoading(false);
+    if (logo) {
+      formData.append(`logo`, logo);
     } else {
-      toast({
-        title: "Error",
-        description: message || "Kaydınız oluşturulamadı.",
-        variant: "destructive",
-      });
-      setLoading(false);
+      formData.append("logo", new File([""], ""), "empty.jpg");
+    }
+
+    if (sellerInfo?.id) {
+      console.log("id var", formattedData);
+      const { success, message } = await updateSeller(formData);
+      if (success) {
+        toast({
+          title: "Başarılı!",
+          description:
+            "Güncelleme İsteğiniz başarılı. Gerekli incelemeler yapıldıktan sonra hesabınız kullanıma açılacaktır.",
+          variant: "default",
+        });
+        setLegalDocuments({});
+        setLoading(false);
+      } else {
+        toast({
+          title: "Error",
+          description: message || "Kaydınız oluşturulamadı.",
+          variant: "destructive",
+        });
+        setLoading(false);
+      }
+    } else {
+      const { success, message } = await sellerRegister(formData);
+      if (success) {
+        toast({
+          title: "Başarılı!",
+          description:
+            "İsteğiniz başarılı. Gerekli incelemeler yapıldıktan sonra hesabınız kullanıma açılacaktır.",
+          variant: "default",
+        });
+        setLegalDocuments({});
+        setLoading(false);
+      } else {
+        toast({
+          title: "Error",
+          description: message || "Kaydınız oluşturulamadı.",
+          variant: "destructive",
+        });
+        setLoading(false);
+      }
     }
 
     // Here you would typically send the data to your API
