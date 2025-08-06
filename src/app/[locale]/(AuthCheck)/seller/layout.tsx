@@ -1,7 +1,7 @@
 import React from "react";
 import { SidebarProvider } from "@/context/SideBarContext";
 import { SellerSidebar } from "@/components/seller/SellerSidebar";
-import { getSellerByUserId } from "@/app/actions";
+import { getSellerByUserId } from "@/app/actions/server/general.actions";
 import { redirect } from "next/navigation";
 import { TVerification } from "@/types/SellerTypes/SellerInfo";
 

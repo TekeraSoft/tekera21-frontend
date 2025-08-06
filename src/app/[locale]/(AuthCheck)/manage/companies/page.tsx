@@ -1,4 +1,4 @@
-import { getAllCompany } from "@/app/actions";
+import { getAllCompany } from "@/app/actions/server/general.actions";
 import VerificationPanel from "@/components/manage/Companies/CheckCompanies";
 import TopBar from "@/components/manage/TopBar";
 import React from "react";

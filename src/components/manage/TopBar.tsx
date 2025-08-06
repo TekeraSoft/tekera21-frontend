@@ -17,7 +17,7 @@ import ToggleSidebarButton from "./ToggleSidebarButton";
 import { Link } from "@/i18n/navigation";
 import { useAuthContext } from "@/context/AuthContext";
 import { Button } from "../ui/button";
-import { logOut } from "@/app/actions";
+import { logOut } from "@/app/actions/server/auth.actions";
 
 type AlertItem = {
   id: string;

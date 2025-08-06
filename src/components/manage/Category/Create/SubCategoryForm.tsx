@@ -22,8 +22,9 @@ import {
 import { PlusCircle, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { ICategory } from "../../../../../types/AdminTypes/category";
-import { createSubcategory } from "@/app/actions";
+
 import ImageView from "@/components/shared/ImageView";
+import { createSubcategory } from "@/app/actions/server/category.actions";
 
 interface CreateSubcategoryFormProps {
   categories: ICategory[];
@@ -204,7 +205,10 @@ export function CreateSubcategoryForm({
                       name: "preview",
                     }}
                   /> */}
-                  <img src={imagePreview} className="w-12 h-12 rounded-md object-cover border"/>
+                  <img
+                    src={imagePreview}
+                    className="w-12 h-12 rounded-md object-cover border"
+                  />
                   <Button
                     type="button"
                     variant="destructive"

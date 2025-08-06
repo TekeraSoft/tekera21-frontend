@@ -1,10 +1,11 @@
 "use client";
-import { getAllOrders } from "@/app/actions";
+
 import OrderTable from "@/components/shared/Orders/OrderTable";
 import AdminInnerLayout from "@/components/manage/AdminInnerLayout";
 import TopBar from "@/components/manage/TopBar";
 import { IOrderResponse } from "@/types/OrderTypes";
 import { useQuery } from "@tanstack/react-query";
+import { getAllOrders } from "@/app/actions/server/order.actions";
 
 export default function OrdersPage() {
   const orders = useQuery({

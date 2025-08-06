@@ -1,4 +1,4 @@
-import { getAllCollection } from "@/app/actions";
+import { getAllCollection } from "@/app/actions/server/collection.actions";
 import CollectionList from "@/components/manage/FashionCollection/CollectionList";
 import TopBar from "@/components/manage/TopBar";
 import React from "react";

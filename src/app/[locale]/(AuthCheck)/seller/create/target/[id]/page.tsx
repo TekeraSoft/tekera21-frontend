@@ -1,12 +1,9 @@
-import {
-  getSingleProductById,
-  getTargetPictureByProductById,
-} from "@/app/actions";
-
 import React from "react";
 import { IProduct } from "@/types/product";
 import TargetCreate from "@/components/manage/TargetPicture/Create";
 import TargetDelete from "@/components/manage/TargetPicture/Delete";
+import { getSingleProductById } from "@/app/actions/server/product.actions";
+import { getTargetPictureByProductById } from "@/app/actions/server/targetPicture.actions";
 
 const CreateTargetPage = async ({
   params,

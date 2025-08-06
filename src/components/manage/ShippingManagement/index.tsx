@@ -36,7 +36,7 @@ import {
   IShippingCompany,
   IShippingCompanyCreate,
 } from "@/types/SellerTypes/ShippingCompanies";
-import { createShippingCompany } from "@/app/actions";
+import { createShippingCompany } from "@/app/actions/server/general.actions";
 
 export default function ShippingManagement({
   shippingCompanies,

@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/card";
 import { PlusCircle, X } from "lucide-react";
 
-import { createCategory } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
+import { createCategory } from "@/app/actions/server/category.actions";
 
 export function CreateCategoryForm() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -110,9 +110,7 @@ export function CreateCategoryForm() {
           <PlusCircle className="h-5 w-5" />
           Yeni bir ana kategori oluştur
         </CardTitle>
-        <CardDescription>
-          
-        </CardDescription>
+        <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>
         <form ref={formRef} action={handleSubmit} className="space-y-4">

@@ -1,9 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getSessionToken, logOut } from "../app/actions";
+
 import axios from "axios";
 import { api_base_url } from "@/constants/apiUrls";
 import { useRouter } from "@/i18n/navigation";
+import { getSessionToken, logOut } from "@/app/actions/server/auth.actions";
 
 const axiosClient = axios.create({
   baseURL: api_base_url,

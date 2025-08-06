@@ -1,4 +1,4 @@
-import { getShippingCompanies } from "@/app/actions";
+import { getShippingCompanies } from "@/app/actions/server/general.actions";
 import ShippingManagement from "@/components/manage/ShippingManagement";
 import TopBar from "@/components/manage/TopBar";
 import React from "react";

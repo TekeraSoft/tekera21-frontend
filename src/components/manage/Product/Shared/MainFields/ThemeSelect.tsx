@@ -16,8 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import ImageView from "@/components/shared/ImageView";
-import { getAllTheme } from "@/app/actions";
+import { getAllTheme } from "@/app/actions/server/general.actions";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { TProductFormData } from "@/types/ProductFormData";
 import { genders } from "../Data/Genders";

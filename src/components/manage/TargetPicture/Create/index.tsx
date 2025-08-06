@@ -1,5 +1,5 @@
 "use client";
-import { createTargetPicture } from "@/app/actions";
+
 import { FileUploadEnhanced } from "@/components/shared/FileUploadEnhanced";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +16,7 @@ import { IProduct } from "@/types/product";
 import { toast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
+import { createTargetPicture } from "@/app/actions/server/targetPicture.actions";
 
 interface ITargetPictureFormData {
   productId: string;

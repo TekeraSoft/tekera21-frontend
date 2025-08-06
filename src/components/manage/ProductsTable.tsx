@@ -61,10 +61,11 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Link } from "@/i18n/navigation";
-import { deleteProductById } from "@/app/actions";
+
 import { useToast } from "@/hooks/use-toast";
 import { IProduct } from "@/types/product";
 import { Checkbox } from "../ui/checkbox";
+import { deleteProductById } from "@/app/actions/server/product.actions";
 
 export function ProductsTable() {
   const { data, error, loading, categories, selectedCategory, success } =

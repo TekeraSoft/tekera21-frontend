@@ -32,7 +32,7 @@ import { IFashionCollection, IFashionCollectionData } from "@/types/Collection";
 import ImageView from "@/components/shared/ImageView";
 import { Link } from "@/i18n/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { deleteCollectionById } from "@/app/actions";
+import { deleteCollectionById } from "@/app/actions/server/collection.actions";
 
 export default function CollectionList({
   collectionsData,

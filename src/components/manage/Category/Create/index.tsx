@@ -10,9 +10,8 @@ import { ICategory } from "@/types/AdminTypes/category";
 import { CategoryNavigation } from "./navigation";
 import { CreateCategoryForm } from "./CategoryForm";
 
-import { getCategories } from "@/app/actions";
-import ImageView from "@/components/shared/ImageView";
 import { CreateSubcategoryForm } from "./SubCategoryForm";
+import { getCategories } from "@/app/actions/server/category.actions";
 
 export default async function CreateCategory() {
   const { data } = await getCategories();
@@ -23,10 +22,10 @@ export default async function CreateCategory() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-8">
           <h1 className="text-3xl font-bold tracking-tight">
-           Kategori Yönetimi
+            Kategori Yönetimi
           </h1>
           <p className="text-muted-foreground mt-2">
-           Ana kategori veya alt kategori oluşturun.
+            Ana kategori veya alt kategori oluşturun.
           </p>
         </div>
 
@@ -36,9 +35,7 @@ export default async function CreateCategory() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Kategoriler</CardTitle>
-                <CardDescription>
-                  Tüm kategorilerin listesi
-                </CardDescription>
+                <CardDescription>Tüm kategorilerin listesi</CardDescription>
               </CardHeader>
               <CardContent>
                 <CategoryNavigation categories={categories} />
@@ -52,7 +49,7 @@ export default async function CreateCategory() {
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="category">Ana Kategori Oluştur</TabsTrigger>
                 <TabsTrigger value="subcategory">
-                 Alt Kategori Oluştur
+                  Alt Kategori Oluştur
                 </TabsTrigger>
               </TabsList>
 
@@ -64,8 +61,6 @@ export default async function CreateCategory() {
                 <CreateSubcategoryForm categories={categories} />
               </TabsContent>
             </Tabs>
-
-   
           </div>
         </div>
       </div>

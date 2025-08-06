@@ -1,8 +1,9 @@
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 import { NextRequest, NextResponse } from "next/server";
-import { getUser } from "./app/actions";
+
 import { sellerRoles } from "./constants/roles";
+import { getUser } from "./app/actions/server/auth.actions";
 
 const intlMiddleware = createMiddleware(routing);
 

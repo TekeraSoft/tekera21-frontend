@@ -1,5 +1,6 @@
 "use client";
-import { deleteTargetPicture } from "@/app/actions";
+
+import { deleteTargetPicture } from "@/app/actions/server/targetPicture.actions";
 import { Button } from "@/components/ui/button";
 
 import { toast } from "@/hooks/use-toast";

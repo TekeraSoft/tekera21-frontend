@@ -28,10 +28,10 @@ import { ICategory } from "@/types/AdminTypes/category";
 import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
 import ImageView from "@/components/shared/ImageView";
 
-import { createProduct } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import ProductAttributeManager from "./AttributeManager";
 import { SubCategoriesSelect } from "../Shared/SubCategoriesSelect";
+import { createProduct } from "@/app/actions/server/product.actions";
 
 export type ProductFormData = {
   name: string;

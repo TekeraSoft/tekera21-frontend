@@ -24,7 +24,7 @@ import {
   Minus,
   Plus,
 } from "lucide-react";
-import { deleteFileByUrl, getAllMediaBySellerId } from "@/app/actions";
+import { deleteFileByUrl, getAllMediaBySellerId } from "@/app/actions/server/general.actions";
 import { useToast } from "@/hooks/use-toast";
 import ImageView from "./ImageView";
 import {

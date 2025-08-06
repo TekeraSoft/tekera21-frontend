@@ -19,7 +19,6 @@ import { Separator } from "@/components/ui/separator";
 import { ICategory } from "@/types/AdminTypes/category";
 import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
 
-import { updateProduct } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import ProductVariantForm from "../Shared/ProductVariantForm";
 import { IGetByIdProduct } from "@/types/SingleProduct";
@@ -32,6 +31,7 @@ import GeneralInformation from "../Shared/MainFields/GeneralInformation";
 import CurrencyAndProductType from "../Shared/MainFields/CurrencyAndProductType";
 import ThemeSelect from "../Shared/MainFields/ThemeSelect";
 import axios from "axios";
+import { updateProduct } from "@/app/actions/server/product.actions";
 
 export default function ProductUpdateForm({
   categories,
@@ -304,7 +304,7 @@ export default function ProductUpdateForm({
     setVideoUrlState(null);
   };
 
-  console.log("product",product)
+  console.log("product", product);
 
   return (
     <div className=" mx-auto p-6">

@@ -2,8 +2,9 @@ import type React from "react";
 import type { Metadata } from "next";
 import { FileText, LogOut } from "lucide-react";
 import { Link } from "@/i18n/navigation";
-import { getUser, logOut } from "@/app/actions";
+
 import { Button } from "@/components/ui/button";
+import { getUser, logOut } from "@/app/actions/server/auth.actions";
 
 export const metadata: Metadata = {
   title: "Profil - Belgeler",

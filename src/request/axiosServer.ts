@@ -1,4 +1,5 @@
-import { getSessionToken } from "@/app/actions";
+
+import { getSessionToken } from "@/app/actions/server/auth.actions";
 import { api_base_url } from "@/constants/apiUrls";
 import axios from "axios";
 

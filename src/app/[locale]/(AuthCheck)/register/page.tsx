@@ -1,8 +1,8 @@
+import { getCategoriesForSeller } from "@/app/actions/server/category.actions";
 import {
-  getCategoriesForSeller,
   getSellerByUserId,
   getShippingCompanies,
-} from "@/app/actions";
+} from "@/app/actions/server/general.actions";
 import SellerRegistrationForm from "@/components/seller/RegisterAsSeller";
 
 export default async function SellerRegistrationPage() {

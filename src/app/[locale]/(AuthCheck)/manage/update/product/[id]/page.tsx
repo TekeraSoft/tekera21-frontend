@@ -1,5 +1,5 @@
-import { getCategories, getSingleProductById } from "@/app/actions";
-
+import { getCategories } from "@/app/actions/server/category.actions";
+import { getSingleProductById } from "@/app/actions/server/product.actions";
 import ProductUpdateForm from "@/components/manage/Product/Update/ProductUpdateForm";
 import { ICategory } from "@/types/AdminTypes/category";
 import { IGetByIdProduct } from "@/types/SingleProduct";

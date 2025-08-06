@@ -17,7 +17,6 @@ import { Label } from "@/components/ui/label";
 import { ICategory } from "@/types/AdminTypes/category";
 import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
 
-import { createProduct } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import ProductVariantForm from "../Shared/ProductVariantForm";
 import { TProductFormData } from "@/types/ProductFormData";
@@ -29,6 +28,7 @@ import GeneralInformation from "../Shared/MainFields/GeneralInformation";
 import CurrencyAndProductType from "../Shared/MainFields/CurrencyAndProductType";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ThemeSelect from "../Shared/MainFields/ThemeSelect";
+import { createProduct } from "@/app/actions/server/product.actions";
 
 export default function ProductCreateForm({
   categories,

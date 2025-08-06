@@ -15,7 +15,7 @@ import {
 import { Plus, X, Minus } from "lucide-react";
 
 import ImageView from "@/components/shared/ImageView";
-import { updateCollection } from "@/app/actions";
+
 import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
 import { FileUploadEnhanced } from "@/components/shared/FileUploadEnhanced";
 import { useToast } from "@/hooks/use-toast";
@@ -28,6 +28,7 @@ import {
 } from "@/store/manageSlices/product/productSlice";
 
 import { IFashionCollection } from "@/types/Collection";
+import { updateCollection } from "@/app/actions/server/collection.actions";
 
 const CollectionForm = ({
   defaultData,

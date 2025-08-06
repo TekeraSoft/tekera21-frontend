@@ -4,13 +4,14 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import "./globals.css";
 import StoreProvider from "@/store/StoreProvider";
-import { getUser } from "../actions";
+
 import AuthProvider from "@/context/AuthContext";
 import { AxiosInterceptor } from "@/request/axiosClient";
 import DialogProvider from "@/context/DialogContext";
 import { Toaster } from "@/components/ui/toaster";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { ReactQueryProvider } from "@/providers/ReactQuery";
+import { getUser } from "../actions/server/auth.actions";
 
 export const metadata: Metadata = {
   title: "Tekera21 Yönetim Paneli",

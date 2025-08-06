@@ -1,5 +1,5 @@
 "use client";
-import { createNewTheme } from "@/app/actions";
+import { createNewTheme } from "@/app/actions/server/general.actions";
 import { FileUploadEnhanced } from "@/components/shared/FileUploadEnhanced";
 import { Button } from "@/components/ui/button";
 import {

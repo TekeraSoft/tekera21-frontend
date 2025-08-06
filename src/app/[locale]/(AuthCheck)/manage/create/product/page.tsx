@@ -1,8 +1,9 @@
 import React from "react";
 import { ICategory } from "@/types/AdminTypes/category";
-import { getCategories } from "@/app/actions";
+
 import ProductCreateForm from "@/components/manage/Product/Create/ProductCreateForm";
 import TopBar from "@/components/manage/TopBar";
+import { getCategories } from "@/app/actions/server/category.actions";
 
 const CreateProductPage = async () => {
   const { data, success } = await getCategories();

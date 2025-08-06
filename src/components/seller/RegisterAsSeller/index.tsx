@@ -14,7 +14,7 @@ import CompanyManager from "@/components/seller/RegisterAsSeller/CompanyManager"
 import TaxManager from "@/components/seller/RegisterAsSeller/TaxManager";
 import AddressManager from "@/components/seller/RegisterAsSeller/AddressManager";
 import { ICategoryResponse } from "@/types/SellerTypes/CategoryTypes";
-import { registerAsSeller } from "@/app/actions";
+import { registerAsSeller } from "@/app/actions/server/general.actions";
 import { useToast } from "@/hooks/use-toast";
 import { IdentityDocument, ISellerInfo } from "@/types/SellerTypes/SellerInfo";
 import { IShippingCompany } from "@/types/SellerTypes/ShippingCompanies";

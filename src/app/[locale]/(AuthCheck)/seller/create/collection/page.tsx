@@ -23,12 +23,13 @@ import {
   setError,
 } from "@/store/manageSlices/product/productSlice";
 import ImageView from "@/components/shared/ImageView";
-import { createCollection } from "@/app/actions";
+
 import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
 import { FileUploadEnhanced } from "@/components/shared/FileUploadEnhanced";
 import { useToast } from "@/hooks/use-toast";
 import TopBar from "@/components/manage/TopBar";
 import { IFashionCollection } from "@/types/Collection";
+import { createCollection } from "@/app/actions/server/collection.actions";
 
 export default function CreateCollectionPage() {
   const { data, error, loading, success } = useAppSelector(
