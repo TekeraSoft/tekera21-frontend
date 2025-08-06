@@ -24,6 +24,7 @@ export type TProductFormData = {
     attributes: {
       attributeDetails: { key: string; value: string }[];
       stock: number;
+      maxPurchaseStock: number;
       sku: string;
       barcode: string;
       price: number;

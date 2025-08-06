@@ -37,6 +37,7 @@ const ImageLibrary = ({
   watch,
   handleDeleteImages,
 }: IProps) => {
+  
   const [showMediaLibrary, setShowMediaLibrary] = useState(false);
   const variantImages = images[variationIndex] || [];
 
@@ -45,20 +46,21 @@ const ImageLibrary = ({
   ) => {
     const files = Array.from(event.target.files || []);
     if (files.length === 0) return;
-    const file = event.target.files![0];
+
     try {
-      const resizedImage = await resizeImage(file);
-      // Check if the image already exist
+      const resizedImages = await Promise.all(
+        files.map(async (file) => {
+          const resizedImage = await resizeImage(file);
+          const reNamedImage = new File([resizedImage], imageName);
+          return reNamedImage; // custom isim gerekiyorsa burada değiştir
+        })
+      );
 
-      const reNamedImage = new File([resizedImage], imageName);
-      console.log("imageName", imageName);
-
-      onImagesChange([...variantImages, reNamedImage]);
+      onImagesChange([...variantImages, ...resizedImages]);
     } catch (error) {
       console.error("Resim küçültme hatası:", error);
     }
   };
-
   const removeImage = (imageIndex: number) => {
     onImagesChange(variantImages.filter((_, i) => i !== imageIndex));
   };

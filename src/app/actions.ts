@@ -23,7 +23,7 @@ export async function getSingleProductById(id: string) {
 
   try {
     const { data } = await axiosInstance.get(
-      `/super-admin/getCustomerProduct?id=${id}`
+      `/super-admin/getSellerProducts?id=${id}`
     );
 
     return { success: true, message: data.message, data: data };
@@ -108,7 +108,7 @@ export async function getSellerByUserId() {
     const { data } = await axiosInstance.get(
       `/user/getSellerInformation`
     );
- 
+
     return { success: true, message: data.message, data: data as ISellerInfo };
   } catch (error: any) {
     return { success: false, message: error.message || "Failed to get products" };
@@ -250,7 +250,7 @@ export async function createProduct(formData: FormData) {
     return { success: true, message: data.message, product: data.data };
   } catch (error: any) {
 
-    return { success: false, message: typeof error.message === "string" ? error.message : "Failed to create category" };
+    return { success: false, message: typeof error.message === "string" ? error.message : "Failed to create Product" };
   }
 }
 

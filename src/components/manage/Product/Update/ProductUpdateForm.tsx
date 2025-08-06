@@ -139,6 +139,7 @@ export default function ProductUpdateForm({
             (sa) => sa.key && sa.value
           ),
           stock: attr.stock,
+          maxPurchaseStock: attr.maxPurchaseStock,
           price: Number(attr.price),
           discountPrice: Number(attr.discountPrice),
           sku: attr.sku,
@@ -302,6 +303,8 @@ export default function ProductUpdateForm({
     setDeleteImages((prev) => [...prev, videoUrlState || ""]);
     setVideoUrlState(null);
   };
+
+  console.log("product",product)
 
   return (
     <div className=" mx-auto p-6">

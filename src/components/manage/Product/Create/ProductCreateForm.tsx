@@ -78,15 +78,20 @@ export default function ProductCreateForm({
       description: data.description,
       categoryId: data.categoryId,
       subCategories: data.subCategories?.map((sub) => sub.value),
+
       variants: data.variants.map((variation) => ({
         modelName: variation.modelName,
         modelCode: variation.modelCode,
         color: variation.color,
+        imageUrls: Object.values(watch("imageUrls") ?? {}).flatMap(
+          (urls) => urls
+        ),
         attributes: variation.attributes.map((attr, attrIndex) => ({
           attributeDetails: attr.attributeDetails.filter(
             (sa) => sa.key && sa.value
           ),
           stock: attr.stock,
+          maxPurchaseStock: attr.maxPurchaseStock,
           price: Number(attr.price),
           discountPrice: Number(attr.discountPrice),
           sku: attr.sku,
@@ -101,7 +106,7 @@ export default function ProductCreateForm({
       ),
     };
     console.log("formatted", formattedData);
-    // console.log("stockImages", stockAttributeImages);
+
     const formData = new FormData();
     formData.append(
       "data",

@@ -10,6 +10,7 @@ export interface ProductAttribute {
   discountPrice: number;
   sku: string;
   barcode: string;
+  maxPurchaseStock: number;
 }
 
 export interface ProductVariation {

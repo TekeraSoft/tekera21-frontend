@@ -41,6 +41,7 @@ export function generateAttributeCombinations(
       stock: baseStock,
       price: basePrice,
       discountPrice: 0,
+      maxPurchaseStock: baseStock,
       sku,
       barcode,
     };

@@ -519,6 +519,9 @@ const Attributes = ({
                     </th>
 
                     <th className="px-4 py-2 font-medium">Stok Adeti</th>
+                    <th className="px-4 py-2 font-medium">
+                      Maksimum Satılacak Adet
+                    </th>
                     <th className="px-4 py-2 font-medium">Fiyat</th>
                     <th className="px-4 py-2 font-medium">İndirimli Fiyat</th>
                     <th className="px-4 py-2 font-medium">Stok Kodu</th>
@@ -550,7 +553,26 @@ const Attributes = ({
                                     {...field}
                                     value={field.value ?? ""}
                                     type="number"
-                                    className="h-8"
+                                    className="h-8 w-16"
+                                    onChange={(e) =>
+                                      field.onChange(Number(e.target.value))
+                                    }
+                                  />
+                                );
+                              }}
+                            />
+                          </td>
+                          <td className="px-4 py-2">
+                            <Controller
+                              name={`variants.${variationIndex}.attributes.${attrIndex}.maxPurchaseStock`}
+                              control={control}
+                              render={({ field }) => {
+                                return (
+                                  <Input
+                                    {...field}
+                                    value={field.value ?? ""}
+                                    type="number"
+                                    className="h-8 w-16"
                                     onChange={(e) =>
                                       field.onChange(Number(e.target.value))
                                     }
@@ -568,7 +590,7 @@ const Attributes = ({
                                   {...field}
                                   value={field.value ?? ""}
                                   type="number"
-                                  className="h-8"
+                                  className="h-8 w-20"
                                   onChange={(e) =>
                                     field.onChange(Number(e.target.value))
                                   }
@@ -585,7 +607,7 @@ const Attributes = ({
                                   {...field}
                                   value={field.value ?? ""}
                                   type="number"
-                                  className="h-8"
+                                  className="h-8 w-20"
                                   onChange={(e) =>
                                     field.onChange(Number(e.target.value))
                                   }
