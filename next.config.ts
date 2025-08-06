@@ -31,6 +31,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "api.tekera21.com",
       },
+      {
+        protocol: "https",
+        hostname: "beta.tekera21.com",
+      },
     ],
   },
 };
