@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { ISellerFormData } from ".";
 import { useToast } from "@/hooks/use-toast";
 import { downloadFile } from "@/lib/downloadFiles";
+import { getStatusBadge } from "@/components/manage/Companies/CheckCompanies";
 
 const DocumentManager = ({
   legalDocuments,
@@ -161,9 +162,7 @@ const DocumentManager = ({
                           <p className="text-xs text-muted-foreground">
                             Durum: {doc.status}
                           </p> */}
-                          <p className="text-xs text-muted-foreground">
-                            Durum: {doc.verificationStatus}
-                          </p>
+                          Durum: {getStatusBadge(doc.verificationStatus)}
                         </div>
                       </div>
                     </CardContent>

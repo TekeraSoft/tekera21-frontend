@@ -39,8 +39,33 @@ import { ISellerContent, TVerification } from "@/types/SellerTypes/SellerInfo";
 import { IPage } from "@/types/Collection";
 import { downloadFile } from "@/lib/downloadFiles";
 import { useToast } from "@/hooks/use-toast";
+import { changeSellerStatus } from "@/app/actions/server/seller.actions";
 
 // Mock data - replace with your actual data
+
+export const getStatusBadge = (status: TVerification) => {
+  const variants = {
+    PENDING: "secondary",
+    VERIFIED: "default",
+    REJECTED: "destructive",
+    CANCELLED: "destructive",
+    NONE: "warning",
+  } as const;
+
+  const statusText = {
+    PENDING: "Bekliyor",
+    VERIFIED: "Onaylandı",
+    REJECTED: "Reddedildi",
+    CANCELLED: "İptal Edildi",
+    NONE: "Belge Eklenmedi.",
+  };
+
+  return (
+    <Badge variant={variants[status]} className="capitalize">
+      {statusText[status]}
+    </Badge>
+  );
+};
 
 export default function VerificationPanel({
   companies,
@@ -49,36 +74,29 @@ export default function VerificationPanel({
 }) {
   const [selectedPdf, setSelectedPdf] = useState<string | null>(null);
 
-  const getStatusBadge = (status: TVerification) => {
-    const variants = {
-      PENDING: "secondary",
-      VERIFIED: "default",
-      REJECTED: "destructive",
-      CANCELLED: "destructive",
-      NONE: "destructive",
-    } as const;
-
-    const statusText = {
-      PENDING: "Bekliyor",
-      VERIFIED: "Onaylandı",
-      REJECTED: "Reddedildi",
-      CANCELLED: "İptal Edildi",
-      NONE: "Normal üye",
-    };
-
-    return (
-      <Badge variant={variants[status]} className="capitalize">
-        {statusText[status]}
-      </Badge>
-    );
-  };
-
-  const updateDocumentStatus = (
+  const updateDocumentStatus = async (
     company: ISellerContent,
     documentTitle: string,
     newStatus: TVerification
   ) => {
-    console.log("value", newStatus, documentTitle, company);
+    const { message, success } = await changeSellerStatus(
+      company.seller.id,
+      documentTitle,
+      newStatus
+    );
+    if (success) {
+      toast({
+        title: "Başarılı",
+        description: "Statü değiştirildi.",
+        variant: "default",
+      });
+    } else {
+      toast({
+        title: "Hata",
+        description: message || "Statü değiştirilemedi",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleViewPdf = (documentUrl: string) => {
@@ -101,8 +119,6 @@ export default function VerificationPanel({
       });
     }
   };
-
-  console.log(companies.content);
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -227,7 +243,7 @@ export default function VerificationPanel({
                                   onValueChange={(value: TVerification) =>
                                     updateDocumentStatus(
                                       company,
-                                      doc.documentPath,
+                                      doc.documentTitle,
                                       value
                                     )
                                   }
@@ -239,7 +255,7 @@ export default function VerificationPanel({
                                     <SelectItem value="PENDING">
                                       Bekliyor
                                     </SelectItem>
-                                    <SelectItem value="APPROVED">
+                                    <SelectItem value="VERIFIED">
                                       Onaylandı
                                     </SelectItem>
                                     <SelectItem value="REJECTED">
@@ -271,7 +287,7 @@ export default function VerificationPanel({
                   <TableRow>
                     <TableHead>Şirket</TableHead>
                     <TableHead>Belge Başlığı</TableHead>
-                    <TableHead>Belge Yolu</TableHead>
+
                     <TableHead>Durum</TableHead>
                     <TableHead>İşlemler</TableHead>
                   </TableRow>
@@ -286,9 +302,7 @@ export default function VerificationPanel({
                             {company.seller.name}
                           </TableCell>
                           <TableCell>{doc.documentTitle}</TableCell>
-                          <TableCell className="text-xs text-muted-foreground">
-                            {doc.documentPath}
-                          </TableCell>
+                        
                           <TableCell>
                             {getStatusBadge(doc.verificationStatus)}
                           </TableCell>
@@ -320,7 +334,7 @@ export default function VerificationPanel({
                                 onValueChange={(value: TVerification) =>
                                   updateDocumentStatus(
                                     company,
-                                    doc.documentPath,
+                                    doc.documentTitle,
                                     value
                                   )
                                 }
@@ -332,7 +346,7 @@ export default function VerificationPanel({
                                   <SelectItem value="PENDING">
                                     Bekliyor
                                   </SelectItem>
-                                  <SelectItem value="APPROVED">
+                                  <SelectItem value="VERIFIED">
                                     Onaylandı
                                   </SelectItem>
                                   <SelectItem value="REJECTED">

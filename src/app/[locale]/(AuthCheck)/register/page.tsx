@@ -27,12 +27,10 @@ export default async function SellerRegistrationPage() {
   if (!shippingCompanies?.length) {
     return (
       <div className="p-4 text-red-500">
-        {message} || Şuanda Satıcı Kaydı Yapılamamaktadır.
+        {message} || Şuanda Satıcı Kaydı Yapılamamaktadır..
       </div>
     );
   }
-
-  console.log("selleruın", sellerInfo)
 
   return (
     <SellerRegistrationForm

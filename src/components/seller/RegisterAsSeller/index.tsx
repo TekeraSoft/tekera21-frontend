@@ -230,25 +230,44 @@ export default function SellerRegistrationForm({
       console.log("id var", formattedData);
       const { success, message } = await updateSeller(formData);
       if (success) {
+        const sellerForm = methods.getValues();
+        const newData = {
+          ...sellerForm,
+          documents: sellerInfo?.identityDocumentPaths
+            ? mergeDocuments(sellerInfo.identityDocumentPaths)
+            : requiredDocuments,
+        };
+        methods.reset(newData);
+        console.log("sellerform", sellerForm);
         toast({
           title: "Başarılı!",
           description:
             "Güncelleme İsteğiniz başarılı. Gerekli incelemeler yapıldıktan sonra hesabınız kullanıma açılacaktır.",
           variant: "default",
         });
+
         setLegalDocuments({});
         setLoading(false);
       } else {
         toast({
           title: "Error",
-          description: message || "Kaydınız oluşturulamadı.",
+          description: message || "Güncelleme yapılamadı.",
           variant: "destructive",
         });
         setLoading(false);
       }
     } else {
+      console.log("create", formattedData);
       const { success, message } = await sellerRegister(formData);
       if (success) {
+        const sellerForm = methods.getValues();
+        const newData = {
+          ...sellerForm,
+          documents: sellerInfo?.identityDocumentPaths
+            ? mergeDocuments(sellerInfo.identityDocumentPaths)
+            : requiredDocuments,
+        };
+        methods.reset(newData);
         toast({
           title: "Başarılı!",
           description:
@@ -275,6 +294,8 @@ export default function SellerRegistrationForm({
       setLogo(e.target.files[0]);
     }
   };
+
+  console.log("sellerınfo", sellerInfo);
 
   return (
     <div className="min-h-screen bg-gray-50 lg:p-4">

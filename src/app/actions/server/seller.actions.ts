@@ -2,7 +2,7 @@
 
 import axiosInstance from "@/request/axiosServer";
 import { IPage } from "@/types/Collection";
-import { ISellerContent, ISellerInfo } from "@/types/SellerTypes/SellerInfo";
+import { ISellerContent, ISellerInfo, TVerification } from "@/types/SellerTypes/SellerInfo";
 import { revalidatePath } from "next/cache";
 
 export async function sellerRegister(formData: FormData) {
@@ -84,9 +84,27 @@ export async function updateSeller(formData: FormData) {
         );
         revalidatePath("/");
 
-        return { success: true, message: data.message, product: data.data };
+        return { success: true, message: data.message, data: data.data };
     } catch (error: any) {
 
-        return { success: false, message: typeof error.message === "string" ? error.message : "Failed to update category" };
+        return { success: false, message: typeof error.message === "string" ? error.message : "Failed to update seller" };
+    }
+}
+
+
+
+
+export async function changeSellerStatus(sellerId: string, sellerDocumentName: string, status: TVerification) {
+    console.log("changeSellerStatus")
+    try {
+        const { data } = await axiosInstance.put(
+            `/seller-support/changeStatusFaultyDocument?sellerId=${sellerId}&sellerDocumentName=${sellerDocumentName}&status=${status}`,
+        );
+
+        revalidatePath("/");
+        return { success: true, message: data.message, data: data.data };
+    } catch (error: any) {
+
+        return { success: false, message: typeof error.message === "string" ? error.message : "Failed to changeSellerStatus" };
     }
 }

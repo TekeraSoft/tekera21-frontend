@@ -25,7 +25,7 @@ export async function getShippingCompanies() {
 
   try {
     const { data } = await axiosInstance.get(
-      `/verification/getAllShippingCompany`
+      `/account/getAllShippingCompany`
     );
 
     return { success: true, message: data.message, data: data as IShippingCompany[] };

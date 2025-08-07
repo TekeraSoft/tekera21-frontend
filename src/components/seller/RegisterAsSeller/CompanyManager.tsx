@@ -40,14 +40,13 @@ const CompanyManager = ({
         image: category.image,
       });
 
-      // Alt kategorileri ekle
-      for (const sub of category.subCategories) {
-        flatList.push({
-          id: sub.id,
-          name: `${category.name}/${sub.name}`,
-          image: sub.image,
-        });
-      }
+      // for (const sub of category.subCategories) {
+      //   flatList.push({
+      //     id: sub.id,
+      //     name: `${category.name}/${sub.name}`,
+      //     image: sub.image,
+      //   });
+      // }
     }
 
     return flatList;
