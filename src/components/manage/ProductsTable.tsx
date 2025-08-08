@@ -44,7 +44,6 @@ import {
 } from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import {
-  changeStatus,
   fetchCategories,
   fetchProductsByCategory,
   fetchSellerProducts,
@@ -64,7 +63,6 @@ import { Link } from "@/i18n/navigation";
 
 import { useToast } from "@/hooks/use-toast";
 import { IProduct } from "@/types/product";
-import { Checkbox } from "../ui/checkbox";
 import { deleteProductById } from "@/app/actions/server/product.actions";
 
 export function ProductsTable() {
@@ -700,7 +698,7 @@ export function ProductsTable() {
         <Button
           onClick={() =>
             dispatch(
-              fetchProducts({
+              fetchSellerProducts({
                 page: data.page.number - 1,
                 size: data.page.size,
               })
@@ -715,7 +713,7 @@ export function ProductsTable() {
         <Button
           onClick={() =>
             dispatch(
-              fetchProducts({
+              fetchSellerProducts({
                 page: data.page.number + 1,
                 size: data.page.size,
               })
