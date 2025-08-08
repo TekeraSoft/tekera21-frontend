@@ -1,11 +1,11 @@
 import { ProductsHeader } from "@/components/manage/ProductsHeader";
-import { ProductsTable } from "@/components/manage/ProductsTable";
+import { ProductsTableAdmin } from "@/components/manage/ProductsTableAdmin";
 
 export default function AdminProductsPage() {
   return (
     <>
       <ProductsHeader />
-      <ProductsTable />
+      <ProductsTableAdmin />
     </>
   );
 }

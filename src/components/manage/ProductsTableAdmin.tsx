@@ -46,8 +46,8 @@ import { useAppDispatch, useAppSelector } from "@/store/store";
 import {
   changeStatus,
   fetchCategories,
+  fetchProducts,
   fetchProductsByCategory,
-  fetchSellerProducts,
   setError,
 } from "@/store/manageSlices/product/productSlice";
 import ProductTableSkeleton from "./Skeletons/Products/ProductTableSkeleton";
@@ -67,7 +67,7 @@ import { IProduct } from "@/types/product";
 import { Checkbox } from "../ui/checkbox";
 import { deleteProductById } from "@/app/actions/server/product.actions";
 
-export function ProductsTable() {
+export function ProductsTableAdmin() {
   const { data, error, loading, categories, selectedCategory, success } =
     useAppSelector((state) => state.adminProducts);
 
@@ -79,12 +79,12 @@ export function ProductsTable() {
   const { toast } = useToast();
 
   const handleDispatchProducts = (page: number, pageSize: number = 10) => {
-    dispatch(fetchSellerProducts({ page: page, size: pageSize }));
+    dispatch(fetchProducts({ page: page, size: pageSize }));
   };
 
   useEffect(() => {
     if (!success && !error) {
-      dispatch(fetchSellerProducts({ page: 0, size: 10 }));
+      dispatch(fetchProducts({ page: 0, size: 10 }));
       dispatch(fetchCategories({ page: 0, size: 10 }));
     }
 
@@ -118,9 +118,7 @@ export function ProductsTable() {
         variant: "default",
       });
       setSelectedProduct(null);
-      dispatch(
-        fetchSellerProducts({ page: data.page.number, size: data.page.size })
-      );
+      dispatch(fetchProducts({ page: data.page.number, size: data.page.size }));
     } else {
       toast({
         title: "Error!",
@@ -161,6 +159,14 @@ export function ProductsTable() {
     e.preventDefault();
     toggleRowExpansion(productId);
   };
+  const handleChangeProductIsActive = (prodId: string, status: boolean) => {
+    dispatch(
+      changeStatus({
+        productId: prodId,
+        status: status,
+      })
+    );
+  };
 
   if (error) {
     return <div>{error}</div>;
@@ -181,7 +187,7 @@ export function ProductsTable() {
               if (value !== "all") {
                 dispatch(fetchProductsByCategory({ catSlug: value }));
               } else {
-                dispatch(fetchSellerProducts({ page: 0, size: 10 }));
+                dispatch(fetchProducts({ page: 0, size: 10 }));
               }
             }}
           >
@@ -273,7 +279,7 @@ export function ProductsTable() {
             <TableHead>Marka</TableHead>
             <TableHead>Fiyat</TableHead>
             <TableHead>Stok Adeti</TableHead>
-
+            <TableHead className="text-center">Ürün Aktifliği</TableHead>
             <TableHead className="text-right">Eylemler</TableHead>
           </TableRow>
         </TableHeader>
@@ -329,7 +335,19 @@ export function ProductsTable() {
                       {product.variations[0]?.attributes[0]?.stock}
                     </span>
                   </TableCell>
-
+                  <TableCell className="text-center">
+                    <Checkbox
+                      id="product-status"
+                      className="cursor-pointer w-6 h-6"
+                      checked={product.isActive}
+                      onCheckedChange={() => {
+                        handleChangeProductIsActive(
+                          product.id,
+                          !product.isActive
+                        );
+                      }}
+                    />
+                  </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
