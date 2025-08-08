@@ -161,14 +161,14 @@ export function ProductsTable() {
     e.preventDefault();
     toggleRowExpansion(productId);
   };
-  const handleChangeProductIsActive = (prodId: string, status: boolean) => {
-    dispatch(
-      changeStatus({
-        productId: prodId,
-        status: status,
-      })
-    );
-  };
+  // const handleChangeProductIsActive = (prodId: string, status: boolean) => {
+  //   dispatch(
+  //     changeStatus({
+  //       productId: prodId,
+  //       status: status,
+  //     })
+  //   );
+  // };
 
   if (error) {
     return <div>{error}</div>;
@@ -281,7 +281,7 @@ export function ProductsTable() {
             <TableHead>Marka</TableHead>
             <TableHead>Fiyat</TableHead>
             <TableHead>Stok Adeti</TableHead>
-            <TableHead className="text-center">Ürün Aktifliği</TableHead>
+
             <TableHead className="text-right">Eylemler</TableHead>
           </TableRow>
         </TableHeader>
@@ -337,19 +337,7 @@ export function ProductsTable() {
                       {product.variations[0]?.attributes[0]?.stock}
                     </span>
                   </TableCell>
-                  <TableCell className="text-center">
-                    <Checkbox
-                      id="product-status"
-                      className="cursor-pointer w-6 h-6"
-                      checked={product.isActive}
-                      onCheckedChange={() => {
-                        handleChangeProductIsActive(
-                          product.id,
-                          !product.isActive
-                        );
-                      }}
-                    />
-                  </TableCell>
+
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
