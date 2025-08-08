@@ -21,8 +21,8 @@ export default async function SuperAdminLayout({
   ];
   if (
     !successSellerInfo ||
-    !sellerInfo?.status ||
-    dissAllowedStatusses.includes(sellerInfo?.status)
+    !sellerInfo?.verificationStatus ||
+    dissAllowedStatusses.includes(sellerInfo?.verificationStatus)
   ) {
     return redirect("/register");
   }

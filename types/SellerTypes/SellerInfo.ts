@@ -3,7 +3,7 @@ import { IShippingCompany } from "./ShippingCompanies";
 export type TVerification = "PENDING" | "CANCELLED" | "REJECTED" | "VERIFIED" | "NONE"
 
 export interface ISellerInfo {
-    status: TVerification
+    verificationStatus: TVerification;
     id: string;
     name: string;
     slug: string;
