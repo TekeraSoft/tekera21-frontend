@@ -3,6 +3,7 @@ import {
   getAdminProductCategories,
   getAdminProducts,
   getProductsByCategory,
+  getSellerProducts,
   searchProducts,
 } from "@/services/manage/product.service";
 import { IProduct } from "@/types/product";
@@ -70,6 +71,18 @@ export const fetchProducts = createAsyncThunk<IData, FetchProductsParams>(
 
     try {
       const data = await getAdminProducts(params.page, params.size); // bu fonksiyon parametreleri almalı
+      return data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+export const fetchSellerProducts = createAsyncThunk<IData, FetchProductsParams>(
+  "products/fetchSellerProducts",
+  async (params, thunkAPI) => {
+
+    try {
+      const data = await getSellerProducts(params.page, params.size); // bu fonksiyon parametreleri almalı
       return data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.message);
@@ -155,6 +168,21 @@ const adminProductSlice = createSlice({
         state.success = true;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
+        state.loading = false;
+        state.success = false;
+        state.error = (action.payload as string) || "Bir hata oluştu.";
+      })
+      .addCase(fetchSellerProducts.pending, (state) => {
+        state.loading = true;
+        state.selectedCategory = "all";
+        state.error = null;
+      })
+      .addCase(fetchSellerProducts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.data = action.payload;
+        state.success = true;
+      })
+      .addCase(fetchSellerProducts.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = (action.payload as string) || "Bir hata oluştu.";

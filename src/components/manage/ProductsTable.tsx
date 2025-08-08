@@ -46,8 +46,8 @@ import { useAppDispatch, useAppSelector } from "@/store/store";
 import {
   changeStatus,
   fetchCategories,
-  fetchProducts,
   fetchProductsByCategory,
+  fetchSellerProducts,
   setError,
 } from "@/store/manageSlices/product/productSlice";
 import ProductTableSkeleton from "./Skeletons/Products/ProductTableSkeleton";
@@ -79,12 +79,12 @@ export function ProductsTable() {
   const { toast } = useToast();
 
   const handleDispatchProducts = (page: number, pageSize: number = 10) => {
-    dispatch(fetchProducts({ page: page, size: pageSize }));
+    dispatch(fetchSellerProducts({ page: page, size: pageSize }));
   };
 
   useEffect(() => {
     if (!success && !error) {
-      dispatch(fetchProducts({ page: 0, size: 10 }));
+      dispatch(fetchSellerProducts({ page: 0, size: 10 }));
       dispatch(fetchCategories({ page: 0, size: 10 }));
     }
 
@@ -118,7 +118,9 @@ export function ProductsTable() {
         variant: "default",
       });
       setSelectedProduct(null);
-      dispatch(fetchProducts({ page: data.page.number, size: data.page.size }));
+      dispatch(
+        fetchSellerProducts({ page: data.page.number, size: data.page.size })
+      );
     } else {
       toast({
         title: "Error!",
@@ -187,7 +189,7 @@ export function ProductsTable() {
               if (value !== "all") {
                 dispatch(fetchProductsByCategory({ catSlug: value }));
               } else {
-                dispatch(fetchProducts({ page: 0, size: 10 }));
+                dispatch(fetchSellerProducts({ page: 0, size: 10 }));
               }
             }}
           >
@@ -195,7 +197,7 @@ export function ProductsTable() {
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
+              <SelectItem value="all">Tüm Kategoriler</SelectItem>
               {categories?.length &&
                 categories?.map((cat) => (
                   <SelectItem key={cat.slug} value={cat.slug}>

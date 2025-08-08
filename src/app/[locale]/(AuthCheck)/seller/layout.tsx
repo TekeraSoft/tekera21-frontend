@@ -19,13 +19,13 @@ export default async function SuperAdminLayout({
     "CANCELLED",
     "PENDING",
   ];
-  if (
-    !successSellerInfo ||
-    !sellerInfo?.verificationStatus ||
-    dissAllowedStatusses.includes(sellerInfo?.verificationStatus)
-  ) {
-    return redirect("/register");
-  }
+  // if (
+  //   !successSellerInfo ||
+  //   !sellerInfo?.verificationStatus ||
+  //   dissAllowedStatusses.includes(sellerInfo?.verificationStatus)
+  // ) {
+  //   return redirect("/register");
+  // }
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
