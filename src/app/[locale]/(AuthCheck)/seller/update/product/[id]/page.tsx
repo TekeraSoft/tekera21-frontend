@@ -1,4 +1,7 @@
-import { getCategories } from "@/app/actions/server/category.actions";
+import {
+  getCategories,
+  getCategoriesForSeller,
+} from "@/app/actions/server/category.actions";
 import { getSingleProductById } from "@/app/actions/server/product.actions";
 import ProductUpdateForm from "@/components/manage/Product/Update/ProductUpdateForm";
 import { ICategory } from "@/types/AdminTypes/category";
@@ -17,11 +20,14 @@ const UpdateProductPage = async ({
   if (!success) {
     return <div>Product cant get</div>;
   }
-  const { data: categoriesData, success: successCategories } =
-    await getCategories();
-  const categories: ICategory[] = successCategories
-    ? categoriesData.content
-    : [];
+  const { data: categoryData, success: succesCategories } =
+    await getCategoriesForSeller();
+
+  if (!succesCategories || !categoryData) {
+    return <>No Category</>;
+  }
+  const categories: ICategory[] = success ? categoryData.content : ([] as any);
+
   const product: IGetByIdProduct = (data as IGetByIdProduct) || ({} as any);
 
   return <ProductUpdateForm product={product} categories={categories} />;

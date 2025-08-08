@@ -1,16 +1,11 @@
+import { ICategory } from "../product";
+
 export interface SubCategory {
     id: string;
     name: string;
     image: string;
 }
 
-export interface Category {
-    id: string;
-    name: string;
-    slug: string;
-    image: string;
-    subCategories: SubCategory[];
-}
 
 export interface PageInfo {
     size: number;
@@ -20,6 +15,6 @@ export interface PageInfo {
 }
 
 export interface ICategoryResponse {
-    content: Category[];
+    content: ICategory[];
     page: PageInfo;
 }

@@ -3,11 +3,15 @@ import { ICategory } from "@/types/AdminTypes/category";
 
 import ProductCreateForm from "@/components/manage/Product/Create/ProductCreateForm";
 import TopBar from "@/components/manage/TopBar";
-import { getCategories } from "@/app/actions/server/category.actions";
+import { getCategoriesForSeller } from "@/app/actions/server/category.actions";
 
 const CreateProductPage = async () => {
-  const { data, success } = await getCategories();
-  const categories: ICategory[] = success ? data.content : [];
+  const { data, success } = await getCategoriesForSeller();
+
+  if (!success || !data) {
+    return <>No Category</>;
+  }
+  const categories: ICategory[] = success ? data.content : ([] as any);
   return (
     <div>
       <TopBar>
