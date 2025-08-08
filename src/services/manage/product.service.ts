@@ -17,7 +17,7 @@ export const getSellerProducts = async (
   sortBy: string = ""
 ) => {
   const response = await axiosClient.get(
-    `/seller/findSellerReturnProducts?page=${page}&size=${size}`
+    `/seller/sellerProducts?page=${page}&size=${size}`
   );
   return response.data;
 };

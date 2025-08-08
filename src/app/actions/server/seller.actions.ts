@@ -91,9 +91,6 @@ export async function updateSeller(formData: FormData) {
     }
 }
 
-
-
-
 export async function changeSellerStatus(sellerId: string, sellerDocumentName: string, status: TVerification) {
     console.log("changeSellerStatus")
     try {

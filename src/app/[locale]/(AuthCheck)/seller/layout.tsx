@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { TVerification } from "@/types/SellerTypes/SellerInfo";
 import { getSellerByUserId } from "@/app/actions/server/seller.actions";
 
-export default async function SuperAdminLayout({
+export default async function SellerLayout({
   children,
 }: {
   children: React.ReactNode;

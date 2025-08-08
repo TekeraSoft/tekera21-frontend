@@ -40,6 +40,25 @@ export default async function RootLayout({
   const user = await getUser();
   const dehydratedState = dehydrate(queryClient);
 
+  const originalStderrWrite = process.stderr.write.bind(process.stderr);
+
+  process.stderr.write = ((
+    ...args: Parameters<typeof process.stderr.write>
+  ) => {
+    const chunk = args[0];
+    const msg =
+      chunk && typeof chunk.toString === "function" ? chunk.toString() : "";
+
+    if (
+      msg.includes("upstream image response failed") ||
+      msg.includes('"url" parameter is valid but upstream response is invalid')
+    ) {
+      return true; // loglama
+    }
+
+    return originalStderrWrite(...args);
+  }) as typeof process.stderr.write;
+
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={` antialiased`}>
