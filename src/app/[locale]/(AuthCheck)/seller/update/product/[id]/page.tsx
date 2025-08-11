@@ -1,9 +1,6 @@
-import {
-  getCategories,
-  getCategoriesForSeller,
-} from "@/app/actions/server/category.actions";
-import { getSingleProductById } from "@/app/actions/server/product.actions";
+import { getCategoriesForSeller } from "@/app/actions/server/category.actions";
 import ProductUpdateForm from "@/components/manage/Product/Update/ProductUpdateForm";
+import { getProductById } from "@/services/seller/product.service";
 import { ICategory } from "@/types/AdminTypes/category";
 import { IGetByIdProduct } from "@/types/SingleProduct";
 import React from "react";
@@ -15,7 +12,7 @@ const UpdateProductPage = async ({
 }) => {
   const prodId = (await params).id;
 
-  const { success, data } = await getSingleProductById(prodId);
+  const { success, data } = await getProductById(prodId);
 
   if (!success) {
     return <div>Product cant get</div>;

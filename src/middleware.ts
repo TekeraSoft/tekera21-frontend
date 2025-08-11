@@ -30,7 +30,7 @@ export default async function middleware(request: NextRequest) {
 
   if (user) {
     const isSeller = user.roles.some((role) => sellerRoles.includes(role));
-    const isSuperAdmin = user.roles.includes("SUPER_ADMIN");
+    const isSuperAdmin = user.roles.includes("SUPER_ADMIN") || user.roles.includes("SELLER_SUPPORT");
     const isCustomer = user.roles.includes(customerRole);
 
     if (publicRoutes.some((route) => pathname.includes(route))) {

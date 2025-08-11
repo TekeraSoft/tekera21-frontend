@@ -22,7 +22,7 @@ export function SideBar() {
   const { userInfo: user } = useAuthContext();
 
   const routes = [
-    {
+    user?.roles.includes("SUPER_ADMIN") && {
       name: "Genel Bakış",
       path: "/manage/dashboard",
       icon: Home,
@@ -47,7 +47,8 @@ export function SideBar() {
       path: "/manage/shipping",
       icon: ShoppingCart,
     },
-    user?.roles.includes("SUPER_ADMIN") && {
+    (user?.roles.includes("SUPER_ADMIN") ||
+      user?.roles.includes("SELLER_SUPPORT")) && {
       name: "Şirket Belge Doğrulama",
       path: "/manage/companies",
       icon: Users2,

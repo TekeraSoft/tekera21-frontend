@@ -3,9 +3,9 @@ import {
   getAdminProductCategories,
   getAdminProducts,
   getProductsByCategory,
-  getSellerProducts,
   searchProducts,
 } from "@/services/manage/product.service";
+import { getSellerProducts } from "@/services/seller/product.service";
 import { IProduct } from "@/types/product";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 

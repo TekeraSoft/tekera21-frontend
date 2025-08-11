@@ -11,16 +11,6 @@ export const getAdminProducts = async (
   return response.data;
 };
 
-export const getSellerProducts = async (
-  page: number,
-  size: number,
-  sortBy: string = ""
-) => {
-  const response = await axiosClient.get(
-    `/seller/sellerProducts?page=${page}&size=${size}`
-  );
-  return response.data;
-};
 
 export const changeStatusAction = async (
   productId: string,

@@ -1,10 +1,6 @@
 "use server";
 import axiosInstance from "@/request/axiosServer";
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
-import { redirect } from "@/i18n/navigation";
-import { getLocale } from "next-intl/server";
 
 
 export async function getSingleProductById(id: string) {

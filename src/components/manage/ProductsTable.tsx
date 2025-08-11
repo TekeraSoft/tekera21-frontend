@@ -345,7 +345,7 @@ export function ProductsTable() {
                         <DropdownMenuItem className="px-0">
                           <Link
                             className="flex items-center w-full px-2"
-                            href={`/manage/update/product/${product.id}`}
+                            href={`/seller/update/product/${product.id}`}
                           >
                             <Pencil className="mr-2 h-4 w-4" /> Düzenle
                           </Link>
@@ -353,7 +353,7 @@ export function ProductsTable() {
                         <DropdownMenuItem className="px-0">
                           <Link
                             className="flex items-center w-full px-2"
-                            href={`/manage/create/target/${product.id}`}
+                            href={`/seller/create/target/${product.id}`}
                           >
                             <Target className="mr-2 h-4 w-4" /> Ar İçerik
                             Oluştur
