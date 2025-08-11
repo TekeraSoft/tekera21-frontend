@@ -30,15 +30,15 @@ export default async function middleware(request: NextRequest) {
 
   if (user) {
     const isSeller = user.roles.some((role) => sellerRoles.includes(role));
-    const isSuperAdmin = user.roles.includes("SUPER_ADMIN") || user.roles.includes("SELLER_SUPPORT");
+    const isManager = user.roles.includes("SUPER_ADMIN") || user.roles.includes("SELLER_SUPPORT");
     const isCustomer = user.roles.includes(customerRole);
 
     if (publicRoutes.some((route) => pathname.includes(route))) {
-      const redirectUrl = new URL(isSeller ? `/seller` : isSuperAdmin ? `/manage` : `/register`, request.url);
+      const redirectUrl = new URL(isSeller ? `/seller` : isManager ? `/manage` : `/register`, request.url);
       return NextResponse.redirect(redirectUrl);
     }
 
-    if (isSuperAdmin && !pathname.includes("manage")) {
+    if (isManager && !pathname.includes("manage")) {
       const redirectUrl = new URL(`/manage`, request.url);
       return NextResponse.redirect(redirectUrl);
     }
