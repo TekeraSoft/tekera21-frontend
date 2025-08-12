@@ -1,4 +1,4 @@
-export default function AuthCheckLayout({
+export default async function AuthCheckLayout({
   children,
 }: {
   children: React.ReactNode;

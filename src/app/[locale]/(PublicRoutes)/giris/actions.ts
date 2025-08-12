@@ -1,6 +1,6 @@
 "use server"
 
-import { sellerRoles } from "@/constants/roles";
+import { managerRoles, sellerRoles } from "@/constants/roles";
 import { redirect } from "@/i18n/navigation";
 import axiosInstance from "@/request/axiosServer";
 import { ILogin, ISignUpForm, IUserPayload } from "@/types/AuthTypes";
@@ -117,13 +117,13 @@ export async function loginUser(prevState: ActionStateType, formData: FormData):
     });
 
     const payload = jwt.decode(data.accessToken) as IUserPayload;
-    console.log("jwt", payload)
-    // if (sellerRoles.some(role => payload.roles.includes(role))) {
-    //   return redirect({ href: "/seller", locale: locale })
-    // }
-    // if (payload.roles.includes("SUPER_ADMIN")) {
-    //   return redirect({ href: "/manage", locale: locale })
-    // }
+
+    if (sellerRoles.some(role => payload.roles.includes(role))) {
+      return redirect({ href: "/seller", locale: locale })
+    }
+    if (managerRoles.some(role => payload.roles.includes(role))) {
+      return redirect({ href: "/manage/dashboard", locale: locale })
+    }
     return redirect({ href: "/", locale: locale })
 
   } catch (error: any) {
