@@ -105,3 +105,54 @@ export interface IIdentityDocument {
     documentPath: string;
     verificationStatus: TVerification; // varsayılan 3 durum
 }
+
+
+// -----
+
+interface SellerUser {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    gender: "MALE" | "FEMALE"; // başka gender yoksa enum gibi kısıtlı tutabilirsin
+    birthDate: string; // ISO tarih formatı
+}
+
+interface Supervisor {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    gender: "MALE" | "FEMALE";
+    birthDate: string;
+}
+
+interface Seller {
+    id: string;
+    name: string;
+    slug: string;
+    categories: any[]; // tipini biliyorsan değiştirebilirsin
+    logo: string;
+    email: string;
+    gsmNumber: string;
+    alternativePhoneNumber: string;
+    supportPhoneNumber: string;
+    taxNumber: string;
+    taxOffice: string;
+    merisNumber: string;
+    registrationDate: string; // ISO datetime
+    contactPersonNumber: string;
+    contactPersonTitle: string;
+    address: any[]; // tipini biliyorsan değiştir
+    shippingCompanies: any[];
+    bankAccounts: any[];
+    sellerDocument: any[];
+    rate: number;
+    verificationStatus: TVerification; // sistemdeki enum değerlerine göre ekleyebilirsin
+}
+
+export interface INewSellerRegisterData {
+    sellerUser: SellerUser;
+    supervisor: Supervisor;
+    seller: Seller;
+}

@@ -95,7 +95,7 @@ export async function changeSellerStatus(sellerId: string, sellerDocumentName: s
     console.log("changeSellerStatus")
     try {
         const { data } = await axiosInstance.put(
-            `/seller-support/changeStatusFaultyDocument?sellerId=${sellerId}&sellerDocumentName=${sellerDocumentName}&status=${status}`,
+            `/seller-support/changeStatusFaultyDocument?sellerId=${sellerId}&sellerDocumentTypeName=${sellerDocumentName}&status=${status}`,
         );
 
         revalidatePath("/");

@@ -14,6 +14,7 @@ const CompaniesCheckPage = async () => {
     );
   }
 
+  console.log("data", data.content)
   return (
     <>
       <TopBar>

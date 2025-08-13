@@ -35,7 +35,11 @@ import {
   Phone,
   Mail,
 } from "lucide-react";
-import { ISellerContent, TVerification } from "@/types/SellerTypes/SellerInfo";
+import {
+  INewSellerRegisterData,
+  ISellerContent,
+  TVerification,
+} from "@/types/SellerTypes/SellerInfo";
 import { IPage } from "@/types/Collection";
 import { downloadFile } from "@/lib/downloadFiles";
 import { useToast } from "@/hooks/use-toast";
@@ -70,12 +74,12 @@ export const getStatusBadge = (status: TVerification) => {
 export default function VerificationPanel({
   companies,
 }: {
-  companies: { content: ISellerContent[]; page: IPage };
+  companies: { content: INewSellerRegisterData[]; page: IPage };
 }) {
   const [selectedPdf, setSelectedPdf] = useState<string | null>(null);
 
   const updateDocumentStatus = async (
-    company: ISellerContent,
+    company: INewSellerRegisterData,
     documentTitle: string,
     newStatus: TVerification
   ) => {
@@ -131,7 +135,7 @@ export default function VerificationPanel({
         </div>
         <div className="flex items-center gap-4">
           <Badge variant="secondary" className="text-sm">
-            {companies.content.length} Bekleyen Şirket
+            {companies?.content?.length} Bekleyen Şirket
           </Badge>
         </div>
       </div>
@@ -144,7 +148,7 @@ export default function VerificationPanel({
 
         <TabsContent value="companies" className="space-y-4">
           <div className="grid gap-4">
-            {companies.content.map((company) => (
+            {companies?.content?.map((company) => (
               <Card key={company.seller.id}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -198,26 +202,25 @@ export default function VerificationPanel({
 
                     <div>
                       <h4 className="font-medium mb-2">
-                        Belgeler ({company.seller.identityDocumentPaths.length})
+                        Belgeler ({company?.seller?.sellerDocument?.length})
                       </h4>
                       <div className="space-y-2">
-                        {company.seller.identityDocumentPaths.map(
-                          (doc, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center justify-between p-3 border rounded-lg"
-                            >
-                              <div className="flex items-center gap-3">
-                                <FileText className="h-4 w-4" />
-                                <div>
-                                  <span className="font-medium">
-                                    {doc.documentTitle}
-                                  </span>
-                                </div>
+                        {company?.seller?.sellerDocument?.map((doc, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center justify-between p-3 border rounded-lg"
+                          >
+                            <div className="flex items-center gap-3">
+                              <FileText className="h-4 w-4" />
+                              <div>
+                                <span className="font-medium">
+                                  {doc.documentTitle}
+                                </span>
                               </div>
-                              <div className="flex items-center gap-2">
-                                {getStatusBadge(doc.verificationStatus)}
-                                {/* <Button
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {getStatusBadge(doc.verificationStatus)}
+                              {/* <Button
                                 variant="outline"
                                 size="sm"
                                 onClick={() => handleViewPdf(doc.documentPath)}
@@ -225,48 +228,47 @@ export default function VerificationPanel({
                                 <Eye className="h-3 w-3 mr-1" />
                                 Görüntüle
                               </Button> */}
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() =>
-                                    handleDownloadFile(
-                                      doc.documentPath,
-                                      doc.documentTitle
-                                    )
-                                  }
-                                >
-                                  <Download className="h-3 w-3 mr-1" />
-                                  İndir
-                                </Button>
-                                <Select
-                                  value={doc.verificationStatus}
-                                  onValueChange={(value: TVerification) =>
-                                    updateDocumentStatus(
-                                      company,
-                                      doc.documentTitle,
-                                      value
-                                    )
-                                  }
-                                >
-                                  <SelectTrigger className="w-28">
-                                    <SelectValue />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="PENDING">
-                                      Bekliyor
-                                    </SelectItem>
-                                    <SelectItem value="VERIFIED">
-                                      Onaylandı
-                                    </SelectItem>
-                                    <SelectItem value="REJECTED">
-                                      Reddedildi
-                                    </SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                  handleDownloadFile(
+                                    doc.documentPath,
+                                    doc.documentTitle
+                                  )
+                                }
+                              >
+                                <Download className="h-3 w-3 mr-1" />
+                                İndir
+                              </Button>
+                              <Select
+                                value={doc.verificationStatus}
+                                onValueChange={(value: TVerification) =>
+                                  updateDocumentStatus(
+                                    company,
+                                    doc.documentTitle,
+                                    value
+                                  )
+                                }
+                              >
+                                <SelectTrigger className="w-28">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="PENDING">
+                                    Bekliyor
+                                  </SelectItem>
+                                  <SelectItem value="VERIFIED">
+                                    Onaylandı
+                                  </SelectItem>
+                                  <SelectItem value="REJECTED">
+                                    Reddedildi
+                                  </SelectItem>
+                                </SelectContent>
+                              </Select>
                             </div>
-                          )
-                        )}
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -294,15 +296,15 @@ export default function VerificationPanel({
                 </TableHeader>
                 <TableBody>
                   {companies.content.flatMap((company) =>
-                    company.seller.identityDocumentPaths
-                      .filter((doc) => doc.verificationStatus === "PENDING")
-                      .map((doc, index) => (
+                    company.seller.sellerDocument
+                      ?.filter((doc) => doc.verificationStatus === "PENDING")
+                      ?.map((doc, index) => (
                         <TableRow key={`${company.seller.id}-${index}`}>
                           <TableCell className="font-medium">
                             {company.seller.name}
                           </TableCell>
                           <TableCell>{doc.documentTitle}</TableCell>
-                        
+
                           <TableCell>
                             {getStatusBadge(doc.verificationStatus)}
                           </TableCell>
