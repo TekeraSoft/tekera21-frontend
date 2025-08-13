@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useRef } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import {
   Card,
   CardContent,
@@ -7,19 +7,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  CheckSquare,
-  Download,
-  Trash2,
-  Upload,
-  UploadIcon,
-} from "lucide-react";
+import { CheckSquare, Download, Upload, UploadIcon } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
 import { useFormContext } from "react-hook-form";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { ISellerFormData } from ".";
 import { useToast } from "@/hooks/use-toast";
 import { downloadFile } from "@/lib/downloadFiles";
@@ -182,7 +175,7 @@ const DocumentManager = ({
                           accept=".pdf"
                         />
 
-                        <Button
+                        {/* <Button
                           type="button"
                           variant="destructive"
                           size="sm"
@@ -190,7 +183,7 @@ const DocumentManager = ({
                         >
                           <Trash2 className="h-3 w-3" />
                           Sil
-                        </Button>
+                        </Button> */}
                       </CardFooter>
                     )}
                   </Card>

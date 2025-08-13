@@ -16,7 +16,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { ISellerFormData } from ".";
 
 const AddressManager = () => {
-  const { register, watch, control } = useFormContext<ISellerFormData>();
+  const { register, watch, control, formState } =
+    useFormContext<ISellerFormData>();
 
   const watchedData = watch();
 
@@ -45,6 +46,11 @@ const AddressManager = () => {
             </Select>
           )}
         />
+        {formState.errors.address?.[index]?.country && (
+          <p className="text-sm text-destructive">
+            {formState.errors.address?.[index]?.country?.message}
+          </p>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -54,6 +60,11 @@ const AddressManager = () => {
           {...register(`address.${index}.city`)}
           placeholder="Şehir giriniz"
         />
+        {formState.errors.address?.[index]?.city && (
+          <p className="text-sm text-destructive">
+            {formState.errors.address?.[index]?.city?.message}
+          </p>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -63,6 +74,11 @@ const AddressManager = () => {
           {...register(`address.${index}.street`)}
           placeholder="Mahalle/Sokak giriniz"
         />
+        {formState.errors.address?.[index]?.street && (
+          <p className="text-sm text-destructive">
+            {formState.errors.address?.[index]?.street?.message}
+          </p>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -72,6 +88,11 @@ const AddressManager = () => {
           {...register(`address.${index}.postalCode`)}
           placeholder="Posta kodu giriniz"
         />
+        {formState.errors.address?.[index]?.postalCode && (
+          <p className="text-sm text-destructive">
+            {formState.errors.address?.[index]?.postalCode?.message}
+          </p>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -81,6 +102,11 @@ const AddressManager = () => {
           {...register(`address.${index}.buildNo`)}
           placeholder="Bina numarası"
         />
+        {formState.errors.address?.[index]?.buildNo && (
+          <p className="text-sm text-destructive">
+            {formState.errors.address?.[index]?.buildNo?.message}
+          </p>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -90,6 +116,11 @@ const AddressManager = () => {
           {...register(`address.${index}.doorNumber`)}
           placeholder="Kapı numarası"
         />
+        {formState.errors.address?.[index]?.doorNumber && (
+          <p className="text-sm text-destructive">
+            {formState.errors.address?.[index]?.doorNumber?.message}
+          </p>
+        )}
       </div>
 
       <div className="md:col-span-2 space-y-2">
@@ -100,6 +131,11 @@ const AddressManager = () => {
           placeholder="Detaylı adres bilgilerini giriniz"
           rows={3}
         />
+        {formState.errors.address?.[index]?.detailAddress && (
+          <p className="text-sm text-destructive">
+            {formState.errors.address?.[index]?.detailAddress?.message}
+          </p>
+        )}
       </div>
     </div>
   ));

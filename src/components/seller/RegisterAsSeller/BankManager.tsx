@@ -17,7 +17,8 @@ import {
 import { ISellerFormData } from ".";
 
 const BankManager = () => {
-  const { register, watch, control } = useFormContext<ISellerFormData>();
+  const { register, watch, control, formState } =
+    useFormContext<ISellerFormData>();
   const watchedData = watch();
 
   const { append } = useFieldArray({
@@ -61,6 +62,11 @@ const BankManager = () => {
                 </Select>
               )}
             />
+            {formState.errors.bankAccount?.[index]?.bankName && (
+              <p className="text-sm text-destructive">
+                {formState.errors.bankAccount?.[index]?.bankName?.message}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -70,6 +76,11 @@ const BankManager = () => {
               {...register(`bankAccount.${index}.accountName`)}
               placeholder="Hesap sahibi adını giriniz"
             />
+            {formState.errors.bankAccount?.[index]?.accountName && (
+              <p className="text-sm text-destructive">
+                {formState.errors.bankAccount?.[index]?.accountName?.message}
+              </p>
+            )}
           </div>
 
           <div className="md:col-span-2 space-y-2">
@@ -79,6 +90,11 @@ const BankManager = () => {
               {...register(`bankAccount.${index}.iban`)}
               placeholder="TR00 0000 0000 0000 0000 0000 00"
             />
+            {formState.errors.bankAccount?.[index]?.iban && (
+              <p className="text-sm text-destructive">
+                {formState.errors.bankAccount?.[index]?.iban?.message}
+              </p>
+            )}
           </div>
 
           <div className="md:col-span-2">

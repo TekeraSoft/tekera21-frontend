@@ -28,6 +28,7 @@ interface IProps {
       [key: string]: File[];
     }>
   >;
+  setDeletedVariants: React.Dispatch<React.SetStateAction<string[]>>;
   handleDeleteImages:
     | ((url: string, variationIndex: number) => void)
     | undefined;
@@ -37,6 +38,7 @@ export default function ProductVariantForm({
   stockAttributeImages,
   setStockAttributeImages,
   handleDeleteImages,
+  setDeletedVariants,
 }: IProps) {
   const {
     control,
@@ -94,6 +96,13 @@ export default function ProductVariantForm({
     );
   };
   const handleUpdateVariants = () => {
+    // idsi olan variantları state'e ekle.
+    watchedVariants.forEach((variant) => {
+      if (variant.id && typeof variant.id === "string" && variant.id.length) {
+        setDeletedVariants((prev) => [...prev, variant.id as string]);
+      }
+    });
+
     // 1. Silinmesi gereken indeksleri belirle
     const deletedIndices = watchedVariants
       .map((variant, index) =>
@@ -169,7 +178,6 @@ export default function ProductVariantForm({
 
   useEffect(() => {
     if (watchedVariants.length && !initializedRef.current) {
-      console.log("runn");
       watchedVariants.forEach((variant) =>
         setSelectedColors((prev) => [...prev, { value: variant.color }])
       );
@@ -186,11 +194,13 @@ export default function ProductVariantForm({
         <div className="flex gap-2"></div>
       </div>
 
-      {watchedVariants.length === 0 ? (
+      {
         <div className="text-center py-12">
-          <p className="text-muted-foreground mb-4">
-            Henüz hiç varyant eklenmemiş.
-          </p>
+          {watchedVariants.length === 0 && (
+            <p className="text-muted-foreground mb-4">
+              Henüz hiç varyant eklenmemiş.
+            </p>
+          )}
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -217,10 +227,16 @@ export default function ProductVariantForm({
                       <Button
                         type="button"
                         className="ml-auto"
-                        onClick={handleAddColor}
+                        onClick={
+                          !watchedVariants.length
+                            ? handleAddColor
+                            : handleUpdateVariants
+                        }
                       >
                         <Plus className="w-4 h-4 mr-2" />
-                        Renk varyantı ekle
+                        {!watchedVariants.length
+                          ? "Renk varyantı ekle"
+                          : "Varyantları güncelle"}
                       </Button>
                     </div>
                   </div>
@@ -229,45 +245,7 @@ export default function ProductVariantForm({
             </Tooltip>
           </TooltipProvider>
         </div>
-      ) : (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div>
-                <Label htmlFor={`color`}>Renk</Label>
-                <div className="flex items-center gap-2">
-                  <div className="flex-1 block">
-                    <Controller
-                      control={control}
-                      name={`variants`}
-                      rules={{ required: "Renk seçimi zorunludur." }}
-                      render={({ field }) => (
-                        <MultiSelectColorVariant
-                          options={colors.sort((a, b) =>
-                            a.name.localeCompare(b.name, "tr")
-                          )}
-                          onChange={handleSelectColor}
-                          selected={selectedColors}
-                        />
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <Button
-                      type="button"
-                      className="ml-auto"
-                      onClick={handleUpdateVariants}
-                    >
-                      <Plus className="w-4 h-4 mr-2" />
-                      Varyantları güncelle
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </TooltipTrigger>
-          </Tooltip>
-        </TooltipProvider>
-      )}
+      }
 
       <div className="space-y-6">
         <Card className="w-full">

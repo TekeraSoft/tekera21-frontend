@@ -21,6 +21,9 @@ import {
   sellerRegister,
   updateSeller,
 } from "@/app/actions/server/seller.actions";
+import { getUser } from "@/app/actions/server/auth.actions";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export interface ISellerFormData {
   name: string;
@@ -54,6 +57,45 @@ export interface ISellerFormData {
   }[];
   documents: IIdentityDocument[];
 }
+
+const SellerFormSchema = z.object({
+  name: z.string().min(1, "Mağaza adı zorunlu"),
+  categoryId: z
+    .array(z.object({ value: z.string().uuid("Geçerli kategori ID girin") }))
+    .nonempty("En az 1 kategori seçmelisiniz"),
+  email: z.string().email("Geçerli bir e-posta adresi girin"),
+  gsmNumber: z.string().min(10, "Geçerli bir telefon numarası girin"),
+  logo: z.any().optional(),
+  alternativePhoneNumber: z.string().optional(),
+  supportPhoneNumber: z.string().optional(),
+  taxNumber: z.string().min(10, "Vergi numarası en az 10 haneli olmalı"),
+  taxOffice: z.string().min(1, "Vergi dairesi zorunlu"),
+  merisNumber: z.string().optional(),
+  registrationDate: z.any().optional(),
+  contactPersonNumber: z.string().optional(),
+  contactPersonTitle: z.string().optional(),
+  shippingCompanies: z.array(z.object({ value: z.string().uuid() })).optional(),
+  address: z.array(
+    z.object({
+      city: z.string().min(1, "Şehir zorunlu"),
+      street: z.string().optional(),
+      postalCode: z.string().optional(),
+      buildNo: z.string().optional(),
+      doorNumber: z.string().optional(),
+      detailAddress: z.string().optional(),
+      country: z.string().min(1, "Ülke zorunlu"),
+    })
+  ),
+  bankAccount: z.array(
+    z.object({
+      iban: z.string().min(10, "Geçerli IBAN girin"),
+      accountName: z.string().min(1, "Hesap adı zorunlu"),
+      bankName: z.string().min(1, "Banka adı zorunlu"),
+      isActive: z.boolean(),
+    })
+  ),
+  documents: z.any(), // Eğer spesifik formatın varsa burada da şema yaz
+});
 
 export default function SellerRegistrationForm({
   categories,
@@ -125,7 +167,8 @@ export default function SellerRegistrationForm({
     });
   };
 
-  const methods = useForm<ISellerFormData>({
+  const methods = useForm<z.infer<typeof SellerFormSchema>>({
+    resolver: zodResolver(SellerFormSchema),
     defaultValues: {
       name: sellerInfo?.name || "",
       categoryId: sellerInfo?.categories.map((category) => {
@@ -134,7 +177,7 @@ export default function SellerRegistrationForm({
       }),
       email: sellerInfo?.email || "",
       gsmNumber: sellerInfo?.gsmNumber || "",
-      logo: sellerInfo?.logo || undefined,
+      logo: sellerInfo?.logo || "",
       alternativePhoneNumber: sellerInfo?.alternativePhoneNumber || "",
       supportPhoneNumber: sellerInfo?.supportPhoneNumber || "",
       taxNumber: sellerInfo?.taxNumber || "",
@@ -168,41 +211,98 @@ export default function SellerRegistrationForm({
           isActive: true,
         },
       ],
-      documents: sellerInfo?.identityDocumentPaths
-        ? mergeDocuments(sellerInfo.identityDocumentPaths)
+      documents: sellerInfo?.sellerDocument
+        ? mergeDocuments(sellerInfo.sellerDocument)
         : requiredDocuments,
-    },
+    }, // Senin yukarıdaki defaultValues
   });
+
+  // const methods2 = useForm<ISellerFormData>({
+  //   defaultValues: {
+  //     name: sellerInfo?.name || "",
+  //     categoryId: sellerInfo?.categories.map((category) => {
+  //       const item = { value: category.id };
+  //       return item;
+  //     }),
+  //     email: sellerInfo?.email || "",
+  //     gsmNumber: sellerInfo?.gsmNumber || "",
+  //     logo: sellerInfo?.logo || undefined,
+  //     alternativePhoneNumber: sellerInfo?.alternativePhoneNumber || "",
+  //     supportPhoneNumber: sellerInfo?.supportPhoneNumber || "",
+  //     taxNumber: sellerInfo?.taxNumber || "",
+  //     taxOffice: sellerInfo?.taxOffice || "",
+  //     merisNumber: sellerInfo?.merisNumber || "",
+  //     registrationDate: sellerInfo?.registrationDate || undefined,
+  //     contactPersonNumber: sellerInfo?.contactPersonNumber || "",
+  //     contactPersonTitle: sellerInfo?.contactPersonTitle || "",
+  //     shippingCompanies: sellerInfo?.shippingCompanies?.map(
+  //       (shippingCompany) => {
+  //         const item = { value: shippingCompany.id };
+  //         return item;
+  //       }
+  //     ),
+  //     address: sellerInfo?.address || [
+  //       {
+  //         city: "",
+  //         street: "",
+  //         postalCode: "",
+  //         buildNo: "",
+  //         doorNumber: "",
+  //         detailAddress: "",
+  //         country: "Turkey",
+  //       },
+  //     ],
+  //     bankAccount: sellerInfo?.bankAccounts || [
+  //       {
+  //         iban: "",
+  //         accountName: "",
+  //         bankName: "",
+  //         isActive: true,
+  //       },
+  //     ],
+  //     documents: sellerInfo?.sellerDocument
+  //       ? mergeDocuments(sellerInfo.sellerDocument)
+  //       : requiredDocuments,
+  //   },
+  // });
 
   const { toast } = useToast();
 
-  const onSubmit = async (data: ISellerFormData) => {
+  const onSubmit = async (data: z.infer<typeof SellerFormSchema>) => {
     const formData = new FormData();
+    const user = await getUser();
 
     const formattedData: ISellerRegister = {
       ...(sellerInfo?.id && { id: sellerInfo.id }),
-      ...(sellerInfo?.identityDocumentPaths && {
-        identityDocumentPaths: sellerInfo.identityDocumentPaths,
+      ...(sellerInfo?.sellerDocument && {
+        sellerDocument: sellerInfo.sellerDocument,
       }),
-      address: data.address,
-      alternativePhoneNumber: data.alternativePhoneNumber,
+      address: data.address.map((addr) => ({
+        ...addr,
+        street: addr.street || "",
+        postalCode: addr.postalCode || "",
+        buildNo: addr.buildNo || "",
+        doorNumber: addr.doorNumber || "",
+        detailAddress: addr.detailAddress || "",
+      })),
+      alternativePhoneNumber: data.alternativePhoneNumber || "",
       bankAccount: data.bankAccount,
       categoryId: data.categoryId.map((cat) => cat.value),
-      contactPersonNumber: data.contactPersonNumber,
+      contactPersonNumber: data.contactPersonNumber || "",
       name: data.name,
-      email: data.email,
-      shippingCompanies: data.shippingCompanies.map(
-        (shippnCompany) => shippnCompany.value
-      ),
+      email: user?.email || data.email,
+      shippingCompanies:
+        data.shippingCompanies?.map((shippnCompany) => shippnCompany.value) ||
+        [],
       gsmNumber: data.gsmNumber,
-      supportPhoneNumber: data.supportPhoneNumber,
+      supportPhoneNumber: data.supportPhoneNumber || "",
       taxNumber: data.taxNumber,
       taxOffice: data.taxOffice,
-      merisNumber: data.merisNumber,
+      merisNumber: data.merisNumber || "",
       registrationDate: data.registrationDate
         ? new Date(data.registrationDate).toISOString()
         : new Date().toISOString(),
-      contactPersonTitle: data.contactPersonTitle,
+      contactPersonTitle: data.contactPersonTitle || "",
     };
 
     formData.append(
@@ -233,8 +333,8 @@ export default function SellerRegistrationForm({
         const sellerForm = methods.getValues();
         const newData = {
           ...sellerForm,
-          documents: sellerInfo?.identityDocumentPaths
-            ? mergeDocuments(sellerInfo.identityDocumentPaths)
+          documents: sellerInfo?.sellerDocument
+            ? mergeDocuments(sellerInfo.sellerDocument)
             : requiredDocuments,
         };
         methods.reset(newData);
@@ -263,8 +363,8 @@ export default function SellerRegistrationForm({
         const sellerForm = methods.getValues();
         const newData = {
           ...sellerForm,
-          documents: sellerInfo?.identityDocumentPaths
-            ? mergeDocuments(sellerInfo.identityDocumentPaths)
+          documents: sellerInfo?.sellerDocument
+            ? mergeDocuments(sellerInfo.sellerDocument)
             : requiredDocuments,
         };
         methods.reset(newData);

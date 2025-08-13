@@ -44,6 +44,7 @@ export default function ProductUpdateForm({
     [key: string]: File[];
   }>({});
   const [deleteImages, setDeleteImages] = useState<string[]>([]);
+  const [deletedVariants, setDeletedVariants] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -88,6 +89,7 @@ export default function ProductUpdateForm({
 
   useEffect(() => {
     if (product) {
+      console.log("if products", product);
       setVideoUrlState(product.videoUrl || null);
       reset({
         name: product.name,
@@ -153,6 +155,7 @@ export default function ProductUpdateForm({
         (attr) => attr.key && attr.value
       ),
       deleteImages: deleteImages,
+      deletedVariants: deletedVariants,
     };
 
     console.log("formatted", formattedData);
@@ -221,7 +224,7 @@ export default function ProductUpdateForm({
     const { success } = await updateProduct(formData);
     if (success) {
       toast({
-        title: "Success",
+        title: "Başarılı",
         description: "Product is updated.",
         variant: "default",
       });
@@ -307,7 +310,7 @@ export default function ProductUpdateForm({
   console.log("product", product);
 
   return (
-    <div className=" mx-auto p-6">
+    <div className="mx-auto p-6">
       <Card>
         <CardHeader>
           <CardTitle>Ürün düzenle</CardTitle>
@@ -468,6 +471,7 @@ export default function ProductUpdateForm({
             {/* Variations */}
             <FormProvider {...methods}>
               <ProductVariantForm
+                setDeletedVariants={setDeletedVariants}
                 stockAttributeImages={stockAttributeImages}
                 setStockAttributeImages={setStockAttributeImages}
                 handleDeleteImages={handleDeleteImages}

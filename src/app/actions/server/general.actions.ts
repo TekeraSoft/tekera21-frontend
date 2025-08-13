@@ -3,7 +3,7 @@
 import axiosInstance from "@/request/axiosServer";
 import { IPage } from "@/types/Collection";
 import { revalidatePath } from "next/cache";
-import { ICompany } from "@/types/SellerTypes/SellerInfo";
+import { ISellerUser } from "@/types/SellerTypes/SellerInfo";
 import { IShippingCompany, IShippingCompanyCreate } from "@/types/SellerTypes/ShippingCompanies";
 
 
@@ -14,7 +14,7 @@ export async function getAllCompany(page: string = "0", size: string = "20") {
       `/super-admin/getAllCompany?page=${page}&size=${size}`
     );
     console.log("data from getAllCompany", data)
-    return { success: true, message: data.message, data: data as { content: ICompany[], page: IPage } };
+    return { success: true, message: data.message, data: data as { content: ISellerUser[], page: IPage } };
   } catch (error: any) {
     return { success: false, message: error.message || "Failed to get products", data: undefined };
   }

@@ -8,13 +8,18 @@ const CompaniesCheckPage = async () => {
 
   if (!success || !data) {
     return (
-      <div className="p-4 text-red-500">
-        {message} || Firmalar getirilemedi.
-      </div>
+      <>
+        <TopBar>
+          <></>
+        </TopBar>
+        <div className="p-4 text-red-500">
+          {message} || Firmalar getirilemedi.
+        </div>
+      </>
     );
   }
 
-  console.log("data", data.content)
+  console.log("data", data.content);
   return (
     <>
       <TopBar>

@@ -85,6 +85,11 @@ const CompanyManager = ({
               className="hidden"
               onChange={(e) => handleSetLogo(e)}
             />
+            {formState.errors.logo && (
+              <p className="text-sm text-destructive">
+                {formState.errors.logo.message}
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -96,9 +101,14 @@ const CompanyManager = ({
           {...register("name")}
           placeholder="Firma adını giriniz"
         />
+        {formState.errors.name && (
+          <p className="text-sm text-destructive">
+            {formState.errors.name.message}
+          </p>
+        )}
       </div>
 
-      <div className="space-y-2">
+      {/* <div className="space-y-2">
         <Label htmlFor="email">E-posta</Label>
         <Input
           id="email"
@@ -106,7 +116,7 @@ const CompanyManager = ({
           {...register("email")}
           placeholder="ornek@email.com"
         />
-      </div>
+      </div> */}
 
       <div className="space-y-2">
         <Label htmlFor="gsmNumber">GSM Numarası</Label>
@@ -115,6 +125,11 @@ const CompanyManager = ({
           {...register("gsmNumber")}
           placeholder="5XX XXX XX XX"
         />
+        {formState.errors.gsmNumber && (
+          <p className="text-sm text-destructive">
+            {formState.errors.gsmNumber.message}
+          </p>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -124,6 +139,11 @@ const CompanyManager = ({
           {...register("alternativePhoneNumber")}
           placeholder="5XX XXX XX XX"
         />
+        {formState.errors.alternativePhoneNumber && (
+          <p className="text-sm text-destructive">
+            {formState.errors.alternativePhoneNumber.message}
+          </p>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -133,6 +153,11 @@ const CompanyManager = ({
           {...register("supportPhoneNumber")}
           placeholder="5XX XXX XX XX"
         />
+        {formState.errors.supportPhoneNumber && (
+          <p className="text-sm text-destructive">
+            {formState.errors.supportPhoneNumber.message}
+          </p>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -142,6 +167,11 @@ const CompanyManager = ({
           {...register("contactPersonTitle")}
           placeholder="Manager"
         />
+        {formState.errors.contactPersonTitle && (
+          <p className="text-sm text-destructive">
+            {formState.errors.contactPersonTitle.message}
+          </p>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -151,6 +181,11 @@ const CompanyManager = ({
           {...register("contactPersonNumber")}
           placeholder="5XX XXX XX XX"
         />
+        {formState.errors.contactPersonNumber && (
+          <p className="text-sm text-destructive">
+            {formState.errors.contactPersonNumber.message}
+          </p>
+        )}
       </div>
       <div className="space-y-2 relative">
         <Label htmlFor={"categoryId"}>Kategori</Label>
@@ -186,6 +221,11 @@ const CompanyManager = ({
             />
           )}
         />
+        {formState.errors.categoryId && (
+          <p className="text-sm text-destructive">
+            {formState.errors.categoryId.message}
+          </p>
+        )}
       </div>
       {shippingCompanies && (
         <div className="space-y-2 relative">
@@ -222,6 +262,11 @@ const CompanyManager = ({
               />
             )}
           />
+          {formState.errors.shippingCompanies && (
+            <p className="text-sm text-destructive">
+              {formState.errors.shippingCompanies.message}
+            </p>
+          )}
         </div>
       )}
     </div>

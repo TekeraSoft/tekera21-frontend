@@ -37,13 +37,15 @@ import {
 } from "lucide-react";
 import {
   INewSellerRegisterData,
-  ISellerContent,
   TVerification,
 } from "@/types/SellerTypes/SellerInfo";
 import { IPage } from "@/types/Collection";
 import { downloadFile } from "@/lib/downloadFiles";
 import { useToast } from "@/hooks/use-toast";
-import { changeSellerStatus } from "@/app/actions/server/seller.actions";
+import {
+  changeSellerStatus,
+  activateSeller,
+} from "@/app/actions/server/seller.actions";
 
 // Mock data - replace with your actual data
 
@@ -98,6 +100,25 @@ export default function VerificationPanel({
       toast({
         title: "Hata",
         description: message || "Statü değiştirilemedi",
+        variant: "destructive",
+      });
+    }
+  };
+  const handleChangeSellerStatus = async (companyId: string) => {
+    const { message, success } = await activateSeller(companyId);
+    if (success) {
+      toast({
+        title: "Başarılı",
+        description: "Statü değiştirildi.",
+        variant: "default",
+      });
+    } else {
+      const parsed = JSON.parse(message as any) as [];
+
+      const text = parsed.map((item: any) => item.documentTitle).join(", ");
+      toast({
+        title: "Hata",
+        description: `Statü değiştirilemedi: ${text} alanlarının onaylanması gerekiyor.`,
         variant: "destructive",
       });
     }
@@ -178,6 +199,14 @@ export default function VerificationPanel({
                     </div>
                     <div className="flex items-center gap-3">
                       {getStatusBadge(company.seller.verificationStatus)}
+                      <Button
+                        variant={"outline"}
+                        onClick={() =>
+                          handleChangeSellerStatus(company.seller.id)
+                        }
+                      >
+                        Onayla
+                      </Button>
                     </div>
                   </div>
                 </CardHeader>

@@ -29,7 +29,7 @@ axiosInstance.interceptors.response.use(
   },
   async (error) => {
     if (error) {
-      console.log("axios error", error);
+
       console.log("error in axios response interceptor", error?.response?.data);
       const errorData = error?.response?.data as any;
 
@@ -38,8 +38,10 @@ axiosInstance.interceptors.response.use(
       if (errorData) {
         if (typeof errorData === "string") {
           errorMessage = errorData;
-        } else if (errorData.message) {
+        } else if (typeof errorData.message === "string") {
           errorMessage = errorData.message;
+        } else if (errorData.message) {
+          errorMessage = JSON.stringify(errorData.message);
         } else if (errorData.detail) {
           errorMessage = errorData.detail;
         }

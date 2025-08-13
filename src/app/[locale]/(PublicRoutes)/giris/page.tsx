@@ -74,6 +74,10 @@ export default function SigUpPage() {
                 </div>
               </div>
 
+              {state.message && (
+                <p className="text-red-600 text-sm">{state.message}</p>
+              )}
+
               <Button
                 type="submit"
                 className="w-full h-11 text-base font-medium"
