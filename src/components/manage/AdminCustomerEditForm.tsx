@@ -47,12 +47,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { formSchema } from "@/data/users";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { enUS, tr as dateFnsTr } from "date-fns/locale";
 import { useLocale } from "next-intl";
 import { TabsList, Tabs, TabsTrigger, TabsContent } from "../ui/tabs";
 import DocumentCard from "./DocumentCard";
+import { formSchema } from "@/data/users";
 
 const countries = [
   { label: "Türkiye", value: "tr" },

@@ -6,7 +6,6 @@ export type TProductFormData = {
     [key: string]: string[];
   }
   brandName: string;
-  companyId: string;
   description: string;
   currencyType: string;
   categoryId: string;

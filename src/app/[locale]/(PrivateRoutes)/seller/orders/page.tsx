@@ -5,13 +5,13 @@ import AdminInnerLayout from "@/components/manage/AdminInnerLayout";
 import TopBar from "@/components/manage/TopBar";
 import { IOrderResponse } from "@/types/OrderTypes";
 import { useQuery } from "@tanstack/react-query";
-import { getOrdersByUserId } from "@/app/actions/server/order.actions";
+import { getSellerOrders } from "@/app/actions/server/seller.actions";
 
 export default function OrdersPage() {
   const orders = useQuery({
-    queryKey: ["cartItems"],
+    queryKey: ["sellerOrders"],
     queryFn: async (): Promise<IOrderResponse> => {
-      return await getOrdersByUserId();
+      return await getSellerOrders();
     },
   });
   return (

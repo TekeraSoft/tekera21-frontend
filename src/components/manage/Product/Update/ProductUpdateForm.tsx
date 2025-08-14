@@ -51,7 +51,6 @@ export default function ProductUpdateForm({
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [videoUrlState, setVideoUrlState] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [showMediaLibrary, setShowMediaLibrary] = useState(false);
 
   const { toast } = useToast();
 
@@ -65,7 +64,6 @@ export default function ProductUpdateForm({
       currencyType: product.currencyType,
       productType: product.productType,
       tags: product.tags?.map((tag) => ({ value: tag })) || [],
-      companyId: product.company.id,
       categoryId: product.category.id || "",
       subCategories: categories
         .flatMap((cat) => cat.subCategories)
@@ -89,7 +87,6 @@ export default function ProductUpdateForm({
 
   useEffect(() => {
     if (product) {
-      console.log("if products", product);
       setVideoUrlState(product.videoUrl || null);
       reset({
         name: product.name,
@@ -99,7 +96,6 @@ export default function ProductUpdateForm({
         currencyType: product.currencyType,
         videoUrl: product.videoUrl,
         productType: product.productType,
-        companyId: product.company.id,
         categoryId: product.category.id || "",
         tags: product.tags?.map((tag) => ({ value: tag })) || [],
         subCategories: categories
@@ -117,7 +113,6 @@ export default function ProductUpdateForm({
   const onSubmit = async (data: TProductFormData) => {
     // Transform data to match the required format
     setLoading(true);
-    console.log("watch", watch("imageUrls"));
 
     const formattedData = {
       name: data.name,
@@ -221,7 +216,7 @@ export default function ProductUpdateForm({
       return;
     }
 
-    const { success } = await updateProduct(formData);
+    const { success, message } = await updateProduct(formData);
     if (success) {
       toast({
         title: "Başarılı",
@@ -235,7 +230,7 @@ export default function ProductUpdateForm({
     } else {
       toast({
         title: "Error",
-        description: "Product cannot be updated.",
+        description: message || "Product cannot be updated.",
         variant: "destructive",
       });
       setLoading(false);

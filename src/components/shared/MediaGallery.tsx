@@ -17,14 +17,15 @@ import {
 import {
   Play,
   Download,
-  Eye,
   Trash2,
   Upload,
-  PlusCircle,
   Minus,
   Plus,
 } from "lucide-react";
-import { deleteFileByUrl, getAllMediaBySellerId } from "@/app/actions/server/general.actions";
+import {
+  deleteFileByUrl,
+  getAllMediaBySellerId,
+} from "@/app/actions/server/general.actions";
 import { useToast } from "@/hooks/use-toast";
 import ImageView from "./ImageView";
 import {
@@ -40,7 +41,6 @@ import {
 import { Link } from "@/i18n/navigation";
 import { TProductFormData } from "@/types/ProductFormData";
 import { useFormContext } from "react-hook-form";
-import { SelectIcon } from "@radix-ui/react-select";
 
 interface IData {
   content: string[];
@@ -53,11 +53,9 @@ interface IData {
 }
 
 export default function MediaGallery({
-  sellerId,
   showMediaLibrary,
   variationIndex,
 }: {
-  sellerId: string;
   showMediaLibrary: boolean;
   variationIndex: number;
 }) {
@@ -135,7 +133,6 @@ export default function MediaGallery({
   const getFiles = async (pageCount: number = 0) => {
     setLoading(true);
     const { data, success, message } = await getAllMediaBySellerId(
-      sellerId,
       pageCount,
       size
     );
@@ -179,10 +176,10 @@ export default function MediaGallery({
   }, [mediaFiles]);
 
   useEffect(() => {
-    if (sellerId.length && mediaFiles.length === 0 && showMediaLibrary) {
+    if (mediaFiles.length === 0 && showMediaLibrary) {
       getFiles(0);
     }
-  }, [sellerId, showMediaLibrary]);
+  }, [showMediaLibrary]);
 
   const MediaCard = ({
     file,

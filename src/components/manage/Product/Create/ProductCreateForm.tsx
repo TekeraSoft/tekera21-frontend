@@ -51,7 +51,6 @@ export default function ProductCreateForm({
       productType: "PHYSICAL",
       tags: [],
       categoryId: "",
-      companyId: "",
       subCategories: [],
       attributeDetails: [{ key: "", value: "" }],
       variants: [],
@@ -73,7 +72,6 @@ export default function ProductCreateForm({
     const formattedData = {
       name: data.name,
       code: data.code,
-      companyId: data.companyId,
       brandName: data.brandName,
       description: data.description,
       categoryId: data.categoryId,
@@ -194,7 +192,6 @@ export default function ProductCreateForm({
     1: [
       "name",
       "brandName",
-      "companyId",
       "categoryId",
       "subCategories",
       "code",

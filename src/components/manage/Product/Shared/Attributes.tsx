@@ -185,14 +185,6 @@ const Attributes = ({
     setValue(`variants.${variationIndex}.attributes`, newAttributes);
   };
 
-  // const removeAttribute = (variationIndex: number, attributeIndex: number) => {
-  //   const currentAttributes = watchedAttributes || [];
-  //   const newAttributes = currentAttributes.filter(
-  //     (_, index) => index !== attributeIndex
-  //   );
-  //   setValue(`variants.${variationIndex}.attributes`, newAttributes);
-  // };
-
   const handleBulkUpdate = (bulkData: BulkUpdateData) => {
     watchedVariants.map((variant, variationIndex) => {
       const currentAttributes = variant.attributes || [];
@@ -265,17 +257,6 @@ const Attributes = ({
               return total + attrLength;
             }, 0)}
           />
-          {/* <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              setSelectedAttributes({});
-              setValue(`variants.${variationIndex}.attributes`, []);
-            }}
-          >
-            Tümünü temizle
-          </Button> */}
         </div>
 
         {watchedVariants.map((_, variationIndex) => {

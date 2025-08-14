@@ -34,6 +34,8 @@ export interface IUserPayload {
     phoneNumber: string;
     roles: TUserTypes[];
     nameSurname: string;
+    sellerId: string;
+    userId: string;
     email: string;
     sub: string;
     iat: number; // issued at (timestamp)

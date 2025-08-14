@@ -25,19 +25,6 @@ const GeneralInformation = () => {
             <p className="text-sm text-red-500">{errors.name.message}</p>
           )}
         </div>
-        <div className="space-y-2 h-full">
-          <Label htmlFor="slug">Company Id *</Label>
-          <Input
-            id="companyId"
-            {...register("companyId", {
-              required: "Company Id is required",
-            })}
-            placeholder="dfc9a257-a4bc-4bc3-89ee-8727a129efd2"
-          />
-          {errors.slug && (
-            <p className="text-sm text-red-500">{errors.companyId?.message}</p>
-          )}
-        </div>
         <div className="space-y-2">
           <Label htmlFor="code">Ürün Kodu *</Label>
           <Input

@@ -5,6 +5,7 @@ import { IPage } from "@/types/Collection";
 import { revalidatePath } from "next/cache";
 import { ISellerUser } from "@/types/SellerTypes/SellerInfo";
 import { IShippingCompany, IShippingCompanyCreate } from "@/types/SellerTypes/ShippingCompanies";
+import { getUser } from "./auth.actions";
 
 
 export async function getAllCompany(page: string = "0", size: string = "20") {
@@ -78,11 +79,11 @@ export async function createNewTheme(formData: FormData) {
   }
 }
 
-export async function getAllMediaBySellerId(sellerId: string, page: number = 0, size: number = 50) {
-  console.log("sellerId", sellerId)
+export async function getAllMediaBySellerId(page: number = 0, size: number = 50) {
+  const user = await getUser();
   try {
     const { data } = await axiosInstance.get(
-      `/seller/sellerGallery?companyId=${sellerId}&page=${page}&size=${size}`,
+      `/seller/sellerGallery?companyId=${user?.sellerId}&page=${page}&size=${size}`,
     );
 
     return { success: true, message: null, data: data };

@@ -37,7 +37,6 @@ const ImageLibrary = ({
   watch,
   handleDeleteImages,
 }: IProps) => {
-  
   const [showMediaLibrary, setShowMediaLibrary] = useState(false);
   const variantImages = images[variationIndex] || [];
 
@@ -114,27 +113,24 @@ const ImageLibrary = ({
             <CardContent className="p-4">
               <div className="border-2 border-dashed border-gray-200 rounded-lg p-3">
                 <div className="text-center">
-                  {!!watch("companyId").length && (
-                    <Dialog
-                      open={showMediaLibrary}
-                      onOpenChange={setShowMediaLibrary}
-                    >
-                      <DialogTrigger asChild>
-                        <div>
-                          <Upload className="mx-auto h-6 w-6 text-gray-400 mb-1" />
-                          <Label className="cursor-pointer text-xs font-medium text-blue-600 hover:text-blue-500">
-                            Galeriden seç
-                          </Label>
-                        </div>
-                      </DialogTrigger>
+                  <Dialog
+                    open={showMediaLibrary}
+                    onOpenChange={setShowMediaLibrary}
+                  >
+                    <DialogTrigger asChild>
+                      <div>
+                        <Upload className="mx-auto h-6 w-6 text-gray-400 mb-1" />
+                        <Label className="cursor-pointer text-xs font-medium text-blue-600 hover:text-blue-500">
+                          Galeriden seç
+                        </Label>
+                      </div>
+                    </DialogTrigger>
 
-                      <MediaGallery
-                        showMediaLibrary={showMediaLibrary}
-                        sellerId={watch("companyId")}
-                        variationIndex={variationIndex}
-                      />
-                    </Dialog>
-                  )}
+                    <MediaGallery
+                      showMediaLibrary={showMediaLibrary}
+                      variationIndex={variationIndex}
+                    />
+                  </Dialog>
 
                   <p className="text-xs text-gray-500 mt-1">
                     PNG, JPG, GIF up to 10MB each

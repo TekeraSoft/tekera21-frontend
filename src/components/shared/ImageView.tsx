@@ -1,3 +1,4 @@
+import { makeCdnUrl } from "@/lib/makeCdnUrl";
 import Image from "next/image";
 import React from "react";
 
@@ -9,9 +10,7 @@ const ImageView = ({
   className: string;
 }) => {
   const { url, name } = imageInfo;
-  const imageUrl =
-    process.env.NEXT_PUBLIC_IMAGE_BASE_URL +
-    (url.startsWith("/") ? url : `/${url}`);
+  const imageUrl = makeCdnUrl(url);
 
   return (
     <Image

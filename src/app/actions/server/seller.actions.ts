@@ -2,6 +2,7 @@
 
 import axiosInstance from "@/request/axiosServer";
 import { IPage } from "@/types/Collection";
+import { IOrderData, IOrderResponse } from "@/types/OrderTypes";
 import { INewSellerRegisterData, ISellerInfo, TVerification } from "@/types/SellerTypes/SellerInfo";
 import { revalidatePath } from "next/cache";
 
@@ -35,7 +36,7 @@ export async function sellerRegister(formData: FormData) {
     }
 }
 
-export async function getSellerByUserId() {
+export async function getSellerByUserId(id?: string) {
 
     try {
         const { data } = await axiosInstance.get(
@@ -44,7 +45,19 @@ export async function getSellerByUserId() {
 
         return { success: true, message: data.message, data: data as ISellerInfo };
     } catch (error: any) {
-        return { success: false, message: error.message || "Failed to get products" };
+        return { success: false, message: error.message || "Failed to get products", data: undefined };
+    }
+}
+export async function getSellerOrders(): Promise<IOrderResponse> {
+
+    try {
+        const { data } = await axiosInstance.get(
+            `/seller/getSellerOrders`
+        );
+
+        return { success: true, message: data.message, data: data };
+    } catch (error: any) {
+        return { success: false, message: error.message || "Failed to get products", data: undefined };
     }
 }
 

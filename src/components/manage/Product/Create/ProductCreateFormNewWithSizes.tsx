@@ -38,7 +38,6 @@ export type ProductFormData = {
   slug: string;
   code: string;
   brandName: string;
-  companyId: string;
   description: string;
   currencyType: string;
   categoryId: string;
@@ -84,7 +83,6 @@ export default function ProductCreateFormNewWithSize({
       productType: "PHYSICAL",
       tags: [{ value: "" }],
       categoryId: "",
-      companyId: "",
       subCategories: [],
       attributes: [{ key: "", value: "" }],
       variants: [
@@ -141,7 +139,6 @@ export default function ProductCreateFormNewWithSize({
     const formattedData = {
       name: data.name,
       code: data.code,
-      companyId: data.companyId,
       brandName: data.brandName,
       description: data.description,
       categoryId: data.categoryId,
@@ -224,21 +221,7 @@ export default function ProductCreateFormNewWithSize({
                     </p>
                   )}
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="slug">Company Id *</Label>
-                  <Input
-                    id="companyId"
-                    {...register("companyId", {
-                      required: "Company Id is required",
-                    })}
-                    placeholder="dfc9a257-a4bc-4bc3-89ee-8727a129efd2"
-                  />
-                  {errors.slug && (
-                    <p className="text-sm text-red-500">
-                      {errors.companyId?.message}
-                    </p>
-                  )}
-                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="code">Product Code *</Label>
                   <Input
