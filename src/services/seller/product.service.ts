@@ -7,16 +7,16 @@ export const getSellerProducts = async (
     sortBy: string = ""
 ) => {
     const response = await axiosInstance.get(
-        `/seller/sellerProducts?page=${page}&size=${size}`
+        `/seller/getSellerProducts?page=${page}&size=${size}`
     );
     return response.data;
 };
 
 export async function getProductById(id: string) {
-    console.log("id geldi")
+
     try {
         const { data } = await axiosInstance.get(
-            `/seller/getProductById?productId=${id}`
+            `/seller/getProductBySellerCheck?productId=${id}`
         );
 
         return { success: true, message: data.message, data: data };

@@ -32,6 +32,7 @@ import CurrencyAndProductType from "../Shared/MainFields/CurrencyAndProductType"
 import ThemeSelect from "../Shared/MainFields/ThemeSelect";
 import axios from "axios";
 import { updateProduct } from "@/app/actions/server/product.actions";
+import TopBar from "../../TopBar";
 
 export default function ProductUpdateForm({
   categories,
@@ -150,7 +151,7 @@ export default function ProductUpdateForm({
         (attr) => attr.key && attr.value
       ),
       deleteImages: deleteImages,
-      deletedVariants: deletedVariants,
+      deletedVariants: [...new Set(deletedVariants)],
     };
 
     console.log("formatted", formattedData);
@@ -305,128 +306,132 @@ export default function ProductUpdateForm({
   console.log("product", product);
 
   return (
-    <div className="mx-auto p-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Ürün düzenle</CardTitle>
-          <CardDescription>
-            Ürününüze ait aşağıdaki bilgileri güncelleyebilirsiniz
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-            {/* Basic Information */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Genel Bilgiler</h3>
-              <FormProvider {...methods}>
-                <GeneralInformation />
-              </FormProvider>
+    <>
+      <TopBar><></></TopBar>
+      <div className="mx-auto p-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Ürün düzenle</CardTitle>
+            <CardDescription>
+              Ürününüze ait aşağıdaki bilgileri güncelleyebilirsiniz
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+              {/* Basic Information */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Genel Bilgiler</h3>
+                <FormProvider {...methods}>
+                  <GeneralInformation />
+                </FormProvider>
 
-              <div className="space-y-2">
-                <Label htmlFor="description">Açıklama *</Label>
-                <Controller
-                  control={control}
-                  name="description"
-                  rules={{ required: "Ürün açıklaması gereklidir." }}
-                  render={({ field }) => (
-                    <MarkdownEditor
-                      defaultValue={product.description}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-
-                {errors.description && (
-                  <p className="text-sm text-red-500">
-                    {errors.description.message}
-                  </p>
-                )}
-              </div>
-
-              <FormProvider {...methods}>
-                <CurrencyAndProductType />
-              </FormProvider>
-            </div>
-
-            <Separator />
-
-            <FormProvider {...methods}>
-              <CategorySelect categories={categories} />
-              <SubCategoriesSelect
-                name="subCategories"
-                label="Subcategories"
-                subCategories={
-                  categories.find((cat) => cat.id === watch("categoryId"))
-                    ?.subCategories || []
-                }
-              />
-            </FormProvider>
-
-            {videoUrlState && !deleteImages.includes(videoUrlState) ? (
-              <div className="space-y-2">
-                <Label>Ürün Videosu</Label>
-                <div className="flex flex-col mt-2">
-                  Yeni video yüklemek için lütfen silin
-                  <Button
-                    type="button"
-                    variant={"warning"}
-                    className="w-max mt-1"
-                    onClick={handleDeleteVideo}
-                  >
-                    Silmek için tıklayın.
-                  </Button>
-                </div>
-                <video
-                  src={
-                    process.env.NEXT_PUBLIC_IMAGE_BASE_URL + "/" + videoUrlState
-                  }
-                  controls
-                  className="w-full h-96 rounded-lg"
-                />
-              </div>
-            ) : (
-              <>
-                <div className="p-4 space-y-4">
-                  <button
-                    onClick={handleUploadClick}
-                    type="button"
-                    className="bg-blue-600 text-white px-4 py-2 rounded"
-                    disabled={uploading}
-                  >
-                    {uploading
-                      ? "Yükleniyor..."
-                      : "Video Yükle (Presigned URL)"}
-                  </button>
-
-                  <input
-                    type="file"
-                    accept=".mp4, .mov"
-                    style={{ display: "none" }}
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
+                <div className="space-y-2">
+                  <Label htmlFor="description">Açıklama *</Label>
+                  <Controller
+                    control={control}
+                    name="description"
+                    rules={{ required: "Ürün açıklaması gereklidir." }}
+                    render={({ field }) => (
+                      <MarkdownEditor
+                        defaultValue={product.description}
+                        onChange={field.onChange}
+                      />
+                    )}
                   />
 
-                  {uploading && (
-                    <div className="w-full bg-gray-200 h-4 rounded">
-                      <div
-                        className="bg-blue-500 h-3 rounded"
-                        style={{ width: `${uploadProgress}%` }}
-                      ></div>
-                    </div>
-                  )}
-
-                  {videoUrlState && (
-                    <video controls className="mt-4 max-w-full">
-                      <source
-                        src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${videoUrlState}`}
-                        type="video/mp4"
-                      />
-                      Tarayıcınız video etiketini desteklemiyor.
-                    </video>
+                  {errors.description && (
+                    <p className="text-sm text-red-500">
+                      {errors.description.message}
+                    </p>
                   )}
                 </div>
 
-                {/*
+                <FormProvider {...methods}>
+                  <CurrencyAndProductType />
+                </FormProvider>
+              </div>
+
+              <Separator />
+
+              <FormProvider {...methods}>
+                <CategorySelect categories={categories} />
+                <SubCategoriesSelect
+                  name="subCategories"
+                  label="Subcategories"
+                  subCategories={
+                    categories.find((cat) => cat.id === watch("categoryId"))
+                      ?.subCategories || []
+                  }
+                />
+              </FormProvider>
+
+              {videoUrlState && !deleteImages.includes(videoUrlState) ? (
+                <div className="space-y-2">
+                  <Label>Ürün Videosu</Label>
+                  <div className="flex flex-col mt-2">
+                    Yeni video yüklemek için lütfen silin
+                    <Button
+                      type="button"
+                      variant={"warning"}
+                      className="w-max mt-1"
+                      onClick={handleDeleteVideo}
+                    >
+                      Silmek için tıklayın.
+                    </Button>
+                  </div>
+                  <video
+                    src={
+                      process.env.NEXT_PUBLIC_IMAGE_BASE_URL +
+                      "/" +
+                      videoUrlState
+                    }
+                    controls
+                    className="w-full h-96 rounded-lg"
+                  />
+                </div>
+              ) : (
+                <>
+                  <div className="p-4 space-y-4">
+                    <button
+                      onClick={handleUploadClick}
+                      type="button"
+                      className="bg-blue-600 text-white px-4 py-2 rounded"
+                      disabled={uploading}
+                    >
+                      {uploading
+                        ? "Yükleniyor..."
+                        : "Video Yükle (Presigned URL)"}
+                    </button>
+
+                    <input
+                      type="file"
+                      accept=".mp4, .mov"
+                      style={{ display: "none" }}
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                    />
+
+                    {uploading && (
+                      <div className="w-full bg-gray-200 h-4 rounded">
+                        <div
+                          className="bg-blue-500 h-3 rounded"
+                          style={{ width: `${uploadProgress}%` }}
+                        ></div>
+                      </div>
+                    )}
+
+                    {videoUrlState && (
+                      <video controls className="mt-4 max-w-full">
+                        <source
+                          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${videoUrlState}`}
+                          type="video/mp4"
+                        />
+                        Tarayıcınız video etiketini desteklemiyor.
+                      </video>
+                    )}
+                  </div>
+
+                  {/*
                   <FileUploadEnhanced
                       name="video"
                       accept=".mp4,video/mp4"
@@ -437,49 +442,50 @@ export default function ProductUpdateForm({
                       file={productVideo}
                   />
                   */}
-              </>
-            )}
+                </>
+              )}
 
-            <Separator />
+              <Separator />
 
-            {/* Tags */}
-            <FormProvider {...methods}>
-              <ThemeSelect />
-            </FormProvider>
+              {/* Tags */}
+              <FormProvider {...methods}>
+                <ThemeSelect />
+              </FormProvider>
 
-            <Separator />
+              <Separator />
 
-            <FormProvider {...methods}>
-              <GenderSelect />
-            </FormProvider>
+              <FormProvider {...methods}>
+                <GenderSelect />
+              </FormProvider>
 
-            <Separator />
+              <Separator />
 
-            {/* Attributes */}
+              {/* Attributes */}
 
-            <FormProvider {...methods}>
-              <ProductAttributes />
-            </FormProvider>
+              <FormProvider {...methods}>
+                <ProductAttributes />
+              </FormProvider>
 
-            <Separator />
+              <Separator />
 
-            {/* Variations */}
-            <FormProvider {...methods}>
-              <ProductVariantForm
-                setDeletedVariants={setDeletedVariants}
-                stockAttributeImages={stockAttributeImages}
-                setStockAttributeImages={setStockAttributeImages}
-                handleDeleteImages={handleDeleteImages}
-              />
-            </FormProvider>
-            <div className="flex gap-4">
-              <Button disabled={loading} type="submit" className="flex-1">
-                Gönder
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+              {/* Variations */}
+              <FormProvider {...methods}>
+                <ProductVariantForm
+                  setDeletedVariants={setDeletedVariants}
+                  stockAttributeImages={stockAttributeImages}
+                  setStockAttributeImages={setStockAttributeImages}
+                  handleDeleteImages={handleDeleteImages}
+                />
+              </FormProvider>
+              <div className="flex gap-4">
+                <Button disabled={loading} type="submit" className="flex-1">
+                  Gönder
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    </>
   );
 }

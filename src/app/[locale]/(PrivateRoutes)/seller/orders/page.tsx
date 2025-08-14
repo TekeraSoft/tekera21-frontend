@@ -6,6 +6,7 @@ import TopBar from "@/components/manage/TopBar";
 import { IOrderResponse } from "@/types/OrderTypes";
 import { useQuery } from "@tanstack/react-query";
 import { getSellerOrders } from "@/app/actions/server/seller.actions";
+import ErrorMessageComponent from "@/components/shared/ErrorMessageComponent";
 
 export default function OrdersPage() {
   const orders = useQuery({
@@ -14,14 +15,19 @@ export default function OrdersPage() {
       return await getSellerOrders();
     },
   });
+
   return (
     <>
       <TopBar>
         <></>
       </TopBar>
       <AdminInnerLayout>
-        {orders.isSuccess && orders.data.data && (
+        {orders.isSuccess && orders.data.data ? (
           <OrderTable orderData={orders.data.data} />
+        ) : (
+          <ErrorMessageComponent
+            message={orders.error?.message || "Siparişler getirilemedi."}
+          />
         )}
       </AdminInnerLayout>
     </>

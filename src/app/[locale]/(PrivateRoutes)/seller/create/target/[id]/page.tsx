@@ -2,8 +2,10 @@ import React from "react";
 import { IProduct } from "@/types/product";
 import TargetCreate from "@/components/manage/TargetPicture/Create";
 import TargetDelete from "@/components/manage/TargetPicture/Delete";
-import { getSingleProductById } from "@/app/actions/server/product.actions";
 import { getTargetPictureByProductById } from "@/app/actions/server/targetPicture.actions";
+import { getProductById } from "@/services/seller/product.service";
+import TopBar from "@/components/manage/TopBar";
+import ErrorMessageComponent from "@/components/shared/ErrorMessageComponent";
 
 const CreateTargetPage = async ({
   params,
@@ -12,16 +14,16 @@ const CreateTargetPage = async ({
 }) => {
   const prodId = (await params).id;
 
-  const { data, success } = await getSingleProductById(prodId);
+  const { data, success, message } = await getProductById(prodId);
 
   if (!success || !data.id) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-4">Ürünler yüklenemedi.</h1>
-        <p className="text-muted-foreground">
-          There was an error loading the products. Please try again later.
-        </p>
-      </div>
+      <>
+        <TopBar>
+          <></>
+        </TopBar>
+        <ErrorMessageComponent message={message || "Product cant get"} />
+      </>
     );
   }
 
@@ -29,15 +31,20 @@ const CreateTargetPage = async ({
 
   if (targetData) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-4">
-          Zaten bu ürün için bir target picture oluşturulmuş.
-        </h1>
-        <p className="text-muted-foreground">
-          Lütfen önce ürünün target picture alanını temizleyin.
-        </p>
-        <TargetDelete id={targetData.id} />
-      </div>
+      <>
+        <TopBar>
+          <></>
+        </TopBar>
+        <div className="container mx-auto px-4 py-8">
+          <h1 className="text-3xl font-bold mb-4">
+            Zaten bu ürün için bir target picture oluşturulmuş.
+          </h1>
+          <p className="text-muted-foreground">
+            Lütfen önce ürünün target picture alanını temizleyin.
+          </p>
+          <TargetDelete id={targetData.id} />
+        </div>
+      </>
     );
   }
   const product: IProduct = (data as IProduct) || ({} as any[]);

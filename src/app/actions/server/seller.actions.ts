@@ -2,7 +2,7 @@
 
 import axiosInstance from "@/request/axiosServer";
 import { IPage } from "@/types/Collection";
-import { IOrderData, IOrderResponse } from "@/types/OrderTypes";
+import { IOrderResponse } from "@/types/OrderTypes";
 import { INewSellerRegisterData, ISellerInfo, TVerification } from "@/types/SellerTypes/SellerInfo";
 import { revalidatePath } from "next/cache";
 
@@ -55,9 +55,10 @@ export async function getSellerOrders(): Promise<IOrderResponse> {
             `/seller/getSellerOrders`
         );
 
+        console.log("data get seller orders", data)
         return { success: true, message: data.message, data: data };
     } catch (error: any) {
-        return { success: false, message: error.message || "Failed to get products", data: undefined };
+        return { success: false, message: error.message || "Failed to get seller orders", data: undefined };
     }
 }
 

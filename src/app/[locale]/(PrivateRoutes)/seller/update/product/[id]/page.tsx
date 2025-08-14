@@ -1,5 +1,7 @@
 import { getCategoriesForSeller } from "@/app/actions/server/category.actions";
 import ProductUpdateForm from "@/components/manage/Product/Update/ProductUpdateForm";
+import TopBar from "@/components/manage/TopBar";
+import ErrorMessageComponent from "@/components/shared/ErrorMessageComponent";
 import { getProductById } from "@/services/seller/product.service";
 import { ICategory } from "@/types/AdminTypes/category";
 import { IGetByIdProduct } from "@/types/SingleProduct";
@@ -12,10 +14,17 @@ const UpdateProductPage = async ({
 }) => {
   const prodId = (await params).id;
 
-  const { success, data } = await getProductById(prodId);
+  const { success, data, message } = await getProductById(prodId);
 
   if (!success) {
-    return <div>Product cant get</div>;
+    return (
+      <>
+        <TopBar>
+          <></>
+        </TopBar>
+        <ErrorMessageComponent message={message || "Product cant get"} />
+      </>
+    );
   }
   const { data: categoryData, success: succesCategories } =
     await getCategoriesForSeller();

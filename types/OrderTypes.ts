@@ -3,8 +3,15 @@ export interface IOrderResponse {
     message: string;
     data: IOrderData | undefined
 }
+
+export interface IOrderNew {
+    orderNo: string;
+    shippingPrice: number;
+    totalPrice: number;
+    sellerOrders: IOrder[];
+};
 export interface IOrderData {
-    content: Order[];
+    content: IOrderNew[];
     page: {
         size: number;
         number: number;
@@ -13,7 +20,7 @@ export interface IOrderData {
     };
 }
 
-interface Order {
+interface IOrder {
     id: string;
     buyer: {
         name: string;
@@ -21,13 +28,13 @@ interface Order {
         gsmNumber: string;
     };
     status: string;
-    basketItems: BasketItem[];
-    shippingAddress: Address;
-    billingAddress: Address;
+    basketItems: IBasketItem[];
+    shippingAddress: IAddress;
+    billingAddress: IAddress;
     totalPrice: number;
 }
 
-interface BasketItem {
+interface IBasketItem {
     id: string;
     name: string;
     slug: string;
@@ -39,7 +46,7 @@ interface BasketItem {
     sku: string;
     barcode: string;
     image: string;
-    attributes: Attribute[];
+    attributes: IAttribute[];
     shippingPrice: number;
     shippingCompanyName: string;
     productId: string;
@@ -47,12 +54,12 @@ interface BasketItem {
     attributeId: string;
 }
 
-interface Attribute {
+interface IAttribute {
     key: string;
     value: string;
 }
 
-interface Address {
+interface IAddress {
     city: string;
     street: string;
     postalCode: string;

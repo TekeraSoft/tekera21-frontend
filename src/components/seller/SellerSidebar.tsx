@@ -20,7 +20,7 @@ export function SellerSidebar() {
 
   const routes = [
     {
-      name: "Dashboard",
+      name: "Genel Bakış",
       path: "/seller/dashboard",
       icon: Home,
     },
