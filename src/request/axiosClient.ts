@@ -30,6 +30,10 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
         return response
       }, // Başarılı cevapları direkt döndür
       async (error) => {
+
+        if (error.code === "ERR_CANCELED" || error.name === "CanceledError") {
+          return Promise.reject(error);
+        }
         if (error.response) {
           // 401 Unauthorized durumunda logout yap
 
