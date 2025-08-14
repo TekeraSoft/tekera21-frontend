@@ -28,7 +28,9 @@ interface IProps {
       [key: string]: File[];
     }>
   >;
-  setDeletedVariants: React.Dispatch<React.SetStateAction<string[]>>;
+  setDeletedVariants:
+    | React.Dispatch<React.SetStateAction<string[]>>
+    | undefined;
   handleDeleteImages:
     | ((url: string, variationIndex: number) => void)
     | undefined;
@@ -97,11 +99,13 @@ export default function ProductVariantForm({
   };
   const handleUpdateVariants = () => {
     // idsi olan variantları state'e ekle.
-    watchedVariants.forEach((variant) => {
-      if (variant.id && typeof variant.id === "string" && variant.id.length) {
-        setDeletedVariants((prev) => [...prev, variant.id as string]);
-      }
-    });
+    if (setDeletedVariants) {
+      watchedVariants.forEach((variant) => {
+        if (variant.id && typeof variant.id === "string" && variant.id.length) {
+          setDeletedVariants((prev) => [...prev, variant.id as string]);
+        }
+      });
+    }
 
     // 1. Silinmesi gereken indeksleri belirle
     const deletedIndices = watchedVariants

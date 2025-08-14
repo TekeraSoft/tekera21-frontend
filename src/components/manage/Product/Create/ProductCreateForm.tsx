@@ -189,14 +189,7 @@ export default function ProductCreateForm({
   };
 
   const stepFields: Record<number, (keyof TProductFormData)[]> = {
-    1: [
-      "name",
-      "brandName",
-      "categoryId",
-      "subCategories",
-      "code",
-      "tags",
-    ],
+    1: ["name", "brandName", "categoryId", "subCategories", "code", "tags"],
     2: ["description", "currencyType", "productType"],
     3: ["tags", "attributeDetails"],
     4: ["variants"],
@@ -317,6 +310,7 @@ export default function ProductCreateForm({
                     stockAttributeImages={stockAttributeImages}
                     setStockAttributeImages={setStockAttributeImages}
                     handleDeleteImages={undefined}
+                    setDeletedVariants={undefined}
                   />
                 </FormProvider>
                 <div className="flex gap-4">
