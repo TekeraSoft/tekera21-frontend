@@ -33,6 +33,7 @@ import ThemeSelect from "../Shared/MainFields/ThemeSelect";
 import axios from "axios";
 import { updateProduct } from "@/app/actions/server/product.actions";
 import TopBar from "../../TopBar";
+import axiosClient from "@/request/axiosClient";
 
 export default function ProductUpdateForm({
   categories,
@@ -258,8 +259,8 @@ export default function ProductUpdateForm({
 
     try {
       // Backend'den presigned URL al (örnek endpoint)
-      const { data: presignedUrl } = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/company/getPresignedUrl`,
+      const { data: presignedUrl } = await axiosClient.get(
+        `/seller/getPresignedUrl`,
         {
           params: {
             objectName: crypto.randomUUID() + "." + file.name.split(".").pop(),
@@ -268,7 +269,7 @@ export default function ProductUpdateForm({
       );
 
       //PUT isteği ile videoyu direkt MinIO’ya yükle
-      await axios.put(presignedUrl, file, {
+      await axiosClient.put(presignedUrl, file, {
         headers: {
           "Content-Type": file.type,
         },
@@ -307,7 +308,9 @@ export default function ProductUpdateForm({
 
   return (
     <>
-      <TopBar><></></TopBar>
+      <TopBar>
+        <></>
+      </TopBar>
       <div className="mx-auto p-6">
         <Card>
           <CardHeader>
