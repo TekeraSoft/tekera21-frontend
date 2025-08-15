@@ -269,17 +269,25 @@ export default function ProductUpdateForm({
       );
 
       //PUT isteği ile videoyu direkt MinIO’ya yükle
-      await axiosClient.put(presignedUrl, file, {
-        headers: {
-          "Content-Type": file.type,
-        },
-        onUploadProgress: (progressEvent) => {
-          const percent = Math.round(
-            (progressEvent.loaded * 100) / (progressEvent.total || 1)
+      try {
+        const response = await fetch(presignedUrl, {
+          method: "PUT",
+          body: file, // dosya içeriği
+          headers: {
+            "Content-Type": file.type, // backend ile imzalanan content-type ile eşleşmeli
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            `Yükleme hatası: ${response.status} ${response.statusText}`
           );
-          setUploadProgress(percent);
-        },
-      });
+        }
+
+        console.log("Dosya başarıyla yüklendi!");
+      } catch (error) {
+        console.error("Yükleme hatası:", error);
+      }
 
       // MinIO'daki URL'yi kullanıcıya göstermek için
       const urlWithoutQueryParams = new URL(presignedUrl).pathname.replace(
