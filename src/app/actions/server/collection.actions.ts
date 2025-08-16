@@ -58,7 +58,7 @@ export async function updateCollection(formData: FormData) {
     }
 }
 
-export async function getAllCollection(page: string = "0", size: string = "8"): Promise<{
+export async function getFashionCollectionBySellerId(page: string = "0", size: string = "8", sellerId: string): Promise<{
     success: true;
     message: null;
     data: IFashionCollectionData;
@@ -67,7 +67,7 @@ export async function getAllCollection(page: string = "0", size: string = "8"): 
     message: any;
 }> {
     try {
-        const { data } = await axiosInstance.get(`/super-admin/getAllFashionCollection?page=${page}&size=${size}`)
+        const { data } = await axiosInstance.get(`/fashion-collection/getFashionCollectionsByCompany?companyId=${sellerId}&page=${page}&size=${size}`)
         return { success: true, message: null, data: data as IFashionCollectionData };
 
     } catch (error: any) {

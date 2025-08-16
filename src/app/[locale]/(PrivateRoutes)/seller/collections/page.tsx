@@ -1,4 +1,5 @@
-import { getAllCollection } from "@/app/actions/server/collection.actions";
+import { getUser } from "@/app/actions/server/auth.actions";
+import { getFashionCollectionBySellerId } from "@/app/actions/server/collection.actions";
 import CollectionList from "@/components/manage/FashionCollection/CollectionList";
 import TopBar from "@/components/manage/TopBar";
 import React from "react";
@@ -9,13 +10,30 @@ interface IProps {
 
 const FashionCollectionsPage = async ({ searchParams }: IProps) => {
   const search = await searchParams;
+  const user = await getUser();
   const pageParam = Array.isArray(search.page)
     ? search.page[0] ?? "0"
     : search.page ?? "0";
   const sizeParam = Array.isArray(search.pagesize)
     ? search.pagesize[0] ?? "8"
     : search.pagesize ?? "8";
-  const result = await getAllCollection(pageParam, sizeParam);
+
+  if (!user?.sellerId) {
+    return (
+      <div>
+        <TopBar>
+          <></>
+        </TopBar>
+        Unauthorized access
+      </div>
+    );
+  }
+
+  const result = await getFashionCollectionBySellerId(
+    pageParam,
+    sizeParam,
+    user.sellerId
+  );
 
   if (!result.success) {
     console.log("message", result.message);

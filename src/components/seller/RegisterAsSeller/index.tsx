@@ -24,6 +24,8 @@ import {
 import { getUser } from "@/app/actions/server/auth.actions";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useAuthContext } from "@/context/AuthContext";
 
 export interface ISellerFormData {
   name: string;
@@ -70,7 +72,7 @@ const SellerFormSchema = z.object({
   supportPhoneNumber: z.string().optional(),
   taxNumber: z.string().min(10, "Vergi numarası en az 10 haneli olmalı"),
   taxOffice: z.string().min(1, "Vergi dairesi zorunlu"),
-  merisNumber: z.string().optional(),
+  merisNumber: z.string().min(16, "Mersis numarası en az 16 haneli olmalı"),
   registrationDate: z.any().optional(),
   contactPersonNumber: z.string().optional(),
   contactPersonTitle: z.string().optional(),
@@ -106,6 +108,7 @@ export default function SellerRegistrationForm({
   sellerInfo: ISellerInfo | undefined;
   shippingCompanies: IShippingCompany[];
 }) {
+  const { userInfo } = useAuthContext();
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("company");
   const [legalDocuments, setLegalDocuments] = useState<{
@@ -175,7 +178,7 @@ export default function SellerRegistrationForm({
         const item = { value: category.id };
         return item;
       }),
-      email: sellerInfo?.email || "",
+      email: userInfo?.email || "",
       gsmNumber: sellerInfo?.gsmNumber || "",
       logo: sellerInfo?.logo || "",
       alternativePhoneNumber: sellerInfo?.alternativePhoneNumber || "",
@@ -327,7 +330,6 @@ export default function SellerRegistrationForm({
     }
 
     if (sellerInfo?.id) {
-      console.log("id var", formattedData);
       const { success, message } = await updateSeller(formData);
       if (success) {
         const sellerForm = methods.getValues();
@@ -395,7 +397,7 @@ export default function SellerRegistrationForm({
     }
   };
 
-  console.log("sellerınfo", sellerInfo);
+  console.log("seller", sellerInfo);
 
   return (
     <div className="min-h-screen bg-gray-50 lg:p-4">
@@ -454,17 +456,41 @@ export default function SellerRegistrationForm({
                 </Tabs>
 
                 {/* Action Buttons */}
-                <div className="flex justify-end gap-3 mt-8 pt-6 border-t">
-                  <Button variant="outline" type="button">
-                    İptal
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="bg-blue-600 hover:bg-blue-700"
-                  >
-                    <Save className="w-4 h-4 mr-2" />
-                    Değişiklikleri Kaydet
-                  </Button>
+
+                <div className="mt-4">
+                  {!!Object.keys(methods.formState.errors).length && (
+                    <Alert>
+                      <AlertTitle className="text-red-800">Hata</AlertTitle>
+                      <AlertDescription className="text-red-500">
+                        {Object.values(methods.formState.errors)
+                          .map((error) => error.message)
+                          .join(", ")}
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                  {Object.keys(legalDocuments).length === 0 &&
+                    !sellerInfo?.sellerDocument.length && (
+                      <p className="text-yellow-700 ml-auto">
+                        Henüz hiçbir belge yüklenmedi.
+                      </p>
+                    )}
+                  {!logo && !sellerInfo?.logo.length && (
+                    <p className="text-yellow-700 ml-auto">
+                      Logo henüz yüklenmedi.
+                    </p>
+                  )}
+                  <div className="flex justify-end gap-3 border-t mt-4 pt-2">
+                    <Button variant="outline" type="button">
+                      İptal
+                    </Button>
+                    <Button
+                      type="submit"
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
+                      <Save className="w-4 h-4 mr-2" />
+                      Değişiklikleri Kaydet
+                    </Button>
+                  </div>
                 </div>
               </form>
             </FormProvider>

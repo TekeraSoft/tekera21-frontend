@@ -32,11 +32,7 @@ export function SideBar() {
       path: "/manage/products",
       icon: Package,
     },
-    user?.roles.includes("SUPER_ADMIN") && {
-      name: "Ürün Oluştur",
-      path: "/manage/create/product",
-      icon: LucidePercentDiamond,
-    },
+
     user?.roles.includes("SUPER_ADMIN") && {
       name: "Siparişler",
       path: "/manage/orders",
@@ -62,16 +58,6 @@ export function SideBar() {
       name: "Analytics",
       path: "/manage/analytics",
       icon: BarChart3,
-    },
-    user?.roles.includes("SUPER_ADMIN") && {
-      name: "Koleksiyonlar",
-      path: "/manage/collections",
-      icon: LucideAirVent,
-    },
-    user?.roles.includes("SUPER_ADMIN") && {
-      name: "Koleksiyon Oluştur",
-      path: "/manage/create/collection",
-      icon: LucideAirVent,
     },
 
     user?.roles.includes("SUPER_ADMIN") && {

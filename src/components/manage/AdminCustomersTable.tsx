@@ -7,6 +7,7 @@ import {
   Mail,
   UserCog,
   Trash2,
+  RotateCcwKeyIcon,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -36,9 +37,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Link } from "@/i18n/navigation";
-import { customers } from "@/data/users";
 
-export function AdminCustomersTable() {
+import { IPageableData } from "@/types/PageableData";
+import { IUser } from "@/types/UserTypes/user";
+
+export function AdminCustomersTable({
+  userData,
+}: {
+  userData: IPageableData<IUser>;
+}) {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Active":
@@ -80,46 +87,49 @@ export function AdminCustomersTable() {
                 <ArrowUpDown className="ml-2 h-4 w-4" />
               </div>
             </TableHead>
-            <TableHead>Location</TableHead>
-            <TableHead>Orders</TableHead>
-            <TableHead>Spent</TableHead>
-            <TableHead>Last Order</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead>ID</TableHead>
+            <TableHead>Cinsiyet</TableHead>
+            <TableHead>Son giriş tarihi</TableHead>
+            <TableHead>Rolü</TableHead>
+            <TableHead className="text-right">İşlemler</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {customers.map((customer) => (
+          {userData.content.map((customer) => (
             <TableRow key={customer.id}>
               <TableCell>
                 <div className="flex items-center gap-3">
                   <Avatar className="h-9 w-9">
                     <AvatarImage
-                      src={customer.avatar || "/placeholder.svg"}
-                      alt={customer.name}
+                      src={customer.email || "/placeholder.svg"}
+                      alt={customer.firstName}
                     />
-                    <AvatarFallback>{customer.name.charAt(0)}</AvatarFallback>
+                    <AvatarFallback>
+                      {customer.firstName.charAt(0)}
+                    </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-medium">{customer.name}</p>
+                    <p className="font-medium">
+                      {customer.firstName} {customer.lastName}
+                    </p>
                     <p className="text-sm text-muted-foreground">
                       {customer.email}
                     </p>
                   </div>
                 </div>
               </TableCell>
-              <TableCell>{customer.location}</TableCell>
-              <TableCell>{customer.orders}</TableCell>
-              <TableCell>{customer.spent}</TableCell>
-              <TableCell>{customer.lastOrder}</TableCell>
-              <TableCell>
+              <TableCell>{customer.id}</TableCell>
+              <TableCell>{customer.gender}</TableCell>
+              <TableCell>{customer.lastLoginDate}</TableCell>
+              <TableCell>{customer.roles.join(", ")}</TableCell>
+              {/* <TableCell>
                 <Badge
                   className={getStatusColor(customer.status)}
                   variant="outline"
                 >
                   {customer.status}
                 </Badge>
-              </TableCell>
+              </TableCell> */}
               <TableCell className="text-right">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -129,14 +139,14 @@ export function AdminCustomersTable() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuLabel>İşlemler</DropdownMenuLabel>
                     <DropdownMenuItem>
                       <Eye className="mr-2 h-4 w-4" />
-                      View details
+                      DetaylarınıGör
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Mail className="mr-2 h-4 w-4" />
-                      Send email
+                      <RotateCcwKeyIcon className="mr-2 h-4 w-4" />
+                      Rol Değiştir
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <Link
@@ -144,13 +154,13 @@ export function AdminCustomersTable() {
                         href={`/manage/customers/${customer.id}`}
                       >
                         <UserCog className="mr-2 h-4 w-4" />
-                        Edit customer
+                        Düzenle
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="text-red-600">
                       <Trash2 className="mr-2 h-4 w-4" />
-                      Delete customer
+                      Sil
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

@@ -45,7 +45,7 @@ export async function getSellerByUserId(id?: string) {
 
         return { success: true, message: data.message, data: data as ISellerInfo };
     } catch (error: any) {
-        return { success: false, message: error.message || "Failed to get products", data: undefined };
+        return { success: false, message: error.message || "Failed to get user", data: undefined };
     }
 }
 export async function getSellerOrders(): Promise<IOrderResponse> {
