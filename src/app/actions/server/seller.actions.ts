@@ -55,7 +55,6 @@ export async function getSellerOrders(): Promise<IOrderResponse> {
             `/seller/getSellerOrders`
         );
 
-        console.log("data get seller orders", data)
         return { success: true, message: data.message, data: data };
     } catch (error: any) {
         return { success: false, message: error.message || "Failed to get seller orders", data: undefined };

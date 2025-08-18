@@ -5,6 +5,7 @@ import { SellerSidebar } from "@/components/seller/SellerSidebar";
 import { redirect } from "next/navigation";
 import { TVerification } from "@/types/SellerTypes/SellerInfo";
 import { getSellerByUserId } from "@/app/actions/server/seller.actions";
+import NotificationProvider from "@/context/NotificationContext";
 
 export default async function SellerLayout({
   children,
@@ -28,13 +29,15 @@ export default async function SellerLayout({
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
-      <div className="flex">
-        <SidebarProvider>
-          <SellerSidebar />
-          <main className="w-full">{children}</main>
-        </SidebarProvider>
+    <NotificationProvider>
+      <div className="flex flex-col min-h-screen bg-gray-100">
+        <div className="flex">
+          <SidebarProvider>
+            <SellerSidebar />
+            <main className="w-full">{children}</main>
+          </SidebarProvider>
+        </div>
       </div>
-    </div>
+    </NotificationProvider>
   );
 }

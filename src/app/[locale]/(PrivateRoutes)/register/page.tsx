@@ -35,7 +35,7 @@ export default async function SellerRegistrationPage() {
   return (
     <SellerRegistrationForm
       categories={categories}
-      sellerInfo={sellerInfo}
+      sellerInfo={sellerInfo || undefined}
       shippingCompanies={shippingCompanies}
     />
   );
