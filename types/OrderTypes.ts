@@ -27,6 +27,8 @@ interface IOrder {
         surname: string;
         gsmNumber: string;
     };
+    createdAt: string;
+    updatedAt: string;
     status: string;
     basketItems: IBasketItem[];
     shippingAddress: IAddress;

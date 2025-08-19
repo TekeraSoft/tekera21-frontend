@@ -72,6 +72,8 @@ const formatDate = (dateString: string) => {
     year: "numeric",
     month: "short",
     day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 };
 
@@ -123,7 +125,7 @@ export default function OrderTable({ orderData }: { orderData: IOrderData }) {
   // const startIndex = (currentPage - 1) * itemsPerPage;
   // const endIndex = startIndex + itemsPerPage;
   // const currentOrders = filteredOrders.slice(startIndex, endIndex);
-  // console.log("orderdayta", orderData);
+  console.log("orderdayta", orderData);
 
   const totalPages = orderData.page.totalPages;
   return (
@@ -243,7 +245,8 @@ export default function OrderTable({ orderData }: { orderData: IOrderData }) {
                         </div>
                       </TableCell>
                       <TableCell>
-                        {formatDate(new Date().toISOString())}
+                        <p> Oluşturulma: {formatDate(order.createdAt)}</p>
+                        <p> Güncellenme: {formatDate(order.updatedAt)}</p>
                       </TableCell>
                       <TableCell>{order.basketItems.length}</TableCell>
                       <TableCell className="font-medium">

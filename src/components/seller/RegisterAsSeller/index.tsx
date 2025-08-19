@@ -220,55 +220,6 @@ export default function SellerRegistrationForm({
     }, // Senin yukarıdaki defaultValues
   });
 
-  // const methods2 = useForm<ISellerFormData>({
-  //   defaultValues: {
-  //     name: sellerInfo?.name || "",
-  //     categoryId: sellerInfo?.categories.map((category) => {
-  //       const item = { value: category.id };
-  //       return item;
-  //     }),
-  //     email: sellerInfo?.email || "",
-  //     gsmNumber: sellerInfo?.gsmNumber || "",
-  //     logo: sellerInfo?.logo || undefined,
-  //     alternativePhoneNumber: sellerInfo?.alternativePhoneNumber || "",
-  //     supportPhoneNumber: sellerInfo?.supportPhoneNumber || "",
-  //     taxNumber: sellerInfo?.taxNumber || "",
-  //     taxOffice: sellerInfo?.taxOffice || "",
-  //     merisNumber: sellerInfo?.merisNumber || "",
-  //     registrationDate: sellerInfo?.registrationDate || undefined,
-  //     contactPersonNumber: sellerInfo?.contactPersonNumber || "",
-  //     contactPersonTitle: sellerInfo?.contactPersonTitle || "",
-  //     shippingCompanies: sellerInfo?.shippingCompanies?.map(
-  //       (shippingCompany) => {
-  //         const item = { value: shippingCompany.id };
-  //         return item;
-  //       }
-  //     ),
-  //     address: sellerInfo?.address || [
-  //       {
-  //         city: "",
-  //         street: "",
-  //         postalCode: "",
-  //         buildNo: "",
-  //         doorNumber: "",
-  //         detailAddress: "",
-  //         country: "Turkey",
-  //       },
-  //     ],
-  //     bankAccount: sellerInfo?.bankAccounts || [
-  //       {
-  //         iban: "",
-  //         accountName: "",
-  //         bankName: "",
-  //         isActive: true,
-  //       },
-  //     ],
-  //     documents: sellerInfo?.sellerDocument
-  //       ? mergeDocuments(sellerInfo.sellerDocument)
-  //       : requiredDocuments,
-  //   },
-  // });
-
   const { toast } = useToast();
 
   const onSubmit = async (data: z.infer<typeof SellerFormSchema>) => {
@@ -387,8 +338,6 @@ export default function SellerRegistrationForm({
         setLoading(false);
       }
     }
-
-    // Here you would typically send the data to your API
   };
 
   const handleSetLogo = (e: React.ChangeEvent<HTMLInputElement>) => {
