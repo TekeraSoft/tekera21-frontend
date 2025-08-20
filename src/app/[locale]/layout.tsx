@@ -1,3 +1,20 @@
+// Define isSpace function globally for markdown-it
+declare global {
+  function isSpace(code: number): boolean;
+}
+
+// Define the isSpace function
+globalThis.isSpace = function (code: number): boolean {
+  return (
+    code === 0x20 ||
+    code === 0x09 ||
+    code === 0x0a ||
+    code === 0x0b ||
+    code === 0x0c ||
+    code === 0x0d
+  );
+};
+
 import type { Metadata } from "next";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
@@ -12,6 +29,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { ReactQueryProvider } from "@/providers/ReactQuery";
 import { getUser } from "../actions/server/auth.actions";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Tekera21 Yönetim Paneli",
@@ -61,6 +79,18 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
+      <head>
+        {/* Define isSpace function globally to fix markdown-it issues with Next.js + Turbopack */}
+        <Script id="markdown-it-fix" strategy="beforeInteractive">
+          {`
+            if (typeof window !== 'undefined' && typeof window.isSpace === 'undefined') {
+              window.isSpace = function(code) {
+                return code === 0x20 || code === 0x09 || code === 0x0A || code === 0x0B || code === 0x0C || code === 0x0D;
+              };
+            }
+          `}
+        </Script>
+      </head>
       <body className={` antialiased`}>
         <StoreProvider>
           <AuthProvider user={user}>
