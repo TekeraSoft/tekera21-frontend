@@ -22,7 +22,9 @@ export default function OrdersPage() {
         <></>
       </TopBar>
       <AdminInnerLayout>
-        {orders.isSuccess && orders.data.data ? (
+        {orders.isLoading ? (
+          <div>Loading...</div>
+        ) : orders.isSuccess && orders.data.data ? (
           <OrderTable orderData={orders.data.data} />
         ) : (
           <ErrorMessageComponent

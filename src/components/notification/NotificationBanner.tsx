@@ -22,7 +22,7 @@ const NotificationBanner: React.FC<NotificationBannerProps> = ({
           </div>
           <span className="font-medium">
             Bildirim seslerini ve browser bildirimlerini aktif etmek için
-            tıklayın
+            tıklayın.
           </span>
         </div>
         <button

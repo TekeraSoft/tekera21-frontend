@@ -58,9 +58,6 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
     unreadCount,
   } = useNotifications();
 
-  const [showPermissionBanner, setShowPermissionBanner] =
-    useState<boolean>(true);
-
   const [isEnablingAudio, setIsEnablingAudio] = useState<boolean>(false);
 
   const enableNotifications = useCallback(async (): Promise<void> => {
@@ -74,7 +71,7 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
         await Notification.requestPermission();
       }
 
-      setShowPermissionBanner(false);
+      setIsEnablingAudio(false);
     } catch (error) {
       console.error("Bildirimler aktif edilemedi:", error);
     } finally {
@@ -91,15 +88,13 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
 
       reconnectDelay: 5000, // otomatik reconnect (ms)
       debug: function (str) {
-        console.log(str);
+        // console.log(str);
       },
     });
 
     client.activate();
 
     client.onConnect = (frame) => {
-      playSound();
-
       client.subscribe(
         `/topic/sellerOrders/${userInfo.sellerId}`,
         (message) => {
@@ -136,14 +131,14 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
         unreadCount,
       }}
     >
-      <NotificationBanner
-        show={showPermissionBanner}
-        onEnable={enableNotifications}
-        isLoading={isEnablingAudio}
-      />
-      <div className={cn(showPermissionBanner ? "mt-[70px]" : "")}>
-        {children}
-      </div>
+      {!isAudioEnabled && (
+        <NotificationBanner
+          show={!isAudioEnabled}
+          onEnable={enableNotifications}
+          isLoading={isEnablingAudio}
+        />
+      )}
+      <div className={cn(!isAudioEnabled ? "mt-[70px]" : "")}>{children}</div>
     </NotificationContext.Provider>
   );
 };
