@@ -30,7 +30,6 @@ import GenderSelect from "../Shared/GenderSelect";
 import GeneralInformation from "../Shared/MainFields/GeneralInformation";
 import CurrencyAndProductType from "../Shared/MainFields/CurrencyAndProductType";
 import ThemeSelect from "../Shared/MainFields/ThemeSelect";
-import axios from "axios";
 import { updateProduct } from "@/app/actions/server/product.actions";
 import TopBar from "../../TopBar";
 import axiosClient from "@/request/axiosClient";
@@ -137,6 +136,7 @@ export default function ProductUpdateForm({
           attributeDetails: attr.attributeDetails?.filter(
             (sa) => sa.key && sa.value
           ),
+          vatPercent: Number(attr.vatPercent).toFixed(2),
           stock: attr.stock,
           maxPurchaseStock: attr.maxPurchaseStock,
           price: Number(attr.price),
@@ -311,8 +311,6 @@ export default function ProductUpdateForm({
     setDeleteImages((prev) => [...prev, videoUrlState || ""]);
     setVideoUrlState(null);
   };
-
-  console.log("product", product);
 
   return (
     <>

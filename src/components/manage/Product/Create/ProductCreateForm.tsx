@@ -40,7 +40,6 @@ export default function ProductCreateForm({
   }>({});
   const [productVideo, setProductVideo] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [showMediaLibrary, setShowMediaLibrary] = useState(false);
   const [step, setStep] = useState(1);
 
   const { toast } = useToast();
@@ -84,10 +83,11 @@ export default function ProductCreateForm({
         imageUrls: Object.values(watch("imageUrls") ?? {}).flatMap(
           (urls) => urls
         ),
-        attributes: variation.attributes.map((attr, attrIndex) => ({
+        attributes: variation.attributes.map((attr) => ({
           attributeDetails: attr.attributeDetails.filter(
             (sa) => sa.key && sa.value
           ),
+          vatPercent: attr.vatPercent,
           stock: attr.stock,
           maxPurchaseStock: attr.maxPurchaseStock,
           price: Number(attr.price),

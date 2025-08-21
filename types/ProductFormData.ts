@@ -22,6 +22,7 @@ export type TProductFormData = {
     color: string;
     attributes: {
       attributeDetails: { key: string; value: string }[];
+      vatPercent: string;
       stock: number;
       maxPurchaseStock: number;
       sku: string;

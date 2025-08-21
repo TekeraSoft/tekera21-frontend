@@ -14,6 +14,14 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Settings } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { taxes } from "@/constants/taxes";
 
 interface BulkUpdateModalProps {
   onBulkUpdate: (updates: BulkUpdateData) => void;
@@ -26,12 +34,14 @@ export interface BulkUpdateData {
   discountPrice?: number;
   generateSku: boolean;
   generateBarcode: boolean;
+  vatPercent: string;
   updateFields: {
     stock: boolean;
     price: boolean;
     discountPrice: boolean;
     sku: boolean;
     barcode: boolean;
+    vatPercent: boolean;
   };
 }
 
@@ -44,6 +54,7 @@ export function BulkUpdateModal({
     stock: 50,
     price: 1449,
     discountPrice: 0,
+    vatPercent: "18.00",
     generateSku: true,
     generateBarcode: true,
     updateFields: {
@@ -52,6 +63,7 @@ export function BulkUpdateModal({
       discountPrice: false,
       sku: true,
       barcode: true,
+      vatPercent: false,
     },
   });
 
@@ -197,6 +209,49 @@ export function BulkUpdateModal({
                     }
                     placeholder="Enter discount price"
                   />
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="update-vat"
+                  checked={bulkData.updateFields.vatPercent}
+                  onCheckedChange={(checked) =>
+                    handleFieldToggle("vatPercent", checked as boolean)
+                  }
+                />
+                <Label htmlFor="update-vat" className="text-sm font-medium">
+                  Vergi Oranı Güncelle
+                </Label>
+              </div>
+              {bulkData.updateFields.vatPercent && (
+                <div>
+                  <Label htmlFor="bulk-vat" className="text-sm">
+                    Vergi Oranı
+                  </Label>
+
+                  <Select
+                    value={bulkData.vatPercent || ""}
+                    onValueChange={(value) => {
+                      setBulkData((prev) => ({
+                        ...prev,
+                        vatPercent: value,
+                      }));
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Vergi Oranı seçin" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {taxes.map((tax) => (
+                        <SelectItem key={tax.id} value={tax.rate}>
+                          {tax.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               )}
             </div>

@@ -4,7 +4,8 @@ import { BulkUpdateData } from "./BulkUpdateModal";
 export function generateAttributeCombinations(
   selectedAttributes: Record<string, string[]>,
   basePrice = 1449,
-  baseStock = 50
+  baseStock = 50,
+  vatPercent = "18.00"
 ): ProductAttribute[] {
   const attributeKeys = Object.keys(selectedAttributes).filter(
     (key) => selectedAttributes[key].length > 0
@@ -40,6 +41,7 @@ export function generateAttributeCombinations(
       attributeDetails,
       stock: baseStock,
       price: basePrice,
+      vatPercent: vatPercent,
       discountPrice: 0,
       maxPurchaseStock: baseStock,
       sku,
@@ -149,6 +151,14 @@ export function applyBulkUpdates(
     // Update price
     if (bulkData.updateFields.price && bulkData.price !== undefined) {
       updatedAttribute.price = bulkData.price;
+    }
+
+    if (bulkData.updateFields.price && bulkData.price !== undefined) {
+      updatedAttribute.price = bulkData.price;
+    }
+    // Vergi
+    if (bulkData.updateFields.vatPercent && bulkData.vatPercent !== undefined) {
+      updatedAttribute.vatPercent = bulkData.vatPercent;
     }
 
     // Update discount price

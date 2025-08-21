@@ -31,6 +31,14 @@ import { TooltipArrow, TooltipPortal } from "@radix-ui/react-tooltip";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { colors } from "./Data/Colors";
 import ImageView from "@/components/shared/ImageView";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { taxes } from "@/constants/taxes";
 
 interface IProps {
   selectedAttributes: Record<number, Record<string, string | string[]>>;
@@ -163,6 +171,7 @@ const Attributes = ({
         [attributeKey]: values,
       },
     };
+
     setSelectedAttributes(newSelectedAttributes);
 
     // Convert single values to arrays for combination generation
@@ -189,7 +198,9 @@ const Attributes = ({
     watchedVariants.map((variant, variationIndex) => {
       const currentAttributes = variant.attributes || [];
       if (currentAttributes.length === 0) return;
+
       const updatedAttributes = applyBulkUpdates(currentAttributes, bulkData);
+
       setValue(`variants.${variationIndex}.attributes`, updatedAttributes, {
         shouldValidate: true,
         shouldDirty: true,
@@ -503,8 +514,11 @@ const Attributes = ({
                     <th className="px-4 py-2 font-medium">
                       Maksimum Satılacak Adet
                     </th>
-                    <th className="px-4 py-2 font-medium">Fiyat</th>
+                    <th className="px-4 py-2 font-medium">
+                      Fiyat<span className="text-[9px]"> (Vergiler dahil)</span>
+                    </th>
                     <th className="px-4 py-2 font-medium">İndirimli Fiyat</th>
+                    <th className="px-4 py-2 font-medium">Vergi Oranı</th>
                     <th className="px-4 py-2 font-medium">Stok Kodu</th>
                     <th className="px-4 py-2 font-medium">Barkod</th>
                   </tr>
@@ -594,6 +608,36 @@ const Attributes = ({
                                   }
                                 />
                               )}
+                            />
+                          </td>
+                          <td className="px-4 py-2">
+                            <Controller
+                              name={`variants.${variationIndex}.attributes.${attrIndex}.vatPercent`}
+                              control={control}
+                              render={({ field }) => {
+                                return (
+                                  <Select
+                                    value={field.value?.toString() || ""}
+                                    onValueChange={(value) => {
+                                      field.onChange(value);
+                                    }}
+                                  >
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Vergi Oranı seçin" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {taxes.map((tax) => (
+                                        <SelectItem
+                                          key={tax.id}
+                                          value={tax.rate}
+                                        >
+                                          {tax.name}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                );
+                              }}
                             />
                           </td>
                           <td className="px-4 py-2">

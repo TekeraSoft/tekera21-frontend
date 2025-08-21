@@ -7,6 +7,7 @@ export interface ProductAttribute {
   attributeDetails: ProductAttributeDetail[];
   stock: number;
   price: number;
+  vatPercent: string;
   discountPrice: number;
   sku: string;
   barcode: string;
