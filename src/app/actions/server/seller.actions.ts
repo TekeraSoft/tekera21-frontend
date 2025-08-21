@@ -42,6 +42,7 @@ export async function getSellerByUserId(id?: string) {
         const { data } = await axiosInstance.get(
             `/user/getSellerInformation`
         );
+        console.log("get seller information", data);
 
         return { success: true, message: data.message, data: data as ISellerInfo };
     } catch (error: any) {

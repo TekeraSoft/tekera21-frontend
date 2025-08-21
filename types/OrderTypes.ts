@@ -11,7 +11,7 @@ export interface IOrderNew {
     sellerOrders: IOrder[];
 };
 export interface IOrderData {
-    content: IOrderNew[];
+    content: IOrder[];
     page: {
         size: number;
         number: number;
@@ -34,6 +34,7 @@ interface IOrder {
     shippingAddress: IAddress;
     billingAddress: IAddress;
     totalPrice: number;
+    shippingPrice: number;
 }
 
 interface IBasketItem {
@@ -49,7 +50,6 @@ interface IBasketItem {
     barcode: string;
     image: string;
     attributes: IAttribute[];
-    shippingPrice: number;
     shippingCompanyName: string;
     productId: string;
     variationId: string;

@@ -214,45 +214,44 @@ export default function OrderTable({ orderData }: { orderData: IOrderData }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {orderData.content.flatMap((sharedOrder) =>
-              sharedOrder.sellerOrders.map((order) => {
-                return (
-                  <React.Fragment key={order.id}>
-                    <TableRow className="hover:bg-gray-50">
-                      <TableCell>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => toggleRowExpansion(order.id)}
-                          className="p-1"
-                        >
-                          {expandedRows.includes(order.id) ? (
-                            <ChevronUp className="h-4 w-4" />
-                          ) : (
-                            <ChevronDown className="h-4 w-4" />
-                          )}
-                        </Button>
-                      </TableCell>
-                      <TableCell className="font-medium">{order.id}</TableCell>
-                      <TableCell>
-                        <div>
-                          <div className="font-medium">
-                            {order.buyer.name} {order.buyer.surname}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {order.buyer.gsmNumber}
-                          </div>
+            {orderData.content.map((order) => {
+              return (
+                <React.Fragment key={order.id}>
+                  <TableRow className="hover:bg-gray-50">
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => toggleRowExpansion(order.id)}
+                        className="p-1"
+                      >
+                        {expandedRows.includes(order.id) ? (
+                          <ChevronUp className="h-4 w-4" />
+                        ) : (
+                          <ChevronDown className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </TableCell>
+                    <TableCell className="font-medium">{order.id}</TableCell>
+                    <TableCell>
+                      <div>
+                        <div className="font-medium">
+                          {order.buyer.name} {order.buyer.surname}
                         </div>
-                      </TableCell>
-                      <TableCell>
-                        <p> Oluşturulma: {formatDate(order.createdAt)}</p>
-                        <p> Güncellenme: {formatDate(order.updatedAt)}</p>
-                      </TableCell>
-                      <TableCell>{order.basketItems.length}</TableCell>
-                      <TableCell className="font-medium">
-                        {formatPrice(order.totalPrice)}
-                      </TableCell>
-                      {/* <TableCell>
+                        <div className="text-sm text-gray-500">
+                          {order.buyer.gsmNumber}
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <p> Oluşturulma: {formatDate(order.createdAt)}</p>
+                      <p> Güncellenme: {formatDate(order.updatedAt)}</p>
+                    </TableCell>
+                    <TableCell>{order.basketItems.length}</TableCell>
+                    <TableCell className="font-medium">
+                      {formatPrice(order.totalPrice)}
+                    </TableCell>
+                    {/* <TableCell>
                     <Badge className={getStatusColor(order.status)}>
                       {order.status}
                     </Badge>
@@ -262,108 +261,103 @@ export default function OrderTable({ orderData }: { orderData: IOrderData }) {
                       {order.status}
                     </Badge>
                   </TableCell> */}
-                    </TableRow>
+                  </TableRow>
 
-                    {/* Expanded Row Content */}
-                    {expandedRows.includes(order.id) && (
-                      <TableRow>
-                        <TableCell colSpan={8} className="bg-gray-50 p-6">
-                          <div className="space-y-6">
-                            {/* Shipping Address */}
-                            <div>
-                              <h4 className="font-semibold mb-2">
-                                Kargo Adresi
-                              </h4>
-                              <p className="text-sm text-gray-600">
-                                {order.shippingAddress.street}{" "}
-                                {order.shippingAddress.buildNo}/
-                                {order.shippingAddress.doorNumber},{" "}
-                                {order.shippingAddress.detailAddress},{" "}
-                                {order.shippingAddress.postalCode}{" "}
-                                {order.shippingAddress.city},{" "}
-                                {order.shippingAddress.country}
-                              </p>
-                            </div>
-                            <div>
-                              <h4 className="font-semibold mb-2">
-                                Fatura Adresi
-                              </h4>
-                              <p className="text-sm text-gray-600">
-                                {order.billingAddress.street}{" "}
-                                {order.billingAddress.buildNo}/
-                                {order.billingAddress.doorNumber},{" "}
-                                {order.billingAddress.detailAddress},{" "}
-                                {order.billingAddress.postalCode}{" "}
-                                {order.billingAddress.city},{" "}
-                                {order.billingAddress.country}
-                              </p>
-                            </div>
+                  {/* Expanded Row Content */}
+                  {expandedRows.includes(order.id) && (
+                    <TableRow>
+                      <TableCell colSpan={8} className="bg-gray-50 p-6">
+                        <div className="space-y-6">
+                          {/* Shipping Address */}
+                          <div>
+                            <h4 className="font-semibold mb-2">Kargo Adresi</h4>
+                            <p className="text-sm text-gray-600">
+                              {order.shippingAddress.street}{" "}
+                              {order.shippingAddress.buildNo}/
+                              {order.shippingAddress.doorNumber},{" "}
+                              {order.shippingAddress.detailAddress},{" "}
+                              {order.shippingAddress.postalCode}{" "}
+                              {order.shippingAddress.city},{" "}
+                              {order.shippingAddress.country}
+                            </p>
+                          </div>
+                          <div>
+                            <h4 className="font-semibold mb-2">
+                              Fatura Adresi
+                            </h4>
+                            <p className="text-sm text-gray-600">
+                              {order.billingAddress.street}{" "}
+                              {order.billingAddress.buildNo}/
+                              {order.billingAddress.doorNumber},{" "}
+                              {order.billingAddress.detailAddress},{" "}
+                              {order.billingAddress.postalCode}{" "}
+                              {order.billingAddress.city},{" "}
+                              {order.billingAddress.country}
+                            </p>
+                          </div>
 
-                            {/* Order Items */}
-                            <div>
-                              <h4 className="font-semibold mb-3">Ürünler</h4>
-                              <div className="space-y-3">
-                                {order.basketItems.map((item) => (
-                                  <div
-                                    key={item.id}
-                                    className="flex items-center space-x-4 bg-white p-4 rounded-lg border"
-                                  >
-                                    <ImageView
-                                      imageInfo={{
-                                        url: item.image,
-                                        name: item.name,
-                                      }}
-                                      className="w-16 h-16 object-cover rounded-lg"
-                                    />
-                                    <div className="flex-1">
-                                      <h5 className="font-medium">
-                                        {item.name}
-                                      </h5>
-                                      <p className="text-sm text-gray-600">
-                                        {item.brandName} • {item.modelCode}
-                                      </p>
-                                      <div className="flex space-x-4 text-sm text-gray-500 mt-1">
-                                        <span>Adet: {item.quantity}</span>
-                                        <span>SKU: {item.sku}</span>
-                                      </div>
-                                      <div className="flex flex-wrap gap-1 mt-2">
-                                        {item.attributes.map((attr, index) => (
-                                          <Badge
-                                            key={index}
-                                            variant="outline"
-                                            className="text-xs"
-                                          >
-                                            {attr.key}: {attr.value}
-                                          </Badge>
-                                        ))}
-                                      </div>
+                          {/* Order Items */}
+                          <div>
+                            <h4 className="font-semibold mb-3">Ürünler</h4>
+                            <div className="space-y-3">
+                              {order.basketItems.map((item) => (
+                                <div
+                                  key={item.id}
+                                  className="flex items-center space-x-4 bg-white p-4 rounded-lg border"
+                                >
+                                  <ImageView
+                                    imageInfo={{
+                                      url: item.image,
+                                      name: item.name,
+                                    }}
+                                    className="w-16 h-16 object-cover rounded-lg"
+                                  />
+                                  <div className="flex-1">
+                                    <h5 className="font-medium">{item.name}</h5>
+                                    <p className="text-sm text-gray-600">
+                                      {item.brandName} • {item.modelCode}
+                                    </p>
+                                    <div className="flex space-x-4 text-sm text-gray-500 mt-1">
+                                      <span>Adet: {item.quantity}</span>
+                                      <span>SKU: {item.sku}</span>
                                     </div>
-                                    <div className="text-right">
-                                      <p className="font-semibold">
-                                        {formatPrice(item.price)}
-                                      </p>
-                                      {item.shippingPrice > 0 && (
-                                        <p className="text-sm text-gray-500">
-                                          Kargo ücreti:{" "}
-                                          {formatPrice(item.shippingPrice)}
-                                        </p>
-                                      )}
-                                      <p className="text-xs text-gray-400">
-                                        {item.shippingCompanyName}
-                                      </p>
+                                    <div className="flex flex-wrap gap-1 mt-2">
+                                      {item.attributes.map((attr, index) => (
+                                        <Badge
+                                          key={index}
+                                          variant="outline"
+                                          className="text-xs"
+                                        >
+                                          {attr.key}: {attr.value}
+                                        </Badge>
+                                      ))}
                                     </div>
                                   </div>
-                                ))}
-                              </div>
+                                  <div className="text-right">
+                                    <p className="font-semibold">
+                                      {formatPrice(item.price)}
+                                    </p>
+                                    {item.shippingPrice > 0 && (
+                                      <p className="text-sm text-gray-500">
+                                        Kargo ücreti:{" "}
+                                        {formatPrice(item.shippingPrice)}
+                                      </p>
+                                    )}
+                                    <p className="text-xs text-gray-400">
+                                      {item.shippingCompanyName}
+                                    </p>
+                                  </div>
+                                </div>
+                              ))}
                             </div>
                           </div>
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </React.Fragment>
-                );
-              })
-            )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </React.Fragment>
+              );
+            })}
           </TableBody>
         </Table>
       </div>

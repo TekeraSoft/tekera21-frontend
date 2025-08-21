@@ -45,10 +45,6 @@ export function MultiSelectColorVariant({
 }: MultiSelectProps) {
   const [open, setOpen] = React.useState(false);
 
-  const handleUnselect = (item: string) => {
-    onChange(selected.filter((i) => i.value !== item));
-  };
-
   const handleSelect = (value: string) => {
     if (selected.find((item) => item.value === value)) {
       onChange(selected.filter((item) => item.value !== value));
@@ -135,7 +131,6 @@ export function MultiSelectColorVariant({
             </CommandGroup>
           </CommandList>
         </Command>
-      
       </PopoverContent>
     </Popover>
   );
