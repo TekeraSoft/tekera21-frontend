@@ -13,8 +13,11 @@ export default async function SuperAdminLayout({
       <div className="flex">
         <SidebarProvider>
           <SideBarAdmin />
-          <AdminTopBar />
-          <main className="w-full">{children}</main>
+
+          <main className="w-full">
+            <AdminTopBar />
+            {children}
+          </main>
         </SidebarProvider>
       </div>
     </div>

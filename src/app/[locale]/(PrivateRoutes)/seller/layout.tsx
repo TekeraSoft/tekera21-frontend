@@ -35,8 +35,11 @@ export default async function SellerLayout({
         <div className="flex">
           <SidebarProvider>
             <SellerSidebar />
-            <SellerTopBar />
-            <main className="w-full">{children}</main>
+
+            <main className="w-full">
+              <SellerTopBar />
+              {children}
+            </main>
           </SidebarProvider>
         </div>
       </div>
