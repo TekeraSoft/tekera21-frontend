@@ -15,11 +15,11 @@ const DashBoard = () => {
       </TopBar>
       <AdminInnerLayout>
         <DashboardHeader />
-        <DashboardCards />
+        {/* <DashboardCards />
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <RecentOrders />
           <TopProducts />
-        </div>
+        </div> */}
       </AdminInnerLayout>
     </div>
   );
