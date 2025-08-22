@@ -16,7 +16,7 @@ import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import TopBar from "@/components/manage/TopBar";
+
 
 interface ITargetPictureFormData {
   name: string;
@@ -74,9 +74,7 @@ export default function CreateThemePage() {
   };
   return (
     <>
-      <TopBar>
-        <></>
-      </TopBar>
+      
       <div className="max-w-md mx-auto p-6">
         <Card>
           <CardHeader>

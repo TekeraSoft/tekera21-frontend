@@ -3,6 +3,7 @@
 import axiosInstance from "@/request/axiosServer";
 import { IPage } from "@/types/Collection";
 import { IOrderData } from "@/types/OrderTypes";
+import { IPaymentReport } from "@/types/PaymentReport";
 import { IResponse } from "@/types/ResponseType";
 import { INewSellerRegisterData, ISellerInfo, TVerification } from "@/types/SellerTypes/SellerInfo";
 import { ISellerDashboardData } from "@/types/SellerTypes/SellerReportTypes";
@@ -52,7 +53,6 @@ export async function getSellerByUserId(id?: string) {
     }
 }
 
-
 export async function getSellerOrders(): Promise<IResponse<IOrderData>> {
 
     try {
@@ -65,8 +65,8 @@ export async function getSellerOrders(): Promise<IResponse<IOrderData>> {
         return { success: false, message: error.message || "Failed to get seller orders", data: undefined };
     }
 }
-export async function getSellerReport(): Promise<IResponse<ISellerDashboardData>> {
 
+export async function getSellerReport(): Promise<IResponse<ISellerDashboardData>> {
     try {
         const { data } = await axiosInstance.get(
             `/seller/getSellerReport`
@@ -74,6 +74,18 @@ export async function getSellerReport(): Promise<IResponse<ISellerDashboardData>
         return { success: true, message: data.message, data: data };
     } catch (error: any) {
         return { success: false, message: error.message || "Failed to get seller report", data: undefined };
+    }
+}
+
+export async function getSellerInterruptions(): Promise<IResponse<IPaymentReport[]>> {
+
+    try {
+        const { data } = await axiosInstance.get(
+            `/seller/getSellerInterruptions`
+        );
+        return { success: true, message: data.message, data: data };
+    } catch (error: any) {
+        return { success: false, message: error.message || "Failed to get seller Interruptions", data: undefined };
     }
 }
 

@@ -17,7 +17,6 @@ import { toast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import { createTargetPicture } from "@/app/actions/server/targetPicture.actions";
-import TopBar from "../../TopBar";
 
 interface ITargetPictureFormData {
   productId: string;
@@ -78,9 +77,6 @@ export default function TargetCreate({ product }: { product: IProduct }) {
   };
   return (
     <>
-      <TopBar>
-        <></>
-      </TopBar>
       <div className="mx-auto p-6">
         <Card>
           <CardHeader>

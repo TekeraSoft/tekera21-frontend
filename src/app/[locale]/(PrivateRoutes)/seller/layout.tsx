@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { TVerification } from "@/types/SellerTypes/SellerInfo";
 import { getSellerByUserId } from "@/app/actions/server/seller.actions";
 import NotificationProvider from "@/context/NotificationContext";
+import SellerTopBar from "@/components/seller/SellerTopbar";
 
 export default async function SellerLayout({
   children,
@@ -34,6 +35,7 @@ export default async function SellerLayout({
         <div className="flex">
           <SidebarProvider>
             <SellerSidebar />
+            <SellerTopBar />
             <main className="w-full">{children}</main>
           </SidebarProvider>
         </div>

@@ -1,6 +1,6 @@
 import { getCollectionById } from "@/app/actions/server/collection.actions";
 import CollectionForm from "@/components/manage/FashionCollection/CollectionForm";
-import TopBar from "@/components/manage/TopBar";
+
 import React from "react";
 
 interface IProps {
@@ -19,9 +19,7 @@ const CollectionEditPage = async ({ params }: IProps) => {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
-      <TopBar>
-        <></>
-      </TopBar>
+      
       <CollectionForm defaultData={data} />
     </div>
   );

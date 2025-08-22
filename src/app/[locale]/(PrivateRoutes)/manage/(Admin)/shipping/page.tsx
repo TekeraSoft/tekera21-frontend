@@ -1,6 +1,6 @@
 import { getShippingCompanies } from "@/app/actions/server/general.actions";
 import ShippingManagement from "@/components/manage/ShippingManagement";
-import TopBar from "@/components/manage/TopBar";
+
 import React from "react";
 
 const ShippingCompanies = async () => {
@@ -15,9 +15,7 @@ const ShippingCompanies = async () => {
   }
   return (
     <>
-      <TopBar>
-        <></>
-      </TopBar>
+      
       <ShippingManagement shippingCompanies={shippingCompaniesRes.data} />
     </>
   );

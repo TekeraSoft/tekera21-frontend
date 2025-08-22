@@ -8,9 +8,7 @@ import {
   Package,
   ShoppingCart,
   BarChart3,
-  LucidePercentDiamond,
   LucideChartNoAxesColumnDecreasing,
-  LucideAirVent,
   ThermometerSunIcon,
   Users2,
 } from "lucide-react";
@@ -18,7 +16,7 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { useSidebar } from "@/context/SideBarContext";
 import { useAuthContext } from "@/context/AuthContext";
 
-export function SideBar() {
+export function SideBarAdmin() {
   const { userInfo: user } = useAuthContext();
 
   const routes = [

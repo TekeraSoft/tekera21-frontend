@@ -1,14 +1,12 @@
 import AdminConfigurationPanel from "@/components/manage/AdminConfigurationPanel";
 import AdminInnerLayout from "@/components/manage/AdminInnerLayout";
-import TopBar from "@/components/manage/TopBar";
+
 import React from "react";
 
 const AdminConfigurationPage = () => {
   return (
     <div>
-      <TopBar>
-        <></>
-      </TopBar>
+      
       <AdminInnerLayout>
         <div className="flex items-center justify-between">
           <div className="flex items-center">

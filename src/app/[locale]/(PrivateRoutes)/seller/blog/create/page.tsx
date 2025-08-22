@@ -1,7 +1,7 @@
 "use client";
 
 import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
-import TopBar from "@/components/manage/TopBar";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -114,9 +114,7 @@ const CreateBlogPage = () => {
   };
   return (
     <>
-      <TopBar>
-        <></>
-      </TopBar>
+      
       <Card className="mx-auto">
         <CardHeader>
           <CardTitle className="text-2xl">Yeni Blog Yazısı Oluştur</CardTitle>

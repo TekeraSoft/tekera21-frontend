@@ -1,6 +1,5 @@
 import { getCategoriesForSeller } from "@/app/actions/server/category.actions";
 import ProductUpdateForm from "@/components/manage/Product/Update/ProductUpdateForm";
-import TopBar from "@/components/manage/TopBar";
 import ErrorMessageComponent from "@/components/shared/ErrorMessageComponent";
 import { getProductById } from "@/services/seller/product.service";
 import { ICategory } from "@/types/AdminTypes/category";
@@ -19,9 +18,6 @@ const UpdateProductPage = async ({
   if (!success) {
     return (
       <>
-        <TopBar>
-          <></>
-        </TopBar>
         <ErrorMessageComponent message={message || "Product cant get"} />
       </>
     );

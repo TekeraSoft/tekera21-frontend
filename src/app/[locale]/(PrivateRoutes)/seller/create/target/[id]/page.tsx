@@ -4,7 +4,7 @@ import TargetCreate from "@/components/manage/TargetPicture/Create";
 import TargetDelete from "@/components/manage/TargetPicture/Delete";
 import { getTargetPictureByProductById } from "@/app/actions/server/targetPicture.actions";
 import { getProductById } from "@/services/seller/product.service";
-import TopBar from "@/components/manage/TopBar";
+
 import ErrorMessageComponent from "@/components/shared/ErrorMessageComponent";
 
 const CreateTargetPage = async ({
@@ -19,9 +19,6 @@ const CreateTargetPage = async ({
   if (!success || !data.id) {
     return (
       <>
-        <TopBar>
-          <></>
-        </TopBar>
         <ErrorMessageComponent message={message || "Product cant get"} />
       </>
     );
@@ -32,9 +29,6 @@ const CreateTargetPage = async ({
   if (targetData) {
     return (
       <>
-        <TopBar>
-          <></>
-        </TopBar>
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-3xl font-bold mb-4">
             Zaten bu ürün için bir target picture oluşturulmuş.

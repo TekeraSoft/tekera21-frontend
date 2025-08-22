@@ -2,7 +2,7 @@
 
 import OrderTable from "@/components/shared/Orders/OrderTable";
 import AdminInnerLayout from "@/components/manage/AdminInnerLayout";
-import TopBar from "@/components/manage/TopBar";
+
 import { IOrderData } from "@/types/OrderTypes";
 import { useQuery } from "@tanstack/react-query";
 import { getAllOrders } from "@/app/actions/server/order.actions";
@@ -18,9 +18,7 @@ export default function OrdersPage() {
 
   return (
     <>
-      <TopBar>
-        <></>
-      </TopBar>
+      
       <AdminInnerLayout>
         {orders.isSuccess && orders.data.data && (
           <OrderTable orderData={orders.data.data} />

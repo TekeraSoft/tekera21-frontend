@@ -2,7 +2,7 @@ import React from "react";
 import { ICategory } from "@/types/AdminTypes/category";
 
 import ProductCreateForm from "@/components/manage/Product/Create/ProductCreateForm";
-import TopBar from "@/components/manage/TopBar";
+
 import { getCategoriesForSeller } from "@/app/actions/server/category.actions";
 
 const CreateProductPage = async () => {
@@ -14,9 +14,7 @@ const CreateProductPage = async () => {
   const categories: ICategory[] = success ? data.content : ([] as any);
   return (
     <div>
-      <TopBar>
-        <></>
-      </TopBar>
+      
       <ProductCreateForm categories={categories} />
     </div>
   );

@@ -4,7 +4,7 @@ import { DashboardCards } from "@/components/manage/DashBoardCards";
 import { DashboardHeader } from "@/components/manage/DashBoardHeader";
 import { RecentOrders } from "@/components/manage/RecentOrders";
 import { TopProducts } from "@/components/manage/TopProducts";
-import TopBar from "@/components/manage/TopBar";
+
 import AdminInnerLayout from "@/components/manage/AdminInnerLayout";
 import { getSellerReport } from "@/app/actions/server/seller.actions";
 import { useQuery } from "@tanstack/react-query";
@@ -27,9 +27,6 @@ const DashBoard = () => {
   }
   return (
     <div>
-      <TopBar>
-        <></>
-      </TopBar>
       <AdminInnerLayout>
         <DashboardHeader />
         <DashboardCards data={mutationSellerReport.data.data} />

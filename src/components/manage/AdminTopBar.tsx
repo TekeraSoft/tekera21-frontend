@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 import Notifications from "../notification/Notifications";
 import { useNotificationContext } from "@/context/NotificationContext";
 
-const TopBar = ({ children }: { children: React.ReactNode }) => {
+const AdminTopBar = () => {
   const { userInfo } = useAuthContext();
 
   const { isAudioEnabled } = useNotificationContext();
@@ -34,7 +34,6 @@ const TopBar = ({ children }: { children: React.ReactNode }) => {
         )}
       >
         <ToggleSidebarButton />
-        {children}
         <div className="pr-2 ml-auto flex items-center gap-3">
           <Popover>
             <PopoverTrigger asChild>
@@ -87,4 +86,4 @@ const TopBar = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default TopBar;
+export default AdminTopBar;

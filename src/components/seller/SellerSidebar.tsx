@@ -9,6 +9,7 @@ import {
   BarChart3,
   LucidePercentDiamond,
   LucideAirVent,
+  DollarSign,
 } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useSidebar } from "@/context/SideBarContext";
@@ -38,6 +39,11 @@ export function SellerSidebar() {
       name: "Siparişler",
       path: "/seller/orders",
       icon: ShoppingCart,
+    },
+    user?.roles.some((role) => sellerRoles.includes(role)) && {
+      name: "Ödeme Raporları",
+      path: "/seller/payment",
+      icon: DollarSign,
     },
     user?.roles.some((role) => sellerRoles.includes(role)) && {
       name: "Analitik veriler",

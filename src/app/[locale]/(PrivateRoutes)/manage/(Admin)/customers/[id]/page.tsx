@@ -1,8 +1,7 @@
 "use client";
 import { useParams } from "next/navigation";
-import { AdminCustomerEditForm } from "@/components/manage/AdminCustomerEditForm";
 import React from "react";
-import TopBar from "@/components/manage/TopBar";
+
 import AdminInnerLayout from "@/components/manage/AdminInnerLayout";
 import { getSellerByUserId } from "@/app/actions/server/seller.actions";
 import { useQuery } from "@tanstack/react-query";
@@ -10,12 +9,12 @@ import { useQuery } from "@tanstack/react-query";
 const AdminEditCustomerPage = () => {
   const { id } = useParams() as { id: string };
 
-  const customerMutation = useQuery({
+  const customerQuery = useQuery({
     queryKey: ["customer", id],
     queryFn: () => getSellerByUserId(id),
   });
 
-  if (!customerMutation.data?.success) {
+  if (!customerQuery.data?.success) {
     return <div>Customer not found</div>;
   }
 
@@ -24,9 +23,7 @@ const AdminEditCustomerPage = () => {
   };
   return (
     <>
-      <TopBar>
-        <></>
-      </TopBar>
+      
       <AdminInnerLayout>
         <div className="w-full">
           {/* <AdminCustomerEditForm

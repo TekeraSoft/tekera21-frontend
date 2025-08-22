@@ -27,7 +27,7 @@ import ImageView from "@/components/shared/ImageView";
 import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
 import { FileUploadEnhanced } from "@/components/shared/FileUploadEnhanced";
 import { useToast } from "@/hooks/use-toast";
-import TopBar from "@/components/manage/TopBar";
+
 import { IFashionCollection } from "@/types/Collection";
 import { createCollection } from "@/app/actions/server/collection.actions";
 
@@ -160,9 +160,7 @@ export default function CreateCollectionPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <TopBar>
-        <></>
-      </TopBar>
+      
       {
         <div className="mx-auto px-4 sm:px-6 lg:px-8 mt-4">
           <div className="mb-8">

@@ -1,18 +1,16 @@
 import React from "react";
 
-import { DashboardCards } from "@/components/manage/DashBoardCards";
+// import { DashboardCards } from "@/components/manage/DashBoardCards";
 import { DashboardHeader } from "@/components/manage/DashBoardHeader";
-import { RecentOrders } from "@/components/manage/RecentOrders";
-import { TopProducts } from "@/components/manage/TopProducts";
-import TopBar from "@/components/manage/TopBar";
+// import { RecentOrders } from "@/components/manage/RecentOrders";
+// import { TopProducts } from "@/components/manage/TopProducts";
+
 import AdminInnerLayout from "@/components/manage/AdminInnerLayout";
 
 const DashBoard = () => {
   return (
     <div>
-      <TopBar>
-        <></>
-      </TopBar>
+      
       <AdminInnerLayout>
         <DashboardHeader />
         {/* <DashboardCards />

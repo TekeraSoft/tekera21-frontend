@@ -1,7 +1,7 @@
 import { getUser } from "@/app/actions/server/auth.actions";
 import { getFashionCollectionBySellerId } from "@/app/actions/server/collection.actions";
 import CollectionList from "@/components/manage/FashionCollection/CollectionList";
-import TopBar from "@/components/manage/TopBar";
+
 import React from "react";
 
 interface IProps {
@@ -19,14 +19,7 @@ const FashionCollectionsPage = async ({ searchParams }: IProps) => {
     : search.pagesize ?? "8";
 
   if (!user?.sellerId) {
-    return (
-      <div>
-        <TopBar>
-          <></>
-        </TopBar>
-        Unauthorized access
-      </div>
-    );
+    return <div>Unauthorized access</div>;
   }
 
   const result = await getFashionCollectionBySellerId(
@@ -43,9 +36,6 @@ const FashionCollectionsPage = async ({ searchParams }: IProps) => {
 
   return (
     <div>
-      <TopBar>
-        <></>
-      </TopBar>
       <CollectionList collectionsData={data} />
     </div>
   );

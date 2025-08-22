@@ -1,6 +1,6 @@
 import { getNewSellers } from "@/app/actions/server/seller.actions";
 import VerificationPanel from "@/components/manage/Companies/CheckCompanies";
-import TopBar from "@/components/manage/TopBar";
+
 import React from "react";
 
 const CompaniesCheckPage = async () => {
@@ -9,9 +9,6 @@ const CompaniesCheckPage = async () => {
   if (!success || !data) {
     return (
       <>
-        <TopBar>
-          <></>
-        </TopBar>
         <div className="p-4 text-red-500">
           {message} || Firmalar getirilemedi.
         </div>
@@ -22,9 +19,6 @@ const CompaniesCheckPage = async () => {
   console.log("data", data.content);
   return (
     <>
-      <TopBar>
-        <></>
-      </TopBar>
       <VerificationPanel companies={data} />
     </>
   );

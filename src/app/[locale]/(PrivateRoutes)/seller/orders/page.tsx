@@ -2,7 +2,7 @@
 
 import OrderTable from "@/components/shared/Orders/OrderTable";
 import AdminInnerLayout from "@/components/manage/AdminInnerLayout";
-import TopBar from "@/components/manage/TopBar";
+
 import { IOrderData } from "@/types/OrderTypes";
 import { useQuery } from "@tanstack/react-query";
 import { getSellerOrders } from "@/app/actions/server/seller.actions";
@@ -19,9 +19,6 @@ export default function OrdersPage() {
 
   return (
     <>
-      <TopBar>
-        <></>
-      </TopBar>
       <AdminInnerLayout>
         {orders.isLoading ? (
           <div>Loading...</div>
