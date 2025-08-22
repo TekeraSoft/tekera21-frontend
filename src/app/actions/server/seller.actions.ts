@@ -2,8 +2,10 @@
 
 import axiosInstance from "@/request/axiosServer";
 import { IPage } from "@/types/Collection";
-import { IOrderResponse } from "@/types/OrderTypes";
+import { IOrderData } from "@/types/OrderTypes";
+import { IResponse } from "@/types/ResponseType";
 import { INewSellerRegisterData, ISellerInfo, TVerification } from "@/types/SellerTypes/SellerInfo";
+import { ISellerDashboardData } from "@/types/SellerTypes/SellerReportTypes";
 import { revalidatePath } from "next/cache";
 
 export async function sellerRegister(formData: FormData) {
@@ -42,14 +44,16 @@ export async function getSellerByUserId(id?: string) {
         const { data } = await axiosInstance.get(
             `/user/getSellerInformation`
         );
-        console.log("get seller information", data);
+
 
         return { success: true, message: data.message, data: data as ISellerInfo };
     } catch (error: any) {
         return { success: false, message: error.message || "Failed to get user", data: undefined };
     }
 }
-export async function getSellerOrders(): Promise<IOrderResponse> {
+
+
+export async function getSellerOrders(): Promise<IResponse<IOrderData>> {
 
     try {
         const { data } = await axiosInstance.get(
@@ -59,6 +63,17 @@ export async function getSellerOrders(): Promise<IOrderResponse> {
         return { success: true, message: data.message, data: data };
     } catch (error: any) {
         return { success: false, message: error.message || "Failed to get seller orders", data: undefined };
+    }
+}
+export async function getSellerReport(): Promise<IResponse<ISellerDashboardData>> {
+
+    try {
+        const { data } = await axiosInstance.get(
+            `/seller/getSellerReport`
+        );
+        return { success: true, message: data.message, data: data };
+    } catch (error: any) {
+        return { success: false, message: error.message || "Failed to get seller report", data: undefined };
     }
 }
 

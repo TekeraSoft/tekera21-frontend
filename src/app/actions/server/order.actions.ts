@@ -1,9 +1,10 @@
 "use server"
 
 import axiosInstance from "@/request/axiosServer";
-import { IOrderData, IOrderResponse } from "@/types/OrderTypes";
+import { IOrderData } from "@/types/OrderTypes";
+import { IResponse } from "@/types/ResponseType";
 
-export async function getOrdersByUserId(page: string = "0", size: string = "20"): Promise<IOrderResponse> {
+export async function getOrdersByUserId(page: string = "0", size: string = "20"): Promise<IResponse<IOrderData>> {
 
     try {
         const { data } = await axiosInstance.get(
@@ -15,7 +16,7 @@ export async function getOrdersByUserId(page: string = "0", size: string = "20")
     }
 }
 
-export async function getAllOrders(page: string = "0", size: string = "20"): Promise<IOrderResponse> {
+export async function getAllOrders(page: string = "0", size: string = "20"): Promise<IResponse<IOrderData>> {
 
     try {
         const { data } = await axiosInstance.get(

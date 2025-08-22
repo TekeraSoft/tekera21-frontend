@@ -1,9 +1,3 @@
-export interface IOrderResponse {
-    success: boolean;
-    message: string;
-    data: IOrderData | undefined
-}
-
 export interface IOrderNew {
     orderNo: string;
     shippingPrice: number;

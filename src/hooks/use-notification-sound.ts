@@ -34,7 +34,7 @@ export const useNotificationSound = (): UseNotificationSoundReturn => {
       oscillator.stop(audioContextRef.current.currentTime + 0.1);
 
       setIsAudioEnabled(true);
-      console.log("Audio sistemi aktif edildi");
+
       return true;
     } catch (error) {
       console.error("Audio başlatılamadı:", error);

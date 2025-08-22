@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/table";
 import { IOrderData } from "@/types/OrderTypes";
 import ImageView from "../ImageView";
+import { formatDate, formatPrice } from "@/lib/formatters";
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -58,23 +59,6 @@ const getPaymentStatusColor = (status: string) => {
     default:
       return "bg-gray-100 text-gray-800 hover:bg-gray-200";
   }
-};
-
-const formatPrice = (price: number) => {
-  return new Intl.NumberFormat("tr-TR", {
-    style: "currency",
-    currency: "TRY",
-  }).format(price);
-};
-
-const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString("tr-TR", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
 };
 
 export default function OrderTable({ orderData }: { orderData: IOrderData }) {
@@ -337,12 +321,12 @@ export default function OrderTable({ orderData }: { orderData: IOrderData }) {
                                     <p className="font-semibold">
                                       {formatPrice(item.price)}
                                     </p>
-                                    {item.shippingPrice > 0 && (
+                                    {/* {item.shippingPrice > 0 && (
                                       <p className="text-sm text-gray-500">
                                         Kargo ücreti:{" "}
                                         {formatPrice(item.shippingPrice)}
                                       </p>
-                                    )}
+                                    )} */}
                                     <p className="text-xs text-gray-400">
                                       {item.shippingCompanyName}
                                     </p>
