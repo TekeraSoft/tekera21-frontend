@@ -60,7 +60,11 @@ const CompanyManager = ({
         <div className="flex items-center gap-6">
           <div className="w-24 h-24 bg-pink-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
             {logo ? (
-              <img src={URL.createObjectURL(logo)} alt="logo"></img>
+              <img
+                className="w-full h-full rounded-full object-cover"
+                src={URL.createObjectURL(logo)}
+                alt="logo"
+              ></img>
             ) : logoSeller ? (
               <ImageView
                 imageInfo={{ url: logoSeller, name: "logo" }}
