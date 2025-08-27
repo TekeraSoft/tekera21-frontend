@@ -2,10 +2,11 @@ import { cn } from "@/lib/utils";
 import { TProductFormData } from "@/types/ProductFormData";
 import React from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { genders } from "../Data/Genders";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus } from "lucide-react";
+import { genders } from "../Data/Genders";
 
 const Tags = () => {
   const {
@@ -32,7 +33,10 @@ const Tags = () => {
             genders.includes(field.value) && "hidden"
           )}
         >
-          <Input {...register(`tags.${index}.value`)} placeholder="Bir etiket ekle" />
+          <Input
+            {...register(`tags.${index}.value`)}
+            placeholder="Bir etiket ekle"
+          />
           <Button
             type="button"
             variant="outline"

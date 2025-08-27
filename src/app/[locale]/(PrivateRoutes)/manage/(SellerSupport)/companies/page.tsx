@@ -16,7 +16,6 @@ const CompaniesCheckPage = async () => {
     );
   }
 
-  console.log("data", data.content);
   return (
     <>
       <VerificationPanel companies={data} />

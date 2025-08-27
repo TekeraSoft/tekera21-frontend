@@ -7,7 +7,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 
 import { Label } from "@/components/ui/label";
-import { MultiSelectCategory } from "@/components/manage/Product/Shared/MultiSelectCategory";
+import { MultiSelectCategory } from "@/components/seller/Product/Shared/MultiSelectCategory";
 import { ISellerFormData } from ".";
 import { ICategoryResponse } from "@/types/SellerTypes/CategoryTypes";
 import { useAuthContext } from "@/context/AuthContext";

@@ -176,7 +176,7 @@ export function BulkUpdateModal({
 
             <Separator />
 
-            <div className="space-y-3">
+            {/* <div className="space-y-3">
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="update-discount"
@@ -211,7 +211,7 @@ export function BulkUpdateModal({
                   />
                 </div>
               )}
-            </div>
+            </div> */}
 
             <div className="space-y-3">
               <div className="flex items-center space-x-2">

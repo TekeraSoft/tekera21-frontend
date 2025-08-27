@@ -26,6 +26,11 @@ export function SellerSidebar() {
       icon: Home,
     },
     user?.roles.some((role) => sellerRoles.includes(role)) && {
+      name: "Kampanyalar",
+      path: "/seller/campaigns",
+      icon: Package,
+    },
+    user?.roles.some((role) => sellerRoles.includes(role)) && {
       name: "Ürünler",
       path: "/seller/products",
       icon: Package,

@@ -139,7 +139,7 @@ export default function ProductUpdateForm({
           stock: attr.stock,
           maxPurchaseStock: attr.maxPurchaseStock,
           price: Number(attr.price),
-          discountPrice: Number(attr.discountPrice),
+          // discountPrice: Number(attr.discountPrice),
           sku: attr.sku,
           barcode: attr.barcode,
         })),
@@ -311,53 +311,52 @@ export default function ProductUpdateForm({
     setVideoUrlState(null);
   };
 
+  console.log("product", product);
+
   return (
     <div className="mx-auto p-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Ürün düzenle</CardTitle>
-          <CardDescription>
-            Ürününüze ait aşağıdaki bilgileri güncelleyebilirsiniz
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-            {/* Basic Information */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Genel Bilgiler</h3>
-              <FormProvider {...methods}>
+      <FormProvider {...methods}>
+        <Card>
+          <CardHeader>
+            <CardTitle>Ürün düzenle</CardTitle>
+            <CardDescription>
+              Ürününüze ait aşağıdaki bilgileri güncelleyebilirsiniz
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+              {/* Basic Information */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Genel Bilgiler</h3>
+
                 <GeneralInformation />
-              </FormProvider>
 
-              <div className="space-y-2">
-                <Label htmlFor="description">Açıklama *</Label>
-                <Controller
-                  control={control}
-                  name="description"
-                  rules={{ required: "Ürün açıklaması gereklidir." }}
-                  render={({ field }) => (
-                    <MarkdownEditor
-                      defaultValue={product.description}
-                      onChange={field.onChange}
-                    />
+                <div className="space-y-2">
+                  <Label htmlFor="description">Açıklama *</Label>
+                  <Controller
+                    control={control}
+                    name="description"
+                    rules={{ required: "Ürün açıklaması gereklidir." }}
+                    render={({ field }) => (
+                      <MarkdownEditor
+                        defaultValue={product.description}
+                        onChange={field.onChange}
+                      />
+                    )}
+                  />
+
+                  {errors.description && (
+                    <p className="text-sm text-red-500">
+                      {errors.description.message}
+                    </p>
                   )}
-                />
+                </div>
 
-                {errors.description && (
-                  <p className="text-sm text-red-500">
-                    {errors.description.message}
-                  </p>
-                )}
+                <CurrencyAndProductType />
               </div>
 
-              <FormProvider {...methods}>
-                <CurrencyAndProductType />
-              </FormProvider>
-            </div>
+              <Separator />
 
-            <Separator />
-
-            <FormProvider {...methods}>
               <CategorySelect categories={categories} />
               <SubCategoriesSelect
                 name="subCategories"
@@ -367,73 +366,74 @@ export default function ProductUpdateForm({
                     ?.subCategories || []
                 }
               />
-            </FormProvider>
 
-            {videoUrlState && !deleteImages.includes(videoUrlState) ? (
-              <div className="space-y-2">
-                <Label>Ürün Videosu</Label>
-                <div className="flex flex-col mt-2">
-                  Yeni video yüklemek için lütfen silin
-                  <Button
-                    type="button"
-                    variant={"warning"}
-                    className="w-max mt-1"
-                    onClick={handleDeleteVideo}
-                  >
-                    Silmek için tıklayın.
-                  </Button>
-                </div>
-                <video
-                  src={
-                    process.env.NEXT_PUBLIC_IMAGE_BASE_URL + "/" + videoUrlState
-                  }
-                  controls
-                  className="w-full h-96 rounded-lg"
-                />
-              </div>
-            ) : (
-              <>
-                <div className="p-4 space-y-4">
-                  <button
-                    onClick={handleUploadClick}
-                    type="button"
-                    className="bg-blue-600 text-white px-4 py-2 rounded"
-                    disabled={uploading}
-                  >
-                    {uploading
-                      ? "Yükleniyor..."
-                      : "Video Yükle (Presigned URL)"}
-                  </button>
-
-                  <input
-                    type="file"
-                    accept=".mp4, .mov"
-                    style={{ display: "none" }}
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
+              {videoUrlState && !deleteImages.includes(videoUrlState) ? (
+                <div className="space-y-2">
+                  <Label>Ürün Videosu</Label>
+                  <div className="flex flex-col mt-2">
+                    Yeni video yüklemek için lütfen silin
+                    <Button
+                      type="button"
+                      variant={"warning"}
+                      className="w-max mt-1"
+                      onClick={handleDeleteVideo}
+                    >
+                      Silmek için tıklayın.
+                    </Button>
+                  </div>
+                  <video
+                    src={
+                      process.env.NEXT_PUBLIC_IMAGE_BASE_URL +
+                      "/" +
+                      videoUrlState
+                    }
+                    controls
+                    className="w-full h-96 rounded-lg"
                   />
-
-                  {uploading && (
-                    <div className="w-full bg-gray-200 h-4 rounded">
-                      <div
-                        className="bg-blue-500 h-3 rounded"
-                        style={{ width: `${uploadProgress}%` }}
-                      ></div>
-                    </div>
-                  )}
-
-                  {videoUrlState && (
-                    <video controls className="mt-4 max-w-full">
-                      <source
-                        src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${videoUrlState}`}
-                        type="video/mp4"
-                      />
-                      Tarayıcınız video etiketini desteklemiyor.
-                    </video>
-                  )}
                 </div>
+              ) : (
+                <>
+                  <div className="p-4 space-y-4">
+                    <button
+                      onClick={handleUploadClick}
+                      type="button"
+                      className="bg-blue-600 text-white px-4 py-2 rounded"
+                      disabled={uploading}
+                    >
+                      {uploading
+                        ? "Yükleniyor..."
+                        : "Video Yükle (Presigned URL)"}
+                    </button>
 
-                {/*
+                    <input
+                      type="file"
+                      accept=".mp4, .mov"
+                      style={{ display: "none" }}
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                    />
+
+                    {uploading && (
+                      <div className="w-full bg-gray-200 h-4 rounded">
+                        <div
+                          className="bg-blue-500 h-3 rounded"
+                          style={{ width: `${uploadProgress}%` }}
+                        ></div>
+                      </div>
+                    )}
+
+                    {videoUrlState && (
+                      <video controls className="mt-4 max-w-full">
+                        <source
+                          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${videoUrlState}`}
+                          type="video/mp4"
+                        />
+                        Tarayıcınız video etiketini desteklemiyor.
+                      </video>
+                    )}
+                  </div>
+
+                  {/*
                   <FileUploadEnhanced
                       name="video"
                       accept=".mp4,video/mp4"
@@ -444,49 +444,45 @@ export default function ProductUpdateForm({
                       file={productVideo}
                   />
                   */}
-              </>
-            )}
+                </>
+              )}
 
-            <Separator />
+              <Separator />
 
-            {/* Tags */}
-            <FormProvider {...methods}>
+              {/* Tags */}
+
               <ThemeSelect />
-            </FormProvider>
 
-            <Separator />
+              <Separator />
 
-            <FormProvider {...methods}>
               <GenderSelect />
-            </FormProvider>
 
-            <Separator />
+              <Separator />
 
-            {/* Attributes */}
+              {/* Attributes */}
 
-            <FormProvider {...methods}>
               <ProductAttributes />
-            </FormProvider>
 
-            <Separator />
+              <Separator />
 
-            {/* Variations */}
-            <FormProvider {...methods}>
+              {/* Variations */}
+
               <ProductVariantForm
                 setDeletedVariants={setDeletedVariants}
                 stockAttributeImages={stockAttributeImages}
                 setStockAttributeImages={setStockAttributeImages}
                 handleDeleteImages={handleDeleteImages}
               />
-            </FormProvider>
-            <div className="flex gap-4">
-              <Button disabled={loading} type="submit" className="flex-1">
-                Gönder
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+
+              <div className="flex gap-4">
+                <Button disabled={loading} type="submit" className="flex-1">
+                  Gönder
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </FormProvider>
     </div>
   );
 }

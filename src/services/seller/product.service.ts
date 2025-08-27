@@ -1,14 +1,17 @@
 
 import axiosInstance from "@/request/axiosServer";
+import { IPageableData } from "@/types/PageableData";
+import { IProduct } from "@/types/product";
 
 export const getSellerProducts = async (
-    page: number,
-    size: number,
+    page: number = 0,
+    size: number = 10,
     sortBy: string = ""
-) => {
+): Promise<IPageableData<IProduct>> => {
     const response = await axiosInstance.get(
         `/seller/getSellerProducts?page=${page}&size=${size}`
     );
+    console.log("response", response.data)
     return response.data;
 };
 

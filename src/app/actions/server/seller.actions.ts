@@ -96,8 +96,6 @@ export async function getNewSellers(page: string = "0", size: string = "20") {
             `/seller-support/getNewSellerPageable?${page}&size=${size}`
         );
 
-        console.log("data geldi", data)
-
         return { success: true, message: data.message, data: data as { content: INewSellerRegisterData[], page: IPage } };
     } catch (error: any) {
         console.log("error oluştu", error)
@@ -161,5 +159,38 @@ export async function activateSeller(sellerId: string) {
     } catch (error: any) {
 
         return { success: false, message: error.message };
+    }
+}
+
+export async function getAllCampaignsForSeller() {
+    try {
+        const { data } = await axiosInstance.get(
+            `/seller/getAllCampaign`,
+        );
+        return { success: true, message: data.message, data: data };
+    } catch (error: any) {
+        return { success: false, message: error.message || "Failed to get all campaigns" };
+    }
+}
+export async function addProductsToCampaign(campaignId: string, productIds: string[]) {
+    try {
+        const { data } = await axiosInstance.put(
+            `/seller/addProductToCampaign`,
+            { campaignId, productIds }
+        );
+        return { success: true, message: data.message, data: data };
+    } catch (error: any) {
+        return { success: false, message: error.message || "Failed to get all campaigns" };
+    }
+}
+export async function removeProductsFromCampaign(campaignId: string, productIds: string[]) {
+    try {
+        const { data } = await axiosInstance.put(
+            `/seller/takeOutProductInCampaign`,
+            { campaignId, productIds }
+        );
+        return { success: true, message: data.message, data: data };
+    } catch (error: any) {
+        return { success: false, message: error.message || "Failed to get all campaigns" };
     }
 }

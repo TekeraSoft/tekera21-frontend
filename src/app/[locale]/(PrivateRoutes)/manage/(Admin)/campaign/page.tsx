@@ -4,11 +4,12 @@ import {
   getAllCampaigns,
 } from "@/app/actions/server/campaign.actions";
 import CampaignList from "@/components/manage/Campaign/CampaignList";
+import { getSellerProducts } from "@/services/seller/product.service";
 import { ICampaign } from "@/types/AdminTypes/campaign";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import React from "react";
 
-function App() {
+function CampaignPage() {
   const campaignsQuery = useQuery<ICampaign[]>({
     queryKey: ["campaigns"],
     queryFn: async () => {
@@ -16,6 +17,7 @@ function App() {
       return response.success ? response.data : [];
     },
   });
+
   const deleteCampaignMutation = useMutation({
     mutationFn: async (id: string) => {
       const response = await deleteCampaign(id);
@@ -41,4 +43,4 @@ function App() {
   );
 }
 
-export default App;
+export default CampaignPage;

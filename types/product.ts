@@ -31,6 +31,11 @@ export interface ICategory {
   image: string;
 }
 
+interface ICampaignLabel {
+  id: string;
+  name: string;
+}
+
 export interface IProduct {
   id: string;
   name: string;
@@ -39,6 +44,7 @@ export interface IProduct {
   isActive: boolean;
   brandName: string;
   description: string;
+  campaignLabel: ICampaignLabel[];
   category: ICategory;
   subCategories: ICategory[];
   variations: ProductVariation[];

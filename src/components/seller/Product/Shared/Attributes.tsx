@@ -603,6 +603,7 @@ const Attributes = ({
                                   value={field.value ?? ""}
                                   type="number"
                                   className="h-8 w-20"
+                                  disabled={true}
                                   onChange={(e) =>
                                     field.onChange(Number(e.target.value))
                                   }

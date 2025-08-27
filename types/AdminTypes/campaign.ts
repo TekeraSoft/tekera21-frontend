@@ -1,9 +1,17 @@
+export interface ICampaignProduct {
+    id: string;
+    image: string;
+    modelCode: string;
+    name: string;
+}
+
 export interface ICampaign {
     id: string;
     name: string;
     description: string;
     campaignType: TCampaignType;
     discountValue: number;
+    products: ICampaignProduct[];
     discountType: TDiscountType;
     startDate: string;
     endDate: string;

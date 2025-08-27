@@ -1,7 +1,7 @@
 import React from "react";
 import { ICategory } from "@/types/AdminTypes/category";
 
-import ProductCreateForm from "@/components/manage/Product/Create/ProductCreateForm";
+import ProductCreateForm from "@/components/seller/Product/Create/ProductCreateForm";
 
 import { getCategoriesForSeller } from "@/app/actions/server/category.actions";
 
