@@ -50,9 +50,9 @@ export default async function RootLayout({
 }) {
   // Ensure that the incoming `locale` is valid
   const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+  // if (!hasLocale(routing.locales, locale)) {
+  //   notFound();
+  // }
 
   const queryClient = new QueryClient();
   const user = await getUser();

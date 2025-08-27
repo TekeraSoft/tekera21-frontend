@@ -18,7 +18,7 @@ const SellerInterruptions = () => {
   if (interruptionsQuery.isError) {
     return <div>Hata: {interruptionsQuery.error.message}</div>;
   }
-  if (interruptionsQuery.data?.data?.length === 0) {
+  if (!interruptionsQuery.data?.success ||interruptionsQuery.data?.data?.length === 0) {
     return <div>Herhangi bir kesinti bulunamadı.</div>;
   }
   return (

@@ -29,7 +29,7 @@ axiosInstance.interceptors.response.use(
   },
   async (error) => {
     if (error) {
-
+      console.log("error in axios response interceptor", error)
       if (error.code === "ERR_CANCELED" || error.name === "CanceledError") {
         return Promise.reject(error);
       }

@@ -53,6 +53,16 @@ export function SideBarAdmin() {
       icon: Users,
     },
     user?.roles.includes("SUPER_ADMIN") && {
+      name: "Kampanyalar",
+      path: "/manage/campaign",
+      icon: Users,
+    },
+    user?.roles.includes("SUPER_ADMIN") && {
+      name: "Kampanya Oluştur",
+      path: "/manage/campaign/create",
+      icon: Users,
+    },
+    user?.roles.includes("SUPER_ADMIN") && {
       name: "Analytics",
       path: "/manage/analytics",
       icon: BarChart3,

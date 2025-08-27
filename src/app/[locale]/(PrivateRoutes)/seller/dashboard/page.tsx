@@ -22,7 +22,10 @@ const DashBoard = () => {
   if (mutationSellerReport.isError) {
     return <div>Hata: {mutationSellerReport.error.message}</div>;
   }
-  if (!mutationSellerReport.data?.data) {
+  if (
+    !mutationSellerReport.data?.success ||
+    !mutationSellerReport.data?.data?.sellerReportAggregation
+  ) {
     return <div>Hata: Herhangi bir veri bulunamadı</div>;
   }
   return (

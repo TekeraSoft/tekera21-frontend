@@ -39,17 +39,17 @@ export async function sellerRegister(formData: FormData) {
     }
 }
 
-export async function getSellerByUserId(id?: string) {
+export async function getSellerByUserId() {
 
     try {
         const { data } = await axiosInstance.get(
             `/user/getSellerInformation`
         );
 
-
         return { success: true, message: data.message, data: data as ISellerInfo };
     } catch (error: any) {
-        return { success: false, message: error.message || "Failed to get user", data: undefined };
+        console.log("error", error)
+        return { success: false, message: error.message || "Failed to get seller information", data: undefined };
     }
 }
 
