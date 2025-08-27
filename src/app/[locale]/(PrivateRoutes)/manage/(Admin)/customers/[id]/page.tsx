@@ -11,7 +11,7 @@ const AdminEditCustomerPage = () => {
 
   const customerQuery = useQuery({
     queryKey: ["customer", id],
-    queryFn: () => getSellerByUserId(id),
+    queryFn: () => getSellerByUserId(),
   });
 
   if (!customerQuery.data?.success) {
