@@ -198,9 +198,9 @@ export default function OrderTable({ orderData }: { orderData: IOrderData }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {orderData.content.map((order) => {
+            {orderData.content.map((order, index) => {
               return (
-                <React.Fragment key={order.id}>
+                <React.Fragment key={order.id || index}>
                   <TableRow className="hover:bg-gray-50">
                     <TableCell>
                       <Button
@@ -220,10 +220,10 @@ export default function OrderTable({ orderData }: { orderData: IOrderData }) {
                     <TableCell>
                       <div>
                         <div className="font-medium">
-                          {order.buyer.name} {order.buyer.surname}
+                          {order.buyer?.name} {order.buyer?.surname}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {order.buyer.gsmNumber}
+                          {order.buyer?.gsmNumber}
                         </div>
                       </div>
                     </TableCell>
@@ -231,7 +231,7 @@ export default function OrderTable({ orderData }: { orderData: IOrderData }) {
                       <p> Oluşturulma: {formatDate(order.createdAt)}</p>
                       <p> Güncellenme: {formatDate(order.updatedAt)}</p>
                     </TableCell>
-                    <TableCell>{order.basketItems.length}</TableCell>
+                    <TableCell>{order.basketItems?.length}</TableCell>
                     <TableCell className="font-medium">
                       {formatPrice(order.totalPrice)}
                     </TableCell>
@@ -284,7 +284,7 @@ export default function OrderTable({ orderData }: { orderData: IOrderData }) {
                           <div>
                             <h4 className="font-semibold mb-3">Ürünler</h4>
                             <div className="space-y-3">
-                              {order.basketItems.map((item) => (
+                              {order.basketItems?.map((item) => (
                                 <div
                                   key={item.id}
                                   className="flex items-center space-x-4 bg-white p-4 rounded-lg border"
