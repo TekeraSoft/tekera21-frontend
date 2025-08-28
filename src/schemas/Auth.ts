@@ -2,7 +2,7 @@ import z from "zod";
 
 export const loginSchema = z.object({
     email: z.string().email("Geçerli bir e-posta giriniz"),
-    password: z.string().min(5, "Şifre en az 5 karakter olmalıdır"),
+    password: z.string().min(6, "Şifre en az 6 karakter olmalıdır"),
 });
 
 export const signUpSchema = z.object({
