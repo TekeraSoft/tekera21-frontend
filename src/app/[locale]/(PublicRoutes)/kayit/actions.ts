@@ -63,7 +63,7 @@ export async function registerUser(prevState: ActionStateType, formData: FormDat
 
     try {
 
-        const { data } = await axiosInstance.post("/auth/register", signUpData);
+        await axiosInstance.post("/auth/register", signUpData);
 
 
 

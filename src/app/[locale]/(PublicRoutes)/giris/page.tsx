@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,18 +13,38 @@ import { Label } from "@/components/ui/label";
 import { Link } from "@/i18n/navigation";
 import { Separator } from "@radix-ui/react-separator";
 import { Lock, Mail } from "lucide-react";
-import { useActionState } from "react";
-import { ActionStateType, loginUser } from "./actions";
 import { AdvancedPasswordInput } from "@/components/auth/PasswordInput";
+import { useMutation } from "@tanstack/react-query";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginUser } from "./actions"; // server action değil, api fetch gibi çalışacak
+import { LoginFormValues, loginSchema } from "@/schemas/Auth";
+import { useRouter } from "next/navigation";
 
-const initialState: ActionStateType = {
-  error: null,
-  message: "",
-  errors: {},
-};
+export default function SignInPage() {
+  const router = useRouter();
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-export default function SigUpPage() {
-  const [state, formAction, pending] = useActionState(loginUser, initialState);
+  const loginMutation = useMutation({
+    mutationFn: async (data: LoginFormValues) => {
+      return await loginUser({ email: data.email, password: data.password });
+    },
+    onSuccess: (data) => {
+      if (data.redirectUrl) {
+        router.push(data.redirectUrl);
+      }
+    },
+  });
+
+  const onSubmit = (values: LoginFormValues) => {
+    loginMutation.mutate(values);
+  };
 
   return (
     <div className="min-h-screen justify-center lg:items-center bg-gradient-to-br from-slate-50 to-slate-100 flex p-2">
@@ -39,51 +60,62 @@ export default function SigUpPage() {
           </CardHeader>
 
           <CardContent className="space-y-4">
-            <form action={formAction} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              {/* Email */}
               <div className="space-y-2">
                 <Label htmlFor="email">E-posta</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                   <Input
                     id="email"
-                    name="email"
                     type="email"
                     placeholder="ornek@email.com"
                     className="pl-10"
-                    required
+                    {...form.register("email")}
                   />
-                  {state?.errors?.email && (
+                  {form.formState.errors.email && (
                     <p className="text-sm text-red-600">
-                      {state.errors.email[0]}
+                      {form.formState.errors.email.message}
                     </p>
                   )}
                 </div>
               </div>
 
+              {/* Password */}
               <div className="space-y-2">
                 <Label htmlFor="password">Şifre</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                  <AdvancedPasswordInput
-                    id="password"
+                  <Controller
                     name="password"
-                    placeholder="Enter your password"
-                    required
-                    error={state?.errors?.password?.[0]}
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <AdvancedPasswordInput
+                        id="password"
+                        placeholder="Şifrenizi girin"
+                        {...field}
+                        error={fieldState.error?.message}
+                      />
+                    )}
                   />
                 </div>
               </div>
 
-              {state.message && (
-                <p className="text-red-600 text-sm">{state.message}</p>
+              {/* General error */}
+              {loginMutation.isError && (
+                <p className="text-red-600 text-sm">
+                  {(loginMutation.error as any)?.message !== "NEXT_REDIRECT"
+                    ? (loginMutation.error as any)?.message
+                    : "Giriş başarısız. Lütfen tekrar deneyin."}
+                </p>
               )}
 
               <Button
                 type="submit"
                 className="w-full h-11 text-base font-medium"
-                disabled={pending}
+                disabled={loginMutation.isPending}
               >
-                {pending ? "Giriş yapılıyor..." : "Giriş yap"}
+                {loginMutation.isPending ? "Giriş yapılıyor..." : "Giriş yap"}
               </Button>
             </form>
 
@@ -100,6 +132,7 @@ export default function SigUpPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <Button variant="outline" className="h-11 bg-transparent">
+                {/* Google */}
                 <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                   <path
                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -121,6 +154,7 @@ export default function SigUpPage() {
                 Google
               </Button>
               <Button variant="outline" className="h-11 bg-transparent">
+                {/* Facebook */}
                 <svg
                   className="mr-2 h-4 w-4"
                   fill="currentColor"

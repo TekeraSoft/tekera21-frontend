@@ -25,19 +25,15 @@ export type ActionStateType = {
 
 // Validation schema
 const signUpSchema = z.object({
-  firstName: z.string().min(2, "First name must be at least 2 characters"),
-  lastName: z.string().min(2, "Last name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  gsmNumber: z.string().min(10, "Phone number must be at least 10 digits"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  firstName: z.string().min(2, "Adınız en az 2 karakter olmalı"),
+  lastName: z.string().min(2, "Soyadınız en az 2 karakter olmalı"),
+  email: z.string().email("Geçersiz e-posta adresi"),
+  gsmNumber: z.string().min(10, "Telefon numarası en az 10 haneli olmalıdır"),
+  password: z.string().min(6, "Şifre en az 6 karakter olmalıdır"),
   gender: z.enum(["MALE", "FEMALE"]),
-  birthDate: z.string().min(1, "Birth date is required"),
+  birthDate: z.string().min(1, "Doğum tarihi gereklidir"),
 })
-const signInSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
 
-})
 
 
 
@@ -85,23 +81,7 @@ export async function registerUser(prevState: ActionStateType, formData: FormDat
   }
 }
 
-export async function loginUser(prevState: ActionStateType, formData: FormData): Promise<ActionStateType> {
-  const locale = await getLocale()
-  const rawData = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-  }
-
-  const validatedFields = signInSchema.safeParse(rawData)
-
-  if (!validatedFields.success) {
-    return {
-      error: null,
-      errors: validatedFields.error.flatten().fieldErrors,
-    }
-  }
-
-  const signInData: ILogin = validatedFields.data
+export async function loginUser(signInData: { email: string, password: string }): Promise<{ redirectUrl: string | null, message: string }> {
 
   try {
 
@@ -119,22 +99,28 @@ export async function loginUser(prevState: ActionStateType, formData: FormData):
     const payload = jwt.decode(data.accessToken) as IUserPayload;
 
     if (sellerRoles.some(role => payload.roles.includes(role))) {
-      return redirect({ href: "/seller", locale: locale })
+      return {
+        redirectUrl: "/seller",
+        message: "Login successful"
+      }
     }
     if (managerRoles.some(role => payload.roles.includes(role))) {
-      return redirect({ href: "/manage/dashboard", locale: locale })
-    }
-    return redirect({ href: "/", locale: locale })
-
-  } catch (error: any) {
-    console.error("login error:", error)
-    if (error instanceof Error && error.message === "NEXT_REDIRECT") {
-      throw error;
+      return {
+        redirectUrl: "/manage/dashboard",
+        message: "Login successful"
+      }
     }
     return {
-      error: error,
-      message: error.message || "login failed. Please try again.",
+      redirectUrl: "/",
+      message: "Login successful"
     }
+
+  } catch (error: any) {
+    console.error("login error:", error);
+    if (error instanceof Error && error?.message === "NEXT_REDIRECT") {
+      throw error;
+    }
+    throw error?.message || "Giriş başarısız. Lütfen tekrar deneyin.";
   }
 
 }
