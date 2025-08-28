@@ -17,7 +17,7 @@ import { AdvancedPasswordInput } from "@/components/auth/PasswordInput";
 import { useMutation } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginUser } from "./actions"; // server action değil, api fetch gibi çalışacak
+import { loginUser } from "./actions"; 
 import { LoginFormValues, loginSchema } from "@/schemas/Auth";
 import { useRouter } from "next/navigation";
 
