@@ -22,7 +22,6 @@ import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
 import { useToast } from "@/hooks/use-toast";
 import ProductVariantForm from "../Shared/ProductVariantForm";
 import { IGetByIdProduct } from "@/types/SingleProduct";
-import { SubCategoriesSelect } from "../Shared/SubCategoriesSelect";
 import { TProductFormData } from "@/types/ProductFormData";
 import ProductAttributes from "../Shared/ProductAttributes";
 import CategorySelect from "../Shared/CategorySelect";
@@ -32,6 +31,9 @@ import CurrencyAndProductType from "../Shared/MainFields/CurrencyAndProductType"
 import ThemeSelect from "../Shared/MainFields/ThemeSelect";
 import { updateProduct } from "@/app/actions/server/product.actions";
 import axiosClient from "@/request/axiosClient";
+import { useQuery } from "@tanstack/react-query";
+import { findProductOptionByCategoryName } from "@/app/actions/server/seller.actions";
+import { ProductFormSubCategoryField } from "../Shared/SubCategorySelect/ProductFormSubCategoryField";
 
 export default function ProductUpdateForm({
   categories,
@@ -59,7 +61,8 @@ export default function ProductUpdateForm({
       name: product.name,
       imageUrls: {},
       code: product.code,
-      brandName: product.brandName,
+      brandName: product.brandName || "",
+      seller: product.seller,
       description: product.description,
       currencyType: product.currencyType,
       productType: product.productType,
@@ -311,6 +314,7 @@ export default function ProductUpdateForm({
     setVideoUrlState(null);
   };
 
+  console.log("categories", categories);
   console.log("product", product);
 
   return (
@@ -358,15 +362,24 @@ export default function ProductUpdateForm({
               <Separator />
 
               <CategorySelect categories={categories} />
-              <SubCategoriesSelect
+
+              {/* <SubCategoriesSelect
                 name="subCategories"
                 label="Subcategories"
                 subCategories={
                   categories.find((cat) => cat.id === watch("categoryId"))
                     ?.subCategories || []
                 }
+              /> */}
+              <ProductFormSubCategoryField
+                control={methods.control}
+                name="subCategories"
+                categories={
+                  categories.find((cat) => cat.id === watch("categoryId"))
+                    ?.subCategories || []
+                }
+                label="Alt Kategoriler Seçin"
               />
-
               {videoUrlState && !deleteImages.includes(videoUrlState) ? (
                 <div className="space-y-2">
                   <Label>Ürün Videosu</Label>

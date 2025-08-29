@@ -5,6 +5,7 @@ import { IPage } from "@/types/Collection";
 import { IOrderData } from "@/types/OrderTypes";
 import { IPaymentReport } from "@/types/PaymentReport";
 import { IResponse } from "@/types/ResponseType";
+import { IProductOption } from "@/types/SellerTypes/ProductOptions";
 import { INewSellerRegisterData, ISellerInfo, TVerification } from "@/types/SellerTypes/SellerInfo";
 import { ISellerDashboardData } from "@/types/SellerTypes/SellerReportTypes";
 import { revalidatePath } from "next/cache";
@@ -183,6 +184,7 @@ export async function addProductsToCampaign(campaignId: string, productIds: stri
         return { success: false, message: error.message || "Failed to get all campaigns" };
     }
 }
+
 export async function removeProductsFromCampaign(campaignId: string, productIds: string[]) {
     try {
         const { data } = await axiosInstance.put(
@@ -192,5 +194,17 @@ export async function removeProductsFromCampaign(campaignId: string, productIds:
         return { success: true, message: data.message, data: data };
     } catch (error: any) {
         return { success: false, message: error.message || "Failed to get all campaigns" };
+    }
+}
+
+export async function findProductOptionByCategoryName(categoryNames: string[]): Promise<IResponse<IProductOption[]>> {
+    console.log("categoryNames", categoryNames)
+    try {
+        const { data } = await axiosInstance.get(
+            `/seller/findOptionByCategoryName?${categoryNames.map((name) => `categoryName=${name}`).join("&")}`
+        );
+        return { success: true, message: data.message, data: data };
+    } catch (error: any) {
+        return { success: false, message: error.message || "Failed to get options", data: undefined };
     }
 }

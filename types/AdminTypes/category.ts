@@ -1,10 +1,15 @@
-
 export interface ICategory {
   id: string;
-  name: string;
-  count?: number;
   image?: string;
-  subCategories: ICategory[];
+  name: string;
+  slug?: string;
+  subCategories: ISubCategory[];
+}
+export interface ISubCategory {
+  id: string;
+  image?: string;
+  name: string;
+  children: ISubCategory[];
 }
 
 export interface ICategoryData {

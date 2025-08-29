@@ -20,7 +20,6 @@ import MarkdownEditor from "@/components/shared/Editor/MarkdownEditor";
 import { useToast } from "@/hooks/use-toast";
 import ProductVariantForm from "../Shared/ProductVariantForm";
 import { TProductFormData } from "@/types/ProductFormData";
-import { SubCategoriesSelect } from "../Shared/SubCategoriesSelect";
 import ProductAttributes from "../Shared/ProductAttributes";
 import CategorySelect from "../Shared/CategorySelect";
 import GenderSelect from "../Shared/GenderSelect";
@@ -29,6 +28,7 @@ import CurrencyAndProductType from "../Shared/MainFields/CurrencyAndProductType"
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ThemeSelect from "../Shared/MainFields/ThemeSelect";
 import { createProduct } from "@/app/actions/server/product.actions";
+import { ProductFormSubCategoryField } from "../Shared/SubCategorySelect/ProductFormSubCategoryField";
 
 export default function ProductCreateForm({
   categories,
@@ -245,13 +245,14 @@ export default function ProductCreateForm({
                 </FormProvider>
                 <FormProvider {...methods}>
                   <CategorySelect categories={categories} />
-                  <SubCategoriesSelect
+                  <ProductFormSubCategoryField
+                    control={methods.control}
                     name="subCategories"
-                    label="Subcategories"
-                    subCategories={
+                    categories={
                       categories.find((cat) => cat.id === watch("categoryId"))
                         ?.subCategories || []
                     }
+                    label="Alt Kategoriler Seçin"
                   />
                 </FormProvider>
 

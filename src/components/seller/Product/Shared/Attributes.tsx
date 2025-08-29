@@ -28,7 +28,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { TooltipArrow, TooltipPortal } from "@radix-ui/react-tooltip";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { colors } from "./Data/Colors";
 import ImageView from "@/components/shared/ImageView";
 import {
@@ -39,6 +44,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { taxes } from "@/constants/taxes";
+import { useQuery } from "@tanstack/react-query";
+import { findProductOptionByCategoryName } from "@/app/actions/server/seller.actions";
+import ProductOptionsSelect from "./ProductOptionsSelect";
 
 interface IProps {
   selectedAttributes: Record<number, Record<string, string | string[]>>;
@@ -76,6 +84,7 @@ const Attributes = ({
   const [currentVariantIndex, setCurrentVariantIndex] = useState<number | null>(
     null
   );
+  const [showOptions, setShowOptions] = useState(false);
   // const watchedAttributes = watch(`variants.${variationIndex}.attributes`);
 
   const [primaryAttributeTypes, setPrimaryAttributeTypes] = useState<
@@ -234,6 +243,17 @@ const Attributes = ({
       return newState;
     });
   };
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["product-options", watch("subCategories")],
+    queryFn: () =>
+      findProductOptionByCategoryName(
+        watch("subCategories")?.map((subCat) => subCat.name) || []
+      ),
+    enabled: !!watch("subCategories")?.length,
+  });
+
+  console.log("data Options", data?.data);
 
   return (
     <div className="space-y-4">
@@ -453,7 +473,26 @@ const Attributes = ({
                             )}
                           </Tooltip>
                         </TooltipProvider>
-                        <div className="space-y-4">
+
+                        <Dialog key={"optionsDialog"}>
+                          <DialogTrigger asChild>
+                            <Button>Özellik seçimi</Button>
+                          </DialogTrigger>
+                          <DialogContent className="w-full! max-w-max lg:min-w-2xl px-16">
+                            <DialogTitle hidden className="sr-only hidden">
+                              Product options
+                            </DialogTitle>
+                            <ProductOptionsSelect
+                              options={data?.data || []}
+                              variationIndex={variationIndex}
+                              handleAttributeSelectionChange={
+                                handleAttributeSelectionChange
+                              }
+                            />
+                          </DialogContent>
+                        </Dialog>
+
+                        {/* <div className="space-y-4">
                           <MultiSelectAttribute
                             attribute={currentPrimaryAttribute}
                             selectedValues={
@@ -469,8 +508,19 @@ const Attributes = ({
                               )
                             }
                           />
-                        </div>
-                        {!!getOtherAttributes(currentPrimaryAttribute.key)
+                        </div> */}
+                        {watchedVariants[variationIndex].attributes.map(
+                          (attr, attrIndex) => (
+                            <div key={attrIndex}>
+                              {attr.attributeDetails?.map((detail) => (
+                                <div key={detail.key}>
+                                  {detail.key}: {detail.value}
+                                </div>
+                              ))}
+                            </div>
+                          )
+                        )}
+                        {/* {!!getOtherAttributes(currentPrimaryAttribute.key)
                           .length && (
                           <div className="space-y-4">
                             {getOtherAttributes(
@@ -494,7 +544,7 @@ const Attributes = ({
                               />
                             ))}
                           </div>
-                        )}
+                        )} */}
                       </div>
                     </td>
                   </tr>
@@ -504,11 +554,7 @@ const Attributes = ({
               <table className="text-sm text-left text-gray-700">
                 <thead className="bg-gray-100">
                   <tr className="h-14">
-                    <th className="px-4 py-2 font-medium">
-                      {currentPrimaryAttributeType === "size"
-                        ? "Beden"
-                        : "Ağırlık"}
-                    </th>
+                    <th className="px-4 py-2 font-medium">Stok Tipi</th>
 
                     <th className="px-4 py-2 font-medium">Stok Adeti</th>
                     <th className="px-4 py-2 font-medium">

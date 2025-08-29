@@ -1,3 +1,5 @@
+import { ICompany } from "./SingleProduct";
+
 export type TProductFormData = {
   name: string;
   slug: string;
@@ -5,11 +7,12 @@ export type TProductFormData = {
   imageUrls?: {
     [key: string]: string[];
   }
-  brandName: string;
   description: string;
   currencyType: string;
+  brandName: string;
+  seller: ICompany;
   categoryId: string;
-  subCategories?: { value: string }[];
+  subCategories?: { value: string, name: string }[];
   productType: string;
   tags: { value: string }[];
   attributeDetails: { key: string; value: string }[];

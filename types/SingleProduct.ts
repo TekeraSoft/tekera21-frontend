@@ -3,10 +3,10 @@ export type IGetByIdProduct = {
   name: string;
   slug: string;
   code: string;
-  brandName: string;
   category: Category;
   subCategories: Category[];
-  company: Company;
+  seller: ICompany;
+  brandName: string;
   description: string;
   variations: Variation[];
   currencyType: string;
@@ -20,11 +20,12 @@ export type IGetByIdProduct = {
 
 type Category = {
   id: string;
-  name: string;
   image: string;
+  name: string;
+  slug: string;
 };
 
-type Company = {
+export type ICompany = {
   id: string;
   name: string;
   logo: string;
